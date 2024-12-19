@@ -1,1 +1,79 @@
-<p>footer works!</p>
+<footer class="footer">
+    <div class="footer__container">
+        <section class="footer__left" aria-label="Info">
+            <a href="https://icc.knu.ua/" class="footer__logo">
+                <img [src]="logoPath" alt="KNU logo" loading="lazy" />
+                <div class="footer__logo-text">
+                    <span
+                        >KNUdev &amp; <br />
+                        Інформаційно обчислювальний центр</span
+                    >
+                </div>
+            </a>
+            <div class="footer__support">
+                <span>Виникли питання?</span>
+                <a
+                    href="#"
+                    class="footer__support-link"
+                    aria-label="Перейти до підтримки"
+                    >Підтримка</a
+                >
+            </div>
+            <nav class="footer__buttons" aria-label="Соціальні мережі">
+                @for (item of socialLinks[0].item; track item) {
+                <a
+                    href="#"
+                    class="footer__button"
+                    [attr.aria-label]="item.name"
+                >
+                    <img [src]="item.link" [alt]="item.name" loading="lazy" />
+                </a>
+                }
+            </nav>
+        </section>
+
+        <section class="footer__right" aria-label="Навігація за розділами">
+            <nav class="footer__section" aria-labelledby="institutes-heading">
+                <h3 id="institutes-heading" class="footer__heading">
+                    {{ institutes[0].title }}
+                </h3>
+                <ul class="footer__list">
+                    @for(item of institutes[0].items; track item){
+                    <li>
+                        <a [href]="item.link" rel="noopener noreferrer">{{
+                            item.name
+                        }}</a>
+                    </li>
+                    }
+                </ul>
+                <a
+                    href="#"
+                    class="footer__more"
+                    aria-label="Переглянути всі інститути"
+                    >Дивитись більше</a
+                >
+            </nav>
+
+            <nav class="footer__section" aria-labelledby="faculties-heading">
+                <h3 id="faculties-heading" class="footer__heading">
+                    {{ faculties[0].title }}
+                </h3>
+                <ul class="footer__list">
+                    @for(item of faculties[0].items; track item){
+                    <li>
+                        <a [href]="item.link" rel="noopener noreferrer">{{
+                            item.name
+                        }}</a>
+                    </li>
+                    }
+                </ul>
+                <a
+                    href="#"
+                    class="footer__more"
+                    aria-label="Переглянути всі факультети"
+                    >Дивитись більше</a
+                >
+            </nav>
+        </section>
+    </div>
+</footer>
