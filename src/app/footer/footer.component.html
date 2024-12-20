@@ -24,13 +24,17 @@
                 aria-label="Соціальні мережі"
             >
                 @for (item of socialLinks; track item) {
-                <a
-                    href="#"
-                    class="footer__button"
-                    [attr.aria-label]="item.name"
-                >
-                    <img [src]="item.link" [alt]="item.name" loading="lazy" />
-                </a>
+                    <a
+                        href="#"
+                        class="footer__button"
+                        [attr.aria-label]="item.name"
+                    >
+                        <img
+                            [src]="item.link"
+                            [alt]="item.name"
+                            loading="lazy"
+                        />
+                    </a>
                 }
             </nav>
         </section>
@@ -41,12 +45,12 @@
                     {{ departments.institutes.title }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for(item of departments.institutes.items; track item){
-                    <li>
-                        <a [href]="item.link" rel="noopener noreferrer">{{
-                            item.name
-                        }}</a>
-                    </li>
+                    @for (item of departments.institutes.items; track item) {
+                        <li>
+                            <a [href]="item.link" rel="noopener noreferrer">{{
+                                item.ukName
+                            }}</a>
+                        </li>
                     }
                 </ul>
                 <a
@@ -62,12 +66,12 @@
                     {{ departments.faculties.title }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for(item of departments.faculties.items; track item){
-                    <li>
-                        <a [href]="item.link" rel="noopener noreferrer">{{
-                            item.name
-                        }}</a>
-                    </li>
+                    @for (item of departments.faculties.items; track item) {
+                        <li>
+                            <a [href]="item.link" rel="noopener noreferrer">{{
+                                item.ukName
+                            }}</a>
+                        </li>
                     }
                 </ul>
                 <a
