@@ -23,6 +23,11 @@
                         "tsConfig": "tsconfig.app.json",
                         "assets": [
                             {
+                                "glob": "**/*.json",
+                                "input": "src",
+                                "output": "/"
+                            },
+                            {
                                 "glob": "**/*",
                                 "input": "public"
                             },
@@ -81,6 +86,11 @@
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
                         "assets": [
+                            {
+                                "glob": "**/*.json",
+                                "input": "src",
+                                "output": "/"
+                            },
                             {
                                 "glob": "**/*",
                                 "input": "public"
