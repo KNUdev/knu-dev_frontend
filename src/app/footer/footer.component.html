@@ -41,7 +41,7 @@
                     {{ "footer.departments.institutes.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of institutes; track item) {
+                    @for (item of institutes; track $index) {
                     <li>
                         <a [href]="item.link" rel="noopener noreferrer">
                             {{ item.name }}
@@ -53,8 +53,9 @@
                     href="#"
                     class="footer__more-departments"
                     aria-label="Переглянути всі інститути"
-                    >{{ "footer.more" | translate }}</a
                 >
+                    {{ "footer.more" | translate }}
+                </a>
             </nav>
 
             <nav class="footer__section" aria-labelledby="faculties-heading">
@@ -74,8 +75,9 @@
                     href="#"
                     class="footer__more-departments"
                     aria-label="Переглянути всі факультети"
-                    >{{ "footer.more" | translate }}</a
                 >
+                    {{ "footer.more" | translate }}
+                </a>
             </nav>
         </section>
     </div>

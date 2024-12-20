@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../i18n.service';
-
+interface Department {
+    name: string;
+    link: string;
+}
 @Component({
     selector: 'app-footer',
     templateUrl: './footer.component.html',
@@ -9,29 +12,40 @@ import { I18nService } from '../i18n.service';
     imports: [TranslateModule],
 })
 export class FooterComponent implements OnInit {
-    institutes: any[] = [];
-    faculties: any[] = [];
+    institutes: Department[] = [];
+    faculties: Department[] = [];
     constructor(
         private i18nService: I18nService,
         private translate: TranslateService
     ) {}
 
     ngOnInit() {
+        this.loadTranslationsAndData();
+        this.translate.onLangChange.subscribe(() => {
+            this.loadTranslationsAndData();
+        });
+    }
+
+    private loadTranslationsAndData() {
         this.i18nService
             .loadComponentTranslations('footer', this.translate.currentLang)
-            .subscribe();
-        this.translate.onLangChange.subscribe((event) => {
-            this.i18nService
-                .loadComponentTranslations('footer', event.lang)
-                .subscribe();
-        });
+            .subscribe(() => {
+                this.loadDepartments();
+            });
+    }
 
-        this.institutes = this.translate.instant(
-            'footer.departments.institutes.items'
-        );
-        this.faculties = this.translate.instant(
-            'footer.departments.faculties.items'
-        );
+    private loadDepartments() {
+        this.translate
+            .get([
+                'footer.departments.institutes.items',
+                'footer.departments.faculties.items',
+            ])
+            .subscribe((translations) => {
+                this.institutes =
+                    translations['footer.departments.institutes.items'] || [];
+                this.faculties =
+                    translations['footer.departments.faculties.items'] || [];
+            });
     }
     get logoPath(): string {
         return 'assets/footer/KNULogo.svg';
