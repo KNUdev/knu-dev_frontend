@@ -7,24 +7,20 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
     get logoPath() {
-        return 'assets/footer/KNULogo.png';
+        return 'assets/footer/KNULogo.svg';
     }
 
     socialLinks = [
-        {
-            item: [
-                { name: 'instagram', link: 'assets/social networks/inst.svg' },
-                { name: 'telegram', link: 'assets/social networks/tg.svg' },
-            ],
-        },
+        { name: 'instagram', link: 'assets/social networks/inst.svg' },
+        { name: 'telegram', link: 'assets/social networks/tg.svg' },
     ];
 
-    institutes = [
-        {
+    departments = {
+        institutes: {
             title: 'ІНСТИТУТИ',
             items: [
                 {
-                    name: 'Навчально-науковий інститут “Інститут геології”',
+                    name: 'Навчально-науковий інститут "Інститут геології"',
                     link: 'https://geology.knu.ua/',
                 },
                 {
@@ -45,10 +41,7 @@ export class FooterComponent {
                 },
             ],
         },
-    ];
-
-    faculties = [
-        {
+        faculties: {
             title: 'ФАКУЛЬТЕТИ',
             items: [
                 {
@@ -61,7 +54,7 @@ export class FooterComponent {
                 },
                 {
                     name: 'Історичний факультет',
-                    link: 'http://www.history.univ.kiev.ua/',
+                    link: 'http://history.univ.kiev.ua/',
                 },
                 {
                     name: 'Математичний факультет',
@@ -73,5 +66,5 @@ export class FooterComponent {
                 },
             ],
         },
-    ];
+    };
 }

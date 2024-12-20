@@ -24,14 +24,14 @@ a {
 .footer {
     background-color: $bg-dark;
     color: $text-light;
-    padding: 3.125rem 0;
+    padding: 3.125rem 4rem;
 
     &__container {
         max-width: 105rem;
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
-        gap: 6.875rem;
+        gap: 7rem;
     }
 
     &__left {
@@ -96,7 +96,7 @@ a {
         text-decoration: none;
     }
 
-    &__buttons {
+    &__social-network-buttons {
         display: flex;
         gap: 3.125rem;
     }
@@ -124,7 +124,7 @@ a {
         text-transform: uppercase;
     }
 
-    &__list {
+    &__department-list {
         list-style: none;
         padding: 0;
         margin: 0 0 1.25rem 0;
