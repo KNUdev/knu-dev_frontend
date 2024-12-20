@@ -1,0 +1,156 @@
+$bg-dark: #141414;
+$text-light: #d1d1d1;
+$text-white: #ffffff;
+$border-gray: #343434;
+$accent-yellow: #edd342;
+$text-gray: #a0a0a0;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin text-style($size: 0.875rem, $weight: 400) {
+    font-size: $size;
+    font-weight: $weight;
+    letter-spacing: 0.05em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.footer {
+    background-color: $bg-dark;
+    color: $text-light;
+    padding: 3.125rem 4rem;
+
+    &__container {
+        max-width: 105rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 6rem;
+    }
+
+    &__left {
+        width: 29.375rem;
+        padding: 2.3125rem 0;
+        border-right: 1px solid $border-gray;
+    }
+
+    &__right {
+        display: flex;
+        justify-content: flex-end;
+        gap: clamp(2rem, 5vw, 8rem);
+    }
+
+    &__logo {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        margin-bottom: 1.25rem;
+
+        img {
+            width: 5rem;
+            height: 5.3125rem;
+            object-fit: contain;
+        }
+    }
+
+    &__logo-text {
+        font-family: Manrope;
+        @include text-style;
+        line-height: 1.5625rem;
+        text-align: left;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+        color: $text-light;
+    }
+
+    &__support {
+        margin-bottom: 4.375rem;
+
+        span {
+            font-family: Manrope;
+            line-height: 1.195rem;
+            @include text-style;
+            text-align: center;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            color: $text-white;
+            margin-right: 0.9375rem;
+        }
+    }
+
+    &__support-link {
+        font-family: Geist;
+        line-height: 1.085rem;
+        @include text-style;
+        text-align: center;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+        color: $accent-yellow;
+        padding: 0.625rem;
+        text-decoration: none;
+    }
+
+    &__social-network-buttons {
+        display: flex;
+        gap: 3.125rem;
+    }
+
+    &__button {
+        width: 10.9375rem;
+        height: 3.125rem;
+        border: 1px solid $border-gray;
+        background: transparent;
+        border-radius: 0.25rem;
+        @include flex-center;
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+
+    &__heading {
+        font-family: Unbounded;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.5625rem;
+        letter-spacing: 0.05em;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+        margin-bottom: 1.25rem;
+        text-transform: uppercase;
+    }
+
+    &__department-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.25rem 0;
+
+        li {
+            margin-bottom: 0.9375rem;
+        }
+        a {
+            font-family: Geist;
+            line-height: 1.5625rem;
+            @include text-style;
+            text-align: center;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            color: $text-gray;
+        }
+    }
+
+    &__more-departments {
+        color: $accent-yellow;
+        text-decoration: none;
+        font-family: Geist;
+        line-height: 1.085rem;
+        @include text-style;
+        text-align: center;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+    }
+}
