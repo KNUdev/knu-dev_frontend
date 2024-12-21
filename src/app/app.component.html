@@ -1,1 +1,7 @@
+<nav>
+    <select [(ngModel)]="currentLang" (ngModelChange)="switchLang($event)">
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+    </select>
+</nav>
 <app-footer />

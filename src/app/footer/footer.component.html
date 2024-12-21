@@ -6,17 +6,17 @@
                 <div class="footer__logo-text">
                     <span
                         >KNUdev &amp; <br />
-                        Інформаційно обчислювальний центр</span
+                        {{ "footer.logoText" | translate }}</span
                     >
                 </div>
             </a>
             <div class="footer__support">
-                <span>Виникли питання?</span>
+                <span>{{ "footer.support" | translate }}</span>
                 <a
                     href="#"
                     class="footer__support-link"
                     aria-label="Перейти до підтримки"
-                    >Підтримка</a
+                    >{{ "footer.supportLink" | translate }}</a
                 >
             </div>
             <nav
@@ -24,17 +24,13 @@
                 aria-label="Соціальні мережі"
             >
                 @for (item of socialLinks; track item) {
-                    <a
-                        href="#"
-                        class="footer__button"
-                        [attr.aria-label]="item.name"
-                    >
-                        <img
-                            [src]="item.link"
-                            [alt]="item.name"
-                            loading="lazy"
-                        />
-                    </a>
+                <a
+                    href="#"
+                    class="footer__button"
+                    [attr.aria-label]="item.name"
+                >
+                    <img [src]="item.link" [alt]="item.name" loading="lazy" />
+                </a>
                 }
             </nav>
         </section>
@@ -42,44 +38,46 @@
         <section class="footer__right" aria-label="Навігація за розділами">
             <nav class="footer__section" aria-labelledby="institutes-heading">
                 <h3 id="institutes-heading" class="footer__heading">
-                    {{ departments.institutes.title }}
+                    {{ "footer.departments.institutes.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of departments.institutes.items; track item) {
-                        <li>
-                            <a [href]="item.link" rel="noopener noreferrer">{{
-                                item.ukName
-                            }}</a>
-                        </li>
+                    @for (item of (institutes$ | async); track $index) {
+                    <li>
+                        <a [href]="item.link" rel="noopener noreferrer">
+                            {{ item.name }}
+                        </a>
+                    </li>
                     }
                 </ul>
                 <a
                     href="#"
                     class="footer__more-departments"
                     aria-label="Переглянути всі інститути"
-                    >Дивитись більше</a
                 >
+                    {{ "footer.more" | translate }}
+                </a>
             </nav>
 
             <nav class="footer__section" aria-labelledby="faculties-heading">
                 <h3 id="faculties-heading" class="footer__heading">
-                    {{ departments.faculties.title }}
+                    {{ "footer.departments.faculties.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of departments.faculties.items; track item) {
-                        <li>
-                            <a [href]="item.link" rel="noopener noreferrer">{{
-                                item.ukName
-                            }}</a>
-                        </li>
+                    @for (item of (faculties$ | async); track $index) {
+                    <li>
+                        <a [href]="item.link" rel="noopener noreferrer">
+                            {{ item.name }}
+                        </a>
+                    </li>
                     }
                 </ul>
                 <a
                     href="#"
                     class="footer__more-departments"
                     aria-label="Переглянути всі факультети"
-                    >Дивитись більше</a
                 >
+                    {{ "footer.more" | translate }}
+                </a>
             </nav>
         </section>
     </div>
