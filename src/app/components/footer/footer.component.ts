@@ -7,7 +7,7 @@ import {
 } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
-import { I18nService } from '../i18n.service';
+import { I18nService } from '../../i18n.service';
 
 const DEPARTMENT_TRANSLATIONS = {
     INSTITUTES: 'footer.departments.institutes.items',

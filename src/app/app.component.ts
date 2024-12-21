@@ -1,14 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FooterComponent } from './footer/footer.component';
 
 const AVAILABLE_LANGUAGES = ['uk', 'en'] as string[];
 type LanguageCode = (typeof AVAILABLE_LANGUAGES)[number];
 
 @Component({
     selector: 'app-root',
-    imports: [FormsModule, FooterComponent],
+    imports: [FormsModule, RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
