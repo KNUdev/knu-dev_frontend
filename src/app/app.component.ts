@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { FooterComponent } from './footer/footer.component';
@@ -14,13 +14,11 @@ type LanguageCode = (typeof AVAILABLE_LANGUAGES)[number];
 })
 export class AppComponent {
     private translate = inject(TranslateService);
-    currentLang: LanguageCode;
+    currentLang = signal<LanguageCode>('uk');
 
     constructor() {
-        // Add available languages
         this.translate.addLangs(AVAILABLE_LANGUAGES);
 
-        // Get browser language or fallback to Ukrainian
         const userDefaultLanguage = (navigator.language.split('-')[0] ||
             'uk') as LanguageCode;
         const defaultLang = AVAILABLE_LANGUAGES.includes(userDefaultLanguage)
@@ -29,11 +27,11 @@ export class AppComponent {
 
         this.translate.setDefaultLang(defaultLang);
         this.translate.use(defaultLang);
-        this.currentLang = defaultLang;
+        this.currentLang.set(defaultLang);
     }
 
-    switchLang(languageCode: LanguageCode) {
+    switchLang(languageCode: LanguageCode): void {
         this.translate.use(languageCode);
-        this.currentLang = languageCode;
+        this.currentLang.set(languageCode);
     }
 }
