@@ -41,7 +41,7 @@
                     {{ "footer.departments.institutes.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of institutes(); track $index) {
+                    @for (item of (institutes$ | async); track $index) {
                     <li>
                         <a [href]="item.link" rel="noopener noreferrer">
                             {{ item.name }}
@@ -63,7 +63,7 @@
                     {{ "footer.departments.faculties.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of faculties(); track $index) {
+                    @for (item of (faculties$ | async); track $index) {
                     <li>
                         <a [href]="item.link" rel="noopener noreferrer">
                             {{ item.name }}

@@ -1,10 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import {
     LangChangeEvent,
     TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
-import { startWith, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { I18nService } from '../i18n.service';
 
 const DEPARTMENT_TRANSLATIONS = {
@@ -21,14 +23,14 @@ type Department = {
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
-    imports: [TranslateModule],
+    imports: [TranslateModule, AsyncPipe],
 })
 export class FooterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
 
-    institutes = signal<Department[]>([]);
-    faculties = signal<Department[]>([]);
+    institutes$: Observable<Department[]>;
+    faculties$: Observable<Department[]>;
 
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
@@ -50,14 +52,19 @@ export class FooterComponent {
             )
         );
 
-        departmentTranslations$.subscribe((translations) => {
-            this.institutes.set(
-                translations[DEPARTMENT_TRANSLATIONS.INSTITUTES] || []
-            );
-            this.faculties.set(
-                translations[DEPARTMENT_TRANSLATIONS.FACULTIES] || []
-            );
-        });
+        this.institutes$ = departmentTranslations$.pipe(
+            map(
+                (translations) =>
+                    translations[DEPARTMENT_TRANSLATIONS.INSTITUTES] || []
+            )
+        );
+
+        this.faculties$ = departmentTranslations$.pipe(
+            map(
+                (translations) =>
+                    translations[DEPARTMENT_TRANSLATIONS.FACULTIES] || []
+            )
+        );
     }
 
     get logoPath(): string {
