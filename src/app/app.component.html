@@ -1,5 +1,5 @@
 <nav>
-    <select (change)="switchLang($event)">
+    <select [(ngModel)]="currentLang" (ngModelChange)="switchLang($event)">
         <option value="uk">Українська</option>
         <option value="en">English</option>
     </select>

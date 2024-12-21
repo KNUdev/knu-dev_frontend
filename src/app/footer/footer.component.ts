@@ -1,52 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Component, inject, signal } from '@angular/core';
+import {
+    LangChangeEvent,
+    TranslateModule,
+    TranslateService,
+} from '@ngx-translate/core';
+import { startWith, switchMap } from 'rxjs/operators';
 import { I18nService } from '../i18n.service';
-interface Department {
+
+const DEPARTMENT_TRANSLATIONS = {
+    INSTITUTES: 'footer.departments.institutes.items',
+    FACULTIES: 'footer.departments.faculties.items',
+} as const;
+
+type Department = {
     name: string;
     link: string;
-}
+};
+
 @Component({
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
     imports: [TranslateModule],
 })
-export class FooterComponent implements OnInit {
-    institutes: Department[] = [];
-    faculties: Department[] = [];
-    constructor(
-        private i18nService: I18nService,
-        private translate: TranslateService
-    ) {}
+export class FooterComponent {
+    private i18nService = inject(I18nService);
+    private translate = inject(TranslateService);
 
-    ngOnInit() {
-        this.loadTranslationsAndData();
-        this.translate.onLangChange.subscribe(() => {
-            this.loadTranslationsAndData();
+    institutes = signal<Department[]>([]);
+    faculties = signal<Department[]>([]);
+
+    constructor() {
+        const langChange$ = this.translate.onLangChange.pipe(
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+        );
+
+        const loadTranslations$ = langChange$.pipe(
+            switchMap((event) =>
+                this.i18nService.loadComponentTranslations('footer', event.lang)
+            )
+        );
+
+        const departmentTranslations$ = loadTranslations$.pipe(
+            switchMap(() =>
+                this.translate.get([
+                    DEPARTMENT_TRANSLATIONS.INSTITUTES,
+                    DEPARTMENT_TRANSLATIONS.FACULTIES,
+                ])
+            )
+        );
+
+        departmentTranslations$.subscribe((translations) => {
+            this.institutes.set(
+                translations[DEPARTMENT_TRANSLATIONS.INSTITUTES] || []
+            );
+            this.faculties.set(
+                translations[DEPARTMENT_TRANSLATIONS.FACULTIES] || []
+            );
         });
     }
 
-    private loadTranslationsAndData() {
-        this.i18nService
-            .loadComponentTranslations('footer', this.translate.currentLang)
-            .subscribe(() => {
-                this.loadDepartments();
-            });
-    }
-
-    private loadDepartments() {
-        this.translate
-            .get([
-                'footer.departments.institutes.items',
-                'footer.departments.faculties.items',
-            ])
-            .subscribe((translations) => {
-                this.institutes =
-                    translations['footer.departments.institutes.items'] || [];
-                this.faculties =
-                    translations['footer.departments.faculties.items'] || [];
-            });
-    }
     get logoPath(): string {
         return 'assets/footer/KNULogo.svg';
     }
