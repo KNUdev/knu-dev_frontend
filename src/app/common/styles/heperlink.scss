@@ -1,0 +1,39 @@
+@use "./variables.scss" as *;
+
+.hyperlink {
+    font-family: Geist;
+    line-height: 1.085rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: $accent-yellow;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    &:hover {
+        padding: 10px;
+        gap: 10px;
+        border-color: $accent-yellow;
+        img {
+            filter: brightness(0) saturate(100%) invert(93%) sepia(33%)
+                saturate(1027%) hue-rotate(334deg) brightness(92%)
+                contrast(101%);
+        }
+    }
+
+    &:active {
+        padding: 10px;
+        gap: 10px;
+        border: 1px solid #cdb945;
+        border-radius: 5px;
+        img {
+            filter: brightness(0) saturate(100%) invert(81%) sepia(23%)
+                saturate(1170%) hue-rotate(5deg) brightness(93%) contrast(80%);
+        }
+    }
+}

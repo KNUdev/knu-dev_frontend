@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
     LangChangeEvent,
@@ -10,8 +10,8 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 import { I18nService } from '../../i18n.service';
 
 const DEPARTMENT_TRANSLATIONS = {
-    INSTITUTES: 'footer.departments.institutes.items',
-    FACULTIES: 'footer.departments.faculties.items',
+    INSTITUTES: 'departments.institutes.items',
+    FACULTIES: 'departments.faculties.items',
 } as const;
 
 type Department = {
@@ -23,7 +23,7 @@ type Department = {
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
-    imports: [TranslateModule, AsyncPipe],
+    imports: [TranslateModule, CommonModule],
 })
 export class FooterComponent {
     private i18nService = inject(I18nService);
@@ -68,11 +68,11 @@ export class FooterComponent {
     }
 
     get logoPath(): string {
-        return 'assets/footer/KNULogo.svg';
+        return 'assets/logo/KNULogo.svg';
     }
 
     socialLinks: { name: string; link: string }[] = [
-        { name: 'instagram', link: 'assets/social networks/inst.svg' },
-        { name: 'telegram', link: 'assets/social networks/tg.svg' },
+        { name: 'instagram', link: 'assets/icon/social networks/inst.svg' },
+        { name: 'telegram', link: 'assets/icon/social networks/tg.svg' },
     ];
 }

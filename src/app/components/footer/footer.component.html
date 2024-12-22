@@ -14,7 +14,7 @@
                 <span>{{ "footer.support" | translate }}</span>
                 <a
                     href="#"
-                    class="footer__support-link"
+                    class="footer__support-link hyperlink"
                     aria-label="Перейти до підтримки"
                     >{{ "footer.supportLink" | translate }}</a
                 >
@@ -24,11 +24,7 @@
                 aria-label="Соціальні мережі"
             >
                 @for (item of socialLinks; track item) {
-                <a
-                    href="#"
-                    class="footer__button"
-                    [attr.aria-label]="item.name"
-                >
+                <a href="#" class="icon__button" [attr.aria-label]="item.name">
                     <img [src]="item.link" [alt]="item.name" loading="lazy" />
                 </a>
                 }
@@ -38,12 +34,17 @@
         <section class="footer__right" aria-label="Навігація за розділами">
             <nav class="footer__section" aria-labelledby="institutes-heading">
                 <h3 id="institutes-heading" class="footer__heading">
-                    {{ "footer.departments.institutes.title" | translate }}
+                    {{ "departments.institutes.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of (institutes$ | async); track $index) {
+                    @for (item of (institutes$ | async | slice:0:5); track
+                    $index) {
                     <li>
-                        <a [href]="item.link" rel="noopener noreferrer">
+                        <a
+                            [href]="item.link"
+                            rel="noopener noreferrer"
+                            class="menu__nav"
+                        >
                             {{ item.name }}
                         </a>
                     </li>
@@ -51,7 +52,7 @@
                 </ul>
                 <a
                     href="#"
-                    class="footer__more-departments"
+                    class="footer__more-departments hyperlink"
                     aria-label="Переглянути всі інститути"
                 >
                     {{ "footer.more" | translate }}
@@ -60,12 +61,17 @@
 
             <nav class="footer__section" aria-labelledby="faculties-heading">
                 <h3 id="faculties-heading" class="footer__heading">
-                    {{ "footer.departments.faculties.title" | translate }}
+                    {{ "departments.faculties.title" | translate }}
                 </h3>
                 <ul class="footer__department-list">
-                    @for (item of (faculties$ | async); track $index) {
+                    @for (item of (faculties$ | async | slice:0:5); track
+                    $index) {
                     <li>
-                        <a [href]="item.link" rel="noopener noreferrer">
+                        <a
+                            [href]="item.link"
+                            rel="noopener noreferrer"
+                            class="menu__nav"
+                        >
                             {{ item.name }}
                         </a>
                     </li>
@@ -73,7 +79,7 @@
                 </ul>
                 <a
                     href="#"
-                    class="footer__more-departments"
+                    class="footer__more-departments hyperlink"
                     aria-label="Переглянути всі факультети"
                 >
                     {{ "footer.more" | translate }}

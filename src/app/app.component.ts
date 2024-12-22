@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ type LanguageCode = (typeof AVAILABLE_LANGUAGES)[number];
     imports: [FormsModule, RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
+    encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
     private translate = inject(TranslateService);

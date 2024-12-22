@@ -1,9 +1,4 @@
-$bg-dark: #141414;
-$text-light: #d1d1d1;
-$text-white: #ffffff;
-$border-gray: #343434;
-$accent-yellow: #edd342;
-$text-gray: #a0a0a0;
+@use "../../common/styles/variables" as *;
 
 @mixin flex-center {
     display: flex;
@@ -85,15 +80,7 @@ a {
     }
 
     &__support-link {
-        font-family: Geist;
-        line-height: 1.085rem;
-        @include text-style;
-        text-align: center;
-        text-underline-position: from-font;
-        text-decoration-skip-ink: none;
-        color: $accent-yellow;
         padding: 0.625rem;
-        text-decoration: none;
     }
 
     &__social-network-buttons {
@@ -132,25 +119,5 @@ a {
         li {
             margin-bottom: 0.9375rem;
         }
-        a {
-            font-family: Geist;
-            line-height: 1.5625rem;
-            @include text-style;
-            text-align: center;
-            text-underline-position: from-font;
-            text-decoration-skip-ink: none;
-            color: $text-gray;
-        }
-    }
-
-    &__more-departments {
-        color: $accent-yellow;
-        text-decoration: none;
-        font-family: Geist;
-        line-height: 1.085rem;
-        @include text-style;
-        text-align: center;
-        text-underline-position: from-font;
-        text-decoration-skip-ink: none;
     }
 }

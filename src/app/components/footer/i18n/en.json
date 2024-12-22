@@ -3,58 +3,6 @@
         "logoText": "Information Computing Center",
         "support": "Have questions?",
         "supportLink": "Support",
-        "more": "See more",
-        "departments": {
-            "institutes": {
-                "title": "INSTITUTES",
-                "items": [
-                    {
-                        "name": "Educational and Scientific Institute 'Institute of Geology'",
-                        "link": "https://geology.knu.ua/"
-                    },
-                    {
-                        "name": "Military Institute",
-                        "link": "https://mil.knu.ua/ua/"
-                    },
-                    {
-                        "name": "Institute of State Protection Management of Ukraine",
-                        "link": "https://institute.do.gov.ua/"
-                    },
-                    {
-                        "name": "Institute of Postgraduate Education",
-                        "link": "https://ipe.knu.ua/"
-                    },
-                    {
-                        "name": "Educational and Scientific Institute",
-                        "link": "https://philology.knu.ua/"
-                    }
-                ]
-            },
-            "faculties": {
-                "title": "FACULTIES",
-                "items": [
-                    {
-                        "name": "Geographical Faculty",
-                        "link": "https://geo.knu.ua/"
-                    },
-                    {
-                        "name": "Economic Faculty",
-                        "link": "https://econom.knu.ua/"
-                    },
-                    {
-                        "name": "Historical Faculty",
-                        "link": "http://history.univ.kiev.ua/"
-                    },
-                    {
-                        "name": "Mathematical Faculty",
-                        "link": "https://mechmat.knu.ua/"
-                    },
-                    {
-                        "name": "Faculty of Information Technologies",
-                        "link": "https://fit.knu.ua/"
-                    }
-                ]
-            }
-        }
+        "more": "See more"
     }
 }

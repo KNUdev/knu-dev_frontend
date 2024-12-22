@@ -1,0 +1,31 @@
+@use "../variables.scss" as *;
+
+.menu__nav {
+    font-family: Geist;
+    line-height: 1.5625rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: $text-gray;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: $text-light;
+    }
+    /*
+    &:focus {
+        padding: 10px;
+        gap: 10px;
+        border-radius: 5px;
+        border: 1px solid $text-light;
+        opacity: 0px;
+        color: $text-light;
+    }
+    */
+    &:active {
+        color: #888888;
+    }
+}
