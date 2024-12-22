@@ -18,7 +18,7 @@ export class I18nService {
         lang: string
     ): Observable<any> {
         const paths = [
-            `app/${component}/i18n/${lang}.json`,
+            `app/components/${component}/i18n/${lang}.json`,
             `app/i18n/common/${lang}.json`,
         ];
 
