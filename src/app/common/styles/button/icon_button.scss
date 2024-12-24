@@ -14,14 +14,12 @@
 
     &:hover {
         border-color: $accent-yellow;
-        img {
-            filter: brightness(0) saturate(100%) invert(93%) sepia(33%)
-                saturate(1027%) hue-rotate(334deg) brightness(92%)
-                contrast(101%);
+        svg path {
+            fill: $accent-yellow;
         }
     }
-    /*
-    &:focus {
+
+    &:focus-visible {
         padding: 10px;
         gap: 0px;
         border-radius: 5px;
@@ -29,13 +27,11 @@
         opacity: 0px;
         color: $text-light;
     }
-    */
 
     &:active {
         border-color: #cdb945;
-        img {
-            filter: brightness(0) saturate(100%) invert(81%) sepia(23%)
-                saturate(1170%) hue-rotate(5deg) brightness(93%) contrast(80%);
+        svg path {
+            fill: #cdb945;
         }
     }
 }

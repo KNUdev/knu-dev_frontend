@@ -23,9 +23,13 @@
                 class="footer__social-network-buttons"
                 aria-label="Соціальні мережі"
             >
-                @for (item of socialLinks; track item) {
-                <a href="#" class="icon__button" [attr.aria-label]="item.name">
-                    <img [src]="item.link" [alt]="item.name" loading="lazy" />
+                @for (link of socialLinks; track link.name) {
+                <a
+                    [href]="link.url"
+                    class="icon__button"
+                    [attr.aria-label]="link.name"
+                >
+                    <mat-icon [svgIcon]="link.name"></mat-icon>
                 </a>
                 }
             </nav>

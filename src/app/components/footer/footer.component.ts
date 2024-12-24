@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -14,6 +16,19 @@ const DEPARTMENT_TRANSLATIONS = {
     FACULTIES: 'departments.faculties.items',
 } as const;
 
+const SOCIAL_ICONS = [
+    {
+        name: 'instagram',
+        path: 'assets/icon/social networks/inst.svg',
+        url: '#',
+    },
+    {
+        name: 'telegram',
+        path: 'assets/icon/social networks/tg.svg',
+        url: '#',
+    },
+] as const;
+
 type Department = {
     name: string;
     link: string;
@@ -23,16 +38,26 @@ type Department = {
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
-    imports: [TranslateModule, CommonModule],
+    imports: [TranslateModule, CommonModule, MatIconModule],
 })
 export class FooterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matMatIconRegistry = inject(MatIconRegistry);
+    readonly socialLinks = SOCIAL_ICONS;
 
     institutes$: Observable<Department[]>;
     faculties$: Observable<Department[]>;
 
     constructor() {
+        SOCIAL_ICONS.forEach((icon) => {
+            this.matMatIconRegistry.addSvgIcon(
+                icon.name,
+                this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
+            );
+        });
+
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
@@ -70,9 +95,4 @@ export class FooterComponent {
     get logoPath(): string {
         return 'assets/logo/KNULogo.svg';
     }
-
-    socialLinks: { name: string; link: string }[] = [
-        { name: 'instagram', link: 'assets/icon/social networks/inst.svg' },
-        { name: 'telegram', link: 'assets/icon/social networks/tg.svg' },
-    ];
 }
