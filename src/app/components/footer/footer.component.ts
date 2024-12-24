@@ -44,19 +44,20 @@ export class FooterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
-    private matMatIconRegistry = inject(MatIconRegistry);
+    private matIconRegistry = inject(MatIconRegistry);
     readonly socialLinks = SOCIAL_ICONS;
+    readonly logoPath = 'assets/logo/KNULogo.svg';
 
     institutes$: Observable<Department[]>;
     faculties$: Observable<Department[]>;
 
     constructor() {
-        SOCIAL_ICONS.forEach((icon) => {
-            this.matMatIconRegistry.addSvgIcon(
+        SOCIAL_ICONS.map((icon) =>
+            this.matIconRegistry.addSvgIcon(
                 icon.name,
                 this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
-            );
-        });
+            )
+        );
 
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
@@ -90,9 +91,5 @@ export class FooterComponent {
                     translations[DEPARTMENT_TRANSLATIONS.FACULTIES] || []
             )
         );
-    }
-
-    get logoPath(): string {
-        return 'assets/logo/KNULogo.svg';
     }
 }
