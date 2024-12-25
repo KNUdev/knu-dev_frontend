@@ -20,8 +20,7 @@
     }
 
     &:focus-visible {
-        padding: 10px;
-        gap: 0px;
+        padding: 0.625rem;
         border-radius: 5px;
         border: 2px solid $text-light;
         opacity: 0px;

@@ -16,8 +16,7 @@
     border-radius: 5px;
 
     &:hover {
-        padding: 10px;
-        gap: 10px;
+        padding: 0.625rem;
         border-color: $accent-yellow;
         svg path {
             fill: $accent-yellow;
@@ -25,8 +24,7 @@
     }
 
     &:active {
-        padding: 10px;
-        gap: 10px;
+        padding: 0.625rem;
         border: 1px solid #cdb945;
         border-radius: 5px;
         svg path {
