@@ -1,0 +1,12 @@
+<header class="header">
+    @if (!isAuthPage()) {
+    <nav>
+        <select [(ngModel)]="currentLang" (ngModelChange)="switchLang($event)">
+            <option value="uk">Українська</option>
+            <option value="en">English</option>
+        </select>
+    </nav>
+    } @else {
+    <h1>LOGO</h1>
+    }
+</header>

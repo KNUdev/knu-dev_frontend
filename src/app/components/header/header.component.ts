@@ -1,28 +1,24 @@
-import { Component, inject, signal, ViewEncapsulation } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
 
 const AVAILABLE_LANGUAGES = ['uk', 'en'] as string[];
 type LanguageCode = (typeof AVAILABLE_LANGUAGES)[number];
 const LANGUAGE_KEY = 'selectedLanguage';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, HeaderComponent, FooterComponent],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
-    encapsulation: ViewEncapsulation.None,
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
+    imports: [FormsModule],
 })
-export class AppComponent {
-    private router = inject(Router);
+export class HeaderComponent {
     private translate = inject(TranslateService);
+    private router = inject(Router);
     currentLang = signal<LanguageCode>('uk');
 
     constructor() {
-        this.translate.addLangs(AVAILABLE_LANGUAGES);
-
         const savedLanguage = localStorage.getItem(
             LANGUAGE_KEY
         ) as LanguageCode;
@@ -34,12 +30,16 @@ export class AppComponent {
                 ? userDefaultLanguage
                 : 'uk');
 
-        this.translate.setDefaultLang(defaultLang);
-        this.translate.use(defaultLang);
         this.currentLang.set(defaultLang);
     }
 
     isAuthPage(): boolean {
         return this.router.url.includes('auth');
+    }
+
+    switchLang(languageCode: LanguageCode): void {
+        this.translate.use(languageCode);
+        this.currentLang.set(languageCode);
+        localStorage.setItem(LANGUAGE_KEY, languageCode);
     }
 }
