@@ -4,3 +4,21 @@ $text-white: #ffffff;
 $border-gray: #6d6d6d;
 $accent-yellow: #edd342;
 $text-gray: #a0a0a0;
+
+@mixin for-desktop {
+    @media (max-width: 1920px) {
+        @content;
+    }
+}
+
+@mixin for-tablet {
+    @media (max-width: 1440px) {
+        @content;
+    }
+}
+
+@mixin for-mobile {
+    @media (max-width: 1024px) {
+        @content;
+    }
+}

@@ -12,6 +12,11 @@
     cursor: pointer;
     transition: all 0.3s ease;
 
+    @include for-mobile {
+        width: 8.44rem;
+        height: 3.13rem;
+    }
+
     &:hover {
         border-color: $accent-yellow;
         svg path {

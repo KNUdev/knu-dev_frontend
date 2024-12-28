@@ -19,26 +19,74 @@ a {
 .footer {
     background-color: $bg-dark;
     color: $text-light;
-    padding: 3.125rem 4rem;
+    padding: 3.13rem 7.5rem;
+
+    @include for-desktop {
+        padding: 3.13rem 4.06rem;
+    }
+
+    @include for-tablet {
+        padding: 3.13rem 2.63rem;
+    }
+
+    @include for-mobile {
+        padding: 3.13rem 1.25rem;
+    }
 
     &__container {
         max-width: 105rem;
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
-        gap: 6rem;
+        gap: 6.8rem;
+
+        @include for-tablet {
+            flex-direction: column;
+            gap: 3.75rem;
+        }
+
+        @include for-mobile {
+            gap: 4.6rem;
+        }
     }
 
     &__left {
         width: 29.375rem;
         padding: 2.3125rem 0;
+        padding-right: 3rem;
         border-right: 1px solid $border-gray;
+
+        @include for-tablet {
+            display: flex;
+            justify-content: space-between;
+            width: auto;
+            border-right: none;
+            border-bottom: 1px solid $border-gray;
+            padding: 0;
+            padding-bottom: 4rem;
+        }
+
+        @include for-mobile {
+            display: block;
+            padding-bottom: 4rem;
+        }
     }
 
     &__right {
         display: flex;
         justify-content: flex-end;
-        gap: clamp(2rem, 5vw, 8rem);
+        gap: 3.125rem;
+
+        @include for-tablet {
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15rem;
+        }
+
+        @include for-mobile {
+            flex-direction: column;
+            gap: 4.75rem;
+        }
     }
 
     &__logo {
@@ -65,7 +113,15 @@ a {
     }
 
     &__support {
-        margin-bottom: 4.375rem;
+        margin-bottom: 4.5rem;
+
+        @include for-tablet {
+            margin-bottom: 0;
+        }
+
+        @include for-mobile {
+            margin-bottom: 2.75rem;
+        }
 
         span {
             font-family: Manrope;
@@ -86,17 +142,18 @@ a {
     &__social-network-buttons {
         display: flex;
         gap: 3.125rem;
+
+        @include for-tablet {
+            margin: auto 0;
+        }
     }
 
-    &__button {
-        width: 10.9375rem;
-        height: 3.125rem;
-        border: 1px solid $border-gray;
-        background: transparent;
-        border-radius: 0.25rem;
-        @include flex-center;
-        cursor: pointer;
-        transition: border-color 0.3s;
+    &__section {
+        display: flex;
+        flex-direction: column;
+        @include for-mobile {
+            width: 100%;
+        }
     }
 
     &__heading {
@@ -107,7 +164,9 @@ a {
         letter-spacing: 0.05em;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
-        margin-bottom: 1.25rem;
+        margin: 0;
+        margin-bottom: 1.5rem;
+        padding: 0rem 0.94rem;
         text-transform: uppercase;
     }
 
@@ -117,10 +176,19 @@ a {
         margin: 0 0 1.25rem 0;
 
         li {
-            margin-bottom: 0.9375rem;
+            margin-bottom: 0.625rem;
+            padding: 0.31rem 0.94rem;
+
             a {
                 text-align: start;
             }
         }
+    }
+
+    &__more-departments {
+        margin-top: auto;
+        padding: 0.94rem;
+        display: flex;
+        width: fit-content;
     }
 }

@@ -1,23 +1,25 @@
 <footer class="footer">
     <div class="footer__container">
         <section class="footer__left" aria-label="Info">
-            <a href="https://icc.knu.ua/" class="footer__logo">
-                <img [src]="logoPath" alt="KNU logo" loading="lazy" />
-                <div class="footer__logo-text">
-                    <span
-                        >KNUdev &amp; <br />
-                        {{ "footer.logoText" | translate }}</span
+            <div>
+                <a href="https://icc.knu.ua/" class="footer__logo">
+                    <img [src]="logoPath" alt="KNU logo" loading="lazy" />
+                    <div class="footer__logo-text">
+                        <span
+                            >KNUdev &amp; <br />
+                            {{ "footer.logoText" | translate }}</span
+                        >
+                    </div>
+                </a>
+                <div class="footer__support">
+                    <span>{{ "footer.support" | translate }}</span>
+                    <a
+                        href="#"
+                        class="footer__support-link hyperlink"
+                        aria-label="Перейти до підтримки"
+                        >{{ "footer.supportLink" | translate }}</a
                     >
                 </div>
-            </a>
-            <div class="footer__support">
-                <span>{{ "footer.support" | translate }}</span>
-                <a
-                    href="#"
-                    class="footer__support-link hyperlink"
-                    aria-label="Перейти до підтримки"
-                    >{{ "footer.supportLink" | translate }}</a
-                >
             </div>
             <nav
                 class="footer__social-network-buttons"
