@@ -28,7 +28,8 @@ export class HeaderComponent {
             savedLanguage ||
             (AVAILABLE_LANGUAGES.includes(userDefaultLanguage)
                 ? userDefaultLanguage
-                : 'uk');
+                : 'uk'
+            );
 
         this.currentLang.set(defaultLang);
     }

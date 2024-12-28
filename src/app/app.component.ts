@@ -28,11 +28,11 @@ export class AppComponent {
         ) as LanguageCode;
         const userDefaultLanguage = (navigator.language.split('-')[0] ||
             'uk') as LanguageCode;
-        const defaultLang =
-            savedLanguage ||
+        const defaultLang = savedLanguage ||
             (AVAILABLE_LANGUAGES.includes(userDefaultLanguage)
                 ? userDefaultLanguage
-                : 'uk');
+                : 'uk'
+            );
 
         this.translate.setDefaultLang(defaultLang);
         this.translate.use(defaultLang);
