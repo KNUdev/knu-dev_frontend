@@ -9,7 +9,7 @@ import {
 } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
-import { I18nService } from '../../i18n.service';
+import { I18nService } from '../../services/languages/i18n.service';
 
 const DEPARTMENT_TRANSLATIONS = {
     INSTITUTES: 'departments.institutes.items',
@@ -19,12 +19,12 @@ const DEPARTMENT_TRANSLATIONS = {
 const SOCIAL_ICONS = [
     {
         name: 'instagram',
-        path: 'assets/icon/social networks/inst.svg',
+        path: 'assets/icon/social-networks/inst.svg',
         url: '#',
     },
     {
         name: 'telegram',
-        path: 'assets/icon/social networks/tg.svg',
+        path: 'assets/icon/social-networks/tg.svg',
         url: '#',
     },
 ] as const;
