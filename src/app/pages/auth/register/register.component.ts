@@ -29,24 +29,34 @@ export class RegisterComponent {
 
     onSubmit() {
         if (this.registerForm.valid) {
+            const formData = new FormData();
+            formData.append(
+                'username',
+                this.registerForm.get('username')?.value
+            );
+            formData.append('email', this.registerForm.get('email')?.value);
+            formData.append(
+                'password',
+                this.registerForm.get('password')?.value
+            );
+
             this.http
-                .post(
-                    'http://localhost:5001/account/register',
-                    this.registerForm.value
-                )
+                .post('http://localhost:5001/account/register', formData)
                 .subscribe({
                     next: (response) => {
                         alert('Registration successful!');
                         this.registerForm.reset();
+                        this.errorMessage = null;
                     },
                     error: (error) => {
                         if (error.status === 400) {
                             this.errorMessage =
                                 'Validation failed. Please check your input.';
+                            console.log(this.errorMessage);
                         } else {
-                            console.error(error);
                             this.errorMessage =
                                 'Something went wrong. Please try again later.';
+                            console.log(this.errorMessage);
                         }
                     },
                 });
