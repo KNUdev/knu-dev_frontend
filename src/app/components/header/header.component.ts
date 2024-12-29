@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { languageSwitcher } from '../../services/languages/language-switcher';
+import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
 
 @Component({
     selector: 'app-header',
@@ -13,7 +13,7 @@ import { languageSwitcher } from '../../services/languages/language-switcher';
 export class HeaderComponent {
     private translate = inject(TranslateService);
     private router = inject(Router);
-    protected languageSwitcher = languageSwitcher(this.translate);
+    protected languageSwitcher = LanguageSwitcherService(this.translate);
 
     isAuthPage(): boolean {
         return this.router.url.includes('auth');

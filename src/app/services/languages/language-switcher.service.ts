@@ -11,7 +11,7 @@ interface LanguageOption {
     name: string;
 }
 
-export function languageSwitcher(translate: TranslateService) {
+export function LanguageSwitcherService(translate: TranslateService) {
     const currentLang = signal<LanguageCode>('uk');
 
     const savedLanguage = localStorage.getItem(LANGUAGE_KEY) as LanguageCode;
