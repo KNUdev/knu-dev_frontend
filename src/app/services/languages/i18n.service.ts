@@ -19,7 +19,7 @@ export class I18nService {
     ): Observable<any> {
         const paths = [
             `app/components/${component}/i18n/${lang}.json`,
-            `app/i18n/common/${lang}.json`,
+            `app/common/i18n/${lang}.json`,
         ];
 
         const requests = paths.map((path) =>

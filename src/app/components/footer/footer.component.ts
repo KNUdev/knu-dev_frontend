@@ -1,5 +1,7 @@
-import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -7,12 +9,25 @@ import {
 } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
-import { I18nService } from '../../i18n.service';
+import { I18nService } from '../../services/languages/i18n.service';
 
 const DEPARTMENT_TRANSLATIONS = {
-    INSTITUTES: 'footer.departments.institutes.items',
-    FACULTIES: 'footer.departments.faculties.items',
+    INSTITUTES: 'departments.institutes.items',
+    FACULTIES: 'departments.faculties.items',
 } as const;
+
+const SOCIAL_ICONS = [
+    {
+        name: 'instagram',
+        path: 'assets/icon/social-networks/inst.svg',
+        url: '#',
+    },
+    {
+        name: 'telegram',
+        path: 'assets/icon/social-networks/tg.svg',
+        url: '#',
+    },
+] as const;
 
 type Department = {
     name: string;
@@ -23,16 +38,27 @@ type Department = {
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
-    imports: [TranslateModule, AsyncPipe],
+    imports: [TranslateModule, CommonModule, MatIconModule],
 })
 export class FooterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+    readonly socialLinks = SOCIAL_ICONS;
+    readonly logoPath = 'assets/logo/KNULogo.svg';
 
     institutes$: Observable<Department[]>;
     faculties$: Observable<Department[]>;
 
     constructor() {
+        SOCIAL_ICONS.map((icon) =>
+            this.matIconRegistry.addSvgIcon(
+                icon.name,
+                this.domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
+            )
+        );
+
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
@@ -66,13 +92,4 @@ export class FooterComponent {
             )
         );
     }
-
-    get logoPath(): string {
-        return 'assets/footer/KNULogo.svg';
-    }
-
-    socialLinks: { name: string; link: string }[] = [
-        { name: 'instagram', link: 'assets/social networks/inst.svg' },
-        { name: 'telegram', link: 'assets/social networks/tg.svg' },
-    ];
 }

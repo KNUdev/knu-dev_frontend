@@ -1,0 +1,41 @@
+@use "../variables.scss" as *;
+
+.icon__button {
+    width: 10.9375rem;
+    height: 3.125rem;
+    border: 1px solid $border-gray;
+    background: transparent;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    @include for-mobile {
+        width: 8.44rem;
+        height: 3.13rem;
+    }
+
+    &:hover {
+        border-color: $accent-yellow;
+        svg path {
+            fill: $accent-yellow;
+        }
+    }
+
+    &:focus-visible {
+        padding: 0.625rem;
+        border-radius: 5px;
+        border: 2px solid $text-light;
+        opacity: 0px;
+        color: $text-light;
+    }
+
+    &:active {
+        border-color: #cdb945;
+        svg path {
+            fill: #cdb945;
+        }
+    }
+}
