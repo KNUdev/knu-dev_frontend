@@ -1,18 +1,217 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div>
-        <label for="username">Username</label>
-        <input id="username" formControlName="username" type="text" />
-    </div>
+<div class="registration-container">
+    @if (currentStep === 1) {
+    <form [formGroup]="personalInfoForm" (ngSubmit)="nextStep()">
+        <div class="form-group">
+            <input formControlName="firstName" placeholder="Ім'я*" />
+            @if (showValidationErrors &&
+            personalInfoForm.get('firstName')?.errors?.['required']) {
+            <div class="error">First name cannot be null or blank.</div>
+            } @if (showValidationErrors &&
+            personalInfoForm.get('firstName')?.errors?.['pattern']) {
+            <div class="error">
+                First name must contain only English letters and valid symbols
+                (- or ')
+            </div>
+            } @if (backendErrors['firstName']) { @for (error of
+            backendErrors['firstName']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
 
-    <div>
-        <label for="email">Email</label>
-        <input id="email" formControlName="email" type="email" />
-    </div>
+        <div class="form-group">
+            <input formControlName="lastName" placeholder="Прізвище*" />
+            @if (showValidationErrors &&
+            personalInfoForm.get('lastName')?.errors?.['required']) {
+            <div class="error">Last name cannot be null or blank.</div>
+            }@if (showValidationErrors &&
+            personalInfoForm.get('lastName')?.errors?.['pattern']) {
+            <div class="error">
+                First name must contain only English letters and valid symbols
+                (- or ')
+            </div>
+            } @if (backendErrors['lastName']) { @for (error of
+            backendErrors['lastName']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
 
-    <div>
-        <label for="password">Password</label>
-        <input id="password" formControlName="password" type="password" />
-    </div>
+        <div class="form-group">
+            <input formControlName="middleName" placeholder="По батькові*" />
+            @if (showValidationErrors &&
+            personalInfoForm.get('middleName')?.errors?.['required']) {
+            <div class="error">Middle name cannot be null or blank.</div>
+            } @if (showValidationErrors &&
+            personalInfoForm.get('middleName')?.errors?.['pattern']) {
+            <div class="error">
+                First name must contain only English letters and valid symbols
+                (- or ')
+            </div>
+            } @if (backendErrors['middleName']) { @for (error of
+            backendErrors['middleName']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
 
-    <button type="submit" [disabled]="registerForm.invalid">Register</button>
-</form>
+        <div class="form-group">
+            <div class="email-input-container">
+                <input
+                    formControlName="email"
+                    placeholder="Email*"
+                    (input)="onEmailInput($event)"
+                    (blur)="formatEmailOnBlur()"
+                />
+                @if(!personalInfoForm.get('email')?.value ||
+                !personalInfoForm.get('email')?.value.includes('@')) {
+                <span class="domain-suffix">&#64;knu.ua</span>
+                }
+            </div>
+            @if (showValidationErrors &&
+            personalInfoForm.get('email')?.errors?.['required']) {
+            <div class="error">Email cannot be blank</div>
+            } @if (personalInfoForm.get('email')?.errors?.['invalidDomain']) {
+            <div class="error">Email must be in the &#64;knu.ua domain</div>
+            }@if (backendErrors['email']) { @for (error of
+            backendErrors['email']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+
+        <div class="form-group">
+            <input
+                [type]="isPasswordVisible ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Пароль*"
+            />
+            <button type="button" (click)="togglePasswordVisibility()">
+                {{ isPasswordVisible ? "Скрыть" : "Показать" }}
+            </button>
+            @if (showValidationErrors &&
+            personalInfoForm.get('password')?.errors?.['required']) {
+            <div class="error">Password cannot be blank</div>
+            } @if (showValidationErrors &&
+            personalInfoForm.get('password')?.errors?.['minlength'] ||
+            personalInfoForm.get('password')?.errors?.['maxlength']) {
+            <div class="error">
+                Password must be between 8 and 64 characters
+            </div>
+            } @if (showValidationErrors &&
+            personalInfoForm.get('password')?.errors?.['pattern']) {
+            <div class="error">
+                Password must contain at least one letter and one digit
+            </div>
+            }@if (backendErrors['password']) { @for (error of
+            backendErrors['password']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+
+        <div class="form-group">
+            <input
+                [type]="isConfirmPasswordVisible ? 'text' : 'password'"
+                formControlName="confirmPassword"
+                placeholder="Підтвердження пароля*"
+                (paste)="preventPaste($event)"
+                (copy)="preventCopy($event)"
+                (cut)="preventCut($event)"
+            />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()">
+                {{ isConfirmPasswordVisible ? "Скрыть" : "Показать" }}
+            </button>
+            @if (showValidationErrors &&
+            personalInfoForm.get('confirmPassword')?.errors?.['required']) {
+            <div class="error">Confirm password cannot be blank</div>
+            } @if (showValidationErrors &&
+            personalInfoForm.errors?.['passwordMismatch']) {
+            <div class="error">Passwords do not match</div>
+            }
+        </div>
+
+        <button type="submit">Продовжити</button>
+    </form>
+    } @if (currentStep === 2) {
+    <form [formGroup]="academicInfoForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <select
+                formControlName="departmentId"
+                (change)="onDepartmentChange()"
+            >
+                <option value="">Факультет/Інститут*</option>
+                @for (department of departments; track department.id) {
+                <option [value]="department.id">
+                    {{ department.name.ukName }}
+                </option>
+                }
+            </select>
+            @if (showValidationErrors &&
+            academicInfoForm.get('departmentId')?.errors?.['required']) {
+            <div class="error">You must select a department</div>
+            } @if (backendErrors['departmentId']) { @for (error of
+            backendErrors['departmentId']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+
+        <div class="form-group">
+            @if(!academicInfoForm.get('departmentId')?.value) {
+            <select disabled>
+                <option value="">Спеціальність*</option>
+            </select>
+
+            <p>Firstly you must select a department</p>
+            } @else {
+            <select formControlName="specialtyCodename">
+                <option value="">Спеціальність*</option>
+                @for (specialty of specialties; track specialty.codeName) {
+                <option [value]="specialty.codeName">
+                    {{ specialty.name.ukName }}
+                </option>
+                }
+            </select>
+            } @if (showValidationErrors &&
+            academicInfoForm.get('specialtyCodename')?.errors?.['required']) {
+            <div class="error">You must select a specialty</div>
+            } @if (backendErrors['specialtyCodename']) { @for (error of
+            backendErrors['specialtyCodename']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+
+        <div class="form-group">
+            <select formControlName="course">
+                <option value="">Курс*</option>
+                @for (course of courses; track course) {
+                <option [value]="course">
+                    {{ course }}
+                </option>
+                }
+            </select>
+            @if (showValidationErrors &&
+            academicInfoForm.get('course')?.errors?.['required']) {
+            <div class="error">You must select a course</div>
+            } @if (backendErrors['course']) { @for (error of
+            backendErrors['course']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+
+        <div class="form-group">
+            <select formControlName="expertise">
+                <option value="">Тех. напрямок*</option>
+                <option value="FULLSTACK">FULLSTACK</option>
+                <option value="BACKEND">BACKEND</option>
+                <option value="FRONTEND">FRONTEND</option>
+                <option value="UI_UX_DESIGNER">UI_UX_DESIGNER</option>
+            </select>
+            @if (showValidationErrors &&
+            academicInfoForm.get('expertise')?.errors?.['required']) {
+            <div class="error">You must select a expertise</div>
+            } @if (backendErrors['expertise']) { @for (error of
+            backendErrors['expertise']; track $index) {
+            <div class="error">{{ error }}</div>
+            } }
+        </div>
+        <button type="button" (click)="previousStep()">Назад</button>
+        <button type="submit">Зареєструватися</button>
+    </form>
+    }
+</div>
