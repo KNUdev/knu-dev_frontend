@@ -9,6 +9,8 @@ interface LanguageOption {
     code: LanguageCode;
     active: boolean;
     name: string;
+    imgMiniPath: string;
+    imgFullPath: string;
 }
 
 export function LanguageSwitcherService(translate: TranslateService) {
