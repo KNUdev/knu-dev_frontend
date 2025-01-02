@@ -9,6 +9,8 @@ interface LanguageOption {
     code: LanguageCode;
     active: boolean;
     name: string;
+    imgMiniPath: string;
+    imgFullPath: string;
 }
 
 export function LanguageSwitcherService(translate: TranslateService) {
@@ -40,6 +42,8 @@ export function LanguageSwitcherService(translate: TranslateService) {
             code,
             active: currentLang() === code,
             name: code === 'uk' ? 'Українська' : 'English',
+            imgMiniPath: `assets/icon/language/${code}Round.svg`,
+            imgFullPath: `assets/icon/language/${code}Square.svg`,
         }));
     });
 
