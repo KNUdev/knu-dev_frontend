@@ -1,1 +1,123 @@
 @use "../../common/styles/variables" as *;
+
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(16, 16, 16);
+    transition: all 0.3s ease;
+
+    padding: 3.13rem 7.5rem;
+
+    @include for-desktop {
+        padding: 3.13rem 4.06rem;
+    }
+
+    @include for-tablet {
+        padding: 3.13rem 2.63rem;
+    }
+
+    @include for-mobile {
+        padding: 3.13rem 1.25rem;
+    }
+
+    &.scrolled {
+        height: 60px;
+    }
+    &__container {
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6.8rem;
+        max-width: 105rem;
+        padding: 0 20px;
+    }
+    &__menu-list {
+        display: flex;
+        gap: 20px;
+    }
+    option {
+        img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+    &__avatar {
+        display: flex;
+    }
+}
+
+img {
+    transition: all 0.3s ease;
+}
+
+.language-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.selector-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.flag-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.chevron {
+    color: white;
+    font-size: 12px;
+    transition: transform 0.2s;
+}
+
+.chevron.up {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: -100%;
+    background: #1e1e1e;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 8px;
+    min-width: 160px;
+    z-index: 1000;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.language-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.language-option.active {
+    background: rgba(255, 255, 255, 0.05);
+}
