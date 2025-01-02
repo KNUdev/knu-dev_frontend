@@ -1,5 +1,3 @@
-/// <reference types="@angular/localize" />
-
 import { provideHttpClient } from '@angular/common/http';
 import '@angular/localize/init';
 import { bootstrapApplication } from '@angular/platform-browser';
