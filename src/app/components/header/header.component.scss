@@ -1,46 +1,50 @@
 @use "../../common/styles/variables" as *;
 
+a {
+    text-decoration: none;
+}
+
 .header {
     position: sticky;
-    top: 0;
-    width: 100%;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     background: rgb(16, 16, 16);
     transition: all 0.3s ease;
+    top: 0;
 
-    padding: 3.13rem 7.5rem;
+    padding: 1.25rem 7.5rem;
 
     @include for-desktop {
-        padding: 3.13rem 4.06rem;
+        padding: 1.25rem 4.06rem;
     }
 
     @include for-tablet {
-        padding: 3.13rem 2.63rem;
+        padding: 1.25rem 2.63rem;
     }
 
     @include for-mobile {
-        padding: 3.13rem 1.25rem;
+        padding: 1.25rem 2.62rem;
     }
 
-    &.scrolled {
-        height: 60px;
+    &__logo {
+        margin: auto 0;
     }
     &__container {
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         gap: 6.8rem;
         max-width: 105rem;
-        padding: 0 20px;
     }
     &__menu-list {
         display: flex;
-        gap: 20px;
+        list-style: none;
+        gap: 2.81rem;
+        padding: 0;
+        margin: auto 0;
+        li {
+            padding: 0.62rem;
+        }
     }
+
     option {
         img {
             width: 30px;
@@ -49,8 +53,23 @@
             object-fit: cover;
         }
     }
-    &__avatar {
+    &__lang-ava {
         display: flex;
+        margin: auto 0;
+    }
+
+    &__avatar {
+        img {
+            width: 2rem;
+            height: 2rem;
+            padding: 0.62rem;
+        }
+        margin: auto 0;
+    }
+
+    .diviver {
+        border: 1px solid #343434;
+        margin: 0 1.219rem;
     }
 }
 
@@ -61,27 +80,26 @@ img {
 .language-selector {
     position: relative;
     display: inline-block;
+    margin: auto 0;
 }
 
 .selector-button {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: transparent;
-    border: none;
+    gap: 0.62rem;
     cursor: pointer;
-    padding: 8px;
+    padding: 0.62rem;
+    background: none;
+    border: none;
 }
 
 .flag-icon {
-    width: 24px;
-    height: 24px;
+    width: 1.5625rem;
+    height: 1.5625rem;
     border-radius: 50%;
 }
 
 .chevron {
-    color: white;
-    font-size: 12px;
     transition: transform 0.2s;
 }
 
@@ -93,31 +111,53 @@ img {
     position: absolute;
     top: 100%;
     left: -100%;
-    background: #1e1e1e;
-    border: 1px solid #2e2e2e;
-    border-radius: 8px;
-    padding: 8px;
-    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.98rem;
+    background: #232323;
+    border-radius: 10px;
+    padding: 1.25rem;
+    min-width: 15.625rem;
+    box-sizing: border-box;
     z-index: 1000;
 }
 
 .language-option {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     width: 100%;
-    padding: 8px;
+    padding: 0.62rem;
     background: transparent;
-    border: none;
+    border-radius: 5px;
+    border: 1px solid #343434;
     cursor: pointer;
     color: white;
     transition: background-color 0.2s;
+
+    img {
+        width: 1.5625rem;
+        height: 1.5625rem;
+        border-radius: 50%;
+    }
+
+    span {
+        font-family: Geist;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
 }
 
 .language-option:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #4a4a4a;
 }
 
 .language-option.active {
-    background: rgba(255, 255, 255, 0.05);
+    background: #343434;
+}
+
+.language-option.active:hover {
+    background: #4a4a4a;
 }

@@ -32,6 +32,8 @@ export class HeaderComponent {
     isOpen = false;
     readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
     readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
+    readonly arrowDownPath = 'assets/icon/system/arrowDown.svg';
+    readonly avatarNotFoundPath = 'assets/icon/avatarNotFound.svg';
 
     isScrolled = false;
 
@@ -81,21 +83,24 @@ export class HeaderComponent {
 
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent),
         );
 
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
-                this.i18nService.loadComponentTranslations('header', event.lang)
-            )
+                this.i18nService.loadComponentTranslations(
+                    'header',
+                    event.lang,
+                ),
+            ),
         );
 
         const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
+            switchMap(() => this.translate.get([MENU_TRANSLATIONS])),
         );
 
         this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
+            map((translations) => translations[MENU_TRANSLATIONS] || []),
         );
     }
 }

@@ -1,60 +1,76 @@
 <header class="header" [class.scrolled]="isScrolled">
     <div class="header__container">
         @if (!isAuthPage()) {
-        <div class="header__logo">
-            <a href="/">
-                <img [src]="isScrolled ? logoMiniPath : logoFullPath" />
-            </a>
-        </div>
-        <ul class="header__menu-list">
-            @for (item of menu$ | async; track $index) {
-            <li>
-                <a
-                    [href]="item.link"
-                    rel="noopener noreferrer"
-                    class="menu__nav"
-                >
-                    {{ item.name }}
+            <div class="header__logo">
+                <a href="/">
+                    <img [src]="isScrolled ? logoMiniPath : logoFullPath" />
                 </a>
-            </li>
-            }
-        </ul>
-        <div class="header__avatar">
-            <div class="language-selector" [class.open]="isOpen">
-                <button class="selector-button" (click)="toggleDropdown()">
-                    <img
-                        [src]="getCurrentLanguageFlag()"
-                        [alt]="getCurrentLanguageName()"
-                        class="flag-icon"
-                    />
-                    <span class="chevron" [class.up]="isOpen">▼</span>
-                </button>
-                @if(isOpen){
-                <div class="dropdown-menu">
-                    @for(lang of languageSwitcher.supportedLanguages(); track
-                    lang.code) {
-                    <button
-                        class="language-option"
-                        [class.active]="
-                            lang.code === languageSwitcher.currentLang()
-                        "
-                        (click)="selectLanguage(lang.code)"
-                    >
+            </div>
+            <ul class="header__menu-list">
+                @for (item of menu$ | async; track $index) {
+                    <li>
+                        <a
+                            [href]="item.link"
+                            rel="noopener noreferrer"
+                            class="menu__nav"
+                        >
+                            {{ item.name }}
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div class="header__lang-ava">
+                <div class="language-selector" [class.open]="isOpen">
+                    <button class="selector-button" (click)="toggleDropdown()">
                         <img
-                            [src]="lang.imgMiniPath"
-                            [alt]="lang.name"
+                            [src]="getCurrentLanguageFlag()"
+                            [alt]="getCurrentLanguageName()"
                             class="flag-icon"
                         />
-                        <span>{{ lang.name }}</span>
+                        <img
+                            [src]="arrowDownPath"
+                            class="chevron"
+                            [class.up]="isOpen"
+                        />
                     </button>
+                    @if (isOpen) {
+                        <div class="dropdown-menu">
+                            @for (
+                                lang of languageSwitcher.supportedLanguages();
+                                track lang.code
+                            ) {
+                                <button
+                                    class="language-option"
+                                    [class.active]="
+                                        lang.code ===
+                                        languageSwitcher.currentLang()
+                                    "
+                                    (click)="selectLanguage(lang.code)"
+                                >
+                                    <span>{{ lang.name }}</span>
+                                    <img
+                                        [src]="lang.imgMiniPath"
+                                        [alt]="lang.name"
+                                        class="flag-icon"
+                                    />
+                                </button>
+                            }
+                        </div>
                     }
                 </div>
-                }
+                <div class="diviver"></div>
+                <div class="header__avatar">
+                    <a href="auth/register"
+                        ><img [src]="avatarNotFoundPath"
+                    /></a>
+                </div>
             </div>
-            <a href="auth/register">Увійти</a>
-        </div>
         } @else {
-        <h1>LOGO</h1>
+            <div class="header__logo">
+                <a href="/">
+                    <img [src]="isScrolled ? logoMiniPath : logoFullPath" />
+                </a>
+            </div>
         }
     </div>
 </header>
