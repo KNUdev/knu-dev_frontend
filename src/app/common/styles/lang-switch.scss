@@ -1,0 +1,90 @@
+@use "./variables.scss" as *;
+
+.language-selector {
+    position: relative;
+    display: inline-block;
+    margin: auto 0;
+}
+
+.selector-button {
+    display: flex;
+    align-items: center;
+    gap: 0.62rem;
+    cursor: pointer;
+    padding: 0.62rem;
+    background: none;
+    border: none;
+}
+
+.flag-icon {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    border-radius: 50%;
+}
+
+.chevron {
+    transition: transform 0.2s;
+}
+
+.chevron.up {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: -100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.98rem;
+    background: #232323;
+    border-radius: 10px;
+    padding: 1.25rem;
+    min-width: 15.625rem;
+    box-sizing: border-box;
+    z-index: 1000;
+
+    @include for-mobile {
+        left: 0;
+    }
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.62rem;
+    background: transparent;
+    border-radius: 5px;
+    border: 1px solid #343434;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.2s;
+
+    img {
+        width: 1.5625rem;
+        height: 1.5625rem;
+        border-radius: 50%;
+    }
+
+    span {
+        font-family: Geist;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+}
+
+.language-option:hover {
+    background: #4a4a4a;
+}
+
+.language-option.active {
+    background: #343434;
+}
+
+.language-option.active:hover {
+    background: #4a4a4a;
+}

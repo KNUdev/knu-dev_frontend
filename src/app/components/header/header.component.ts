@@ -29,13 +29,16 @@ export class HeaderComponent {
     private translate = inject(TranslateService);
     private router = inject(Router);
     protected languageSwitcher = LanguageSwitcherService(this.translate);
-    isOpen = false;
+    isOpenLang = false;
+    isScrolled = false;
+    isMobile = window.innerWidth < 1024;
+    isMenuOpen = false;
     readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
     readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
     readonly arrowDownPath = 'assets/icon/system/arrowDown.svg';
     readonly avatarNotFoundPath = 'assets/icon/avatarNotFound.svg';
-
-    isScrolled = false;
+    readonly menuIconPath = 'assets/icon/system/menu.svg';
+    readonly closeIconPath = 'assets/icon/system/close.svg';
 
     menu$: Observable<Menu[]>;
 
@@ -50,17 +53,27 @@ export class HeaderComponent {
     onDocumentClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
         if (!target.closest('.language-selector')) {
-            this.isOpen = false;
+            this.isOpenLang = false;
         }
     }
 
-    toggleDropdown() {
-        this.isOpen = !this.isOpen;
+    @HostListener('window:resize', ['$event'])
+    onResize() {
+        this.isMobile = window.innerWidth < 1440;
+        if (!this.isMobile) {
+            this.isMenuOpen = false;
+        }
+    }
+    toggleMenu() {
+        this.isMenuOpen = !this.isMenuOpen;
+    }
+    toggleDropdownLang() {
+        this.isOpenLang = !this.isOpenLang;
     }
 
     selectLanguage(code: string) {
         this.languageSwitcher.switchLang(code as any);
-        this.isOpen = false;
+        this.isOpenLang = false;
     }
 
     getCurrentLanguageFlag() {
