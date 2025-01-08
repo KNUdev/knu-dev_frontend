@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, startWith } from 'rxjs/operators';
+
+interface LanguageDetails {
+    flag: string;
+    name: string;
+}
 
 @Injectable({
     providedIn: 'root',
@@ -45,5 +50,18 @@ export class I18nService {
         );
 
         return forkJoin(requests);
+    }
+
+    getCurrentLanguage(): Observable<LanguageDetails> {
+        return this.translate.onLangChange.pipe(
+            startWith({ lang: this.translate.currentLang }),
+            map(() => ({
+                flag: `assets/icon/language/${this.translate.currentLang}Round.svg`,
+                name:
+                    this.translate.currentLang === 'uk'
+                        ? 'Українська'
+                        : 'English',
+            }))
+        );
     }
 }

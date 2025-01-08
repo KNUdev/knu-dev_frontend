@@ -1,1 +1,152 @@
 @use "../../common/styles/variables" as *;
+
+a {
+    text-decoration: none;
+}
+
+.header {
+    position: sticky;
+    background: rgb(16, 16, 16);
+    transition: all 0.3s ease;
+    top: 0;
+
+    padding: 1.25rem 7.5rem;
+
+    @include for-desktop {
+        padding: 1.25rem 4.06rem;
+    }
+
+    @include for-tablet {
+        padding: 1.25rem 2.63rem;
+    }
+
+    @include for-mobile {
+        padding: 1.25rem 2.62rem;
+    }
+
+    &__logo {
+        margin: auto 0;
+    }
+    &__container {
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 6.8rem;
+        max-width: 105rem;
+    }
+
+    .authPage {
+        justify-content: center;
+    }
+
+    &__menu-button {
+        border: none;
+        background: none;
+
+        img {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+    }
+
+    &__menu-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        hr {
+            display: none;
+        }
+
+        &__bottom {
+            display: flex;
+            align-items: center;
+            gap: 1.219rem;
+        }
+
+        &__list {
+            display: flex;
+            list-style: none;
+            gap: 2.81rem;
+            padding: 0;
+            margin: auto;
+
+            @include for-tablet {
+                margin: 0;
+            }
+            li {
+                padding: 0.62rem;
+            }
+        }
+
+        @include for-tablet {
+            padding: 1.25rem 2.63rem;
+            width: auto;
+
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgb(16, 16, 16);
+
+            &.open {
+                display: flex;
+            }
+        }
+
+        @include for-mobile {
+            padding: 1.25rem 2.62rem;
+            flex-direction: column;
+
+            &__bottom {
+                justify-content: space-between;
+            }
+
+            ul {
+                order: 3;
+                display: block;
+                li {
+                    text-align: center;
+                }
+            }
+
+            hr {
+                order: 2;
+                width: 100%;
+                color: #343434;
+                border-color: #343434;
+                background-color: #343434;
+                margin: 1.56rem 0;
+                display: block;
+            }
+
+            div {
+                order: 1;
+            }
+        }
+    }
+
+    &__avatar {
+        img {
+            width: 2rem;
+            height: 2rem;
+            padding: 0.62rem;
+        }
+        margin: auto 0;
+    }
+
+    .divider {
+        border: 1px solid #343434;
+        margin: 0 1.219rem;
+        height: 100%;
+
+        @include for-mobile {
+            display: none;
+        }
+    }
+
+    img {
+        transition: all 0.3s ease;
+    }
+}
