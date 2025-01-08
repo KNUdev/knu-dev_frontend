@@ -39,54 +39,7 @@ a {
         justify-content: center;
     }
 
-    &__menu-list {
-        display: flex;
-        list-style: none;
-        gap: 2.81rem;
-        padding: 0;
-        margin: auto;
-
-        @include for-tablet {
-            margin: 0;
-        }
-        li {
-            padding: 0.62rem;
-        }
-    }
-
-    option {
-        img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-    }
-    &__lang-ava {
-        display: flex;
-        margin: auto 0;
-    }
-
-    &__avatar {
-        img {
-            width: 2rem;
-            height: 2rem;
-            padding: 0.62rem;
-        }
-        margin: auto 0;
-    }
-
-    .divider {
-        border: 1px solid #343434;
-        margin: 0 1.219rem;
-        height: 100%;
-
-        @include for-mobile {
-            display: none;
-        }
-    }
-
-    .menu-button {
+    &__menu-button {
         border: none;
         background: none;
 
@@ -96,13 +49,34 @@ a {
         }
     }
 
-    .menu__container {
+    &__menu-container {
         display: flex;
         justify-content: space-between;
         width: 100%;
 
         hr {
             display: none;
+        }
+
+        &__bottom {
+            display: flex;
+            align-items: center;
+            gap: 1.219rem;
+        }
+
+        &__list {
+            display: flex;
+            list-style: none;
+            gap: 2.81rem;
+            padding: 0;
+            margin: auto;
+
+            @include for-tablet {
+                margin: 0;
+            }
+            li {
+                padding: 0.62rem;
+            }
         }
 
         @include for-tablet {
@@ -125,7 +99,7 @@ a {
             padding: 1.25rem 2.62rem;
             flex-direction: column;
 
-            .menu__bottom {
+            &__bottom {
                 justify-content: space-between;
             }
 
@@ -151,15 +125,28 @@ a {
                 order: 1;
             }
         }
+    }
 
-        .menu__bottom {
-            display: flex;
-            align-items: center;
-            gap: 1.219rem;
+    &__avatar {
+        img {
+            width: 2rem;
+            height: 2rem;
+            padding: 0.62rem;
+        }
+        margin: auto 0;
+    }
+
+    .divider {
+        border: 1px solid #343434;
+        margin: 0 1.219rem;
+        height: 100%;
+
+        @include for-mobile {
+            display: none;
         }
     }
-}
 
-img {
-    transition: all 0.3s ease;
+    img {
+        transition: all 0.3s ease;
+    }
 }
