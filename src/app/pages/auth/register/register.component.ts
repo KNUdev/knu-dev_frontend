@@ -1,43 +1,43 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-interface Specialty {
-    id?: string;
-    codeName?: string;
-    name: {
-        enName: string;
-        ukName: string;
-    };
-}
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import {
+    BehaviorSubject,
+    catchError,
+    map,
+    Observable,
+    of,
+    startWith,
+    switchMap,
+} from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { DepartmentService } from '../../../services/department.services';
+import { I18nService } from '../../../services/languages/i18n.service';
+import {
+    Course,
+    Department,
+    Specialty,
+    ValidationErrors,
+} from './register.model';
 
-interface Department {
-    id: string;
-    name: {
-        enName: string;
-        ukName: string;
-    };
-}
-interface ValidationErrors {
-    [key: string]: string[];
-}
+const COURSE_TRANSLATIONS = 'course' as const;
 
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
     PASSWORD_MAX_LENGTH: 64,
     EMAIL_DOMAIN: '@knu.ua',
-    NAME_PATTERN: "[A-Za-z'-]+",
+    NAME_PATTERN: "^[A-Za-z'-]+$",
     PASSWORD_PATTERN: '(?=.*[A-Za-z])(?=.*\\d).+',
-    EMAIL_PATTERN: '^[\\w.-]+@knu\\.ua$',
-    COURSES: [1, 2, 3, 4, 5, 6],
     API_ENDPOINTS: {
-        DEPARTMENTS: 'http://localhost:5001/departments',
-        REGISTER: 'http://localhost:5001/account/register',
+        DEPARTMENTS: `${environment.apiUrl}/departments`,
+        REGISTER: `${environment.apiUrl}/account/register`,
     },
 } as const;
 @Component({
@@ -47,21 +47,82 @@ const REGISTER_CONSTANTS = {
     styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-    currentStep = 1;
-    personalInfoForm: FormGroup;
-    academicInfoForm: FormGroup;
-    backendErrors: ValidationErrors = {};
-    departments: Department[] = [];
-    specialties: Specialty[] = [];
-    courses = REGISTER_CONSTANTS.COURSES;
+    private i18nService = inject(I18nService);
+    private translate = inject(TranslateService);
+    currentRegistrationPhase = signal(1);
+    personalInfoForm = signal<FormGroup>(new FormGroup({}));
+    academicInfoForm = signal<FormGroup>(new FormGroup({}));
+    backendErrors = signal<ValidationErrors>({});
+    departments$: Observable<Department[]>;
+    specialties$: Observable<Specialty[]>;
+    private selectedDepartmentId$ = new BehaviorSubject<string>('');
+    isPasswordVisible = signal(false);
+    isConfirmPasswordVisible = signal(false);
+    showValidationErrors = signal(false);
+    isKnuDomain = signal(true);
+    course$: Observable<Course[]>;
 
-    public isPasswordVisible: boolean = false;
-    public isConfirmPasswordVisible: boolean = false;
-    public showValidationErrors: boolean = false;
-    public isKnuDomain: boolean = true;
+    constructor(
+        private readonly fb: FormBuilder,
+        private readonly http: HttpClient,
+        private readonly departmentService: DepartmentService
+    ) {
+        this.personalInfoForm.set(this.initPersonalInfoForm());
+        this.academicInfoForm.set(this.initAcademicInfoForm());
 
-    constructor(private fb: FormBuilder, private http: HttpClient) {
-        this.personalInfoForm = this.fb.group(
+        this.departments$ = this.departmentService.getDepartments().pipe(
+            catchError((error) => {
+                console.error('Failed to load departments:', error);
+                return of([]);
+            })
+        );
+
+        this.specialties$ = this.selectedDepartmentId$.pipe(
+            switchMap((departmentId) =>
+                departmentId
+                    ? this.departmentService.getSpecialties(departmentId).pipe(
+                          catchError((error) => {
+                              console.error(
+                                  'Failed to load specialties:',
+                                  error
+                              );
+                              return of([]);
+                          })
+                      )
+                    : of([])
+            )
+        );
+
+        const langChange$ = this.translate.onLangChange.pipe(
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+        );
+
+        const loadTranslations$ = langChange$.pipe(
+            switchMap((event) =>
+                this.i18nService.loadComponentTranslations(
+                    'register',
+                    event.lang
+                )
+            )
+        );
+
+        const courseTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get([COURSE_TRANSLATIONS]))
+        );
+
+        this.course$ = courseTranslations$.pipe(
+            map((translations) => {
+                const courses = translations[COURSE_TRANSLATIONS] || [];
+                return courses.map((course: any, index: number) => ({
+                    id: course.id || index + 1,
+                    name: course.name,
+                }));
+            })
+        );
+    }
+
+    private initPersonalInfoForm(): FormGroup {
+        return this.fb.group(
             {
                 firstName: [
                     '',
@@ -84,13 +145,7 @@ export class RegisterComponent {
                         Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
                     ],
                 ],
-                email: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.EMAIL_PATTERN),
-                    ],
-                ],
+                email: ['', [Validators.required]],
                 password: [
                     '',
                     [
@@ -108,15 +163,15 @@ export class RegisterComponent {
             },
             { validators: this.passwordMatchValidator }
         );
+    }
 
-        this.academicInfoForm = this.fb.group({
+    private initAcademicInfoForm(): FormGroup {
+        return this.fb.group({
             departmentId: ['', Validators.required],
             specialtyCodename: ['', Validators.required],
             course: ['', Validators.required],
             expertise: ['', Validators.required],
         });
-
-        this.loadDepartments();
     }
 
     passwordMatchValidator(form: FormGroup) {
@@ -126,61 +181,26 @@ export class RegisterComponent {
             : { passwordMismatch: true };
     }
 
-    preventPaste(event: ClipboardEvent) {
-        event.preventDefault();
-    }
-
-    preventCopy(event: ClipboardEvent) {
-        event.preventDefault();
-    }
-
-    preventCut(event: ClipboardEvent) {
+    preventClipboardAction(event: ClipboardEvent) {
         event.preventDefault();
     }
 
     public togglePasswordVisibility(): void {
-        this.isPasswordVisible = !this.isPasswordVisible;
+        this.isPasswordVisible.update((v) => !v);
     }
 
     public toggleConfirmPasswordVisibility(): void {
-        this.isConfirmPasswordVisible = !this.isConfirmPasswordVisible;
-    }
-
-    loadDepartments() {
-        this.http.get(REGISTER_CONSTANTS.API_ENDPOINTS.DEPARTMENTS).subscribe({
-            next: (data: any) => {
-                this.departments = data;
-            },
-            error: (error) => {
-                console.error('Failed to load departments:', error);
-            },
-        });
+        this.isConfirmPasswordVisible.update((v) => !v);
     }
 
     onDepartmentChange() {
-        const departmentId = this.academicInfoForm.get('departmentId')?.value;
+        const departmentId = this.academicInfoForm().get('departmentId')?.value;
         if (departmentId) {
-            this.http
-                .get(
-                    `${REGISTER_CONSTANTS.API_ENDPOINTS.DEPARTMENTS}/${departmentId}/specialties`
-                )
-                .subscribe({
-                    next: (data: any) => {
-                        this.specialties = data;
-                        this.academicInfoForm
-                            .get('specialtyCodename')
-                            ?.setValue('');
-                    },
-                    error: (error) => {
-                        console.error('Failed to load specialties:', error);
-                        this.specialties = [];
-                        this.academicInfoForm
-                            .get('specialtyCodename')
-                            ?.setValue('');
-                    },
-                });
+            this.selectedDepartmentId$.next(departmentId);
+            this.academicInfoForm().get('specialtyCodename')?.setValue('');
         }
     }
+
     onEmailInput(event: Event) {
         const inputElement = event.target as HTMLInputElement;
         const originalValue = inputElement.value;
@@ -188,18 +208,18 @@ export class RegisterComponent {
 
         let value = originalValue.trim();
 
-        this.personalInfoForm.get('email')?.setErrors(null);
+        this.personalInfoForm().get('email')?.setErrors(null);
 
         if (
             value.includes('@') &&
             !value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)
         ) {
-            this.personalInfoForm.get('email')?.setErrors({
+            this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
             });
         }
 
-        this.personalInfoForm
+        this.personalInfoForm()
             .get('email')
             ?.setValue(value, { emitEvent: false });
 
@@ -209,49 +229,50 @@ export class RegisterComponent {
     }
 
     formatEmailOnBlur() {
-        let value = this.personalInfoForm.get('email')?.value.trim();
+        let value = this.personalInfoForm().get('email')?.value.trim();
 
         if (!value.includes('@')) {
             value += REGISTER_CONSTANTS.EMAIL_DOMAIN;
-            this.personalInfoForm.get('email')?.setValue(value);
+            this.personalInfoForm().get('email')?.setValue(value);
         } else if (!value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
-            this.personalInfoForm.get('email')?.setErrors({
+            this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
             });
         }
     }
 
-    nextStep() {
-        this.showValidationErrors = true;
-        if (this.personalInfoForm.valid) {
-            this.showValidationErrors = false;
-            this.currentStep = 2;
+    goToNextStep() {
+        this.showValidationErrors.set(true);
+        if (this.personalInfoForm().valid) {
+            this.showValidationErrors.set(false);
+            this.currentRegistrationPhase.set(2);
         }
     }
 
-    previousStep() {
-        this.currentStep = 1;
+    returnToPreviousStep() {
+        this.currentRegistrationPhase.set(1);
     }
 
     onSubmit() {
-        this.showValidationErrors = true;
-        this.backendErrors = {};
+        this.showValidationErrors.set(true);
+        this.backendErrors.set({});
 
-        if (this.personalInfoForm.valid && this.academicInfoForm.valid) {
+        if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
             const { confirmPassword, ...personalInfo } =
-                this.personalInfoForm.value;
+                this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
             });
 
-            const academicInfo = this.academicInfoForm.value;
+            const academicInfo = this.academicInfoForm().value;
             formData.append('departmentId', academicInfo.departmentId);
             formData.append(
                 'specialtyCodename',
                 academicInfo.specialtyCodename
             );
+            formData.append('course', academicInfo.course);
             formData.append('expertise', academicInfo.expertise);
 
             this.http
@@ -263,6 +284,12 @@ export class RegisterComponent {
                     error: (error: HttpErrorResponse) => {
                         if (error.status === 400 && error.error) {
                             this.handleValidationErrors(error.error);
+                        }
+                        if (error.status === 200 && error.error) {
+                            this.currentRegistrationPhase.set(1);
+                            this.backendErrors.set({
+                                email: ['This email is already registered'],
+                            });
                         } else {
                             console.error('Registration failed', error);
                         }
@@ -272,11 +299,8 @@ export class RegisterComponent {
     }
 
     private handleValidationErrors(errors: any) {
-        this.backendErrors = {};
+        const newErrors: ValidationErrors = {};
         const errorKeys = [
-            'firstNameErrors',
-            'lastNameErrors',
-            'middleNameErrors',
             'emailErrors',
             'passwordErrors',
             'confirmPasswordErrors',
@@ -290,13 +314,15 @@ export class RegisterComponent {
             if (errors[key] && errors[key].length > 0) {
                 const formControlName = this.mapErrorKeyToFormControl(key);
                 if (formControlName) {
-                    this.backendErrors[formControlName] = errors[key];
+                    newErrors[formControlName] = errors[key];
                 }
             }
         });
 
+        this.backendErrors.set(newErrors);
+
         if (
-            Object.keys(this.backendErrors).some((key) =>
+            Object.keys(newErrors).some((key) =>
                 [
                     'firstName',
                     'lastName',
@@ -306,7 +332,7 @@ export class RegisterComponent {
                 ].includes(key)
             )
         ) {
-            this.currentStep = 1;
+            this.currentRegistrationPhase.set(1);
         }
     }
 
