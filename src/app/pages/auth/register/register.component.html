@@ -182,7 +182,7 @@
                 <option value="">Курс*</option>
                 @for (item of course$ | async; track $index) {
                 <option [value]="item.id">
-                    {{ item.name }}
+                    {{ item.displayedName }}
                 </option>
                 }
             </select>

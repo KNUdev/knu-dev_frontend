@@ -23,6 +23,7 @@ import { I18nService } from '../../../services/languages/i18n.service';
 import {
     Course,
     Department,
+    ERROR_KEY_TO_CONTROL,
     Specialty,
     ValidationErrors,
 } from './register.model';
@@ -34,11 +35,6 @@ const REGISTER_CONSTANTS = {
     PASSWORD_MAX_LENGTH: 64,
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
-    PASSWORD_PATTERN: '(?=.*[A-Za-z])(?=.*\\d).+',
-    API_ENDPOINTS: {
-        DEPARTMENTS: `${environment.apiUrl}/departments`,
-        REGISTER: `${environment.apiUrl}/account/register`,
-    },
 } as const;
 @Component({
     selector: 'app-register',
@@ -111,13 +107,7 @@ export class RegisterComponent {
         );
 
         this.course$ = courseTranslations$.pipe(
-            map((translations) => {
-                const courses = translations[COURSE_TRANSLATIONS] || [];
-                return courses.map((course: any, index: number) => ({
-                    id: course.id || index + 1,
-                    name: course.name,
-                }));
-            })
+            map((translations) => translations[COURSE_TRANSLATIONS] || [])
         );
     }
 
@@ -156,7 +146,6 @@ export class RegisterComponent {
                         Validators.maxLength(
                             REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
                         ),
-                        Validators.pattern(REGISTER_CONSTANTS.PASSWORD_PATTERN),
                     ],
                 ],
                 confirmPassword: ['', Validators.required],
@@ -275,79 +264,51 @@ export class RegisterComponent {
             formData.append('course', academicInfo.course);
             formData.append('expertise', academicInfo.expertise);
 
-            this.http
-                .post(REGISTER_CONSTANTS.API_ENDPOINTS.REGISTER, formData)
-                .subscribe({
-                    next: (response) => {
-                        console.log('Registration successful', response);
-                    },
-                    error: (error: HttpErrorResponse) => {
-                        if (error.status === 400 && error.error) {
-                            this.handleValidationErrors(error.error);
-                        }
-                        if (error.status === 200 && error.error) {
-                            this.currentRegistrationPhase.set(1);
-                            this.backendErrors.set({
-                                email: ['This email is already registered'],
-                            });
-                        } else {
-                            console.error('Registration failed', error);
-                        }
-                    },
-                });
+            this.http.post(environment.apiRegisterUrl, formData).subscribe({
+                next: (response) => {
+                    console.log('Registration successful', response);
+                },
+                error: (error: HttpErrorResponse) => {
+                    if (error.status === 400 && error.error) {
+                        this.handleValidationErrors(error.error);
+                    }
+                    if (error.status === 200 && error.error) {
+                        this.currentRegistrationPhase.set(1);
+                        this.backendErrors.set({
+                            email: ['This email is already registered'],
+                        });
+                    } else {
+                        console.error('Registration failed', error);
+                    }
+                },
+            });
         }
     }
 
     private handleValidationErrors(errors: any) {
         const newErrors: ValidationErrors = {};
-        const errorKeys = [
-            'emailErrors',
-            'passwordErrors',
-            'confirmPasswordErrors',
-            'departmentIdErrors',
-            'specialtyCodenameErrors',
-            'courseErrors',
-            'expertiseErrors',
-        ];
 
-        errorKeys.forEach((key) => {
-            if (errors[key] && errors[key].length > 0) {
-                const formControlName = this.mapErrorKeyToFormControl(key);
-                if (formControlName) {
-                    newErrors[formControlName] = errors[key];
+        Object.entries(ERROR_KEY_TO_CONTROL).forEach(
+            ([errorKey, formControlName]) => {
+                if (errors[errorKey]?.length > 0) {
+                    newErrors[formControlName] = errors[errorKey];
                 }
             }
-        });
+        );
 
         this.backendErrors.set(newErrors);
 
+        const criticalFields = [
+            'firstName',
+            'lastName',
+            'middleName',
+            'email',
+            'password',
+        ];
         if (
-            Object.keys(newErrors).some((key) =>
-                [
-                    'firstName',
-                    'lastName',
-                    'middleName',
-                    'email',
-                    'password',
-                ].includes(key)
-            )
+            Object.keys(newErrors).some((key) => criticalFields.includes(key))
         ) {
             this.currentRegistrationPhase.set(1);
         }
-    }
-
-    private mapErrorKeyToFormControl(errorKey: string): string | null {
-        const mapping: { [key: string]: string } = {
-            firstNameErrors: 'firstName',
-            lastNameErrors: 'lastName',
-            middleNameErrors: 'middleName',
-            emailErrors: 'email',
-            passwordErrors: 'password',
-            departmentIdErrors: 'departmentId',
-            specialtyCodenameErrors: 'specialtyCodename',
-            courseErrors: 'course',
-            expertiseErrors: 'expertise',
-        };
-        return mapping[errorKey] || null;
     }
 }

@@ -20,5 +20,17 @@ export interface ValidationErrors {
 
 export interface Course {
     id: number;
-    name: string;
+    displayedName: string;
 }
+
+export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
+    firstNameErrors: 'firstName',
+    lastNameErrors: 'lastName',
+    middleNameErrors: 'middleName',
+    emailErrors: 'email',
+    passwordErrors: 'password',
+    departmentIdErrors: 'departmentId',
+    specialtyCodenameErrors: 'specialtyCodename',
+    courseErrors: 'course',
+    expertiseErrors: 'expertise',
+};

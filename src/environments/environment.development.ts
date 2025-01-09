@@ -1,4 +1,8 @@
+const apiBaseUrl = 'http://localhost:5001';
+
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:5001',
+    apiBaseUrl: apiBaseUrl,
+    apiDepartmentsUrl: `${apiBaseUrl}/departments`,
+    apiRegisterUrl: `${apiBaseUrl}/account/register`,
 };

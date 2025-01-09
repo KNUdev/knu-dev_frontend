@@ -53,44 +53,44 @@
     },
     "course": [
         {
-            "id": 1,
-            "name": "1st Bachelor"
+            "id": "1",
+            "displayedName": "1st Bachelor"
         },
         {
-            "id": 2,
-            "name": "2nd Bachelor"
+            "id": "2",
+            "displayedName": "2nd Bachelor"
         },
         {
-            "id": 3,
-            "name": "1st Master"
+            "id": "3",
+            "displayedName": "1st Master"
         },
         {
-            "id": 4,
-            "name": "2nd Master"
+            "id": "4",
+            "displayedName": "2nd Master"
         },
         {
-            "id": 5,
-            "name": "1st Master"
+            "id": "5",
+            "displayedName": "1st Master"
         },
         {
-            "id": 6,
-            "name": "2nd Master"
+            "id": "6",
+            "displayedName": "2nd Master"
         },
         {
-            "id": 7,
-            "name": "1st PhD"
+            "id": "7",
+            "displayedName": "1st PhD"
         },
         {
-            "id": 8,
-            "name": "2nd PhD"
+            "id": "8",
+            "displayedName": "2nd PhD"
         },
         {
-            "id": 9,
-            "name": "3rd PhD"
+            "id": "9",
+            "displayedName": "3rd PhD"
         },
         {
-            "id": 10,
-            "name": "4th PhD"
+            "id": "10",
+            "displayedName": "4th PhD"
         }
     ]
 }
