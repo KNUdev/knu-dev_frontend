@@ -14,6 +14,11 @@
     transition: all 0.2s ease;
     border: 1px solid transparent;
     border-radius: 5px;
+    padding: 0.625rem;
+
+    svg path {
+        fill: $accent-yellow;
+    }
 
     &:hover {
         padding: 0.625rem;

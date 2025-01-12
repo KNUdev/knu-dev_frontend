@@ -1,0 +1,50 @@
+.default-input {
+    padding: 0.9375rem;
+    outline: none;
+    width: -webkit-fill-available;
+
+    background: none;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+    color: #ffffff;
+    caret-color: #ffffff;
+    font-family: Geist;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+        color: #ffffff;
+        font-family: Geist;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &:hover {
+        border-color: #edd342;
+    }
+
+    &:focus,
+    &:focus-visible {
+        border-color: #edd342;
+    }
+
+    &:focus::placeholder {
+        opacity: 0;
+    }
+}
+
+.default-input__error {
+    border: 1px solid #e5383a;
+}
+
+.error {
+    color: #e5383a;
+
+    svg path {
+        fill: #e5383a;
+    }
+}

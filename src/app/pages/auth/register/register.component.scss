@@ -1,0 +1,102 @@
+@use "../../../common/styles/variables" as *;
+
+.register {
+    background-color: #101010;
+    color: #ffffff;
+    p {
+        margin: 0;
+    }
+    display: flex;
+
+    &__container {
+        max-width: 48.75rem;
+        margin: 0 auto;
+    }
+
+    h2 {
+        color: #fff;
+        text-align: center;
+        font-family: Unbounded;
+        font-size: 1.375rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.06875rem;
+        text-transform: uppercase;
+    }
+
+    .forms {
+        padding: 2.5rem 0;
+        width: max-content;
+    }
+
+    .homePageLink {
+        display: flex;
+        padding: 0.625rem;
+        justify-content: center;
+        align-items: center;
+        gap: 0.625rem;
+        margin-bottom: 1.56rem;
+        width: max-content;
+
+        & > * {
+            margin: auto 0;
+        }
+    }
+
+    form {
+        margin: 0 auto;
+        max-width: 48.75rem;
+        padding: 3.12rem;
+        border-radius: 0.625rem;
+        border: 5px solid #1a1a1a;
+        background: #131313;
+        .fullName {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.88rem;
+            input {
+                padding: 0rem 1rem;
+            }
+        }
+        .password {
+            display: flex;
+            gap: 1.88rem;
+        }
+
+        .email {
+            padding: 2.19rem 0;
+        }
+
+        .email-create {
+            display: flex;
+            gap: 0.62rem;
+            margin-top: 1rem;
+            font-family: "Geist";
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem;
+            letter-spacing: 0.0175rem;
+
+            p {
+                margin: auto 0;
+            }
+        }
+
+        .login {
+            display: flex;
+            margin-top: 1.25rem;
+            align-items: center;
+            justify-content: center;
+            gap: 0.62rem;
+
+            font-family: Geist;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem; /* 142.857% */
+            letter-spacing: 0.0175rem;
+        }
+    }
+}

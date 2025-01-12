@@ -7,6 +7,9 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import {
     BehaviorSubject,
@@ -18,7 +21,9 @@ import {
     switchMap,
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
+import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.services';
+import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
 import {
     Course,
@@ -30,6 +35,11 @@ import {
 
 const COURSE_TRANSLATIONS = 'course' as const;
 
+interface ItemData {
+    name: string;
+    description: string;
+}
+
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
     PASSWORD_MAX_LENGTH: 64,
@@ -38,7 +48,13 @@ const REGISTER_CONSTANTS = {
 } as const;
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, CommonModule],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        RouterModule,
+        LabelInput,
+        MatIconModule,
+    ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
 })
@@ -58,11 +74,79 @@ export class RegisterComponent {
     isKnuDomain = signal(true);
     course$: Observable<Course[]>;
 
+    readonly iconPaths = {
+        arrowLeft: 'assets/icon/system/arrowLeft.svg',
+    } as const;
+
+    fullNameError: ItemData[] = [
+        {
+            name: 'required',
+            description: 'First name cannot be null or blank.',
+        },
+        {
+            name: 'Второй элемент',
+            description: 'Описание второго элемента',
+        },
+    ];
+
+    passwordErrors: ItemData[] = [
+        {
+            name: 'required',
+            description: 'Password cannot be blank',
+        },
+        {
+            name: 'minlength',
+            description: 'Password must be between 8 and 64 characters',
+        },
+        {
+            name: 'maxlength',
+            description: 'Password must be between 8 and 64 characters',
+        },
+        {
+            name: 'pattern',
+            description:
+                'Password must contain at least one letter and one digit',
+        },
+    ];
+
+    confirmPasswordErrors: ItemData[] = [
+        {
+            name: 'required',
+            description: 'Confirm password cannot be blank',
+        },
+        {
+            name: 'passwordMismatch',
+            description: 'Passwords do not match',
+        },
+    ];
+
+    emailErrors: ItemData[] = [
+        {
+            name: 'required',
+            description: 'Email cannot be blank',
+        },
+        {
+            name: 'invalidDomain',
+            description: 'Email must be in the @knu.ua domain',
+        },
+    ];
+
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+
     constructor(
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
-        private readonly departmentService: DepartmentService
+        private readonly departmentService: DepartmentService,
+        private readonly formErrorService: FormErrorService
     ) {
+        this.matIconRegistry.addSvgIcon(
+            'arrowLeft',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowLeft
+            )
+        );
+
         this.personalInfoForm.set(this.initPersonalInfoForm());
         this.academicInfoForm.set(this.initAcademicInfoForm());
 
@@ -231,9 +315,9 @@ export class RegisterComponent {
     }
 
     goToNextStep() {
-        this.showValidationErrors.set(true);
+        this.formErrorService.setShowValidationErrors(true);
         if (this.personalInfoForm().valid) {
-            this.showValidationErrors.set(false);
+            this.formErrorService.setShowValidationErrors(false);
             this.currentRegistrationPhase.set(2);
         }
     }
@@ -243,8 +327,8 @@ export class RegisterComponent {
     }
 
     onSubmit() {
-        this.showValidationErrors.set(true);
-        this.backendErrors.set({});
+        this.formErrorService.setShowValidationErrors(true);
+        this.formErrorService.setBackendErrors({});
 
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
@@ -296,7 +380,7 @@ export class RegisterComponent {
             }
         );
 
-        this.backendErrors.set(newErrors);
+        this.formErrorService.setBackendErrors(newErrors);
 
         const criticalFields = [
             'firstName',
