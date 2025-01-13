@@ -3,6 +3,7 @@
 .register {
     background-color: #101010;
     color: #ffffff;
+    height: 100vh;
     p {
         margin: 0;
     }
@@ -23,6 +24,10 @@
         line-height: normal;
         letter-spacing: 0.06875rem;
         text-transform: uppercase;
+    }
+
+    .form-container {
+        padding: 2.19rem 0;
     }
 
     .forms {
@@ -62,6 +67,7 @@
         .password {
             display: flex;
             gap: 1.88rem;
+            justify-content: space-between;
         }
 
         .email {
@@ -97,6 +103,49 @@
             font-weight: 400;
             line-height: 1.25rem; /* 142.857% */
             letter-spacing: 0.0175rem;
+        }
+    }
+    .language-selector-container {
+        width: 100%;
+        display: flex;
+    }
+
+    .language-selector {
+        margin: 0 auto;
+        .selector-button {
+            margin: 0 auto;
+            color: #fff;
+            border: 1px solid #6d6d6d;
+            border-radius: 0.3125rem;
+            min-width: 12.5rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.9375rem 0.625rem;
+
+            div {
+                display: flex;
+                gap: 0.94rem;
+            }
+            span {
+                margin: auto;
+            }
+        }
+        .dropdown-menu {
+            margin-top: 0.62rem;
+            min-width: 12.5rem;
+            left: 0;
+            padding: 0;
+        }
+
+        .language-option {
+            justify-content: start;
+            padding: 0.62rem;
+            gap: 0.94rem;
+        }
+
+        .flag-icon {
+            width: 1.125rem;
+            height: 1.125rem;
         }
     }
 }

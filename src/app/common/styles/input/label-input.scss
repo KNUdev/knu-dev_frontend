@@ -1,5 +1,6 @@
 label-input {
-    width: -webkit-fill-available;
+    width: min-content;
+    flex: 1;
 }
 
 .input-group {

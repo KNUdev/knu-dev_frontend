@@ -30,14 +30,17 @@
             }
         </button>
     </div>
+
+    @if(showErrors) { @for(item of errors; track $index) {
+    @if(formGroup.get(controlName)?.errors?.[item.name]) {
     <div class="error">
-        @if(showErrors) { @for(item of errors; track $index) {
-        @if(formGroup.get(controlName)?.errors?.[item.name]) {
-        <mat-icon svgIcon="error"></mat-icon>{{ item.description }} } } } @if
-        (backendErrors && backendErrors[controlName]) { @for(error of
-        backendErrors[controlName]; track $index) {<mat-icon
-            svgIcon="error"
-        ></mat-icon>
-        {{ error }} } }
+        <mat-icon svgIcon="error"></mat-icon><span>{{ item.description }}</span>
     </div>
+    } } } @if (backendErrors && backendErrors[controlName]) { @for(error of
+    backendErrors[controlName]; track $index) {
+    <div class="error">
+        <mat-icon svgIcon="error"></mat-icon>
+        <span>{{ error }}</span>
+    </div>
+    } }
 </div>

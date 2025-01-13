@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -10,7 +10,11 @@ import {
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import {
+    LangChangeEvent,
+    TranslateModule,
+    TranslateService,
+} from '@ngx-translate/core';
 import {
     BehaviorSubject,
     catchError,
@@ -25,6 +29,7 @@ import { LabelInput } from '../../../common/components/input/label-input/label-i
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
+import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
 import {
     Course,
     Department,
@@ -54,6 +59,7 @@ const REGISTER_CONSTANTS = {
         RouterModule,
         LabelInput,
         MatIconModule,
+        TranslateModule,
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
@@ -61,6 +67,9 @@ const REGISTER_CONSTANTS = {
 export class RegisterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    protected languageSwitcher = LanguageSwitcherService(this.translate);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    isOpenLang = signal<boolean>(false);
     currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
@@ -76,7 +85,25 @@ export class RegisterComponent {
 
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
+        arrowDown: 'assets/icon/system/arrowDown.svg',
     } as const;
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.language-selector')) {
+            this.isOpenLang.set(false);
+        }
+    }
+
+    toggleDropdownLang() {
+        this.isOpenLang.update((value) => !value);
+    }
+
+    selectLanguage(code: string) {
+        this.languageSwitcher.switchLang(code as any);
+        this.isOpenLang.set(false);
+    }
 
     fullNameError: ItemData[] = [
         {

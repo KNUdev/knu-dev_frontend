@@ -23,7 +23,7 @@
 
         <div
             class="header__menu-container"
-            [class.open]="isMenuOpen() || !isMobile()"
+            [class.open]="isMenuOpen()"
             role="navigation"
             aria-label="Main navigation"
         >
@@ -58,7 +58,7 @@
                     >
                         @if(currentLanguage$ | async; as lang){
                         <img
-                            [src]="lang.flag"
+                            [src]="lang.flagRound"
                             [alt]="lang.name"
                             class="flag-icon"
                         />

@@ -1,6 +1,7 @@
-@use "./common/styles/button/menu_nav";
-@use "./common/styles/button/icon_button";
-@use "./common/styles/hyperlink";
+@use "./common/styles/button/menu_nav.scss";
+@use "./common/styles/button/icon_button.scss";
+@use "./common/styles/hyperlink.scss";
 @use "./common/styles/lang-switch.scss";
 @use "./common/styles/input/default-input.scss";
 @use "./common/styles/input/label-input.scss";
+@use "./common/styles/button/main-button/fill-red.scss";

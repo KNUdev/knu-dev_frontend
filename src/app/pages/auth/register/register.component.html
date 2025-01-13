@@ -1,79 +1,137 @@
 <main class="register">
     <div class="register__container">
         @if (currentRegistrationPhase() === 1) {
-        <a [routerLink]="['/']" class="hyperlink homePageLink"
-            ><mat-icon svgIcon="arrowLeft"></mat-icon
-            ><span> До головної сторінки</span></a
-        >
+        <div class="form-container">
+            <a [routerLink]="['/']" class="hyperlink homePageLink"
+                ><mat-icon svgIcon="arrowLeft"></mat-icon
+                ><span> До головної сторінки</span></a
+            >
 
-        <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
-            <h2>Створіть обліковий запис</h2>
-            <div class="forms">
-                <div class="fullName">
-                    <label-input
-                        controlName="firstName"
-                        label="Ім'я*"
-                        [errors]="fullNameError"
-                    ></label-input>
+            <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
+                <h2>Створіть обліковий запис</h2>
+                <div class="forms">
+                    <div class="fullName">
+                        <label-input
+                            controlName="firstName"
+                            label="Ім'я*"
+                            [errors]="fullNameError"
+                        ></label-input>
 
-                    <label-input
-                        controlName="lastName"
-                        label="Прізвище*"
-                        [errors]="fullNameError"
-                    ></label-input>
+                        <label-input
+                            controlName="lastName"
+                            label="Прізвище*"
+                            [errors]="fullNameError"
+                        ></label-input>
 
-                    <label-input
-                        controlName="middleName"
-                        label="По батькові*"
-                        [errors]="fullNameError"
-                    ></label-input>
-                </div>
-                <div class="email">
-                    <label-input
-                        controlName="email"
-                        label="Email*"
-                        [errors]="emailErrors"
-                        type="email"
-                        [isEmail]="true"
-                        domainSuffix="@knu.ua"
-                        (emailInput)="onEmailInput($event)"
-                        (emailBlur)="formatEmailOnBlur()"
-                    ></label-input>
+                        <label-input
+                            controlName="middleName"
+                            label="По батькові*"
+                            [errors]="fullNameError"
+                        ></label-input>
+                    </div>
+                    <div class="email">
+                        <label-input
+                            controlName="email"
+                            label="Email*"
+                            [errors]="emailErrors"
+                            type="email"
+                            [isEmail]="true"
+                            domainSuffix="@knu.ua"
+                            (emailInput)="onEmailInput($event)"
+                            (emailBlur)="formatEmailOnBlur()"
+                        ></label-input>
 
-                    <div class="email-create">
-                        <p>Не маєте пошти КНУ?</p>
-                        <a
-                            href="https://student.triton.knu.ua/CorporativeMail"
-                            class="hyperlink"
-                            >Тисніть сюди</a
-                        >
+                        <div class="email-create">
+                            <p>Не маєте пошти КНУ?</p>
+                            <a
+                                href="https://student.triton.knu.ua/CorporativeMail"
+                                class="hyperlink"
+                                >Тисніть сюди</a
+                            >
+                        </div>
+                    </div>
+                    <div class="password">
+                        <label-input
+                            controlName="password"
+                            label="Пароль*"
+                            [errors]="passwordErrors"
+                            type="password"
+                            [preventClipboard]="true"
+                        ></label-input>
+
+                        <label-input
+                            controlName="confirmPassword"
+                            label="Підтвердження пароля*"
+                            [errors]="confirmPasswordErrors"
+                            type="password"
+                            [preventClipboard]="true"
+                        ></label-input>
                     </div>
                 </div>
-                <div class="password">
-                    <label-input
-                        controlName="password"
-                        label="Пароль*"
-                        [errors]="passwordErrors"
-                        type="password"
-                        [preventClipboard]="true"
-                    ></label-input>
+                <button type="submit" class="fill-red">Продовжити</button>
 
-                    <label-input
-                        controlName="confirmPassword"
-                        label="Підтвердження пароля*"
-                        [errors]="confirmPasswordErrors"
-                        type="password"
-                        [preventClipboard]="true"
-                    ></label-input>
+                <div class="login">
+                    <p>Немає облікового запису?</p>
+                    <a [routerLink]="['/auth/login']" class="hyperlink"
+                        >Створити</a
+                    >
                 </div>
+            </form>
+        </div>
+        <div class="language-selector-container">
+            <div
+                class="language-selector"
+                [class.open]="isOpenLang()"
+                role="region"
+                aria-label="Language selection"
+            >
+                <button
+                    class="selector-button"
+                    (click)="toggleDropdownLang()"
+                    aria-label="Select language"
+                    [attr.aria-expanded]="isOpenLang()"
+                    aria-controls="language-dropdown"
+                >
+                    @if(currentLanguage$ | async; as lang){
+                    <div>
+                        <img
+                            [src]="lang.flagSquare"
+                            [alt]="lang.name"
+                            class="flag-icon"
+                        />
+                        <span>{{ lang.name }}</span>
+                    </div>
+                    <img
+                        [src]="iconPaths.arrowDown"
+                        class="chevron"
+                        [class.up]="isOpenLang()"
+                        alt="arrowDown"
+                        aria-hidden="true"
+                    />
+                    }
+                </button>
+                @if (isOpenLang()) {
+                <div class="dropdown-menu">
+                    @for (lang of languageSwitcher.supportedLanguages(); track
+                    lang.code) { @if (lang.code !==
+                    languageSwitcher.currentLang()) {
+                    <button
+                        class="language-option"
+                        (click)="selectLanguage(lang.code)"
+                        [attr.aria-label]="lang.name"
+                    >
+                        <img
+                            [src]="lang.imgFullPath"
+                            [alt]="lang.name"
+                            class="flag-icon"
+                        />
+                        <span>{{ lang.name }}</span>
+                    </button>
+                    } }
+                </div>
+                }
             </div>
-            <button type="submit">Продовжити</button>
-
-            <div class="login">
-                <p>Немає облікового запису?</p>
-                <a [routerLink]="['/auth/login']" class="hyperlink">Створити</a>
-            </div>
-        </form>
+        </div>
         } @if (currentRegistrationPhase() === 2) {
         <form [formGroup]="academicInfoForm()" (ngSubmit)="onSubmit()">
             <p>Створіть обліковий запис</p>

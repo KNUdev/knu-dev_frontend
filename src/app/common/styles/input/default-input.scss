@@ -43,6 +43,17 @@
 
 .error {
     color: #e5383a;
+    display: flex;
+    margin-top: 0.94rem;
+    gap: 0.62rem;
+
+    span {
+        margin: auto 0;
+    }
+
+    mat-icon {
+        margin: auto 0;
+    }
 
     svg path {
         fill: #e5383a;

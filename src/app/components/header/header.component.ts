@@ -32,7 +32,7 @@ export class HeaderComponent {
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
-    isMobile = signal<boolean>(window.innerWidth < 1024);
+    isMobile = signal<boolean>(window.innerWidth < 1440);
     isMenuOpen = signal<boolean>(false);
     readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
     readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
