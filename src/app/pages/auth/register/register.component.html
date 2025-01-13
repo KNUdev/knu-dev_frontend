@@ -78,6 +78,103 @@
                 </div>
             </form>
         </div>
+        } @if (currentRegistrationPhase() === 2) {
+        <form [formGroup]="academicInfoForm()" (ngSubmit)="onSubmit()">
+            <h2>Створіть обліковий запис</h2>
+            <div class="form-group">
+                <app-custom-select
+                    [options]="departments"
+                    placeholder="Факультет/Інститут*"
+                    [searchable]="true"
+                    valueField="id"
+                    displayField="name.ukName"
+                    formControlName="departmentId"
+                    (selectionChange)="onDepartmentChange()"
+                ></app-custom-select>
+                @if ( showValidationErrors() &&
+                academicInfoForm().get("departmentId")?.errors?.[ "required" ] )
+                {
+                <div class="error">You must select a department</div>
+                } @if (backendErrors()["departmentId"]) { @for ( error of
+                backendErrors()["departmentId"]; track $index ) {
+                <div class="error">{{ error }}</div>
+                } }
+            </div>
+
+            <div class="form-group">
+                @if (!academicInfoForm().get("departmentId")?.value) {
+                <app-custom-select
+                    [options]="(specialties$ | async) || []"
+                    placeholder="Спеціальність*"
+                    [searchable]="true"
+                    valueField="codeName"
+                    displayField="name.ukName"
+                    formControlName="specialtyCodename"
+                    class="disabled"
+                ></app-custom-select>
+
+                <p>Firstly you must select a department</p>
+                } @else {
+                <app-custom-select
+                    [options]="(specialties$ | async) || []"
+                    placeholder="Спеціальність*"
+                    [searchable]="true"
+                    valueField="codeName"
+                    displayField="name.ukName"
+                    formControlName="specialtyCodename"
+                ></app-custom-select>
+                } @if ( showValidationErrors() &&
+                academicInfoForm().get("specialtyCodename")?.errors?.[
+                "required" ] ) {
+                <div class="error">You must select a specialty</div>
+                } @if (backendErrors()["specialtyCodename"]) { @for ( error of
+                backendErrors()["specialtyCodename"]; track $index ) {
+                <div class="error">{{ error }}</div>
+                } }
+            </div>
+
+            <div class="form-group">
+                <app-custom-select
+                    [options]="courses"
+                    placeholder="Курс*"
+                    [searchable]="false"
+                    valueField="id"
+                    displayField="displayedName"
+                    formControlName="course"
+                ></app-custom-select>
+                @if ( showValidationErrors() &&
+                academicInfoForm().get("course")?.errors?.["required"] ) {
+                <div class="error">You must select a course</div>
+                } @if (backendErrors()["course"]) { @for ( error of
+                backendErrors()["course"]; track $index ) {
+                <div class="error">{{ error }}</div>
+                } }
+            </div>
+
+            <div class="form-group">
+                <app-custom-select
+                    [options]="expertises"
+                    placeholder="Тех. напрямок*"
+                    [searchable]="false"
+                    valueField="id"
+                    displayField="displayedName"
+                    formControlName="expertise"
+                ></app-custom-select>
+                @if ( showValidationErrors() &&
+                academicInfoForm().get("expertise")?.errors?.[ "required" ] ) {
+                <div class="error">You must select a expertise</div>
+                } @if (backendErrors()["expertise"]) { @for ( error of
+                backendErrors()["expertise"]; track $index ) {
+                <div class="error">{{ error }}</div>
+                } }
+            </div>
+
+            <button class="fill-red" type="submit">Зареєструватися</button>
+            <a class="hyperlink" (click)="returnToPreviousStep()">
+                Повернутись на минулу сторінку
+            </a>
+        </form>
+        }
         <div class="language-selector-container">
             <div
                 class="language-selector"
@@ -132,98 +229,5 @@
                 }
             </div>
         </div>
-        } @if (currentRegistrationPhase() === 2) {
-        <form [formGroup]="academicInfoForm()" (ngSubmit)="onSubmit()">
-            <p>Створіть обліковий запис</p>
-            <div class="form-group">
-                <select
-                    formControlName="departmentId"
-                    (change)="onDepartmentChange()"
-                >
-                    <option value="">Факультет/Інститут*</option>
-                    @for ( department of departments$ | async; track
-                    department.id ) {
-                    <option [value]="department.id">
-                        {{ department.name.ukName }}
-                    </option>
-                    }
-                </select>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("departmentId")?.errors?.[ "required" ] )
-                {
-                <div class="error">You must select a department</div>
-                } @if (backendErrors()["departmentId"]) { @for ( error of
-                backendErrors()["departmentId"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
-
-            <div class="form-group">
-                @if (!academicInfoForm().get("departmentId")?.value) {
-                <select disabled>
-                    <option value="">Спеціальність*</option>
-                </select>
-
-                <p>Firstly you must select a department</p>
-                } @else {
-                <select formControlName="specialtyCodename">
-                    <option value="">Спеціальність*</option>
-                    @for ( specialty of specialties$ | async; track
-                    specialty.codeName ) {
-                    <option [value]="specialty.codeName">
-                        {{ specialty.name.ukName }}
-                    </option>
-                    }
-                </select>
-                } @if ( showValidationErrors() &&
-                academicInfoForm().get("specialtyCodename")?.errors?.[
-                "required" ] ) {
-                <div class="error">You must select a specialty</div>
-                } @if (backendErrors()["specialtyCodename"]) { @for ( error of
-                backendErrors()["specialtyCodename"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
-
-            <div class="form-group">
-                <select formControlName="course">
-                    <option value="">Курс*</option>
-                    @for (item of course$ | async; track $index) {
-                    <option [value]="item.id">
-                        {{ item.displayedName }}
-                    </option>
-                    }
-                </select>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("course")?.errors?.["required"] ) {
-                <div class="error">You must select a course</div>
-                } @if (backendErrors()["course"]) { @for ( error of
-                backendErrors()["course"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
-
-            <div class="form-group">
-                <select formControlName="expertise">
-                    <option value="">Тех. напрямок*</option>
-                    <option value="FULLSTACK">FULLSTACK</option>
-                    <option value="BACKEND">BACKEND</option>
-                    <option value="FRONTEND">FRONTEND</option>
-                    <option value="UI_UX_DESIGNER">UI_UX_DESIGNER</option>
-                </select>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("expertise")?.errors?.[ "required" ] ) {
-                <div class="error">You must select a expertise</div>
-                } @if (backendErrors()["expertise"]) { @for ( error of
-                backendErrors()["expertise"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
-            <button type="button" (click)="returnToPreviousStep()">
-                Назад
-            </button>
-            <button type="submit">Зареєструватися</button>
-        </form>
-        }
     </div>
 </main>

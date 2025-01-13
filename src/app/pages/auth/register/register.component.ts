@@ -30,11 +30,10 @@ import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
+import { CustomSelectComponent } from './custom-select.component';
 import {
-    Course,
     Department,
     ERROR_KEY_TO_CONTROL,
-    Specialty,
     ValidationErrors,
 } from './register.model';
 
@@ -43,6 +42,35 @@ const COURSE_TRANSLATIONS = 'course' as const;
 interface ItemData {
     name: string;
     description: string;
+}
+
+interface SelectOption {
+    id: string;
+    codeName?: string;
+    name?: {
+        ukName: string;
+        enName: string;
+    };
+    displayedName?: string;
+    visible?: boolean;
+}
+
+interface Specialty {
+    codeName: string;
+    name: {
+        ukName: string;
+        enName: string;
+    };
+}
+
+interface Course {
+    id: number;
+    displayedName: string;
+}
+
+interface Expertise {
+    id: string;
+    displayedName: string;
 }
 
 const REGISTER_CONSTANTS = {
@@ -60,6 +88,7 @@ const REGISTER_CONSTANTS = {
         LabelInput,
         MatIconModule,
         TranslateModule,
+        CustomSelectComponent,
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
@@ -70,18 +99,26 @@ export class RegisterComponent {
     protected languageSwitcher = LanguageSwitcherService(this.translate);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
-    currentRegistrationPhase = signal(1);
+    currentRegistrationPhase = signal(2);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
     departments$: Observable<Department[]>;
-    specialties$: Observable<Specialty[]>;
-    private selectedDepartmentId$ = new BehaviorSubject<string>('');
+    departments: Department[] = [];
+    specialties$: Observable<SelectOption[]>;
+    selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
     isKnuDomain = signal(true);
-    course$: Observable<Course[]>;
+    courses: SelectOption[] = [];
+    course$: Observable<SelectOption[]>;
+    expertises: SelectOption[] = [
+        { id: 'FULLSTACK', displayedName: 'FULLSTACK' },
+        { id: 'BACKEND', displayedName: 'BACKEND' },
+        { id: 'FRONTEND', displayedName: 'FRONTEND' },
+        { id: 'UI_UX', displayedName: 'UI/UX DESIGNER' },
+    ];
 
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
@@ -177,6 +214,7 @@ export class RegisterComponent {
         this.personalInfoForm.set(this.initPersonalInfoForm());
         this.academicInfoForm.set(this.initAcademicInfoForm());
 
+        // Initialize departments$ Observable
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
                 console.error('Failed to load departments:', error);
@@ -184,17 +222,22 @@ export class RegisterComponent {
             })
         );
 
+        // Subscribe to departments$
+        this.departments$.subscribe((deps) => {
+            this.departments = deps;
+        });
+
         this.specialties$ = this.selectedDepartmentId$.pipe(
             switchMap((departmentId) =>
                 departmentId
                     ? this.departmentService.getSpecialties(departmentId).pipe(
-                          catchError((error) => {
-                              console.error(
-                                  'Failed to load specialties:',
-                                  error
-                              );
-                              return of([]);
-                          })
+                          map((specialties) =>
+                              specialties.map((specialty) => ({
+                                  id: specialty.codeName, // Map codeName to id
+                                  name: specialty.name,
+                              }))
+                          ),
+                          catchError(() => of([]))
                       )
                     : of([])
             )
@@ -218,8 +261,20 @@ export class RegisterComponent {
         );
 
         this.course$ = courseTranslations$.pipe(
-            map((translations) => translations[COURSE_TRANSLATIONS] || [])
+            map(() => [
+                { id: '1', displayedName: '1' },
+                { id: '2', displayedName: '2' },
+                { id: '3', displayedName: '3' },
+                { id: '4', displayedName: '4' },
+            ])
         );
+
+        this.course$.subscribe((coursesData) => {
+            this.courses = coursesData.map((course) => ({
+                id: String(course.id),
+                displayedName: course.displayedName,
+            }));
+        });
     }
 
     private initPersonalInfoForm(): FormGroup {

@@ -1,4 +1,5 @@
 export interface Specialty {
+    id?: string;
     codeName: string;
     name: {
         enName: string;
