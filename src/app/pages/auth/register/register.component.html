@@ -82,15 +82,14 @@
         <form [formGroup]="academicInfoForm()" (ngSubmit)="onSubmit()">
             <h2>Створіть обліковий запис</h2>
             <div class="form-group">
-                <app-custom-select
+                <write-dropdowns
                     [options]="departments"
                     placeholder="Факультет/Інститут*"
-                    [searchable]="true"
                     valueField="id"
                     displayField="name.ukName"
                     formControlName="departmentId"
                     (selectionChange)="onDepartmentChange()"
-                ></app-custom-select>
+                ></write-dropdowns>
                 @if ( showValidationErrors() &&
                 academicInfoForm().get("departmentId")?.errors?.[ "required" ] )
                 {
@@ -103,26 +102,24 @@
 
             <div class="form-group">
                 @if (!academicInfoForm().get("departmentId")?.value) {
-                <app-custom-select
+                <write-dropdowns
                     [options]="(specialties$ | async) || []"
                     placeholder="Спеціальність*"
-                    [searchable]="true"
                     valueField="codeName"
                     displayField="name.ukName"
                     formControlName="specialtyCodename"
                     class="disabled"
-                ></app-custom-select>
+                ></write-dropdowns>
 
                 <p>Firstly you must select a department</p>
                 } @else {
-                <app-custom-select
+                <write-dropdowns
                     [options]="(specialties$ | async) || []"
                     placeholder="Спеціальність*"
-                    [searchable]="true"
                     valueField="codeName"
                     displayField="name.ukName"
                     formControlName="specialtyCodename"
-                ></app-custom-select>
+                ></write-dropdowns>
                 } @if ( showValidationErrors() &&
                 academicInfoForm().get("specialtyCodename")?.errors?.[
                 "required" ] ) {
@@ -134,14 +131,13 @@
             </div>
 
             <div class="form-group">
-                <app-custom-select
+                <write-dropdowns
                     [options]="courses"
                     placeholder="Курс*"
-                    [searchable]="false"
                     valueField="id"
                     displayField="displayedName"
                     formControlName="course"
-                ></app-custom-select>
+                ></write-dropdowns>
                 @if ( showValidationErrors() &&
                 academicInfoForm().get("course")?.errors?.["required"] ) {
                 <div class="error">You must select a course</div>
@@ -152,14 +148,13 @@
             </div>
 
             <div class="form-group">
-                <app-custom-select
+                <write-dropdowns
                     [options]="expertises"
                     placeholder="Тех. напрямок*"
-                    [searchable]="false"
                     valueField="id"
                     displayField="displayedName"
                     formControlName="expertise"
-                ></app-custom-select>
+                ></write-dropdowns>
                 @if ( showValidationErrors() &&
                 academicInfoForm().get("expertise")?.errors?.[ "required" ] ) {
                 <div class="error">You must select a expertise</div>

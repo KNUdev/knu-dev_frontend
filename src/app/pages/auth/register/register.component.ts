@@ -25,12 +25,12 @@ import {
     switchMap,
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
+import { WriteDropDowns } from '../../../common/components/dropdown/registration/write-dropdowns';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
-import { CustomSelectComponent } from './custom-select.component';
 import {
     Department,
     ERROR_KEY_TO_CONTROL,
@@ -55,24 +55,6 @@ interface SelectOption {
     visible?: boolean;
 }
 
-interface Specialty {
-    codeName: string;
-    name: {
-        ukName: string;
-        enName: string;
-    };
-}
-
-interface Course {
-    id: number;
-    displayedName: string;
-}
-
-interface Expertise {
-    id: string;
-    displayedName: string;
-}
-
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
     PASSWORD_MAX_LENGTH: 64,
@@ -88,7 +70,7 @@ const REGISTER_CONSTANTS = {
         LabelInput,
         MatIconModule,
         TranslateModule,
-        CustomSelectComponent,
+        WriteDropDowns,
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
@@ -148,8 +130,9 @@ export class RegisterComponent {
             description: 'First name cannot be null or blank.',
         },
         {
-            name: 'Второй элемент',
-            description: 'Описание второго элемента',
+            name: 'pattern',
+            description:
+                "First name must contain only English letters and valid symbols (- or ')",
         },
     ];
 
@@ -214,7 +197,10 @@ export class RegisterComponent {
         this.personalInfoForm.set(this.initPersonalInfoForm());
         this.academicInfoForm.set(this.initAcademicInfoForm());
 
-        // Initialize departments$ Observable
+        this.formErrorService.showValidationErrors$.subscribe((value) => {
+            this.showValidationErrors.set(value);
+        });
+
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
                 console.error('Failed to load departments:', error);
@@ -222,7 +208,6 @@ export class RegisterComponent {
             })
         );
 
-        // Subscribe to departments$
         this.departments$.subscribe((deps) => {
             this.departments = deps;
         });
@@ -233,7 +218,7 @@ export class RegisterComponent {
                     ? this.departmentService.getSpecialties(departmentId).pipe(
                           map((specialties) =>
                               specialties.map((specialty) => ({
-                                  id: specialty.codeName, // Map codeName to id
+                                  id: specialty.codeName,
                                   name: specialty.name,
                               }))
                           ),
@@ -316,7 +301,7 @@ export class RegisterComponent {
                 ],
                 confirmPassword: ['', Validators.required],
             },
-            { validators: this.passwordMatchValidator }
+            { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
     }
 
@@ -330,10 +315,16 @@ export class RegisterComponent {
     }
 
     passwordMatchValidator(form: FormGroup) {
-        return form.get('password')?.value ===
-            form.get('confirmPassword')?.value
-            ? null
-            : { passwordMismatch: true };
+        const password = form.get('password');
+        const confirmPassword = form.get('confirmPassword');
+
+        if (password?.value !== confirmPassword?.value) {
+            confirmPassword?.setErrors({ passwordMismatch: true });
+            return { passwordMismatch: true };
+        }
+
+        confirmPassword?.setErrors(null);
+        return null;
     }
 
     preventClipboardAction(event: ClipboardEvent) {
@@ -409,6 +400,7 @@ export class RegisterComponent {
     }
 
     onSubmit() {
+        this.showValidationErrors.set(true);
         this.formErrorService.setShowValidationErrors(true);
         this.formErrorService.setBackendErrors({});
 

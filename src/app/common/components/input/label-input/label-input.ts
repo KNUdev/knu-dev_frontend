@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output,
+    signal,
+} from '@angular/core';
 import {
     ControlContainer,
     FormGroupDirective,
@@ -43,6 +50,7 @@ export class LabelInput {
     isPasswordVisible = false;
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    private _showErrors = signal(false);
 
     constructor(
         private formGroupDirective: FormGroupDirective,
@@ -54,6 +62,9 @@ export class LabelInput {
                 this.iconPaths.error
             )
         );
+        this.formErrorService.showValidationErrors$.subscribe((value) => {
+            this._showErrors.set(value);
+        });
     }
 
     get formGroup() {
@@ -90,7 +101,7 @@ export class LabelInput {
     }
 
     get showErrors() {
-        return this.formErrorService.showValidationErrors();
+        return this._showErrors();
     }
 
     get backendErrors() {
