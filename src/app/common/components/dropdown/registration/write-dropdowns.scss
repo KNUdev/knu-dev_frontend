@@ -9,8 +9,12 @@
     cursor: not-allowed;
 
     .select-header {
-        background-color: #f5f5f5;
+        border-radius: 0.3125rem;
+        border: 1px solid #454545;
         pointer-events: none;
+        .select-value {
+            color: #454545;
+        }
     }
 }
 
@@ -18,10 +22,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 0rem 1rem;
     background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 4px;
+    border-radius: 0.3125rem;
+    border: 1px solid #6d6d6d;
     cursor: pointer;
     min-height: 48px;
     color: #999;
@@ -81,13 +85,19 @@
 }
 
 .option-item {
-    padding: 8px 16px;
+    height: 3.4375rem;
+    padding: 0.625rem;
+    box-sizing: border-box;
+    display: flex;
     cursor: pointer;
     transition: all 0.2s ease;
 
+    span {
+        margin: auto 0;
+    }
+
     &.faded {
         opacity: 0.5;
-        pointer-events: none;
     }
 }
 
@@ -107,10 +117,14 @@
     color: #666;
     gap: 8px;
     flex-direction: column;
+
+    svg path {
+        fill: #666;
+    }
 }
 
 .highlight {
-    color: #ffd700; /* Жёлтый для подсветки текста */
+    color: #ffd700;
     font-weight: bold;
 }
 

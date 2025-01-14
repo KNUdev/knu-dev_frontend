@@ -105,6 +105,8 @@ export class RegisterComponent {
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
         arrowDown: 'assets/icon/system/arrowDown.svg',
+        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
+        errorTriangle: 'assets/icon/system/errorTriangle.svg',
     } as const;
 
     @HostListener('document:click', ['$event'])
@@ -191,6 +193,20 @@ export class RegisterComponent {
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.arrowLeft
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'errorTriangle',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorTriangle
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'errorQuadrilateral',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorQuadrilateral
             )
         );
 

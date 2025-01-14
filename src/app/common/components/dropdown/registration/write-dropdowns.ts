@@ -5,6 +5,7 @@ import {
     EventEmitter,
     forwardRef,
     HostListener,
+    inject,
     Input,
     Output,
     ViewChild,
@@ -15,6 +16,8 @@ import {
     FormsModule,
     NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 interface SelectOption {
     id: string;
@@ -35,7 +38,7 @@ interface FilteredOption extends Omit<SelectOption, 'visible'> {
 
 @Component({
     selector: 'write-dropdowns',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, MatIconModule],
     encapsulation: ViewEncapsulation.None,
     providers: [
         {
@@ -55,6 +58,10 @@ export class WriteDropDowns implements ControlValueAccessor {
     @Output() selectionChange = new EventEmitter<any>();
     private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
+
+    readonly iconPaths = {
+        errorTriangle: 'assets/icon/system/errorTriangle.svg',
+    } as const;
 
     private focusSearchInput(): void {
         setTimeout(() => {
@@ -144,8 +151,17 @@ export class WriteDropDowns implements ControlValueAccessor {
         return text.replace(regex, '<span class="highlight">$1</span>');
     }
 
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+
     constructor(private elementRef: ElementRef) {
         this.resetFilter();
+        this.matIconRegistry.addSvgIcon(
+            'errorTriangle',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorTriangle
+            )
+        );
     }
 
     @HostListener('document:click', ['$event'])

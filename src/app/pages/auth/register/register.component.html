@@ -79,95 +79,136 @@
             </form>
         </div>
         } @if (currentRegistrationPhase() === 2) {
-        <form [formGroup]="academicInfoForm()" (ngSubmit)="onSubmit()">
+        <form
+            [formGroup]="academicInfoForm()"
+            (ngSubmit)="onSubmit()"
+            class="formSecond"
+        >
             <h2>Створіть обліковий запис</h2>
-            <div class="form-group">
-                <write-dropdowns
-                    [options]="departments"
-                    placeholder="Факультет/Інститут*"
-                    valueField="id"
-                    displayField="name.ukName"
-                    formControlName="departmentId"
-                    (selectionChange)="onDepartmentChange()"
-                ></write-dropdowns>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("departmentId")?.errors?.[ "required" ] )
-                {
-                <div class="error">You must select a department</div>
-                } @if (backendErrors()["departmentId"]) { @for ( error of
-                backendErrors()["departmentId"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
+            <div class="inputs">
+                <div class="firstRow">
+                    <div class="form-group">
+                        <write-dropdowns
+                            [options]="departments"
+                            placeholder="Факультет/Інститут*"
+                            valueField="id"
+                            displayField="name.ukName"
+                            formControlName="departmentId"
+                            (selectionChange)="onDepartmentChange()"
+                        ></write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("departmentId")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a department
+                        </div>
+                        } @if (backendErrors()["departmentId"]) { @for ( error
+                        of backendErrors()["departmentId"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
 
-            <div class="form-group">
-                @if (!academicInfoForm().get("departmentId")?.value) {
-                <write-dropdowns
-                    [options]="(specialties$ | async) || []"
-                    placeholder="Спеціальність*"
-                    valueField="codeName"
-                    displayField="name.ukName"
-                    formControlName="specialtyCodename"
-                    class="disabled"
-                ></write-dropdowns>
+                    <div class="form-group">
+                        @if (!academicInfoForm().get("departmentId")?.value) {
+                        <write-dropdowns
+                            [options]="(specialties$ | async) || []"
+                            placeholder="Спеціальність*"
+                            valueField="codeName"
+                            displayField="name.ukName"
+                            formControlName="specialtyCodename"
+                            class="disabled"
+                        ></write-dropdowns>
 
-                <p>Firstly you must select a department</p>
-                } @else {
-                <write-dropdowns
-                    [options]="(specialties$ | async) || []"
-                    placeholder="Спеціальність*"
-                    valueField="codeName"
-                    displayField="name.ukName"
-                    formControlName="specialtyCodename"
-                ></write-dropdowns>
-                } @if ( showValidationErrors() &&
-                academicInfoForm().get("specialtyCodename")?.errors?.[
-                "required" ] ) {
-                <div class="error">You must select a specialty</div>
-                } @if (backendErrors()["specialtyCodename"]) { @for ( error of
-                backendErrors()["specialtyCodename"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
+                        <p class="warning">
+                            <mat-icon svgIcon="errorTriangle"></mat-icon>Firstly
+                            you must select a department
+                        </p>
+                        } @else {
+                        <write-dropdowns
+                            [options]="(specialties$ | async) || []"
+                            placeholder="Спеціальність*"
+                            valueField="codeName"
+                            displayField="name.ukName"
+                            formControlName="specialtyCodename"
+                        ></write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("specialtyCodename")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a specialty
+                        </div>
+                        } @if (backendErrors()["specialtyCodename"]) { @for (
+                        error of backendErrors()["specialtyCodename"]; track
+                        $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } } }
+                    </div>
+                </div>
+                <div class="secondRow">
+                    <div class="form-group">
+                        <write-dropdowns
+                            [options]="courses"
+                            placeholder="Курс*"
+                            valueField="id"
+                            displayField="displayedName"
+                            formControlName="course"
+                        ></write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("course")?.errors?.["required"] )
+                        {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a course
+                        </div>
+                        } @if (backendErrors()["course"]) { @for ( error of
+                        backendErrors()["course"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
 
-            <div class="form-group">
-                <write-dropdowns
-                    [options]="courses"
-                    placeholder="Курс*"
-                    valueField="id"
-                    displayField="displayedName"
-                    formControlName="course"
-                ></write-dropdowns>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("course")?.errors?.["required"] ) {
-                <div class="error">You must select a course</div>
-                } @if (backendErrors()["course"]) { @for ( error of
-                backendErrors()["course"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
-            </div>
-
-            <div class="form-group">
-                <write-dropdowns
-                    [options]="expertises"
-                    placeholder="Тех. напрямок*"
-                    valueField="id"
-                    displayField="displayedName"
-                    formControlName="expertise"
-                ></write-dropdowns>
-                @if ( showValidationErrors() &&
-                academicInfoForm().get("expertise")?.errors?.[ "required" ] ) {
-                <div class="error">You must select a expertise</div>
-                } @if (backendErrors()["expertise"]) { @for ( error of
-                backendErrors()["expertise"]; track $index ) {
-                <div class="error">{{ error }}</div>
-                } }
+                    <div class="form-group">
+                        <write-dropdowns
+                            [options]="expertises"
+                            placeholder="Тех. напрямок*"
+                            valueField="id"
+                            displayField="displayedName"
+                            formControlName="expertise"
+                        ></write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("expertise")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a expertise
+                        </div>
+                        } @if (backendErrors()["expertise"]) { @for ( error of
+                        backendErrors()["expertise"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
+                </div>
             </div>
 
             <button class="fill-red" type="submit">Зареєструватися</button>
-            <a class="hyperlink" (click)="returnToPreviousStep()">
-                Повернутись на минулу сторінку
-            </a>
+            <div class="goBack">
+                <a class="hyperlink" (click)="returnToPreviousStep()">
+                    Повернутись на минулу сторінку
+                </a>
+            </div>
         </form>
         }
         <div class="language-selector-container">
