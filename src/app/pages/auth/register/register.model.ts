@@ -20,7 +20,12 @@ export interface ValidationErrors {
 }
 
 export interface Course {
-    id: number;
+    id: string;
+    displayedName: string;
+}
+
+export interface Expertises {
+    id: string;
     displayedName: string;
 }
 
@@ -35,3 +40,17 @@ export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
     courseErrors: 'course',
     expertiseErrors: 'expertise',
 };
+
+export interface ItemData {
+    name: string;
+    description: string;
+}
+
+export const VALIDATION_KEYS = {
+    firstName: ['required', 'pattern'],
+    lastName: ['required', 'pattern'],
+    middleName: ['required', 'pattern'],
+    password: ['required', 'minlength', 'maxlength', 'pattern'],
+    confirmPassword: ['required', 'passwordMismatch'],
+    email: ['required', 'invalidDomain'],
+} as const;

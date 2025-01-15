@@ -31,10 +31,14 @@
         </button>
     </div>
 
-    @if(showErrors) { @for(item of errors; track $index) {
-    @if(formGroup.get(controlName)?.errors?.[item.name]) {
+    @if(showErrors) { @for(errorKey of errors; track $index) {
+    @if(formGroup.get(controlName)?.errors?.[errorKey]) {
     <div class="error">
-        <mat-icon svgIcon="error"></mat-icon><span>{{ item.description }}</span>
+        <mat-icon svgIcon="error"></mat-icon>
+        <span
+            >{{ 'register.' + controlName + '.errors.' + errorKey | translate
+            }}</span
+        >
     </div>
     } } } @if (backendErrors && backendErrors[controlName]) { @for(error of
     backendErrors[controlName]; track $index) {

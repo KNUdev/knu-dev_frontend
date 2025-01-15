@@ -32,17 +32,16 @@ import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
 import {
+    Course,
     Department,
     ERROR_KEY_TO_CONTROL,
+    Expertises,
+    VALIDATION_KEYS,
     ValidationErrors,
 } from './register.model';
 
 const COURSE_TRANSLATIONS = 'course' as const;
-
-interface ItemData {
-    name: string;
-    description: string;
-}
+const EXPERTISES_TRANSLATIONS = 'expertises' as const;
 
 interface SelectOption {
     id: string;
@@ -81,7 +80,7 @@ export class RegisterComponent {
     protected languageSwitcher = LanguageSwitcherService(this.translate);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
-    currentRegistrationPhase = signal(2);
+    currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
@@ -94,13 +93,8 @@ export class RegisterComponent {
     showValidationErrors = signal(false);
     isKnuDomain = signal(true);
     courses: SelectOption[] = [];
-    course$: Observable<SelectOption[]>;
-    expertises: SelectOption[] = [
-        { id: 'FULLSTACK', displayedName: 'FULLSTACK' },
-        { id: 'BACKEND', displayedName: 'BACKEND' },
-        { id: 'FRONTEND', displayedName: 'FRONTEND' },
-        { id: 'UI_UX', displayedName: 'UI/UX DESIGNER' },
-    ];
+    expertises: SelectOption[] = [];
+    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
 
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
@@ -125,60 +119,6 @@ export class RegisterComponent {
         this.languageSwitcher.switchLang(code as any);
         this.isOpenLang.set(false);
     }
-
-    fullNameError: ItemData[] = [
-        {
-            name: 'required',
-            description: 'First name cannot be null or blank.',
-        },
-        {
-            name: 'pattern',
-            description:
-                "First name must contain only English letters and valid symbols (- or ')",
-        },
-    ];
-
-    passwordErrors: ItemData[] = [
-        {
-            name: 'required',
-            description: 'Password cannot be blank',
-        },
-        {
-            name: 'minlength',
-            description: 'Password must be between 8 and 64 characters',
-        },
-        {
-            name: 'maxlength',
-            description: 'Password must be between 8 and 64 characters',
-        },
-        {
-            name: 'pattern',
-            description:
-                'Password must contain at least one letter and one digit',
-        },
-    ];
-
-    confirmPasswordErrors: ItemData[] = [
-        {
-            name: 'required',
-            description: 'Confirm password cannot be blank',
-        },
-        {
-            name: 'passwordMismatch',
-            description: 'Passwords do not match',
-        },
-    ];
-
-    emailErrors: ItemData[] = [
-        {
-            name: 'required',
-            description: 'Email cannot be blank',
-        },
-        {
-            name: 'invalidDomain',
-            description: 'Email must be in the @knu.ua domain',
-        },
-    ];
 
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
@@ -251,29 +191,33 @@ export class RegisterComponent {
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
                 this.i18nService.loadComponentTranslations(
-                    'register',
+                    'auth/register',
                     event.lang
                 )
             )
         );
 
         const courseTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([COURSE_TRANSLATIONS]))
+            switchMap(() => this.translate.get(COURSE_TRANSLATIONS)),
+            map((translations: Course[]) => translations)
         );
 
-        this.course$ = courseTranslations$.pipe(
-            map(() => [
-                { id: '1', displayedName: '1' },
-                { id: '2', displayedName: '2' },
-                { id: '3', displayedName: '3' },
-                { id: '4', displayedName: '4' },
-            ])
-        );
-
-        this.course$.subscribe((coursesData) => {
+        courseTranslations$.subscribe((coursesData) => {
             this.courses = coursesData.map((course) => ({
-                id: String(course.id),
+                id: course.id,
                 displayedName: course.displayedName,
+            }));
+        });
+
+        const expertisesTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(EXPERTISES_TRANSLATIONS)),
+            map((translations: Expertises[]) => translations)
+        );
+
+        expertisesTranslations$.subscribe((expertisesData) => {
+            this.expertises = expertisesData.map((expertises) => ({
+                id: expertises.id,
+                displayedName: expertises.displayedName,
             }));
         });
     }

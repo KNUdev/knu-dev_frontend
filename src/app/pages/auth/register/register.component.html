@@ -4,36 +4,36 @@
         <div class="form-container">
             <a [routerLink]="['/']" class="hyperlink homePageLink"
                 ><mat-icon svgIcon="arrowLeft"></mat-icon
-                ><span> До головної сторінки</span></a
+                ><span> {{ "register.goHomeLink" | translate }}</span></a
             >
 
             <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
-                <h2>Створіть обліковий запис</h2>
+                <h2>{{ "register.title" | translate }}</h2>
                 <div class="forms">
                     <div class="fullName">
                         <label-input
                             controlName="firstName"
-                            label="Ім'я*"
-                            [errors]="fullNameError"
+                            [label]="'register.firstName.label' | translate"
+                            [errors]="VALIDATION_KEYS.firstName"
                         ></label-input>
 
                         <label-input
                             controlName="lastName"
-                            label="Прізвище*"
-                            [errors]="fullNameError"
+                            [label]="'register.lastName.label' | translate"
+                            [errors]="VALIDATION_KEYS.lastName"
                         ></label-input>
 
                         <label-input
                             controlName="middleName"
-                            label="По батькові*"
-                            [errors]="fullNameError"
+                            [label]="'register.middleName.label' | translate"
+                            [errors]="VALIDATION_KEYS.middleName"
                         ></label-input>
                     </div>
                     <div class="email">
                         <label-input
                             controlName="email"
-                            label="Email*"
-                            [errors]="emailErrors"
+                            [label]="'register.email.label' | translate"
+                            [errors]="VALIDATION_KEYS.email"
                             type="email"
                             [isEmail]="true"
                             domainSuffix="@knu.ua"
@@ -42,39 +42,43 @@
                         ></label-input>
 
                         <div class="email-create">
-                            <p>Не маєте пошти КНУ?</p>
+                            <p>{{ "register.KNUEmail.label" | translate }}</p>
                             <a
                                 href="https://student.triton.knu.ua/CorporativeMail"
                                 class="hyperlink"
-                                >Тисніть сюди</a
+                                >{{ "register.KNUEmail.link" | translate }}</a
                             >
                         </div>
                     </div>
                     <div class="password">
                         <label-input
                             controlName="password"
-                            label="Пароль*"
-                            [errors]="passwordErrors"
+                            [label]="'register.password.label' | translate"
+                            [errors]="VALIDATION_KEYS.password"
                             type="password"
                             [preventClipboard]="true"
                         ></label-input>
 
                         <label-input
                             controlName="confirmPassword"
-                            label="Підтвердження пароля*"
-                            [errors]="confirmPasswordErrors"
+                            [label]="
+                                'register.confirmPassword.label' | translate
+                            "
+                            [errors]="VALIDATION_KEYS.confirmPassword"
                             type="password"
                             [preventClipboard]="true"
                         ></label-input>
                     </div>
                 </div>
-                <button type="submit" class="fill-red">Продовжити</button>
+                <button type="submit" class="fill-red">
+                    {{ "register.continue" | translate }}
+                </button>
 
                 <div class="login">
-                    <p>Немає облікового запису?</p>
-                    <a [routerLink]="['/auth/login']" class="hyperlink"
-                        >Створити</a
-                    >
+                    <p>{{ "register.haveAccount.label" | translate }}</p>
+                    <a [routerLink]="['/auth/login']" class="hyperlink">{{
+                        "register.haveAccount.link" | translate
+                    }}</a>
                 </div>
             </form>
         </div>
@@ -84,13 +88,15 @@
             (ngSubmit)="onSubmit()"
             class="formSecond"
         >
-            <h2>Створіть обліковий запис</h2>
+            <h2>{{ "register.title" | translate }}</h2>
             <div class="inputs">
                 <div class="firstRow">
                     <div class="form-group">
                         <write-dropdowns
                             [options]="departments"
-                            placeholder="Факультет/Інститут*"
+                            [placeholder]="
+                                'register.departments.label' | translate
+                            "
                             valueField="id"
                             displayField="name.ukName"
                             formControlName="departmentId"
@@ -116,7 +122,9 @@
                         @if (!academicInfoForm().get("departmentId")?.value) {
                         <write-dropdowns
                             [options]="(specialties$ | async) || []"
-                            placeholder="Спеціальність*"
+                            [placeholder]="
+                                'register.specialties.label' | translate
+                            "
                             valueField="codeName"
                             displayField="name.ukName"
                             formControlName="specialtyCodename"
@@ -130,7 +138,9 @@
                         } @else {
                         <write-dropdowns
                             [options]="(specialties$ | async) || []"
-                            placeholder="Спеціальність*"
+                            [placeholder]="
+                                'register.specialties.label' | translate
+                            "
                             valueField="codeName"
                             displayField="name.ukName"
                             formControlName="specialtyCodename"
@@ -156,7 +166,7 @@
                     <div class="form-group">
                         <write-dropdowns
                             [options]="courses"
-                            placeholder="Курс*"
+                            [placeholder]="'register.courses.label' | translate"
                             valueField="id"
                             displayField="displayedName"
                             formControlName="course"
@@ -180,7 +190,9 @@
                     <div class="form-group">
                         <write-dropdowns
                             [options]="expertises"
-                            placeholder="Тех. напрямок*"
+                            [placeholder]="
+                                'register.expertises.label' | translate
+                            "
                             valueField="id"
                             displayField="displayedName"
                             formControlName="expertise"
@@ -203,10 +215,12 @@
                 </div>
             </div>
 
-            <button class="fill-red" type="submit">Зареєструватися</button>
+            <button class="fill-red" type="submit">
+                {{ "register.register" | translate }}
+            </button>
             <div class="goBack">
                 <a class="hyperlink" (click)="returnToPreviousStep()">
-                    Повернутись на минулу сторінку
+                    {{ "register.goBackLink" | translate }}
                 </a>
             </div>
         </form>

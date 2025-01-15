@@ -92,5 +92,23 @@
             "id": "10",
             "displayedName": "4th PhD"
         }
+    ],
+    "expertises": [
+        {
+            "id": "FULLSTACK",
+            "displayedName": "FULLSTACK"
+        },
+        {
+            "id": "BACKEND",
+            "displayedName": "BACKEND"
+        },
+        {
+            "id": "FRONTEND",
+            "displayedName": "FRONTEND"
+        },
+        {
+            "id": "UI_UX",
+            "displayedName": "UI/UX DESIGNER"
+        }
     ]
 }

@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 interface SelectOption {
     id: string;
@@ -86,13 +87,12 @@ export class WriteDropDowns implements ControlValueAccessor {
     private onTouched: any = () => {};
 
     getDisplayValue(option: SelectOption): string {
-        if (this.displayField === 'name.ukName' && option.name?.ukName) {
-            return option.name.ukName;
+        if (this.displayField === 'name.ukName' && option.name) {
+            return this.translate.currentLang === 'uk'
+                ? option.name.ukName
+                : option.name.enName;
         }
-        if (this.displayField === 'displayedName' && option.displayedName) {
-            return option.displayedName;
-        }
-        return option.displayedName || option.name?.ukName || '';
+        return option.displayedName || '';
     }
 
     selectOption(option: SelectOption): void {
@@ -154,7 +154,10 @@ export class WriteDropDowns implements ControlValueAccessor {
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
 
-    constructor(private elementRef: ElementRef) {
+    constructor(
+        private elementRef: ElementRef,
+        private translate: TranslateService
+    ) {
         this.resetFilter();
         this.matIconRegistry.addSvgIcon(
             'errorTriangle',
@@ -162,6 +165,13 @@ export class WriteDropDowns implements ControlValueAccessor {
                 this.iconPaths.errorTriangle
             )
         );
+
+        this.translate.onLangChange.subscribe(() => {
+            if (this.selectedOption) {
+                this.selectedOption = { ...this.selectedOption };
+            }
+            this.filterOptions();
+        });
     }
 
     @HostListener('document:click', ['$event'])
