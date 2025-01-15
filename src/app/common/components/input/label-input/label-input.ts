@@ -14,18 +14,12 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import {
-    LangChangeEvent,
-    TranslateModule,
-    TranslateService,
-} from '@ngx-translate/core';
-import { startWith, switchMap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../../../../services/languages/i18n.service';
 import { FormErrorService } from './../../../../services/error.services';
 
 @Component({
     selector: 'label-input',
-    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -70,19 +64,6 @@ export class LabelInput {
         private formGroupDirective: FormGroupDirective,
         private formErrorService: FormErrorService
     ) {
-        const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
-        );
-
-        const loadTranslations$ = langChange$.pipe(
-            switchMap((event) =>
-                this.i18nService.loadComponentTranslations(
-                    'label-input',
-                    event.lang
-                )
-            )
-        );
-
         this.matIconRegistry.addSvgIcon(
             'error',
             this.domSanitizer.bypassSecurityTrustResourceUrl(

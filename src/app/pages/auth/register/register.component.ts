@@ -25,7 +25,10 @@ import {
     switchMap,
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { WriteDropDowns } from '../../../common/components/dropdown/registration/write-dropdowns';
+import {
+    SelectOption,
+    WriteDropDowns,
+} from '../../../common/components/dropdown/registration/write-dropdowns';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
@@ -42,17 +45,6 @@ import {
 
 const COURSE_TRANSLATIONS = 'course' as const;
 const EXPERTISES_TRANSLATIONS = 'expertises' as const;
-
-interface SelectOption {
-    id: string;
-    codeName?: string;
-    name?: {
-        ukName: string;
-        enName: string;
-    };
-    displayedName?: string;
-    visible?: boolean;
-}
 
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
@@ -91,7 +83,6 @@ export class RegisterComponent {
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    isKnuDomain = signal(true);
     courses: SelectOption[] = [];
     expertises: SelectOption[] = [];
     protected readonly VALIDATION_KEYS = VALIDATION_KEYS;

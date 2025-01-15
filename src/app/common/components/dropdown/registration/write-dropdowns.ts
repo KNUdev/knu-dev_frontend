@@ -20,19 +20,22 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 
-interface SelectOption {
-    id: string;
-    codeName?: string;
-    name?: {
-        ukName: string;
-        enName: string;
-    };
-    displayedName?: string;
-    visible?: boolean;
-    matchScore?: number;
+export interface LocalizedName {
+    ukName: string;
+    enName: string;
 }
 
-interface FilteredOption extends Omit<SelectOption, 'visible'> {
+export interface SelectOption {
+    id: string;
+    codeName?: string;
+    name?: LocalizedName;
+    displayedName?: string;
+    description?: string;
+    disabled?: boolean;
+    group?: string;
+}
+
+interface FilteredOption extends SelectOption {
     visible: boolean;
     matchScore: number;
 }
@@ -70,13 +73,6 @@ export class WriteDropDowns implements ControlValueAccessor {
         });
     }
 
-    get hasNoResults(): boolean {
-        return (
-            !!this.searchQuery &&
-            !this.filteredOptions.some((opt) => opt.visible)
-        );
-    }
-
     isOpen = false;
     disabled = false;
     selectedOption: any = null;
@@ -85,6 +81,22 @@ export class WriteDropDowns implements ControlValueAccessor {
 
     private onChange: any = () => {};
     private onTouched: any = () => {};
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+    private getMatchScore(text: string, query: string): number {
+        if (!query) return 100;
+        if (text === query) return 90;
+        if (text.startsWith(query)) return 80;
+        if (text.includes(query)) return 70;
+        return 0;
+    }
+
+    get hasNoResults(): boolean {
+        return (
+            !!this.searchQuery &&
+            !this.filteredOptions.some((opt) => opt.visible)
+        );
+    }
 
     getDisplayValue(option: SelectOption): string {
         if (this.displayField === 'name.ukName' && option.name) {
@@ -126,14 +138,6 @@ export class WriteDropDowns implements ControlValueAccessor {
             .sort((a, b) => b.matchScore - a.matchScore);
     }
 
-    private getMatchScore(text: string, query: string): number {
-        if (!query) return 100;
-        if (text === query) return 90;
-        if (text.startsWith(query)) return 80;
-        if (text.includes(query)) return 70;
-        return 0;
-    }
-
     resetFilter(): void {
         this.filteredOptions = this.options.map(
             (option): FilteredOption => ({
@@ -150,9 +154,6 @@ export class WriteDropDowns implements ControlValueAccessor {
         const regex = new RegExp(`(${query})`, 'gi');
         return text.replace(regex, '<span class="highlight">$1</span>');
     }
-
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
 
     constructor(
         private elementRef: ElementRef,
@@ -210,12 +211,6 @@ export class WriteDropDowns implements ControlValueAccessor {
             this.resetFilter();
             this.focusSearchInput();
         } else {
-            WriteDropDowns.currentOpenDropdown = null;
-        }
-    }
-
-    ngOnDestroy(): void {
-        if (WriteDropDowns.currentOpenDropdown === this) {
             WriteDropDowns.currentOpenDropdown = null;
         }
     }

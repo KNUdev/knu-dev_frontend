@@ -5,9 +5,9 @@
         [class.has-value]="selectedOption"
         [class.focused]="isOpen"
     >
+        @if (isOpen) {
         <input
             #searchInput
-            *ngIf="isOpen"
             type="text"
             [(ngModel)]="searchQuery"
             (input)="filterOptions()"
@@ -15,13 +15,11 @@
             class="search-input"
             placeholder="Пошук..."
         />
-        <span
-            *ngIf="!isOpen"
-            class="select-value"
-            (click)="toggleDropdown($event)"
-        >
+        } @if (!isOpen) {
+        <span class="select-value" (click)="toggleDropdown($event)">
             {{ selectedOption ? getDisplayValue(selectedOption) : placeholder }}
         </span>
+        }
         <svg
             class="arrow-icon"
             [class.open]="isOpen"
@@ -34,13 +32,15 @@
         </svg>
     </div>
 
-    <div *ngIf="isOpen" class="select-dropdown">
-        <div *ngIf="hasNoResults" class="no-results">
+    @if (isOpen) {
+    <div class="select-dropdown">
+        @if (hasNoResults) {
+        <div class="no-results">
             <mat-icon svgIcon="errorTriangle"></mat-icon>
             <span>По запиту "{{ searchQuery }}" нічого не знайдено</span>
         </div>
+        } @for (option of filteredOptions; track option[valueField]) {
         <div
-            *ngFor="let option of filteredOptions"
             class="option-item"
             [class.selected]="option[valueField] === selectedOption?.[valueField]"
             [class.faded]="!option.visible"
@@ -48,5 +48,7 @@
         >
             <span [innerHTML]="highlightText(getDisplayValue(option))"></span>
         </div>
+        }
     </div>
+    }
 </div>
