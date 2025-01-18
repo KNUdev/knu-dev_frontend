@@ -56,19 +56,20 @@ interface FilteredOption extends SelectOption {
     styleUrls: ['./write-dropdowns.scss'],
 })
 export class WriteDropDowns implements ControlValueAccessor {
-    private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    @Input() hasError = false;
+    @Input() errorMessage = '';
     @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
     @Output() selectionChange = new EventEmitter<any>();
     private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
-    hasApiError = false;
 
     readonly iconPaths = {
         arrowDown: 'assets/icon/system/arrowDown.svg',
         errorTriangle: 'assets/icon/system/errorTriangle.svg',
+        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
     } as const;
 
     private focusSearchInput(): void {
@@ -176,6 +177,12 @@ export class WriteDropDowns implements ControlValueAccessor {
             'errorTriangle',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.errorTriangle
+            )
+        );
+        this.matIconRegistry.addSvgIcon(
+            'errorQuadrilateral',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorQuadrilateral
             )
         );
 

@@ -110,5 +110,13 @@
             "id": "Ui-Ux",
             "displayedName": "Ui/Ux designer"
         }
-    ]
+    ],
+    "errors": {
+        "departmentLoadError": "Failed to load departments. Please try again later.",
+        "specialtyLoadError": "Failed to load specialties. Please try again later."
+    },
+    "dropdown": {
+        "search": "Search...",
+        "noResults": "No results found for \"{{query}}\""
+    }
 }

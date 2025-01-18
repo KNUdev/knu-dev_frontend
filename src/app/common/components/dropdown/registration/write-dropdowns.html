@@ -14,7 +14,7 @@
             (input)="filterOptions()"
             (click)="preventClose($event)"
             class="search-input"
-            placeholder="Пошук..."
+            [placeholder]="'dropdown.search' | translate"
             maxlength="16"
         />
         } @if (!isOpen) {
@@ -31,10 +31,18 @@
 
     @if (isOpen) {
     <div class="select-dropdown">
-        @if (hasNoResults) {
+        @if (hasError) {
+        <div class="error-message">
+            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+            <span>{{ errorMessage }}</span>
+        </div>
+        } @else if (hasNoResults) {
         <div class="no-results">
             <mat-icon svgIcon="errorTriangle"></mat-icon>
-            <span>По запиту "{{ searchQuery }}" нічого не знайдено</span>
+            <span
+                >{{ 'dropdown.noResults' | translate:{ query: searchQuery }
+                }}</span
+            >
         </div>
         } @else { @for (option of filteredOptions; track option[valueField]) {
         <div

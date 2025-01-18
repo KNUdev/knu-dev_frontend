@@ -69,6 +69,8 @@ const REGISTER_CONSTANTS = {
 export class RegisterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
     protected languageSwitcher = LanguageSwitcherService(this.translate);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
@@ -79,6 +81,8 @@ export class RegisterComponent {
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
+    departmentLoadError = signal<boolean>(false);
+    specialtyLoadError = signal<boolean>(false);
     selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
@@ -110,9 +114,6 @@ export class RegisterComponent {
         this.languageSwitcher.switchLang(code as any);
         this.isOpenLang.set(false);
     }
-
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -151,6 +152,7 @@ export class RegisterComponent {
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
                 console.error('Failed to load departments:', error);
+                this.departmentLoadError.set(true);
                 return of([]);
             })
         );
@@ -169,17 +171,21 @@ export class RegisterComponent {
             switchMap((departmentId) =>
                 departmentId
                     ? this.departmentService.getSpecialties(departmentId).pipe(
-                          map((specialties) =>
-                              specialties.map((specialty) => ({
+                          map((specialties) => {
+                              this.specialtyLoadError.set(false);
+                              return specialties.map((specialty) => ({
                                   id: specialty.codeName,
                                   codeName: specialty.codeName,
                                   name: {
                                       en: specialty.name.en,
                                       uk: specialty.name.uk,
                                   },
-                              }))
-                          ),
-                          catchError(() => of([]))
+                              }));
+                          }),
+                          catchError(() => {
+                              this.specialtyLoadError.set(true);
+                              return of([]);
+                          })
                       )
                     : of([])
             )

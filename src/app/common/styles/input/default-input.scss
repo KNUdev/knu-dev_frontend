@@ -11,7 +11,7 @@
     caret-color: #ffffff;
     font-family: Geist;
     font-style: normal;
-    font-size: x-small;
+    font-size: revert;
     font-weight: 400;
     line-height: normal;
     transition: all 0.3s ease;
@@ -36,6 +36,12 @@
 
     &:focus::placeholder {
         opacity: 0;
+    }
+}
+
+.fullName {
+    input {
+        max-width: 12.5rem;
     }
 }
 

@@ -93,9 +93,7 @@
                 <div class="firstRow">
                     <div class="form-group">
                         <write-dropdowns
-                            [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("departmentId")?.errors?.[
-                        "required" ] || backendErrors()["departmentId"])'
+                            [class.drop-down__error]="departmentLoadError()"
                             [options]="departments"
                             [placeholder]="
                                 'register.departments.label' | translate
@@ -103,6 +101,10 @@
                             valueField="id"
                             formControlName="departmentId"
                             (selectionChange)="onDepartmentChange()"
+                            [hasError]="departmentLoadError()"
+                            [errorMessage]="
+                                'errors.departmentLoadError' | translate
+                            "
                         ></write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("departmentId")?.errors?.[
@@ -142,15 +144,17 @@
                         </p>
                         } @else {
                         <write-dropdowns
-                            [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("specialtyCodename")?.errors?.[
-                        "required" ] || backendErrors()["specialtyCodename"])'
+                            [class.drop-down__error]="specialtyLoadError()"
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
                                 'register.specialties.label' | translate
                             "
                             valueField="codeName"
                             formControlName="specialtyCodename"
+                            [hasError]="specialtyLoadError()"
+                            [errorMessage]="
+                                'errors.specialtyLoadError' | translate
+                            "
                         ></write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("specialtyCodename")?.errors?.[
