@@ -2,7 +2,8 @@
     padding: 0.9375rem;
     outline: none;
     width: -webkit-fill-available;
-
+    width: -moz-available;
+    height: 3.4375rem;
     background: none;
     border-radius: 0.3125rem;
     border: 1px solid #343434;
@@ -10,6 +11,7 @@
     caret-color: #ffffff;
     font-family: Geist;
     font-style: normal;
+    font-size: x-small;
     font-weight: 400;
     line-height: normal;
     transition: all 0.3s ease;
@@ -49,6 +51,7 @@
 
     span {
         margin: auto 0;
+        max-width: fit-content;
     }
 
     mat-icon {

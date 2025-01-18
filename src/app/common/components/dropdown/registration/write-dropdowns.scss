@@ -22,22 +22,46 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    text-align: center;
+    height: 3.4375rem;
     padding: 0rem 1rem;
-    background: #1a1a1a;
     border-radius: 0.3125rem;
     border: 1px solid #6d6d6d;
     cursor: pointer;
     min-height: 48px;
     color: #999;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .select-header.focused {
     border-color: #ffd700;
 }
 
-.select-header.has-value {
-    color: #fff;
+.select-header.has-value .select-label {
+    transform: translate(-10px, -32px);
+    font-size: 14px;
+    color: #6d6d6d;
+    background-color: #131313;
+    padding: 0 8px;
+}
+
+.select-header.focused .select-label {
+    transform: translate(-10px, -32px);
+    font-size: 14px;
+    color: #ffd700;
+    background-color: #131313;
+    padding: 0 8px;
+}
+
+.select-label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #d1d1d1;
+    pointer-events: none;
+    transition: all 0.3s ease;
 }
 
 .search-input {
@@ -59,12 +83,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
+    display: flex;
+    color: #fff;
 }
 
 .arrow-icon {
     transition: transform 0.2s ease;
     margin-left: 8px;
-    color: #666;
+
+    svg {
+        g path[fill] {
+            fill: #d1d1d1 !important;
+        }
+    }
 }
 
 .arrow-icon.open {
@@ -73,15 +104,15 @@
 
 .select-dropdown {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 10px);
     left: 0;
     right: 0;
     background: #1a1a1a;
-    border: 1px solid #333;
     border-radius: 4px;
     max-height: 300px;
     overflow-y: auto;
     z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .option-item {
@@ -109,27 +140,55 @@
     background: #2a2a2a;
 }
 
+.drop-down__error {
+    .select-header {
+        border: 1px solid #e5383a;
+    }
+}
+
 .no-results {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
-    color: #666;
+    color: #a0a0a0;
     gap: 8px;
     flex-direction: column;
 
     svg path {
-        fill: #666;
+        fill: #a0a0a0;
+    }
+
+    span {
+        text-align: center;
+    }
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #ff4444;
+    gap: 8px;
+    flex-direction: column;
+
+    svg path {
+        fill: #ff4444;
+    }
+
+    span {
+        text-align: center;
     }
 }
 
 .highlight {
-    color: #ffd700;
+    color: #cdb945;
     font-weight: bold;
 }
 
 .select-dropdown::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 .select-dropdown::-webkit-scrollbar-track {

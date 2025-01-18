@@ -89,7 +89,10 @@ export class HeaderComponent {
 
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
-                this.i18nService.loadComponentTranslations('header', event.lang)
+                this.i18nService.loadComponentTranslations(
+                    'components/header',
+                    event.lang
+                )
             )
         );
 

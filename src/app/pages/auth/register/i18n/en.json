@@ -3,6 +3,7 @@
         "title": "Create an account",
         "goHomeLink": "Go to home page",
         "goBackLink": "Go back to previous page",
+        "mustSelectDepartment": "Firstly you must select a department",
         "KNUEmail": {
             "label": "Don't have a KNU email?",
             "link": "Click here"

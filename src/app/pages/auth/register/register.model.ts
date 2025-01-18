@@ -2,16 +2,16 @@ export interface Specialty {
     id?: string;
     codeName: string;
     name: {
-        enName: string;
-        ukName: string;
+        en: string;
+        uk: string;
     };
 }
 
 export interface Department {
     id: string;
     name: {
-        enName: string;
-        ukName: string;
+        en: string;
+        uk: string;
     };
 }
 

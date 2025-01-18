@@ -95,20 +95,25 @@
     ],
     "expertises": [
         {
-            "id": "FULLSTACK",
-            "displayedName": "FULLSTACK"
+            "id": "Fullstack",
+            "displayedName": "Fullstack"
         },
         {
-            "id": "BACKEND",
-            "displayedName": "BACKEND"
+            "id": "Backend",
+            "displayedName": "Backend"
         },
         {
-            "id": "FRONTEND",
-            "displayedName": "FRONTEND"
+            "id": "Frontend",
+            "displayedName": "Frontend"
         },
         {
-            "id": "UI_UX",
-            "displayedName": "UI/UX Дизайнер"
+            "id": "Ui-Ux",
+            "displayedName": "Ui/Ux дизайнер"
         }
-    ]
+    ],
+    "common": {
+        "errors": {
+            "loadingFailed": "Виникла помилка при завантаженні даних. Будь ласка, спробуйте пізніше"
+        }
+    }
 }

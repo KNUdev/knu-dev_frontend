@@ -3,7 +3,7 @@
 .register {
     background-color: #101010;
     color: #ffffff;
-    height: 100vh;
+
     p {
         margin: 0;
     }
@@ -138,6 +138,7 @@
     .language-selector-container {
         width: 100%;
         display: flex;
+        margin-bottom: 4.5rem;
     }
 
     .language-selector {

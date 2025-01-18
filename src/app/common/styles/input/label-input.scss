@@ -1,6 +1,6 @@
 label-input {
-    width: min-content;
-    flex: 1;
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .input-group {
@@ -38,6 +38,8 @@ label-input {
         color: #d1d1d1;
         pointer-events: none;
         transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
     }
 
     .side-text {
@@ -49,10 +51,12 @@ label-input {
         padding: 0 1.25rem;
         border: none;
         background: transparent;
-        color: #ffffff;
+        color: #d1d1d1;
+        cursor: pointer;
         font-size: 0.875rem;
-        cursor: unset;
         transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
 
         img {
             cursor: pointer;
@@ -62,4 +66,5 @@ label-input {
 
 .form-group {
     width: -webkit-fill-available;
+    width: -moz-available;
 }

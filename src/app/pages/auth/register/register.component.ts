@@ -72,7 +72,7 @@ export class RegisterComponent {
     protected languageSwitcher = LanguageSwitcherService(this.translate);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
-    currentRegistrationPhase = signal(1);
+    currentRegistrationPhase = signal(2);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
@@ -156,7 +156,13 @@ export class RegisterComponent {
         );
 
         this.departments$.subscribe((deps) => {
-            this.departments = deps;
+            this.departments = deps.map((dep) => ({
+                id: dep.id,
+                name: {
+                    en: dep.name.en,
+                    uk: dep.name.uk,
+                },
+            }));
         });
 
         this.specialties$ = this.selectedDepartmentId$.pipe(
@@ -166,7 +172,11 @@ export class RegisterComponent {
                           map((specialties) =>
                               specialties.map((specialty) => ({
                                   id: specialty.codeName,
-                                  name: specialty.name,
+                                  codeName: specialty.codeName,
+                                  name: {
+                                      en: specialty.name.en,
+                                      uk: specialty.name.uk,
+                                  },
                               }))
                           ),
                           catchError(() => of([]))
@@ -182,7 +192,7 @@ export class RegisterComponent {
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
                 this.i18nService.loadComponentTranslations(
-                    'auth/register',
+                    'pages/auth/register',
                     event.lang
                 )
             )
@@ -320,9 +330,11 @@ export class RegisterComponent {
             .get('email')
             ?.setValue(value, { emitEvent: false });
 
-        setTimeout(() => {
-            inputElement.setSelectionRange(cursorPosition, cursorPosition);
-        }, 0);
+        if (inputElement.type !== 'email') {
+            setTimeout(() => {
+                inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            }, 0);
+        }
     }
 
     formatEmailOnBlur() {

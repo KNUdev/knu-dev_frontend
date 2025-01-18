@@ -18,11 +18,12 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { I18nService } from '../../../../services/languages/i18n.service';
 
 export interface LocalizedName {
-    ukName: string;
-    enName: string;
+    uk: string;
+    en: string;
 }
 
 export interface SelectOption {
@@ -42,7 +43,7 @@ interface FilteredOption extends SelectOption {
 
 @Component({
     selector: 'write-dropdowns',
-    imports: [CommonModule, FormsModule, MatIconModule],
+    imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
     encapsulation: ViewEncapsulation.None,
     providers: [
         {
@@ -55,15 +56,18 @@ interface FilteredOption extends SelectOption {
     styleUrls: ['./write-dropdowns.scss'],
 })
 export class WriteDropDowns implements ControlValueAccessor {
+    private i18nService = inject(I18nService);
+    private translate = inject(TranslateService);
     @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
-    @Input() displayField: 'name.ukName' | 'displayedName' = 'name.ukName';
     @Output() selectionChange = new EventEmitter<any>();
     private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
+    hasApiError = false;
 
     readonly iconPaths = {
+        arrowDown: 'assets/icon/system/arrowDown.svg',
         errorTriangle: 'assets/icon/system/errorTriangle.svg',
     } as const;
 
@@ -99,12 +103,18 @@ export class WriteDropDowns implements ControlValueAccessor {
     }
 
     getDisplayValue(option: SelectOption): string {
-        if (this.displayField === 'name.ukName' && option.name) {
-            return this.translate.currentLang === 'uk'
-                ? option.name.ukName
-                : option.name.enName;
+        if (option?.name) {
+            const name =
+                this.translate.currentLang === 'uk'
+                    ? option.name.uk
+                    : option.name.en;
+
+            if (option.codeName) {
+                return `${option.codeName} - ${name}`;
+            }
+            return name;
         }
-        return option.displayedName || '';
+        return option?.displayedName || '';
     }
 
     selectOption(option: SelectOption): void {
@@ -155,11 +165,13 @@ export class WriteDropDowns implements ControlValueAccessor {
         return text.replace(regex, '<span class="highlight">$1</span>');
     }
 
-    constructor(
-        private elementRef: ElementRef,
-        private translate: TranslateService
-    ) {
-        this.resetFilter();
+    constructor(private elementRef: ElementRef) {
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
+        );
         this.matIconRegistry.addSvgIcon(
             'errorTriangle',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -169,9 +181,19 @@ export class WriteDropDowns implements ControlValueAccessor {
 
         this.translate.onLangChange.subscribe(() => {
             if (this.selectedOption) {
-                this.selectedOption = { ...this.selectedOption };
+                const currentId = this.selectedOption[this.valueField];
+                setTimeout(() => {
+                    const updatedOption = this.options.find(
+                        (opt) => opt[this.valueField] === currentId
+                    );
+                    if (updatedOption) {
+                        this.selectedOption = updatedOption;
+                        this.onChange(updatedOption[this.valueField]);
+                        this.selectionChange.emit(updatedOption);
+                    }
+                    this.resetFilter();
+                }, 100);
             }
-            this.filterOptions();
         });
     }
 

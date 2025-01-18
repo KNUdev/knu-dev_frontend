@@ -5,6 +5,7 @@
         [class.has-value]="selectedOption"
         [class.focused]="isOpen"
     >
+        <label class="select-label">{{ placeholder }}</label>
         @if (isOpen) {
         <input
             #searchInput
@@ -14,22 +15,18 @@
             (click)="preventClose($event)"
             class="search-input"
             placeholder="Пошук..."
+            maxlength="16"
         />
         } @if (!isOpen) {
         <span class="select-value" (click)="toggleDropdown($event)">
-            {{ selectedOption ? getDisplayValue(selectedOption) : placeholder }}
+            @if (selectedOption){ {{ getDisplayValue(selectedOption) }} }
         </span>
         }
-        <svg
+        <mat-icon
+            svgIcon="arrowDown"
             class="arrow-icon"
             [class.open]="isOpen"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-        >
-            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" />
-        </svg>
+        ></mat-icon>
     </div>
 
     @if (isOpen) {
@@ -39,7 +36,7 @@
             <mat-icon svgIcon="errorTriangle"></mat-icon>
             <span>По запиту "{{ searchQuery }}" нічого не знайдено</span>
         </div>
-        } @for (option of filteredOptions; track option[valueField]) {
+        } @else { @for (option of filteredOptions; track option[valueField]) {
         <div
             class="option-item"
             [class.selected]="option[valueField] === selectedOption?.[valueField]"
@@ -48,7 +45,7 @@
         >
             <span [innerHTML]="highlightText(getDisplayValue(option))"></span>
         </div>
-        }
+        } }
     </div>
     }
 </div>

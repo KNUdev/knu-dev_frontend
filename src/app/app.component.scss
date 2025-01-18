@@ -1,3 +1,4 @@
+@use "./common/styles/reset-style.scss";
 @use "./common/styles/button/menu_nav.scss";
 @use "./common/styles/button/icon_button.scss";
 @use "./common/styles/hyperlink.scss";
@@ -5,3 +6,8 @@
 @use "./common/styles/input/default-input.scss";
 @use "./common/styles/input/label-input.scss";
 @use "./common/styles/button/main-button/fill-red.scss";
+
+body {
+    height: 100%;
+    background-color: #101010;
+}
