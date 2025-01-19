@@ -54,10 +54,12 @@
     display: flex;
     margin-top: 0.94rem;
     gap: 0.62rem;
+    align-items: flex-start;
 
     span {
         margin: auto 0;
-        max-width: fit-content;
+        flex: 1;
+        word-break: break-word;
     }
 
     mat-icon {
