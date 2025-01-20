@@ -1,3 +1,74 @@
 {
-    "register": {}
+    "register": {
+        "title": "Create an account",
+        "goHomeLink": "Go to home page",
+        "goBackLink": "Go back to previous page",
+        "mustSelectDepartment": "Firstly you must select a department",
+        "KNUEmail": {
+            "label": "Don't have a KNU email?",
+            "link": "Click here"
+        },
+        "continue": "Continue",
+        "register": "Register",
+        "haveAccount": {
+            "label": "Already have an account?",
+            "link": "Sign in"
+        },
+        "firstName": {
+            "label": "Name*",
+            "errors": {
+                "required": "First name cannot be blank",
+                "pattern": "First name must contain only English letters and valid symbols (- or ')"
+            }
+        },
+        "lastName": {
+            "label": "Last name*",
+            "errors": {
+                "required": "Last name cannot be blank",
+                "pattern": "Last name must contain only English letters and valid symbols (- or ')"
+            }
+        },
+        "middleName": {
+            "label": "Middle name*",
+            "errors": {
+                "required": "Middle name cannot be blank",
+                "pattern": "Middle name must contain only English letters and valid symbols (- or ')"
+            }
+        },
+        "password": {
+            "label": "Password*",
+            "errors": {
+                "required": "Password cannot be blank",
+                "minlength": "Password must be between 8 and 64 characters",
+                "maxlength": "Password must be between 8 and 64 characters",
+                "pattern": "Password must contain at least one letter and one digit"
+            }
+        },
+        "confirmPassword": {
+            "label": "Confirm password*",
+            "errors": {
+                "required": "Confirm password cannot be blank",
+                "passwordMismatch": "Passwords do not match"
+            }
+        },
+        "email": {
+            "label": "Email*",
+            "errors": {
+                "required": "Email cannot be blank",
+                "invalidDomain": "Email must be in the @knu.ua domain"
+            }
+        },
+        "departments": {
+            "label": "Department*"
+        },
+        "specialties": {
+            "label": "Specialty*"
+        },
+        "courses": {
+            "label": "Course*"
+        },
+        "expertises": {
+            "label": "Expertise*"
+        }
+    }
 }

@@ -1,0 +1,215 @@
+@use "../../../common/styles/variables" as *;
+
+.register {
+    background-color: #101010;
+    color: #ffffff;
+
+    p {
+        margin: 0;
+    }
+    display: flex;
+
+    &__container {
+        width: 48.75rem;
+        margin: 0 auto;
+    }
+
+    h2 {
+        color: #fff;
+        text-align: center;
+        font-family: Unbounded;
+        font-size: 1.375rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.06875rem;
+        text-transform: uppercase;
+    }
+
+    .form-container {
+        padding: 2.19rem 0;
+    }
+
+    .forms {
+        padding: 2.5rem 0;
+    }
+
+    .homePageLink {
+        display: flex;
+        padding: 0.625rem;
+        justify-content: center;
+        align-items: center;
+        gap: 0.625rem;
+        margin-bottom: 1.56rem;
+        width: max-content;
+
+        & > * {
+            margin: auto 0;
+        }
+    }
+
+    form {
+        margin: 0 auto;
+        max-width: 48.75rem;
+        padding: 3.12rem;
+        border-radius: 0.625rem;
+        border: 5px solid #1a1a1a;
+        background: #131313;
+        .fullName {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.88rem;
+            input {
+                padding: 0rem 1rem;
+            }
+        }
+        .password {
+            display: flex;
+            gap: 1.88rem;
+            justify-content: space-between;
+        }
+
+        .email {
+            padding: 2.19rem 0;
+        }
+
+        .email-create {
+            display: flex;
+            gap: 0.62rem;
+            margin-top: 1rem;
+            font-family: "Geist";
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem;
+            letter-spacing: 0.0175rem;
+
+            p {
+                margin: auto 0;
+            }
+        }
+
+        .login {
+            display: flex;
+            margin-top: 1.25rem;
+            align-items: center;
+            justify-content: center;
+            gap: 0.62rem;
+
+            font-family: Geist;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem; /* 142.857% */
+            letter-spacing: 0.0175rem;
+        }
+
+        .inputs {
+            margin: 2.5rem 0;
+        }
+
+        .firstRow {
+            display: flex;
+            flex-direction: column;
+            gap: 1.88rem;
+            margin-bottom: 1.88rem;
+        }
+
+        .secondRow {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.88rem;
+        }
+
+        &.formSecond {
+            margin: 2.19rem 0;
+        }
+
+        .goBack {
+            width: 100%;
+            margin-top: 1.25rem;
+            display: flex;
+
+            a {
+                margin: 0 auto;
+            }
+        }
+    }
+    .language-selector-container {
+        width: 100%;
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .language-selector-container .open {
+        margin-bottom: 3.5rem;
+    }
+
+    .language-selector {
+        margin: 0 auto;
+        .selector-button {
+            margin: 0 auto;
+            color: #fff;
+            border: 1px solid #6d6d6d;
+            border-radius: 0.3125rem;
+            min-width: 12.5rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.9375rem 0.625rem;
+
+            div {
+                display: flex;
+                gap: 0.94rem;
+            }
+            span {
+                margin: auto;
+            }
+        }
+        .dropdown-menu {
+            margin-top: 0.62rem;
+            min-width: 12.5rem;
+            left: 0;
+            padding: 0;
+        }
+
+        .language-option {
+            justify-content: start;
+            padding: 0.62rem;
+            gap: 0.94rem;
+        }
+
+        .flag-icon {
+            width: 1.125rem;
+            height: 1.125rem;
+        }
+    }
+
+    .warning {
+        color: #f09227 !important;
+
+        display: flex;
+        margin-top: 0.94rem;
+        gap: 0.62rem;
+
+        span {
+            margin: auto 0;
+        }
+
+        mat-icon {
+            margin: auto 0;
+        }
+
+        svg {
+            height: 1.25rem;
+            width: 1.25rem;
+        }
+
+        .mat-icon {
+            ::ng-deep svg {
+                g path[fill] {
+                    fill: #f09227 !important;
+                }
+            }
+        }
+    }
+}

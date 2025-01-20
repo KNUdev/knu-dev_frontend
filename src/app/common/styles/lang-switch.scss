@@ -14,12 +14,16 @@
     padding: 0.62rem;
     background: none;
     border: none;
+
+    &:hover {
+        border-radius: 0.3125rem;
+        border: 1px solid #edd342 !important;
+    }
 }
 
 .flag-icon {
     width: 1.5625rem;
     height: 1.5625rem;
-    border-radius: 50%;
 }
 
 .chevron {
@@ -65,7 +69,6 @@
     img {
         width: 1.5625rem;
         height: 1.5625rem;
-        border-radius: 50%;
     }
 
     span {

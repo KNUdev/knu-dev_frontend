@@ -65,7 +65,10 @@ export class FooterComponent {
 
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
-                this.i18nService.loadComponentTranslations('footer', event.lang)
+                this.i18nService.loadComponentTranslations(
+                    'components/footer',
+                    event.lang
+                )
             )
         );
 

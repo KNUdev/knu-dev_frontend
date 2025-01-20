@@ -5,7 +5,8 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
 
 interface LanguageDetails {
-    flag: string;
+    flagRound: string;
+    flagSquare: string;
     name: string;
 }
 
@@ -23,7 +24,7 @@ export class I18nService {
         lang: string
     ): Observable<any> {
         const paths = [
-            `app/components/${component}/i18n/${lang}.json`,
+            `app/${component}/i18n/${lang}.json`,
             `app/common/i18n/${lang}.json`,
         ];
 
@@ -56,7 +57,8 @@ export class I18nService {
         return this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang }),
             map(() => ({
-                flag: `assets/icon/language/${this.translate.currentLang}Round.svg`,
+                flagRound: `assets/icon/language/${this.translate.currentLang}Round.svg`,
+                flagSquare: `assets/icon/language/${this.translate.currentLang}Square.svg`,
                 name:
                     this.translate.currentLang === 'uk'
                         ? 'Українська'

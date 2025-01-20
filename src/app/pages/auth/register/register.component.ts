@@ -1,13 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import {
+    LangChangeEvent,
+    TranslateModule,
+    TranslateService,
+} from '@ngx-translate/core';
 import {
     BehaviorSubject,
     catchError,
@@ -18,17 +25,26 @@ import {
     switchMap,
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
+import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.services';
+import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
+import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
+import {
+    SelectOption,
+    WriteDropDowns,
+} from './components/dropdown/write-dropdowns';
 import {
     Course,
     Department,
     ERROR_KEY_TO_CONTROL,
-    Specialty,
+    Expertises,
+    VALIDATION_KEYS,
     ValidationErrors,
 } from './register.model';
 
 const COURSE_TRANSLATIONS = 'course' as const;
+const EXPERTISES_TRANSLATIONS = 'expertises' as const;
 
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
@@ -38,50 +54,136 @@ const REGISTER_CONSTANTS = {
 } as const;
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, CommonModule],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        RouterModule,
+        LabelInput,
+        MatIconModule,
+        TranslateModule,
+        WriteDropDowns,
+    ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+    protected languageSwitcher = LanguageSwitcherService(this.translate);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    isOpenLang = signal<boolean>(false);
     currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
     departments$: Observable<Department[]>;
-    specialties$: Observable<Specialty[]>;
-    private selectedDepartmentId$ = new BehaviorSubject<string>('');
+    departments: Department[] = [];
+    specialties$: Observable<SelectOption[]>;
+    courses: SelectOption[] = [];
+    expertises: SelectOption[] = [];
+    departmentLoadError = signal<boolean>(false);
+    specialtyLoadError = signal<boolean>(false);
+    selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    isKnuDomain = signal(true);
-    course$: Observable<Course[]>;
+    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
+
+    readonly iconPaths = {
+        arrowLeft: 'assets/icon/system/arrowLeft.svg',
+        arrowDown: 'assets/icon/system/arrowDown.svg',
+        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
+        errorTriangle: 'assets/icon/system/errorTriangle.svg',
+    } as const;
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.language-selector')) {
+            this.isOpenLang.set(false);
+        }
+    }
+
+    toggleDropdownLang() {
+        this.isOpenLang.update((value) => !value);
+    }
+
+    selectLanguage(code: string) {
+        this.languageSwitcher.switchLang(code as any);
+        this.isOpenLang.set(false);
+    }
 
     constructor(
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
-        private readonly departmentService: DepartmentService
+        private readonly departmentService: DepartmentService,
+        private readonly formErrorService: FormErrorService
     ) {
+        this.matIconRegistry.addSvgIcon(
+            'arrowLeft',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowLeft
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'errorTriangle',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorTriangle
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'errorQuadrilateral',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorQuadrilateral
+            )
+        );
+
         this.personalInfoForm.set(this.initPersonalInfoForm());
         this.academicInfoForm.set(this.initAcademicInfoForm());
+
+        this.formErrorService.showValidationErrors$.subscribe((value) => {
+            this.showValidationErrors.set(value);
+        });
 
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
                 console.error('Failed to load departments:', error);
+                this.departmentLoadError.set(true);
                 return of([]);
             })
         );
+
+        this.departments$.subscribe((deps) => {
+            this.departments = deps.map((dep) => ({
+                id: dep.id,
+                name: {
+                    en: dep.name.en,
+                    uk: dep.name.uk,
+                },
+            }));
+        });
 
         this.specialties$ = this.selectedDepartmentId$.pipe(
             switchMap((departmentId) =>
                 departmentId
                     ? this.departmentService.getSpecialties(departmentId).pipe(
-                          catchError((error) => {
-                              console.error(
-                                  'Failed to load specialties:',
-                                  error
-                              );
+                          map((specialties) => {
+                              this.specialtyLoadError.set(false);
+                              return specialties.map((specialty) => ({
+                                  id: specialty.codeName,
+                                  codeName: specialty.codeName,
+                                  name: {
+                                      en: specialty.name.en,
+                                      uk: specialty.name.uk,
+                                  },
+                              }));
+                          }),
+                          catchError(() => {
+                              this.specialtyLoadError.set(true);
                               return of([]);
                           })
                       )
@@ -96,19 +198,35 @@ export class RegisterComponent {
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
                 this.i18nService.loadComponentTranslations(
-                    'register',
+                    'pages/auth/register',
                     event.lang
                 )
             )
         );
 
         const courseTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([COURSE_TRANSLATIONS]))
+            switchMap(() => this.translate.get(COURSE_TRANSLATIONS)),
+            map((translations: Course[]) => translations)
         );
 
-        this.course$ = courseTranslations$.pipe(
-            map((translations) => translations[COURSE_TRANSLATIONS] || [])
+        courseTranslations$.subscribe((coursesData) => {
+            this.courses = coursesData.map((course) => ({
+                id: course.id,
+                displayedName: course.displayedName,
+            }));
+        });
+
+        const expertisesTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(EXPERTISES_TRANSLATIONS)),
+            map((translations: Expertises[]) => translations)
         );
+
+        expertisesTranslations$.subscribe((expertisesData) => {
+            this.expertises = expertisesData.map((expertises) => ({
+                id: expertises.id,
+                displayedName: expertises.displayedName,
+            }));
+        });
     }
 
     private initPersonalInfoForm(): FormGroup {
@@ -150,7 +268,7 @@ export class RegisterComponent {
                 ],
                 confirmPassword: ['', Validators.required],
             },
-            { validators: this.passwordMatchValidator }
+            { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
     }
 
@@ -164,10 +282,16 @@ export class RegisterComponent {
     }
 
     passwordMatchValidator(form: FormGroup) {
-        return form.get('password')?.value ===
-            form.get('confirmPassword')?.value
-            ? null
-            : { passwordMismatch: true };
+        const password = form.get('password');
+        const confirmPassword = form.get('confirmPassword');
+
+        if (password?.value !== confirmPassword?.value) {
+            confirmPassword?.setErrors({ passwordMismatch: true });
+            return { passwordMismatch: true };
+        }
+
+        confirmPassword?.setErrors(null);
+        return null;
     }
 
     preventClipboardAction(event: ClipboardEvent) {
@@ -212,18 +336,20 @@ export class RegisterComponent {
             .get('email')
             ?.setValue(value, { emitEvent: false });
 
-        setTimeout(() => {
-            inputElement.setSelectionRange(cursorPosition, cursorPosition);
-        }, 0);
+        if (inputElement.type !== 'email') {
+            setTimeout(() => {
+                inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            }, 0);
+        }
     }
 
     formatEmailOnBlur() {
         let value = this.personalInfoForm().get('email')?.value.trim();
 
-        if (!value.includes('@')) {
+        if (value && !value.includes('@')) {
             value += REGISTER_CONSTANTS.EMAIL_DOMAIN;
             this.personalInfoForm().get('email')?.setValue(value);
-        } else if (!value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
+        } else if (value && !value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
             this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
             });
@@ -231,9 +357,9 @@ export class RegisterComponent {
     }
 
     goToNextStep() {
-        this.showValidationErrors.set(true);
+        this.formErrorService.setShowValidationErrors(true);
         if (this.personalInfoForm().valid) {
-            this.showValidationErrors.set(false);
+            this.formErrorService.setShowValidationErrors(false);
             this.currentRegistrationPhase.set(2);
         }
     }
@@ -244,7 +370,8 @@ export class RegisterComponent {
 
     onSubmit() {
         this.showValidationErrors.set(true);
-        this.backendErrors.set({});
+        this.formErrorService.setShowValidationErrors(true);
+        this.formErrorService.setBackendErrors({});
 
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
@@ -296,7 +423,7 @@ export class RegisterComponent {
             }
         );
 
-        this.backendErrors.set(newErrors);
+        this.formErrorService.setBackendErrors(newErrors);
 
         const criticalFields = [
             'firstName',

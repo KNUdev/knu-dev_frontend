@@ -3,13 +3,12 @@
 a {
     text-decoration: none;
 }
-
 .header {
     position: sticky;
     background: rgb(16, 16, 16);
     transition: all 0.3s ease;
     top: 0;
-
+    z-index: 100000;
     padding: 1.25rem 7.5rem;
 
     @include for-desktop {
@@ -131,7 +130,6 @@ a {
         img {
             width: 2rem;
             height: 2rem;
-            padding: 0.62rem;
         }
         margin: auto 0;
     }

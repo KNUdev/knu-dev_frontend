@@ -92,5 +92,31 @@
             "id": "10",
             "displayedName": "4 курс аспірантури"
         }
-    ]
+    ],
+    "expertises": [
+        {
+            "id": "Fullstack",
+            "displayedName": "Fullstack"
+        },
+        {
+            "id": "Backend",
+            "displayedName": "Backend"
+        },
+        {
+            "id": "Frontend",
+            "displayedName": "Frontend"
+        },
+        {
+            "id": "Ui-Ux",
+            "displayedName": "Ui/Ux дизайнер"
+        }
+    ],
+    "errors": {
+        "departmentLoadError": "Помилка завантаження факультетів. Будь ласка, спробуйте пізніше.",
+        "specialtyLoadError": "Помилка завантаження спеціальностей. Будь ласка, спробуйте пізніше."
+    },
+    "dropdown": {
+        "search": "Пошук...",
+        "noResults": "По запиту \"{{query}}\" нічого не знайдено"
+    }
 }

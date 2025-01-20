@@ -92,5 +92,31 @@
             "id": "10",
             "displayedName": "4th PhD"
         }
-    ]
+    ],
+    "expertises": [
+        {
+            "id": "Fullstack",
+            "displayedName": "Fullstack"
+        },
+        {
+            "id": "Backend",
+            "displayedName": "Backend"
+        },
+        {
+            "id": "Frontend",
+            "displayedName": "Frontend"
+        },
+        {
+            "id": "Ui-Ux",
+            "displayedName": "Ui/Ux designer"
+        }
+    ],
+    "errors": {
+        "departmentLoadError": "Failed to load departments. Please try again later.",
+        "specialtyLoadError": "Failed to load specialties. Please try again later."
+    },
+    "dropdown": {
+        "search": "Search...",
+        "noResults": "No results found for \"{{query}}\""
+    }
 }
