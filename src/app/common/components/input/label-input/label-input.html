@@ -14,6 +14,7 @@
         />
         <label class="input-label">{{label}}</label>
 
+        @if(showDomainSuffix() || type === 'password'){
         <div class="side-text" (click)="togglePasswordVisibility()">
             @if(showDomainSuffix()) {
             <span class="domain-suffix">{{domainSuffix}}</span>
@@ -25,6 +26,7 @@
             />
             }
         </div>
+        }
     </div>
 
     @if(showErrors) { @for(errorKey of errors; track $index) {

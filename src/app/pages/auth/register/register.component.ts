@@ -346,10 +346,10 @@ export class RegisterComponent {
     formatEmailOnBlur() {
         let value = this.personalInfoForm().get('email')?.value.trim();
 
-        if (!value.includes('@')) {
+        if (value && !value.includes('@')) {
             value += REGISTER_CONSTANTS.EMAIL_DOMAIN;
             this.personalInfoForm().get('email')?.setValue(value);
-        } else if (!value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
+        } else if (value && !value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
             this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
             });
