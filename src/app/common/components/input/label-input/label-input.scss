@@ -25,6 +25,10 @@
         }
     }
 
+    .side-text:empty {
+        display: none;
+    }
+
     .input-label {
         position: absolute;
         left: 20px;
