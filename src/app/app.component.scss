@@ -4,10 +4,13 @@
 @use "./common/styles/hyperlink.scss";
 @use "./common/styles/lang-switch.scss";
 @use "./common/styles/input/default-input.scss";
-@use "./common/styles/input/label-input.scss";
 @use "./common/styles/button/main-button/fill-red.scss";
 
 body {
     height: 100%;
     background-color: #101010;
+}
+
+.form-group {
+    width: 100%;
 }

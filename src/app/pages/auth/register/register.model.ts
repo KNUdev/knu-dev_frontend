@@ -41,11 +41,6 @@ export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
     expertiseErrors: 'expertise',
 };
 
-export interface ItemData {
-    name: string;
-    description: string;
-}
-
 export const VALIDATION_KEYS = {
     firstName: ['required', 'pattern'],
     lastName: ['required', 'pattern'],

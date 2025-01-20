@@ -25,15 +25,15 @@ import {
     switchMap,
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import {
-    SelectOption,
-    WriteDropDowns,
-} from '../../../common/components/dropdown/registration/write-dropdowns';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
+import {
+    SelectOption,
+    WriteDropDowns,
+} from './components/dropdown/write-dropdowns';
 import {
     Course,
     Department,
@@ -81,14 +81,14 @@ export class RegisterComponent {
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
+    courses: SelectOption[] = [];
+    expertises: SelectOption[] = [];
     departmentLoadError = signal<boolean>(false);
     specialtyLoadError = signal<boolean>(false);
     selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    courses: SelectOption[] = [];
-    expertises: SelectOption[] = [];
     protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
 
     readonly iconPaths = {

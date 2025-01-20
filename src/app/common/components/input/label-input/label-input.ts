@@ -33,6 +33,7 @@ import { FormErrorService } from './../../../../services/error.services';
         },
     ],
     templateUrl: './label-input.html',
+    styleUrl: './label-input.scss',
 })
 export class LabelInput {
     readonly iconPaths = {
