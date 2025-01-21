@@ -1,0 +1,52 @@
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-title">
+            <div class="hero-title-row">
+                <h1 class="hero-heading">Знайди свій шлях до</h1>
+                <span class="hero-highlight">УСпіху</span>
+            </div>
+            <h2 class="hero-subheading">В майбутньому</h2>
+        </div>
+        <p class="hero-description">
+            Розкрий свій потенціал разом із KNU DEV — опановуй сучасні
+            технології та досягай вершин у кар'єрі!
+        </p>
+    </div>
+    <div class="hero-banner">
+        <div class="banner-info">
+            <span class="banner-dimensions">1920x900px</span>
+            <span class="banner-type">Div block</span>
+        </div>
+        <div class="banner-container">
+            <img
+                loading="lazy"
+                [src]="iconPaths.bgHeader"
+                alt="KNU DEV campus banner"
+                class="banner-image"
+            />
+            <div class="banner-actions">
+                <button
+                    class="action-button primary"
+                    (click)="onJoinCampus()"
+                    tabindex="0"
+                    role="button"
+                >
+                    Приєднатися до кампусу
+                </button>
+                <div class="action-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-text">АБО</span>
+                    <span class="divider-line"></span>
+                </div>
+                <button
+                    class="action-button secondary"
+                    (click)="onJoinPreCampus()"
+                    tabindex="0"
+                    role="button"
+                >
+                    Приєднатися до пре-кампусу
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

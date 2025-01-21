@@ -1,0 +1,331 @@
+.pre-campus-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header {
+    align-self: center;
+    display: flex;
+    width: 316px;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-nat-0, #fff);
+    font-weight: 500;
+}
+
+.info-badge {
+    width: 100%;
+    border-radius: 52px;
+    background-color: rgba(100, 42, 42, 1);
+    letter-spacing: 0.7px;
+    padding: 10px 15px;
+    font: 14px Geist, sans-serif;
+    border: 2px solid rgba(229, 56, 58, 1);
+}
+
+.title {
+    text-align: center;
+    letter-spacing: 1.75px;
+    text-transform: uppercase;
+    margin-top: 15px;
+    font: 35px Unbounded, sans-serif;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 130px;
+    width: 100%;
+    flex-direction: column;
+}
+
+.content-grid {
+    display: flex;
+    min-height: 536px;
+    width: 100%;
+    gap: 40px 100px;
+    flex-wrap: wrap;
+}
+
+.about-section {
+    border-radius: 5px;
+    display: flex;
+    min-width: 240px;
+    flex-direction: column;
+    flex: 1;
+    flex-basis: 0%;
+}
+
+.section-title {
+    color: var(--text-nat-0, #fff);
+    text-align: center;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    font: 500 22px Unbounded, sans-serif;
+}
+
+.description {
+    color: var(--text-nat-200, #d1d1d1);
+    letter-spacing: 0.3px;
+    margin-top: 35px;
+    font: 400 15px/26px Geist, sans-serif;
+}
+
+.vertical-divider {
+    width: 0;
+    height: 536px;
+    border: 1px solid rgba(52, 52, 52, 1);
+}
+
+.curriculum-section {
+    border-radius: 5px;
+    align-self: start;
+    display: flex;
+    min-width: 240px;
+    flex-direction: column;
+    font-family: Unbounded, sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    justify-content: center;
+    flex: 1;
+    flex-basis: 0%;
+}
+
+.curriculum-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    color: var(--text-nat-0, #fff);
+    text-align: center;
+    letter-spacing: 1.1px;
+    flex-wrap: wrap;
+}
+
+.subtitle {
+    border-color: rgba(229, 56, 58, 1);
+    border-bottom-width: 2px;
+    min-width: 240px;
+    padding: 5px 0;
+}
+
+.stats-grid {
+    display: flex;
+    margin-top: 35px;
+    width: 100%;
+    flex-direction: column;
+    font-size: 16px;
+    color: var(--text-nat-200, #d1d1d1);
+    letter-spacing: 0.8px;
+    line-height: 2;
+}
+
+.stat-card {
+    border-radius: 5px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 40px 100px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 35px;
+    border: 1px solid rgba(52, 52, 52, 1);
+    margin-top: 25px;
+}
+
+.stat-card:first-child {
+    margin-top: 0;
+}
+
+.stat-title {
+    align-self: stretch;
+    margin: auto 0;
+}
+
+.stat-image {
+    aspect-ratio: 1;
+    object-fit: contain;
+    object-position: center;
+    width: 100px;
+    align-self: stretch;
+    margin: auto 0;
+}
+
+.horizontal-divider {
+    min-height: 1px;
+    width: 100%;
+    border: 1px solid rgba(52, 52, 52, 1);
+}
+
+.requirements-section {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 0;
+}
+
+.requirements-card {
+    border-radius: 5px;
+    display: flex;
+    margin-top: 45px;
+    min-height: 398px;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 35px;
+    border: 1px solid rgba(52, 52, 52, 1);
+}
+
+.requirements-image {
+    aspect-ratio: 8.4;
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+    max-width: 1674px;
+    border-radius: 3px;
+}
+
+.requirements-content {
+    display: flex;
+    margin-top: 35px;
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+}
+
+.highlight-title {
+    color: var(--text-red-0, #e5383a);
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    font: 500 18px Unbounded, sans-serif;
+}
+
+.accent {
+    color: rgba(229, 56, 58, 1);
+}
+
+.requirements-description {
+    color: var(--text-nat-200, #d1d1d1);
+    letter-spacing: 0.3px;
+    margin-top: 20px;
+    font: 400 15px/26px Geist, sans-serif;
+}
+
+.benefits-section {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 0 0 80px;
+}
+
+.benefits-grid {
+    display: flex;
+    margin-top: 45px;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 35px;
+}
+
+.benefit-card {
+    border-radius: 5px;
+    display: flex;
+    padding: 25px;
+    border: 1px solid rgba(52, 52, 52, 1);
+    flex: 1;
+    min-width: 240px;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.benefit-title {
+    color: var(--text-nat-200, #d1d1d1);
+    font-size: 14px;
+    letter-spacing: 0.7px;
+    line-height: 25px;
+    text-transform: uppercase;
+}
+
+.benefit-icon {
+    aspect-ratio: 1;
+    object-fit: contain;
+    width: 24px;
+}
+
+.cta-section {
+    border-radius: 5px;
+    align-self: center;
+    display: flex;
+    margin-top: 100px;
+    width: 1000px;
+    max-width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 35px;
+    border: 1px solid rgba(52, 52, 52, 1);
+}
+
+.cta-button {
+    width: 100%;
+    border-radius: 5px;
+    background-color: rgba(229, 56, 58, 1);
+    min-height: 55px;
+    font-size: 15px;
+    color: var(--text-nat-0, #fff);
+    font-weight: 500;
+    letter-spacing: 0.75px;
+    padding: 18px 16px;
+    border: none;
+    cursor: pointer;
+    font-family: Geist, sans-serif;
+}
+
+.cta-description {
+    color: var(--text-nat-350, #a0a0a0);
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    margin-top: 25px;
+    font-family: Geist, sans-serif;
+}
+
+@media (max-width: 991px) {
+    .content-wrapper {
+        margin-top: 40px;
+    }
+
+    .content-grid,
+    .about-section,
+    .curriculum-section,
+    .curriculum-header,
+    .stats-grid,
+    .stat-card,
+    .horizontal-divider,
+    .requirements-section,
+    .requirements-card,
+    .requirements-content,
+    .highlight-title,
+    .requirements-description {
+        max-width: 100%;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .requirements-section {
+        padding: 40px 0;
+    }
+
+    .requirements-card {
+        margin-top: 40px;
+        padding: 20px;
+    }
+
+    .cta-section {
+        margin-top: 40px;
+        padding: 20px;
+    }
+}

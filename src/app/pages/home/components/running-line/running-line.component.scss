@@ -1,0 +1,36 @@
+.logo-line-container {
+    width: 100%;
+    background-color: #1a1a1a;
+    padding: 1rem;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    gap: 2rem;
+}
+
+.logo-scroll {
+    display: flex;
+    animation: scroll 20s linear infinite;
+    gap: 2rem;
+}
+
+.logo-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    filter: grayscale(1);
+    transition: filter 0.3s ease;
+}
+
+.logo-item img:hover {
+    filter: grayscale(0);
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
