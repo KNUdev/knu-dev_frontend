@@ -62,11 +62,31 @@
 .hero-banner {
     display: flex;
     margin-top: 50px;
-    min-height: 350px;
     width: 1304px;
     max-width: 100%;
     flex-direction: column;
     font-family: Geist, sans-serif;
+    animation: 1s show ease;
+}
+
+@keyframes show {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes showBut {
+    from {
+        transform: scale(1.2);
+    }
+    to {
+        transform: scale(1);
+    }
 }
 
 .banner-info {
@@ -120,6 +140,9 @@
     text-align: center;
     border: none;
     cursor: pointer;
+    transform: scale(1.2);
+    animation: 1s showBut ease forwards;
+    animation-delay: 1s;
 }
 
 .action-button.primary {
@@ -154,40 +177,4 @@
     border-radius: 43px;
     padding: 10px;
     margin: 15px 0;
-}
-
-@media (max-width: 991px) {
-    .hero {
-        padding: 0 20px;
-    }
-
-    .hero-content {
-        max-width: 100%;
-    }
-
-    .hero-title {
-        font-size: 40px;
-    }
-
-    .hero-title-row {
-        max-width: 100%;
-    }
-
-    .hero-highlight {
-        white-space: initial;
-    }
-
-    .hero-description {
-        max-width: 100%;
-    }
-
-    .hero-banner {
-        margin-top: 40px;
-    }
-
-    .banner-info,
-    .banner-container,
-    .banner-actions {
-        max-width: 100%;
-    }
 }

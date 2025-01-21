@@ -1,11 +1,5 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { Component } from '@angular/core';
-
-interface ButtonProps {
-    text: string;
-    variant: 'primary' | 'secondary';
-    onClick?: () => void;
-}
 
 @Component({
     selector: 'home-header',

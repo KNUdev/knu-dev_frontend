@@ -9,6 +9,7 @@
     display: flex;
     width: 316px;
     max-width: 100%;
+    margin-top: 4rem;
     flex-direction: column;
     align-items: center;
     color: var(--text-nat-0, #fff);
@@ -54,7 +55,7 @@
     min-width: 240px;
     flex-direction: column;
     flex: 1;
-    flex-basis: 0%;
+    flex-basis: 0;
 }
 
 .section-title {
@@ -89,7 +90,7 @@
     text-transform: uppercase;
     justify-content: center;
     flex: 1;
-    flex-basis: 0%;
+    flex-basis: 0;
 }
 
 .curriculum-header {
@@ -222,21 +223,22 @@
 
 .benefits-grid {
     display: flex;
-    margin-top: 45px;
-    width: 100%;
+    gap: 40px 100px;
     flex-wrap: wrap;
+}
+
+.benefits-column {
+    flex: 1;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
     gap: 35px;
 }
 
 .benefit-card {
     border-radius: 5px;
-    display: flex;
     padding: 25px;
     border: 1px solid rgba(52, 52, 52, 1);
-    flex: 1;
-    min-width: 240px;
-    align-items: center;
-    justify-content: space-between;
     cursor: pointer;
 }
 
@@ -245,13 +247,13 @@
     font-size: 14px;
     letter-spacing: 0.7px;
     line-height: 25px;
-    text-transform: uppercase;
+    margin: 0;
 }
 
 .benefit-icon {
-    aspect-ratio: 1;
-    object-fit: contain;
     width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .cta-section {
@@ -291,41 +293,32 @@
     font-family: Geist, sans-serif;
 }
 
-@media (max-width: 991px) {
-    .content-wrapper {
-        margin-top: 40px;
-    }
+details {
+    cursor: pointer;
+    margin: 10px 0;
+    color: #fff;
+}
 
-    .content-grid,
-    .about-section,
-    .curriculum-section,
-    .curriculum-header,
-    .stats-grid,
-    .stat-card,
-    .horizontal-divider,
-    .requirements-section,
-    .requirements-card,
-    .requirements-content,
-    .highlight-title,
-    .requirements-description {
-        max-width: 100%;
-    }
+summary {
+    list-style: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+}
 
-    .stat-card {
-        padding: 20px;
-    }
+summary::marker {
+    content: "";
+}
 
-    .requirements-section {
-        padding: 40px 0;
-    }
+.arrow {
+    margin-right: 8px;
+    transition: transform 0.2s;
+}
 
-    .requirements-card {
-        margin-top: 40px;
-        padding: 20px;
-    }
+details[open] .arrow {
+    transform: rotate(180deg);
+}
 
-    .cta-section {
-        margin-top: 40px;
-        padding: 20px;
-    }
+details[open] {
+    border-color: #edd342;
 }
