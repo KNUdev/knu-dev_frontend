@@ -1,25 +1,28 @@
 .logo-line-container {
     width: 100%;
+    height: 5.625rem;
     background-color: #1a1a1a;
     padding: 1rem;
     overflow: hidden;
     position: relative;
     display: flex;
-    gap: 2rem;
 }
 
 .logo-scroll {
     display: flex;
-    animation: scroll 20s linear infinite;
-    gap: 2rem;
+    animation: scroll 30s linear infinite;
+    gap: 8rem;
+}
+
+.logo-item {
+    display: flex;
 }
 
 .logo-item img {
-    width: 40px;
-    height: 40px;
     object-fit: contain;
     filter: grayscale(1);
     transition: filter 0.3s ease;
+    margin: auto 0;
 }
 
 .logo-item img:hover {
@@ -28,9 +31,9 @@
 
 @keyframes scroll {
     0% {
-        transform: translateX(0);
+        transform: translateX(-50%);
     }
     100% {
-        transform: translateX(-100%);
+        transform: translateX(0);
     }
 }

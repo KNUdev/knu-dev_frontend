@@ -2,13 +2,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 4rem;
+    padding-top: 9.37rem;
+    background-color: #101010;
 }
 
 .campus-header {
     align-self: center;
     display: flex;
-    width: 316px;
     max-width: 100%;
     flex-direction: column;
     align-items: center;
@@ -17,11 +17,12 @@
 }
 
 .info-badge {
-    width: 100%;
+    text-align: center;
+    width: fit-content;
     border-radius: 52px;
     background-color: rgba(100, 91, 42, 1);
     letter-spacing: 0.7px;
-    padding: 10px 15px;
+    padding: 0.625rem 0.9375rem;
     font: 14px Geist, sans-serif;
     border: 2px solid rgba(237, 211, 66, 1);
 }
@@ -30,7 +31,7 @@
     text-align: center;
     letter-spacing: 1.75px;
     text-transform: uppercase;
-    margin: 15px 0 0;
+    margin-top: 0.94rem;
     font: 35px Unbounded, sans-serif;
 }
 
@@ -45,6 +46,7 @@
     width: 100%;
     gap: 40px 100px;
     flex-wrap: wrap;
+    border-bottom: 1px solid #343434;
 }
 
 .about-section {
@@ -55,7 +57,6 @@
 
 .section-title {
     color: var(--text-nat-0, #fff);
-    text-align: center;
     letter-spacing: 1.1px;
     text-transform: uppercase;
     font: 500 22px Unbounded, sans-serif;
@@ -134,6 +135,7 @@
 }
 
 .requirements-section {
+    margin-top: 6.25rem;
     width: 100%;
 }
 
@@ -177,6 +179,12 @@
     width: 50px;
     height: 50px;
     object-fit: contain;
+
+    ::ng-deep svg {
+        g path[fill] {
+            fill: #000000 !important;
+        }
+    }
 }
 
 .requirement-content {
@@ -235,6 +243,16 @@
     padding: 25px;
     border: 1px solid rgba(52, 52, 52, 1);
     cursor: pointer;
+
+
+    display: flex;
+    flex-direction: column;
+
+
+    summary {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 .benefit-title {
@@ -321,4 +339,5 @@ details[open] .arrow {
 
 details[open] {
     border-color: #edd342;
+    gap: 1.56rem;
 }

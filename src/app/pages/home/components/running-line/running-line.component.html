@@ -1,16 +1,10 @@
 <div class="logo-line-container">
     <div class="logo-scroll">
-        @for (logo of doubledLogos; track $index) {
-        <div class="logo-item">
+        <div *ngFor="let logo of doubledLogos" class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>
-        }
-    </div>
-    <div class="logo-scroll" aria-hidden="true">
-        @for (logo of doubledLogos; track $index) {
-        <div class="logo-item">
+        <div *ngFor="let logo of doubledLogos" class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>
-        }
     </div>
 </div>
