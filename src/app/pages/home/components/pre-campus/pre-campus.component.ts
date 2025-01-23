@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
-interface PreCampusProps {
-    onEnrollClick?: () => void;
-}
-
 @Component({
     selector: 'pre-campus',
     templateUrl: './pre-campus.component.html',

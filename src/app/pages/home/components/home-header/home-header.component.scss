@@ -9,7 +9,7 @@
 
 .hero::before,
 .hero::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 10.5rem;
     height: 10rem;
@@ -63,7 +63,7 @@
 }
 
 .hero-highlight {
-    color: #E5383A;
+    color: #e5383a;
     white-space: nowrap;
     min-width: 240px;
 }
@@ -131,16 +131,25 @@
     width: 100%;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 5px;
-    border: 2px solid var(--grads-text-grad-grad-red-yellow-position-1, #edd342);
-    border-bottom: 0;
+    border-radius: 0.3125rem 0.3125rem 0 0;
+    padding: 2px 2px 0 2px;
+    background: linear-gradient(to right, #edd342, #e5393b);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #000;
+        margin: 2px 2px 0 2px;
+    }
 }
 
 .banner-image {
+    position: relative; // Add this
+    z-index: 0; // Add this to appear above pseudo-element
     aspect-ratio: 4.2;
     object-fit: contain;
     width: 100%;
-    align-self: center;
 }
 
 .banner-actions {
