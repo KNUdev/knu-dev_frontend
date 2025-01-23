@@ -1,10 +1,13 @@
 <div class="logo-line-container">
     <div class="logo-scroll">
-        <div *ngFor="let logo of doubledLogos" class="logo-item">
+        @for (logo of doubledLogos; track logo.name) {
+        <div class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>
-        <div *ngFor="let logo of doubledLogos" class="logo-item">
+        } @for (logo of doubledLogos; track logo.name) {
+        <div class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>
+        }
     </div>
 </div>
