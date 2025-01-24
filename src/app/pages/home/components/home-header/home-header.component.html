@@ -1,11 +1,10 @@
 <section class="hero">
     <div class="hero-content">
         <div class="hero-title">
-            <div class="hero-title-row">
-                <h1 class="hero-heading">Знайди свій шлях до</h1>
-                <span class="hero-highlight">УСпіху</span>
-            </div>
-            <h2 class="hero-subheading">В майбутньому</h2>
+            <h1 class="hero-heading">ЗНАЙДИ СВІЙ ШЛЯХ ДО
+                <span class="hero-highlight">УСПІХУ</span>
+                В МАЙБУТНОЬМУ
+            </h1>
         </div>
         <p class="hero-description">
             Розкрий свій потенціал разом із KNU DEV — опановуй сучасні
@@ -18,12 +17,7 @@
             <span class="banner-type">Div block</span>
         </div>
         <div class="banner-container">
-            <img
-                loading="lazy"
-                [src]="iconPaths.bgHeader"
-                alt="KNU DEV campus banner"
-                class="banner-image"
-                />
+            <div [style.background-image]="'url(' + iconPaths.bgHeader + ')'" class="banner-content">
             <div class="banner-actions">
                 <button
                     class="action-button primary"
@@ -46,6 +40,7 @@
                 >
                     Приєднатися до пре-кампусу
                 </button>
+            </div>
             </div>
         </div>
     </div>
