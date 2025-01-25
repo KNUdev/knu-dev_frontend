@@ -9,54 +9,61 @@
 
 .header-info {
     align-self: center;
-    display: flex;
     max-width: 100%;
+    color: #fff;
+
+    display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--text-nat-0, #fff);
-    font-weight: 500;
+    gap: 0.9375rem;
 }
 
 .info-badge {
     text-align: center;
     width: fit-content;
-    border-radius: 52px;
-    letter-spacing: 0.7px;
     padding: 0.625rem 0.9375rem;
-    font:
-        14px Geist,
-        sans-serif;
+    border-radius: 3.25rem;
+
+    font-family: Geist;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.04375rem;
 }
 
 .title {
     text-align: center;
-    letter-spacing: 1.75px;
+    font-family: Unbounded;
+    font-size: 2.1875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.10938rem;
     text-transform: uppercase;
-    margin-top: 0.94rem;
-    font:
-        35px Unbounded,
-        sans-serif;
+    margin: 0;
 }
 
 .main-content {
-    margin-top: 130px;
+    margin-top: 8.125rem;
     width: 100%;
 }
 
 .info-section {
     display: flex;
-    min-height: 473px;
     width: 100%;
-    gap: 40px 100px;
+    gap: 6.25rem;
     flex-wrap: wrap;
     border-bottom: 1px solid #343434;
 }
 
 .about-section {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    min-width: 240px;
-    border-radius: 5px;
     animation: 1s show ease;
+    gap: 2.19rem;
+    margin-bottom: 6.25rem;
 }
 
 @keyframes show {
@@ -71,197 +78,166 @@
 }
 
 .section-title {
-    color: var(--text-nat-0, #fff);
-    letter-spacing: 1.1px;
+    color: #fff;
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
     text-transform: uppercase;
-    font:
-        500 22px Unbounded,
-        sans-serif;
     margin: 0;
 }
 
 .description {
-    color: var(--text-nat-200, #d1d1d1);
-    letter-spacing: 0.3px;
-    margin: 35px 0 0;
-    font:
-        400 15px/26px Geist,
-        sans-serif;
+    color: #d1d1d1;
+    font-family: Geist;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
 }
 
 .vertical-divider {
     width: 0;
-    height: 473px;
-    border: 1px solid rgba(52, 52, 52, 1);
+    height: auto;
+    border: 1px solid #343434;
 }
 
 .entrance-options {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    min-width: 240px;
-    border-radius: 5px;
-    font-family: Unbounded, sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
+    gap: 2.1875rem;
 }
 
 .entrance-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 22px;
-    color: var(--text-nat-0, #fff);
+    color: #fff;
     text-align: center;
-    letter-spacing: 1.1px;
     flex-wrap: wrap;
     margin: 0;
+    gap: 0.625rem;
+
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
+    text-transform: uppercase;
 }
 
 .highlight {
-    padding: 5px 0;
+    padding: 0.3125rem 0;
 }
 
 .options-container {
-    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5625rem;
+    align-self: stretch;
 }
 
 .option-card {
-    border-radius: 5px;
-    padding: 35px;
-    border: 1px solid rgba(52, 52, 52, 1);
-    margin-bottom: 25px;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+
+    display: flex;
+    max-width: 48.25rem;
+    width: 100%;
+    padding: 2.1875rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9375rem;
 }
 
 .option-title {
-    font-size: 14px;
-    letter-spacing: 0.7px;
-    line-height: 25px;
+    font-family: Unbounded;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 178.571% */
+    letter-spacing: 0.04375rem;
+    text-transform: uppercase;
     margin: 0;
 }
 
 .option-description {
-    margin: 10px 0 0;
-    color: var(--text-nat-0, #fff);
-}
-
-.horizontal-divider {
-    width: 100%;
-    height: 1px;
-    background: rgba(52, 52, 52, 1);
-    border: none;
-    margin: 100px 0;
-}
-
-.decorative-arrow {
-    width: 80px;
-    object-fit: contain;
+    color: #fff;
+    font-family: Unbounded;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 156.25% */
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
 }
 
 .benefits-section {
-    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2.8125rem;
 }
 
 .benefits-title {
-    color: var(--text-nat-0, #fff);
+    color: #fff;
     text-align: center;
-    font:
-        500 22px Unbounded,
-        sans-serif;
-    letter-spacing: 1.1px;
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
     text-transform: uppercase;
-    margin: 0 0 45px;
 }
 
 .benefits-grid {
     display: flex;
-    gap: 40px 100px;
+    gap: 6.25rem;
     flex-wrap: wrap;
 }
 
 .benefits-column {
     flex: 1;
-    min-width: 240px;
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 2.1875rem;
 }
 
 .benefit-card {
-    border-radius: 5px;
-    padding: 25px;
-    border: 1px solid rgba(52, 52, 52, 1);
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
     cursor: pointer;
 
     display: flex;
+    padding: 1.5625rem;
     flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
 
     summary {
         display: flex;
+        width: 100%;
         justify-content: space-between;
     }
-}
 
-.benefit-title {
-    color: var(--text-nat-200, #d1d1d1);
-    font-size: 14px;
-    letter-spacing: 0.7px;
-    line-height: 25px;
-    margin: 0;
-}
-
-.benefit-icon {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-}
-
-.cta-section {
-    margin: 100px auto;
-    max-width: 1000px;
-    border-radius: 5px;
-    padding: 35px;
-    border: 1px solid rgba(52, 52, 52, 1);
-    text-align: center;
-}
-
-.cta-button {
-    width: 100%;
-    min-height: 55px;
-    border-radius: 5px;
-    color: var(--text-nat-950, #101010);
-    font:
-        500 15px Geist,
-        sans-serif;
-    letter-spacing: 0.75px;
-    padding: 18px 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.cta-description {
-    color: var(--text-nat-350, #a0a0a0);
-    font:
-        400 14px/20px Geist,
-        sans-serif;
-    letter-spacing: 0.28px;
-    margin: 25px 0 0;
-}
-
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    p {
+        color: #d1d1d1;
+        font-family: Geist;
+        font-size: 0.9375rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.625rem; /* 173.333% */
+        letter-spacing: 0.01875rem;
+    }
 }
 
 details {
     cursor: pointer;
-    margin: 10px 0;
-    color: #fff;
 }
 
 summary {
@@ -286,4 +262,69 @@ details[open] .arrow {
 
 details[open] {
     gap: 1.56rem;
+}
+
+.benefit-title {
+    color: #d1d1d1;
+    font-family: Unbounded;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 178.571% */
+    letter-spacing: 0.04375rem;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.benefit-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.cta-section {
+    margin: 0 auto;
+    margin-top: 6.25rem;
+    text-align: center;
+    display: flex;
+    width: 62.5rem;
+    padding: 2.1875rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5625rem;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+}
+
+.cta-button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+
+    display: flex;
+    height: 3.4375rem;
+    padding: 1.125rem 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: stretch;
+    border-radius: 0.3125rem;
+    font-family: Geist;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.04688rem;
+    color: #101010;
+}
+
+.cta-description {
+    color: #a0a0a0;
+    font-family: Geist;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.25rem; /* 142.857% */
+    letter-spacing: 0.0175rem;
 }

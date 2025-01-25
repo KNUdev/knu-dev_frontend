@@ -2,23 +2,25 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-bottom: 5rem;
 }
 
 .info-badge {
-    background-color: rgb(100, 42, 42);
-    border: 2px solid rgb(237, 66, 66);
+    background-color: #642a2a;
+    border: 2px solid #e5383a;
 }
 
 .highlight {
-    border-bottom: 2px solid rgb(237, 66, 66);
+    border-bottom: 2px solid #e5383a;
 }
 
 .option-title {
-    color: var(--text-yellow-350, #ed4242);
+    color: #ed4242;
 }
 
 .cta-button {
-    background-color: rgb(237, 66, 66);
+    color: #fff;
+    background-color: #e5383a;
 }
 
 details[open] {
@@ -30,18 +32,32 @@ details[open] {
     width: 100%;
     flex-direction: column;
     justify-content: center;
-    padding: 100px 0;
+    gap: 2.81rem;
+    padding: 6.25rem 0;
+
+    .section-title {
+        font-family: Unbounded;
+        font-size: 1.375rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.06875rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
 }
 
 .requirements-card {
-    border-radius: 5px;
-    display: flex;
-    min-height: 398px;
     width: 100%;
-    flex-direction: column;
     text-align: center;
-    padding: 35px;
-    border: 1px solid rgba(52, 52, 52, 1);
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+
+    display: flex;
+    padding: 2.1875rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.1875rem;
 }
 
 .requirements-image {
@@ -49,36 +65,41 @@ details[open] {
     object-fit: contain;
     object-position: center;
     width: 100%;
-    max-width: 1674px;
     border-radius: 3px;
 }
 
 .requirements-content {
     display: flex;
-    margin-top: 35px;
+    gap: 1.25rem;
     width: 100%;
     flex-direction: column;
     align-items: start;
 }
 
 .highlight-title {
-    color: var(--text-red-0, #ffffff);
-    letter-spacing: 0.9px;
-    text-transform: uppercase;
-    font: 500 18px Unbounded, sans-serif;
+    color: #ffffff;
     margin: 0 auto;
+
+    font-family: Unbounded;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.05625rem;
+    text-transform: uppercase;
 }
 
 .accent {
-    color: rgba(229, 56, 58, 1);
+    color: #e5383a;
 }
 
 .requirements-description {
-    color: var(--text-nat-200, #d1d1d1);
-    letter-spacing: 0.3px;
-    margin-top: 20px;
-    font: 400 15px/26px Geist, sans-serif;
+    color: #d1d1d1;
+
+    font-family: Geist;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
 }
-
-
-

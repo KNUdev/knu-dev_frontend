@@ -2,25 +2,26 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 9.37rem;
-    background-color: #101010;
+    padding-top: 9.38rem;
 }
 
 .info-badge {
-    background-color: rgb(100, 88, 42);
-    border: 2px solid rgb(237, 209, 66);
+    border: 2px solid #edd342;
+    background: #645b2a;
 }
 
 .highlight {
-    border-bottom: 2px solid rgb(237, 209, 66);
+    border-bottom: 2px solid #edd342;
 }
 
 .option-title {
-    color: var(--text-yellow-350, #edd142);
+    color: #edd142;
 }
 
 .cta-button {
-    background-color: rgb(237, 209, 66);
+    color: #101010;
+
+    background-color: #edd342;
 }
 
 details[open] {
@@ -28,49 +29,59 @@ details[open] {
 }
 
 .requirements-section {
-    margin-top: 6.25rem;
+    margin: 6.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.81rem;
     width: 100%;
 }
 
 .requirements-title {
-    color: var(--text-nat-0, #fff);
+    color: #fff;
     text-align: center;
-    letter-spacing: 1.1px;
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
     text-transform: uppercase;
-    font: 500 22px Unbounded, sans-serif;
-    margin: 0 0 45px;
 }
 
 .requirements-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px 50px;
+    gap: 3.125rem;
     align-items: center;
 }
 
 .requirement-card {
     flex: 1;
-    min-width: 240px;
-    border-radius: 5px;
-    padding: 35px;
-    border: 1px solid rgba(52, 52, 52, 1);
-    min-height: 429px;
+    padding: 2.1875rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.1875rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
 }
 
 .icon-container {
-    width: 80px;
-    height: 80px;
-    border-radius: 71px;
-    background: var(--bg-yellow-350, #edd342);
-    box-shadow: 0 0 15px 0 rgba(237, 211, 66, 0.15);
+    width: 5rem;
+    height: 5rem;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    border-radius: 4.4375rem;
+    background: #edd342;
+
+    box-shadow: 0px 0px 15px 0px rgba(237, 211, 66, 0.15);
 }
 
 .requirement-icon {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
     object-fit: contain;
 
     ::ng-deep svg {
@@ -81,20 +92,39 @@ details[open] {
 }
 
 .requirement-content {
-    margin-top: 35px;
+    margin-top: 2.19rem;
 }
 
 .requirement-title {
-    color: var(--text-yellow-350, #edd342);
-    letter-spacing: 0.9px;
+    color: #fff;
+
+    font-family: Unbounded;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.05625rem;
     text-transform: uppercase;
-    font: 500 18px Unbounded, sans-serif;
     margin: 0;
+
+    .highlight-text {
+        color: #edd342;
+    }
 }
 
 .requirement-description {
-    color: var(--text-nat-200, #d1d1d1);
-    letter-spacing: 0.3px;
-    margin: 20px 0 0;
-    font: 400 15px/26px Geist, sans-serif;
+    color: #d1d1d1;
+    margin: 1.25rem 0 0;
+
+    font-family: Geist;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
+}
+
+.decorative-arrow {
+    width: 80px;
+    object-fit: contain;
 }

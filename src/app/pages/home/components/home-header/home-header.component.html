@@ -1,8 +1,10 @@
 <section class="hero">
     <div class="hero-content">
         <div class="hero-title">
-            <h1 class="hero-heading">ЗНАЙДИ СВІЙ ШЛЯХ ДО
+            <h1 class="hero-heading">
+                ЗНАЙДИ СВІЙ ШЛЯХ ДО
                 <span class="hero-highlight">УСПІХУ</span>
+                <br />
                 В МАЙБУТНОЬМУ
             </h1>
         </div>
@@ -17,30 +19,33 @@
             <span class="banner-type">Div block</span>
         </div>
         <div class="banner-container">
-            <div [style.background-image]="'url(' + iconPaths.bgHeader + ')'" class="banner-content">
-            <div class="banner-actions">
-                <button
-                    class="action-button primary"
-                    (click)="onJoinCampus()"
-                    tabindex="0"
-                    role="button"
-                >
-                    Приєднатися до кампусу
-                </button>
-                <div class="action-divider">
-                    <span class="divider-line"></span>
-                    <span class="divider-text">АБО</span>
-                    <span class="divider-line"></span>
+            <div
+                [style.background-image]="'url(' + iconPaths.bgHeader + ')'"
+                class="banner-content"
+            >
+                <div class="banner-actions">
+                    <button
+                        class="action-button primary"
+                        (click)="onJoinCampus()"
+                        tabindex="0"
+                        role="button"
+                    >
+                        Приєднатися до кампусу
+                    </button>
+                    <div class="action-divider">
+                        <span class="divider-line"></span>
+                        <span class="divider-text">АБО</span>
+                        <span class="divider-line"></span>
+                    </div>
+                    <button
+                        class="action-button secondary"
+                        (click)="onJoinPreCampus()"
+                        tabindex="0"
+                        role="button"
+                    >
+                        Приєднатися до пре-кампусу
+                    </button>
                 </div>
-                <button
-                    class="action-button secondary"
-                    (click)="onJoinPreCampus()"
-                    tabindex="0"
-                    role="button"
-                >
-                    Приєднатися до пре-кампусу
-                </button>
-            </div>
             </div>
         </div>
     </div>
