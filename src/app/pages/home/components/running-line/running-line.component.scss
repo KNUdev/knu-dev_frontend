@@ -10,7 +10,8 @@
 
 .logo-scroll {
     display: flex;
-    animation: scroll 30s linear infinite;
+    will-change: transform;
+    animation: scroll 50s linear infinite;
     gap: 8.125rem;
 }
 

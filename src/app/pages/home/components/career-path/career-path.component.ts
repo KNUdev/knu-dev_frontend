@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
 import { ArrowNext } from '../../../../../assets/icon/system/arrowNext';
 
 @Component({
     selector: 'career-path',
     templateUrl: './career-path.component.html',
     styleUrl: './career-path.component.scss',
-    imports: [CommonModule, MatIconModule],
+    imports: [CommonModule, MatIconModule, TranslateModule],
 })
 export class CareerPathComponent {
     readonly roleColors = {

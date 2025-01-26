@@ -1,0 +1,156 @@
+{
+    "home-header": {
+        "title": {
+            "find": "FIND YOUR WAY TO",
+            "success": "SUCCESS",
+            "future": "IN THE FUTURE"
+        },
+        "description": "Unlock your potential with KNU DEV — master modern technologies and reach new heights in your career!",
+        "joinCampus": "Join the campus",
+        "joinPreCampus": "Join the pre-campus",
+        "or": "OR"
+    },
+    "campus": {
+        "info-badge": "Information about",
+        "title": "Campus",
+        "about-section": {
+            "title": "ABOUT THE CAMPUS",
+            "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+        },
+        "entrance-options": {
+            "title": "Admission is possible only",
+            "title-highlight": "in 2 ways",
+            "card-v1": {
+                "title": "Option 1",
+                "description": "wait for a new recruitment of participants."
+            },
+            "card-v2": {
+                "title": "Option 2",
+                "description": "Complete training in the pre-campus"
+            }
+        },
+        "requirements-section": {
+            "title": "requirements for admission to the campus",
+            "content-1": {
+                "title": "pass the test with a score of",
+                "title-highlight": "at least 75%",
+                "content": "Testing is your first step. Don't worry, the test is designed so that you can showcase your strengths. Successfully passing is the first important step towards admission and the new opportunities that await you in our campus."
+            },
+            "content-2": {
+                "title": "complete and defend",
+                "title-highlight": "the test task",
+                "content": "The task is designed so that you can reveal your abilities, analytical thinking, and level of preparation. After completing it, you will need to defend your solution by explaining its logic and approach. This stage helps assess your potential and readiness for new challenges."
+            },
+            "content-3": {
+                "title": "pass an interview with",
+                "title-highlight": "the organization's leaders",
+                "content": "After successfully completing and defending the test task, you will have the opportunity to interview with the organization's leaders. This stage allows you to get to know the team better, learn about the organization's goals and mission, and share your achievements, plans, and motivation."
+            }
+        },
+        "benefits-section": {
+            "title": "you will receive",
+            "card-1": {
+                "title": "Working on real projects",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-2": {
+                "title": "mentorship experience",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-3": {
+                "title": "team lead experience",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-4": {
+                "title": "experience in creating educational programs",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            }
+        }
+    },
+    "career-path": {
+        "title": "Career Growth Opportunities",
+        "instruction-text": "Click on any of the roles to learn more about it",
+        "role-card-1": {
+            "title": "Intern",
+            "description": "A tough manipulator, true sigma, a beauty."
+        },
+        "role-card-2": {
+            "title": "Developer",
+            "description": "Does a lot of smart things, but is actually dumb."
+        },
+        "role-card-3": {
+            "title": "Pre-master",
+            "description": "Does a lot of smart things, but is actually dumb."
+        },
+        "role-card-4": {
+            "title": "Master Developer",
+            "description": "Does a lot of smart things, but is actually dumb."
+        },
+        "role-card-5": {
+            "title": "Team Lead",
+            "description": "Does a lot of smart things, but is actually dumb."
+        }
+    },
+    "pre-campus": {
+        "info-badge": "Information about",
+        "title": "Pre-Campus",
+        "about-section": {
+            "title": "ABOUT THE PRE-CAMPUS",
+            "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+        },
+        "entrance-options": {
+            "title": "The training program",
+            "title-highlight": "consists of",
+            "card-v1": {
+                "title": "practice"
+            },
+            "card-v2": {
+                "title": "theory"
+            }
+        },
+        "requirements-section": {
+            "title": "requirements for admission to the pre-campus",
+            "banner-text": {
+                "text-1": "work",
+                "text-2": "offer",
+                "text-3": "progress",
+                "text-4": "invent",
+                "text-5": "learn",
+                "text-6": "enjoy"
+            },
+            "content-title": {
+                "dream": "Desire ",
+                "learn": "to study hard ",
+                "unik": "- is the main requirement for admission to the pre-campus"
+            },
+            "content-description": "Testing is your first step. Don't worry, the test is designed so that you can showcase your strengths. Successfully passing is the first important step towards admission and the new opportunities that await you in our campus."
+        },
+        "benefits-section": {
+            "title": "consultations with a mentor",
+            "card-1": {
+                "title": "Working on real projects",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-2": {
+                "title": "opportunity to enter the campus",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-3": {
+                "title": "opportunity to start your project from scratch",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            },
+            "card-4": {
+                "title": "learning through unique methods",
+                "description": "We are a team of professionals united to help people and businesses achieve their goals, realize ideas, and implement projects. Our mission is to provide innovative, quality, and effective solutions to the modern challenges faced by our clients. We work at the intersection of technology, creativity, and deep analysis, allowing us to create products and services that best meet your needs. Our team consists of experts from various fields: developers, designers, consultants, analysts, and marketers who combine their efforts to achieve the best results. We believe that every idea has the potential to become something great if the right approach is found. Therefore, we pay great attention to detail, consider all the nuances of the task, and offer comprehensive solutions that take into account not only current needs but also future orientations. We pride ourselves on our approach, which is based on three core principles: innovation, quality, and support. Innovation helps us find new paths and open new horizons."
+            }
+        }
+    },
+    "team-section": {
+        "title": "Who created the website?",
+        "description": "Click for information about the developers"
+    },
+    "cta-section": {
+        "title": "Become a campus participant",
+        "description": "Successfully completing all stages will give you access to real experience working in a development team with the prospect of professional growth."
+    }
+}

@@ -2,15 +2,16 @@
     <div class="hero-content">
         <div class="hero-title">
             <h1 class="hero-heading">
-                ЗНАЙДИ СВІЙ ШЛЯХ ДО
-                <span class="hero-highlight">УСПІХУ</span>
+                {{ "home-header.title.find" | translate }}
+                <span class="hero-highlight">{{
+                    "home-header.title.success" | translate
+                }}</span>
                 <br />
-                В МАЙБУТНОЬМУ
+                {{ "home-header.title.future" | translate }}
             </h1>
         </div>
         <p class="hero-description">
-            Розкрий свій потенціал разом із KNU DEV — опановуй сучасні
-            технології та досягай вершин у кар'єрі!
+            {{ "home-header.description" | translate }}
         </p>
     </div>
     <div class="hero-banner">
@@ -30,11 +31,13 @@
                         tabindex="0"
                         role="button"
                     >
-                        Приєднатися до кампусу
+                        {{ "home-header.joinCampus" | translate }}
                     </button>
                     <div class="action-divider">
                         <span class="divider-line"></span>
-                        <span class="divider-text">АБО</span>
+                        <span class="divider-text">{{
+                            "home-header.or" | translate
+                        }}</span>
                         <span class="divider-line"></span>
                     </div>
                     <button
@@ -43,7 +46,7 @@
                         tabindex="0"
                         role="button"
                     >
-                        Приєднатися до пре-кампусу
+                        {{ "home-header.joinPreCampus" | translate }}
                     </button>
                 </div>
             </div>

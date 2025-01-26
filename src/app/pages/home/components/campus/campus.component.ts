@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CircularProgressComponent } from './circular-progress/circular-progress.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'campus',
     templateUrl: './campus.component.html',
     styleUrl: './campus.component.scss',
-    imports: [CommonModule, MatIcon, CircularProgressComponent],
+    imports: [CommonModule, MatIcon, TranslateModule],
 })
 export class CampusComponent {
     readonly iconPaths = {
@@ -17,6 +17,10 @@ export class CampusComponent {
         interview: 'assets/icon/button/interview.svg',
         arrowLong: 'assets/icon/system/arrowLong.svg',
         arrowDown: 'assets/icon/system/arrowDown.svg',
+        program: 'assets/icon/button/program.svg',
+        chat: 'assets/icon/button/chat.svg',
+        mentor: 'assets/icon/button/mentor.svg',
+        realProject: 'assets/icon/button/realProject.svg',
     } as const;
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
@@ -46,6 +50,41 @@ export class CampusComponent {
             'arrowLong',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.arrowLong
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'program',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.program
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'chat',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.chat
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'mentor',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.mentor
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'realProject',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.realProject
             )
         );
     }

@@ -60,12 +60,40 @@ details[open] {
     gap: 2.1875rem;
 }
 
-.requirements-image {
+.requirements-preview {
     aspect-ratio: 8.4;
+    padding: 3rem 11rem;
+    display: flex;
+    justify-content: space-between;
+    background-color: #e5383a;
     object-fit: contain;
     object-position: center;
     width: 100%;
     border-radius: 3px;
+    .requirement-banner-text {
+        margin: auto 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        font-family: Unbounded;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.5625rem; /* 156.25% */
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+        color: #010101;
+    }
+    .up-text {
+        display: flex;
+        gap: 4.5rem;
+    }
+    .requirement-banner-icon {
+        width: 8.125rem;
+        height: 8.125rem;
+        margin: auto 0;
+    }
 }
 
 .requirements-content {
@@ -95,6 +123,7 @@ details[open] {
 
 .requirements-description {
     color: #d1d1d1;
+    margin: 0 auto;
 
     font-family: Geist;
     font-size: 0.9375rem;

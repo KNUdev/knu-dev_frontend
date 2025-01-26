@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 interface Logo {
     name: string;
     url: string;
+    id?: string;
 }
 
 @Component({
@@ -25,5 +26,10 @@ export class RunningLineComponent {
         { name: 'RsJs', url: 'assets/icon/companyLogo/rsjs.svg' },
     ];
 
-    doubledLogos = [...this.logos, ...this.logos, ...this.logos];
+    doubledLogos = [...this.logos, ...this.logos, ...this.logos].map(
+        (logo, index) => ({
+            ...logo,
+            id: `${logo.name}-${index}`,
+        })
+    );
 }

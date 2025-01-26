@@ -1,10 +1,10 @@
 <div class="logo-line-container">
     <div class="logo-scroll">
-        @for (logo of doubledLogos; track logo.name) {
+        @for (logo of doubledLogos; track logo.id) {
         <div class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>
-        } @for (logo of doubledLogos; track logo.name) {
+        } @for (logo of doubledLogos; track logo.id) {
         <div class="logo-item">
             <img [src]="logo.url" [alt]="logo.name" />
         </div>

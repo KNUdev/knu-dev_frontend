@@ -1,34 +1,19 @@
 <section class="pre-campus-container">
     <header class="header-info">
-        <div class="info-badge">Інформація про</div>
-        <h1 class="title">пре-Кампус</h1>
+        <div class="info-badge">
+            {{ "pre-campus.info-badge" | translate }}
+        </div>
+        <h1 class="title">{{ "pre-campus.title" | translate }}</h1>
     </header>
 
     <main class="main-content">
         <section class="info-section">
             <article class="about-section">
-                <h2 class="section-title">ПРО пре-КАМПУС</h2>
+                <h2 class="section-title">
+                    {{ "pre-campus.about-section.title" | translate }}
+                </h2>
                 <p class="description">
-                    Ми — це команда професіоналів, які об'єдналися для того, щоб
-                    допомагати людям і бізнесам досягати своїх цілей,
-                    реалізовувати ідеї та втілювати проєкти. Наша місія —
-                    забезпечити інноваційні, якісні та ефективні рішення для
-                    сучасних викликів, що стоять перед нашими клієнтами. Ми
-                    працюємо на перетині технологій, творчості та глибокого
-                    аналізу, що дозволяє нам створювати продукти та послуги, які
-                    максимально відповідають вашим потребам. Наша команда
-                    складається з експертів із різних галузей: розробників,
-                    дизайнерів, консультантів, аналітиків і маркетологів, які
-                    об'єднують свої зусилля заради досягнення найкращого
-                    результату. Ми впевнені, що кожна ідея має потенціал стати
-                    чимось великим, якщо знайти до неї правильний підхід. Тому
-                    ми приділяємо велику увагу деталям, враховуємо всі
-                    особливості завдання та пропонуємо комплексні рішення, які
-                    враховують не лише теперішні потреби, але й орієнтуються на
-                    майбутнє. Ми пишаємося тим, що наш підхід базується на трьох
-                    основних принципах: інновації, якість і підтримка. Інновації
-                    допомагають нам знаходити нові шляхи та відкривати нові
-                    горизонти.
+                    {{ "pre-campus.about-section.description" | translate }}
                 </p>
             </article>
 
@@ -36,16 +21,23 @@
 
             <article class="entrance-options">
                 <h2 class="entrance-title">
-                    <span>Вступ можливий тільки</span>
-                    <span class="highlight">за 2 варіантів</span>
+                    <span>{{
+                        "pre-campus.entrance-options.title" | translate
+                    }}</span>
+                    <span class="highlight">{{
+                        "pre-campus.entrance-options.title-highlight"
+                            | translate
+                    }}</span>
                 </h2>
 
                 <div class="options-container">
                     <div class="option-card">
                         <div class="option-info">
-                            <h3 class="option-title">Варіант 1</h3>
                             <p class="option-description">
-                                дочекатися нового набору учасників.
+                                {{
+                                    "pre-campus.entrance-options.card-v1.title"
+                                        | translate
+                                }}
                             </p>
                         </div>
                         <app-circular-progress
@@ -55,9 +47,11 @@
                     </div>
                     <div class="option-card">
                         <div class="option-info">
-                            <h3 class="option-title">варіант 2</h3>
                             <p class="option-description">
-                                Закінчити навчання в пре-кампусі
+                                {{
+                                    "pre-campus.entrance-options.card-v2.title"
+                                        | translate
+                                }}
                             </p>
                         </div>
                         <app-circular-progress
@@ -70,42 +64,108 @@
         </section>
 
         <section class="requirements-section">
-            <h2 class="section-title">вимоги для вступу до пре-кампусу</h2>
+            <h2 class="section-title">
+                {{ "pre-campus.requirements-section.title" | translate }}
+            </h2>
 
             <div class="requirements-card">
-                <img
-                    [src]="iconPaths.preCampusImg"
-                    alt="Вимоги для вступу"
-                    class="requirements-image"
-                />
+                <div class="requirements-preview">
+                    <div class="requirement-banner-text">
+                        <div class="up-text">
+                            <p>
+                                {{
+                                    "pre-campus.requirements-section.banner-text.text-1"
+                                        | translate
+                                }}
+                            </p>
+                            <p>
+                                {{
+                                    "pre-campus.requirements-section.banner-text.text-2"
+                                        | translate
+                                }}
+                            </p>
+                        </div>
+                        <p>
+                            {{
+                                "pre-campus.requirements-section.banner-text.text-3"
+                                    | translate
+                            }}
+                        </p>
+                    </div>
+                    <mat-icon
+                        svgIcon="education"
+                        class="requirement-banner-icon"
+                    ></mat-icon>
+                    <div class="requirement-banner-text">
+                        <div class="up-text">
+                            <p>
+                                {{
+                                    "pre-campus.requirements-section.banner-text.text-4"
+                                        | translate
+                                }}
+                            </p>
+                            <p>
+                                {{
+                                    "pre-campus.requirements-section.banner-text.text-5"
+                                        | translate
+                                }}
+                            </p>
+                        </div>
+                        <p>
+                            {{
+                                "pre-campus.requirements-section.banner-text.text-6"
+                                    | translate
+                            }}
+                        </p>
+                    </div>
+                </div>
 
                 <div class="requirements-content">
                     <h3 class="highlight-title">
-                        Бажання
-                        <span class="accent">наполегливо навчатися</span>
-                        - головна вимога вступу до пре-кампусу
+                        {{
+                            "pre-campus.requirements-section.content-title.dream"
+                                | translate
+                        }}
+                        <span class="accent">{{
+                            "pre-campus.requirements-section.content-title.learn"
+                                | translate
+                        }}</span>
+                        {{
+                            "pre-campus.requirements-section.content-title.unik"
+                                | translate
+                        }}
                     </h3>
                     <p class="requirements-description">
-                        Тестування — ваш перший крок. Не хвилюйтеся, тест
-                        створений таким чином, щоб ви змогли показати свої
-                        сильні сторони. Успішне проходження — це перший важливий
-                        крок до вступу та нових можливостей, які відкриваються
-                        перед вами в нашому кампусі.
+                        {{
+                            "pre-campus.requirements-section.content-description"
+                                | translate
+                        }}
                     </p>
                 </div>
             </div>
         </section>
 
         <section class="benefits-section">
-            <h2 class="benefits-title">ви отримаєте</h2>
+            <h2 class="benefits-title">
+                {{ "pre-campus.benefits-section.title" | translate }}
+            </h2>
 
             <div class="benefits-grid">
                 <div class="benefits-column">
                     <details class="benefit-card" tabindex="0">
                         <summary>
-                            <h3 class="benefit-title">
-                                робота над реальними проєктами
-                            </h3>
+                            <div class="benefit-title-wrapper">
+                                <mat-icon
+                                    aria-hidden="true"
+                                    svgIcon="consult"
+                                ></mat-icon>
+                                <h3 class="benefit-title">
+                                    {{
+                                        "pre-campus.benefits-section.card-1.title"
+                                            | translate
+                                    }}
+                                </h3>
+                            </div>
                             <img
                                 [src]="iconPaths.arrowDown"
                                 alt=""
@@ -114,34 +174,26 @@
                             />
                         </summary>
                         <p>
-                            Ми — це команда професіоналів, які об’єдналися для
-                            того, щоб допомагати людям і бізнесам досягати своїх
-                            цілей, реалізовувати ідеї та втілювати проєкти. Наша
-                            місія — забезпечити інноваційні, якісні та ефективні
-                            рішення для сучасних викликів, що стоять перед
-                            нашими клієнтами. Ми працюємо на перетині
-                            технологій, творчості та глибокого аналізу, що
-                            дозволяє нам створювати продукти та послуги, які
-                            максимально відповідають вашим потребам. Наша
-                            команда складається з експертів із різних галузей:
-                            розробників, дизайнерів, консультантів, аналітиків і
-                            маркетологів, які об’єднують свої зусилля заради
-                            досягнення найкращого результату. Ми впевнені, що
-                            кожна ідея має потенціал стати чимось великим, якщо
-                            знайти до неї правильний підхід. Тому ми приділяємо
-                            велику увагу деталям, враховуємо всі особливості
-                            завдання та пропонуємо комплексні рішення, які
-                            враховують не лише теперішні потреби, але й
-                            орієнтуються на майбутнє. Ми пишаємося тим, що наш
-                            підхід базується на трьох основних принципах:
-                            інновації, якість і підтримка. Інновації допомагають
-                            нам знаходити нові шляхи та відкривати нові
-                            горизонти.
+                            {{
+                                "pre-campus.benefits-section.card-1.description"
+                                    | translate
+                            }}
                         </p>
                     </details>
                     <details class="benefit-card" tabindex="0">
                         <summary>
-                            <h3 class="benefit-title">досвід менторства</h3>
+                            <div class="benefit-title-wrapper">
+                                <mat-icon
+                                    aria-hidden="true"
+                                    svgIcon="work"
+                                ></mat-icon>
+                                <h3 class="benefit-title">
+                                    {{
+                                        "pre-campus.benefits-section.card-2.title"
+                                            | translate
+                                    }}
+                                </h3>
+                            </div>
                             <img
                                 [src]="iconPaths.arrowDown"
                                 alt=""
@@ -150,36 +202,28 @@
                             />
                         </summary>
                         <p>
-                            Ми — це команда професіоналів, які об’єдналися для
-                            того, щоб допомагати людям і бізнесам досягати своїх
-                            цілей, реалізовувати ідеї та втілювати проєкти. Наша
-                            місія — забезпечити інноваційні, якісні та ефективні
-                            рішення для сучасних викликів, що стоять перед
-                            нашими клієнтами. Ми працюємо на перетині
-                            технологій, творчості та глибокого аналізу, що
-                            дозволяє нам створювати продукти та послуги, які
-                            максимально відповідають вашим потребам. Наша
-                            команда складається з експертів із різних галузей:
-                            розробників, дизайнерів, консультантів, аналітиків і
-                            маркетологів, які об’єднують свої зусилля заради
-                            досягнення найкращого результату. Ми впевнені, що
-                            кожна ідея має потенціал стати чимось великим, якщо
-                            знайти до неї правильний підхід. Тому ми приділяємо
-                            велику увагу деталям, враховуємо всі особливості
-                            завдання та пропонуємо комплексні рішення, які
-                            враховують не лише теперішні потреби, але й
-                            орієнтуються на майбутнє. Ми пишаємося тим, що наш
-                            підхід базується на трьох основних принципах:
-                            інновації, якість і підтримка. Інновації допомагають
-                            нам знаходити нові шляхи та відкривати нові
-                            горизонти.
+                            {{
+                                "pre-campus.benefits-section.card-2.description"
+                                    | translate
+                            }}
                         </p>
                     </details>
                 </div>
                 <div class="benefits-column">
                     <details class="benefit-card" tabindex="0">
                         <summary>
-                            <h3 class="benefit-title">Досвід тімліда</h3>
+                            <div class="benefit-title-wrapper">
+                                <mat-icon
+                                    aria-hidden="true"
+                                    svgIcon="presentation"
+                                ></mat-icon>
+                                <h3 class="benefit-title">
+                                    {{
+                                        "pre-campus.benefits-section.card-3.title"
+                                            | translate
+                                    }}
+                                </h3>
+                            </div>
                             <img
                                 [src]="iconPaths.arrowDown"
                                 alt=""
@@ -188,36 +232,26 @@
                             />
                         </summary>
                         <p>
-                            Ми — це команда професіоналів, які об’єдналися для
-                            того, щоб допомагати людям і бізнесам досягати своїх
-                            цілей, реалізовувати ідеї та втілювати проєкти. Наша
-                            місія — забезпечити інноваційні, якісні та ефективні
-                            рішення для сучасних викликів, що стоять перед
-                            нашими клієнтами. Ми працюємо на перетині
-                            технологій, творчості та глибокого аналізу, що
-                            дозволяє нам створювати продукти та послуги, які
-                            максимально відповідають вашим потребам. Наша
-                            команда складається з експертів із різних галузей:
-                            розробників, дизайнерів, консультантів, аналітиків і
-                            маркетологів, які об’єднують свої зусилля заради
-                            досягнення найкращого результату. Ми впевнені, що
-                            кожна ідея має потенціал стати чимось великим, якщо
-                            знайти до неї правильний підхід. Тому ми приділяємо
-                            велику увагу деталям, враховуємо всі особливості
-                            завдання та пропонуємо комплексні рішення, які
-                            враховують не лише теперішні потреби, але й
-                            орієнтуються на майбутнє. Ми пишаємося тим, що наш
-                            підхід базується на трьох основних принципах:
-                            інновації, якість і підтримка. Інновації допомагають
-                            нам знаходити нові шляхи та відкривати нові
-                            горизонти.
+                            {{
+                                "pre-campus.benefits-section.card-3.description"
+                                    | translate
+                            }}
                         </p>
                     </details>
                     <details class="benefit-card" tabindex="0">
                         <summary>
-                            <h3 class="benefit-title">
-                                досвід створення навчальних програм
-                            </h3>
+                            <div class="benefit-title-wrapper">
+                                <mat-icon
+                                    aria-hidden="true"
+                                    svgIcon="study"
+                                ></mat-icon>
+                                <h3 class="benefit-title">
+                                    {{
+                                        "pre-campus.benefits-section.card-4.title"
+                                            | translate
+                                    }}
+                                </h3>
+                            </div>
                             <img
                                 [src]="iconPaths.arrowDown"
                                 alt=""
@@ -226,29 +260,10 @@
                             />
                         </summary>
                         <p>
-                            Ми — це команда професіоналів, які об’єдналися для
-                            того, щоб допомагати людям і бізнесам досягати своїх
-                            цілей, реалізовувати ідеї та втілювати проєкти. Наша
-                            місія — забезпечити інноваційні, якісні та ефективні
-                            рішення для сучасних викликів, що стоять перед
-                            нашими клієнтами. Ми працюємо на перетині
-                            технологій, творчості та глибокого аналізу, що
-                            дозволяє нам створювати продукти та послуги, які
-                            максимально відповідають вашим потребам. Наша
-                            команда складається з експертів із різних галузей:
-                            розробників, дизайнерів, консультантів, аналітиків і
-                            маркетологів, які об’єднують свої зусилля заради
-                            досягнення найкращого результату. Ми впевнені, що
-                            кожна ідея має потенціал стати чимось великим, якщо
-                            знайти до неї правильний підхід. Тому ми приділяємо
-                            велику увагу деталям, враховуємо всі особливості
-                            завдання та пропонуємо комплексні рішення, які
-                            враховують не лише теперішні потреби, але й
-                            орієнтуються на майбутнє. Ми пишаємося тим, що наш
-                            підхід базується на трьох основних принципах:
-                            інновації, якість і підтримка. Інновації допомагають
-                            нам знаходити нові шляхи та відкривати нові
-                            горизонти.
+                            {{
+                                "pre-campus.benefits-section.card-4.description"
+                                    | translate
+                            }}
                         </p>
                     </details>
                 </div>
@@ -256,12 +271,10 @@
 
             <div class="cta-section">
                 <button class="cta-button" (click)="onEnrollClick()">
-                    Стати учасником пре-кампусу
+                    {{ "cta-section.title" | translate }}
                 </button>
                 <p class="cta-description">
-                    Успішне виконання всіх етапів відкриє вам доступ до
-                    реального досвіду роботи в команді розробників із
-                    перспективою професійного зростання.
+                    {{ "cta-section.description" | translate }}
                 </p>
             </div>
         </section>

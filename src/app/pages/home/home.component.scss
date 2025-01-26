@@ -160,6 +160,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.9375rem;
+    height: 100%;
 }
 
 .option-title {
@@ -182,6 +183,7 @@
     line-height: 1.5625rem; /* 156.25% */
     letter-spacing: 0.05rem;
     text-transform: uppercase;
+    margin: auto 0;
 }
 
 .benefits-section {
@@ -271,6 +273,15 @@ details[open] {
     gap: 1.56rem;
 }
 
+.benefit-title-wrapper {
+    display: flex;
+    gap: 1.25rem;
+
+    svg {
+        color: #a0a0a0;
+    }
+}
+
 .benefit-title {
     color: #d1d1d1;
     font-family: Unbounded;
@@ -294,7 +305,8 @@ details[open] {
     margin-top: 6.25rem;
     text-align: center;
     display: flex;
-    width: 62.5rem;
+    max-width: 62.5rem;
+    width: 100%;
     padding: 2.1875rem;
     flex-direction: column;
     align-items: center;
