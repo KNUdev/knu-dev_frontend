@@ -42,21 +42,32 @@
 
                 <div class="options-container">
                     <div class="option-card">
-                        <h3 class="option-title">Варіант 1</h3>
-                        <p class="option-description">
-                            дочекатися нового набору учасників.
-                        </p>
+                        <div class="option-info">
+                            <h3 class="option-title">Варіант 1</h3>
+                            <p class="option-description">
+                                дочекатися нового набору учасників.
+                            </p>
+                        </div>
+                        <app-circular-progress
+                            [targetProgress]="80"
+                            [startOffset]="0"
+                        ></app-circular-progress>
                     </div>
                     <div class="option-card">
-                        <h3 class="option-title">варіант 2</h3>
-                        <p class="option-description">
-                            Закінчити навчання в пре-кампусі
-                        </p>
+                        <div class="option-info">
+                            <h3 class="option-title">варіант 2</h3>
+                            <p class="option-description">
+                                Закінчити навчання в пре-кампусі
+                            </p>
+                        </div>
+                        <app-circular-progress
+                            [targetProgress]="20"
+                            [startOffset]="80"
+                        ></app-circular-progress>
                     </div>
                 </div>
             </article>
-            </section>
-
+        </section>
 
         <section class="requirements-section">
             <h2 class="section-title">вимоги для вступу до пре-кампусу</h2>

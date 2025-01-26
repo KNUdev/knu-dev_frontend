@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CircularProgressComponent } from './circular-progress/circular-progress.component';
 
 @Component({
     selector: 'campus',
     templateUrl: './campus.component.html',
     styleUrl: './campus.component.scss',
-    imports: [CommonModule, MatIcon],
+    imports: [CommonModule, MatIcon, CircularProgressComponent],
 })
 export class CampusComponent {
     readonly iconPaths = {

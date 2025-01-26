@@ -110,6 +110,7 @@
     flex-direction: column;
     flex: 1;
     gap: 2.1875rem;
+    margin-bottom: 6.25rem;
 }
 
 .entrance-title {
@@ -150,8 +151,14 @@
     max-width: 48.25rem;
     width: 100%;
     padding: 2.1875rem;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: flex-start;
+    gap: 0.9375rem;
+}
+
+.option-info {
+    display: flex;
+    flex-direction: column;
     gap: 0.9375rem;
 }
 

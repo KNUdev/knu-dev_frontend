@@ -1,0 +1,47 @@
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 6.25rem;
+    height: 6.25rem;
+}
+
+.progress-ring {
+    transform: rotate(75deg);
+}
+
+.progress-ring__background {
+    fill: none;
+    stroke: #232323;
+    stroke-width: 12;
+}
+
+.progress-ring__circle {
+    fill: none;
+    stroke-width: 12;
+    transition: stroke-dashoffset 0.2s linear;
+}
+
+.progress-ring__empty {
+    stroke: #232323;
+    stroke-width: 13;
+    z-index: 2;
+}
+
+.progress-ring__progress {
+    stroke: #e5383a;
+    z-index: 1;
+}
+
+.progress-text {
+    position: absolute;
+    font-family: Unbounded;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.04375rem;
+    text-transform: uppercase;
+    color: #fff;
+}
