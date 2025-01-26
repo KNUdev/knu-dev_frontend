@@ -1,0 +1,135 @@
+.career-path {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-top: 9.38rem;
+    gap: 2.81rem;
+}
+
+.section-title {
+    color: #fff;
+    text-align: center;
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
+    text-transform: uppercase;
+}
+
+.role-list {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.94rem;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.role-card {
+    min-width: 240px;
+    align-items: start;
+    gap: 10px;
+    color: #fff;
+    justify-content: start;
+    height: 100%;
+    flex-basis: 0%;
+
+    display: flex;
+    padding: 1.25rem 1.5625rem;
+    align-items: flex-start;
+    gap: 0.625rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 0.3125rem;
+}
+
+.role-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9375rem;
+    flex: 1;
+}
+
+.role-title {
+    font-family: Unbounded;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 178.571% */
+    letter-spacing: 0.04375rem;
+    text-transform: uppercase;
+}
+
+.role-divider {
+    min-height: 1px;
+    width: 100%;
+}
+
+.role-description {
+    font-family: Geist;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
+    color: #d1d1d1;
+}
+
+.progression-arrow {
+    aspect-ratio: 4.55;
+    object-fit: contain;
+    object-position: center;
+    width: 50px;
+    align-self: stretch;
+    margin: auto 0;
+}
+
+.instruction-text {
+    color: #a0a0a0;
+    text-align: center;
+    font-family: Geist;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.25rem; /* 142.857% */
+    letter-spacing: 0.0175rem;
+}
+
+.intern-card {
+    border: 1px solid #4264ed;
+}
+.intern-card .role-divider {
+    border: 1px solid #4264ed;
+}
+
+.developer-card {
+    border: 1px solid #e5383a;
+}
+.developer-card .role-divider {
+    border: 1px solid #e5383a;
+}
+
+.premaster-card {
+    border: 1px solid #3fcb49;
+}
+.premaster-card .role-divider {
+    border: 1px solid #3fcb49;
+}
+
+.master-card {
+    border: 1px solid #9542ed;
+}
+.master-card .role-divider {
+    border: 1px solid #9542ed;
+}
+
+.teamlead-card {
+    border: 1px solid #edd342;
+}
+.teamlead-card .role-divider {
+    border: 1px solid #edd342;
+}
