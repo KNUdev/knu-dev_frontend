@@ -56,6 +56,7 @@
     mask: linear-gradient(#fff, #fff) padding-box,
         linear-gradient(#fff, #fff) border-box;
     mask-composite: exclude;
+    transition: all 0.3s ease-out;
 }
 
 .team-info-wrapper:hover::before {

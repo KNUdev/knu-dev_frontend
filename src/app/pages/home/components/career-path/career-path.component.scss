@@ -117,6 +117,16 @@
 .intern-card {
     border: 1px solid #4264ed;
 }
+
+.intern-card:hover {
+    background-color: #3147a2;
+    border-color: #3147a2;
+    box-shadow: 0px 0px 15px 0px rgba(66, 100, 237, 0.15);
+    .role-divider {
+        border-color: #fff;
+    }
+}
+
 .intern-card .role-divider {
     border: 1px solid #4264ed;
 }
@@ -124,6 +134,16 @@
 .developer-card {
     border: 1px solid #e5383a;
 }
+
+.developer-card:hover {
+    background-color: #b82f31;
+    border-color: #b82f31;
+    box-shadow: 0px 0px 15px 0px rgba(229, 56, 58, 0.15);
+    .role-divider {
+        border-color: #fff;
+    }
+}
+
 .developer-card .role-divider {
     border: 1px solid #e5383a;
 }
@@ -131,6 +151,16 @@
 .premaster-card {
     border: 1px solid #3fcb49;
 }
+
+.premaster-card:hover {
+    background-color: #36692f;
+    border-color: #36692f;
+    box-shadow: 0px 0px 15px 0px rgba(63, 203, 73, 0.15);
+    .role-divider {
+        border-color: #fff;
+    }
+}
+
 .premaster-card .role-divider {
     border: 1px solid #3fcb49;
 }
@@ -138,6 +168,16 @@
 .master-card {
     border: 1px solid #9542ed;
 }
+
+.master-card:hover {
+    background-color: #592a8b;
+    border-color: #592a8b;
+    box-shadow: 0px 0px 15px 0px rgba(149, 66, 237, 0.15);
+    .role-divider {
+        border-color: #fff;
+    }
+}
+
 .master-card .role-divider {
     border: 1px solid #9542ed;
 }
@@ -145,6 +185,16 @@
 .teamlead-card {
     border: 1px solid #edd342;
 }
+
+.teamlead-card:hover {
+    background-color: #dec63c;
+    border-color: #dec63c;
+    box-shadow: 0px 0px 15px 0px rgba(237, 211, 66, 0.15);
+    .role-divider {
+        border-color: #fff;
+    }
+}
+
 .teamlead-card .role-divider {
     border: 1px solid #edd342;
 }

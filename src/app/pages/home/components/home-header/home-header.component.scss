@@ -183,9 +183,17 @@
     color: #101010;
 }
 
+.action-button.primary:hover {
+    background: #eac72b;
+}
+
 .action-button.secondary {
     background: #e5383a;
     color: #fff;
+}
+
+.action-button.secondary:hover {
+    background: #d42e30;
 }
 
 .action-divider {
