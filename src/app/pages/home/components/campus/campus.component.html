@@ -1,23 +1,23 @@
 <div class="campus-container">
     <header class="header-info">
-        <div class="info-badge">
+        <div #animatedElement class="info-badge">
             {{ "campus.info-badge" | translate }}
         </div>
-        <h1 class="title">{{ "campus.title" | translate }}</h1>
+        <h1 #animatedElement class="title">{{ "campus.title" | translate }}</h1>
     </header>
     <main class="main-content">
         <section class="info-section">
             <article class="about-section">
-                <h2 class="section-title">
+                <h2 #animatedElement class="section-title">
                     {{ "campus.about-section.title" | translate }}
                 </h2>
-                <p class="description">
+                <p #animatedElement class="description">
                     {{ "campus.about-section.description" | translate }}
                 </p>
             </article>
             <div class="vertical-divider" aria-hidden="true"></div>
             <article class="entrance-options">
-                <h2 class="entrance-title">
+                <h2 #animatedElement class="entrance-title">
                     <span>{{
                         "campus.entrance-options.title" | translate
                     }}</span>
@@ -26,7 +26,7 @@
                     }}</span>
                 </h2>
                 <div class="options-container">
-                    <div class="option-card">
+                    <div #animatedElement class="option-card">
                         <div class="option-info">
                             <h3 class="option-title">
                                 {{
@@ -42,7 +42,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="option-card">
+                    <div #animatedElement class="option-card">
                         <div class="option-info">
                             <h3 class="option-title">
                                 {{
@@ -62,10 +62,10 @@
             </article>
         </section>
         <section class="requirements-section">
-            <h2 class="requirements-title">
+            <h2 #animatedElement class="requirements-title">
                 {{ "campus.requirements-section.title" | translate }}
             </h2>
-            <div class="requirements-grid">
+            <div #animatedElement class="requirements-grid">
                 <article class="requirement-card">
                     <div class="icon-container">
                         <mat-icon
@@ -159,12 +159,12 @@
             </div>
         </section>
         <section class="benefits-section">
-            <h2 class="benefits-title">
+            <h2 #animatedElement class="benefits-title">
                 {{ "campus.benefits-section.title" | translate }}
             </h2>
             <div class="benefits-grid">
                 <div class="benefits-column">
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -193,7 +193,7 @@
                             }}
                         </p>
                     </details>
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -224,7 +224,7 @@
                     </details>
                 </div>
                 <div class="benefits-column">
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -252,7 +252,7 @@
                             }}
                         </p>
                     </details>
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -283,7 +283,7 @@
                 </div>
             </div>
         </section>
-        <section class="cta-section">
+        <section #animatedElement class="cta-section">
             <button class="cta-button" (click)="onEnrollClick()">
                 {{ "cta-section.title" | translate }}
             </button>

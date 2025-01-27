@@ -10,7 +10,7 @@ a {
     top: 0;
     z-index: 100000;
     padding: 1.25rem 7.5rem;
-    animation: 2s show ease;
+    animation: 1s show ease;
 
     @include for-desktop {
         padding: 1.25rem 4.06rem;
@@ -87,6 +87,11 @@ a {
             }
             li {
                 padding: 0.62rem;
+            }
+        }
+        .menu__nav {
+            &.active {
+                color: #edd342;
             }
         }
 

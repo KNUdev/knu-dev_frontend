@@ -1,8 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    inject,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
     selector: 'campus',
@@ -25,7 +32,9 @@ export class CampusComponent {
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
 
-    constructor() {
+    @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
+
+    constructor(private animationService: AnimationService) {
         this.matIconRegistry.addSvgIcon(
             'book',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -87,6 +96,10 @@ export class CampusComponent {
                 this.iconPaths.realProject
             )
         );
+    }
+
+    ngAfterViewInit() {
+        this.animationService.setupIntersectionObserver(this.animatedElements);
     }
 
     onEnrollClick(): void {}

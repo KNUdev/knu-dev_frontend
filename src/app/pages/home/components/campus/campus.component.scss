@@ -45,6 +45,11 @@ details[open] {
     line-height: normal;
     letter-spacing: 0.06875rem;
     text-transform: uppercase;
+    opacity: 0;
+}
+
+.requirements-title.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .requirements-grid {
@@ -52,6 +57,11 @@ details[open] {
     flex-wrap: wrap;
     gap: 3.125rem;
     align-items: center;
+    opacity: 0;
+}
+
+.requirements-grid.visible {
+    animation: slideRight 1s ease-out forwards;
 }
 
 .requirement-card {

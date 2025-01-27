@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
     selector: 'home-header',
@@ -19,5 +20,13 @@ export class HomeHeaderComponent {
 
     onJoinPreCampus(): void {
         console.log('Join pre-campus clicked');
+    }
+
+    @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
+
+    constructor(private animationService: AnimationService) {}
+
+    ngAfterViewInit() {
+        this.animationService.setupIntersectionObserver(this.animatedElements);
     }
 }

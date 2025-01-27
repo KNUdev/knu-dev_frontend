@@ -26,6 +26,7 @@ import { TeamButtonComponent } from './components/team-button/team-button.compon
 export class HomeComponent {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
+
     constructor() {
         this.translate.onLangChange
             .pipe(

@@ -6,6 +6,11 @@
     flex-direction: column;
     justify-content: center;
     padding: 1.5625rem;
+    opacity: 0;
+}
+
+.team-section.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .team-container {
@@ -48,8 +53,7 @@
     bottom: 0;
     border: 1px solid #343434;
     border-radius: 0.625rem;
-    mask:
-        linear-gradient(#fff, #fff) padding-box,
+    mask: linear-gradient(#fff, #fff) padding-box,
         linear-gradient(#fff, #fff) border-box;
     mask-composite: exclude;
 }

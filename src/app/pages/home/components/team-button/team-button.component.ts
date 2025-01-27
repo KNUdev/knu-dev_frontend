@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
     selector: 'team-button',
@@ -13,4 +14,12 @@ export class TeamButtonComponent {
         code: 'assets/icon/button/code.svg',
         teamBg: 'assets/home/teamBg.svg',
     } as const;
+
+    @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
+
+    constructor(private animationService: AnimationService) {}
+
+    ngAfterViewInit() {
+        this.animationService.setupIntersectionObserver(this.animatedElements);
+    }
 }

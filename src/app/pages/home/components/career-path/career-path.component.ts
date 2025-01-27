@@ -1,9 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    inject,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArrowNext } from '../../../../../assets/icon/system/arrowNext';
+import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
     selector: 'career-path',
@@ -23,7 +30,12 @@ export class CareerPathComponent {
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
 
-    constructor() {
+    @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
+
+    ngAfterViewInit() {
+        this.animationService.setupIntersectionObserver(this.animatedElements);
+    }
+    constructor(private animationService: AnimationService) {
         this.registerArrowIcons();
     }
 

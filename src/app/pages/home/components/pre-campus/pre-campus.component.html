@@ -1,18 +1,20 @@
 <section class="pre-campus-container">
     <header class="header-info">
-        <div class="info-badge">
+        <div #animatedElement class="info-badge">
             {{ "pre-campus.info-badge" | translate }}
         </div>
-        <h1 class="title">{{ "pre-campus.title" | translate }}</h1>
+        <h1 #animatedElement class="title">
+            {{ "pre-campus.title" | translate }}
+        </h1>
     </header>
 
     <main class="main-content">
         <section class="info-section">
             <article class="about-section">
-                <h2 class="section-title">
+                <h2 #animatedElement class="section-title">
                     {{ "pre-campus.about-section.title" | translate }}
                 </h2>
-                <p class="description">
+                <p #animatedElement class="description">
                     {{ "pre-campus.about-section.description" | translate }}
                 </p>
             </article>
@@ -20,7 +22,7 @@
             <div class="vertical-divider" aria-hidden="true"></div>
 
             <article class="entrance-options">
-                <h2 class="entrance-title">
+                <h2 #animatedElement class="entrance-title">
                     <span>{{
                         "pre-campus.entrance-options.title" | translate
                     }}</span>
@@ -31,7 +33,7 @@
                 </h2>
 
                 <div class="options-container">
-                    <div class="option-card">
+                    <div #animatedElement class="option-card">
                         <div class="option-info">
                             <p class="option-description">
                                 {{
@@ -45,7 +47,7 @@
                             [startOffset]="0"
                         ></app-circular-progress>
                     </div>
-                    <div class="option-card">
+                    <div #animatedElement class="option-card">
                         <div class="option-info">
                             <p class="option-description">
                                 {{
@@ -68,7 +70,7 @@
                 {{ "pre-campus.requirements-section.title" | translate }}
             </h2>
 
-            <div class="requirements-card">
+            <div  #animatedElement class="requirements-card">
                 <div class="requirements-preview">
                     <div class="requirement-banner-text">
                         <div class="up-text">
@@ -152,7 +154,7 @@
 
             <div class="benefits-grid">
                 <div class="benefits-column">
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -180,7 +182,7 @@
                             }}
                         </p>
                     </details>
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -210,7 +212,7 @@
                     </details>
                 </div>
                 <div class="benefits-column">
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -238,7 +240,7 @@
                             }}
                         </p>
                     </details>
-                    <details class="benefit-card" tabindex="0">
+                    <details #animatedElement class="benefit-card" tabindex="0">
                         <summary>
                             <div class="benefit-title-wrapper">
                                 <mat-icon
@@ -269,7 +271,7 @@
                 </div>
             </div>
 
-            <div class="cta-section">
+            <div #animatedElement class="cta-section">
                 <button class="cta-button" (click)="onEnrollClick()">
                     {{ "cta-section.title" | translate }}
                 </button>

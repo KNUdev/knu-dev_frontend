@@ -1,8 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    inject,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { AnimationService } from '../../../../services/animation.services';
 import { CircularProgressComponent } from '../campus/circular-progress/circular-progress.component';
 
 @Component({
@@ -29,7 +36,13 @@ export class PreCampusComponent {
         study: 'assets/icon/button/study.svg',
     } as const;
 
-    constructor() {
+    @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
+
+    ngAfterViewInit() {
+        this.animationService.setupIntersectionObserver(this.animatedElements);
+    }
+
+    constructor(private animationService: AnimationService) {
         this.matIconRegistry.addSvgIcon(
             'education',
             this.domSanitizer.bypassSecurityTrustResourceUrl(

@@ -30,6 +30,11 @@
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.04375rem;
+    opacity: 0;
+}
+
+.info-badge.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .title {
@@ -42,6 +47,11 @@
     letter-spacing: 0.10938rem;
     text-transform: uppercase;
     margin: 0;
+    opacity: 0;
+}
+
+.title.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .main-content {
@@ -66,17 +76,6 @@
     margin-bottom: 6.25rem;
 }
 
-@keyframes show {
-    from {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .section-title {
     color: #fff;
     font-family: Unbounded;
@@ -87,6 +86,11 @@
     letter-spacing: 0.06875rem;
     text-transform: uppercase;
     margin: 0;
+    opacity: 0;
+}
+
+.section-title.visible {
+    animation: slideRight 1s ease-out forwards;
 }
 
 .description {
@@ -97,6 +101,11 @@
     font-weight: 400;
     line-height: 1.625rem; /* 173.333% */
     letter-spacing: 0.01875rem;
+    opacity: 0;
+}
+
+.description.visible {
+    animation: slideRight 1s ease-out forwards;
 }
 
 .vertical-divider {
@@ -129,6 +138,11 @@
     line-height: normal;
     letter-spacing: 0.06875rem;
     text-transform: uppercase;
+    opacity: 0;
+}
+
+.entrance-title.visible {
+    animation: slideLeft 1s ease-out forwards;
 }
 
 .highlight {
@@ -154,6 +168,11 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 0.9375rem;
+    opacity: 0;
+}
+
+.option-card.visible {
+    animation: slideLeft 1s ease-out forwards;
 }
 
 .option-info {
@@ -202,6 +221,11 @@
     line-height: normal;
     letter-spacing: 0.06875rem;
     text-transform: uppercase;
+    opacity: 0;
+}
+
+.benefits-title.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .benefits-grid {
@@ -243,6 +267,11 @@
         line-height: 1.625rem; /* 173.333% */
         letter-spacing: 0.01875rem;
     }
+    opacity: 0;
+}
+
+.benefit-card.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 details {
@@ -314,6 +343,11 @@ details[open] {
 
     border-radius: 0.3125rem;
     border: 1px solid #343434;
+    opacity: 0;
+}
+
+.cta-section.visible {
+    animation: slideDown 1s ease-out forwards;
 }
 
 .cta-button {
@@ -345,4 +379,63 @@ details[open] {
     font-weight: 400;
     line-height: 1.25rem; /* 142.857% */
     letter-spacing: 0.0175rem;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+        visibility: hidden;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+        visibility: hidden;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+        visibility: hidden;
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        visibility: visible;
+    }
+}
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+        visibility: hidden;
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        visibility: visible;
+    }
+}
+
+@keyframes scaling {
+    from {
+        transform: scale(1.2);
+    }
+    to {
+        transform: scale(1);
+    }
 }
