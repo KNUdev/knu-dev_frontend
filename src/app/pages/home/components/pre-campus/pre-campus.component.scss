@@ -81,7 +81,22 @@ details[open] {
 }
 
 .requirements-card.visible {
-    animation: slideDown 1s ease-out forwards;
+    animation: slideDown 1s ease forwards;
+
+    .requirements-preview {
+        animation: slideDown 1s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .highlight-title {
+        animation: slideDown 1s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .requirements-description {
+        animation: scaling 1s ease forwards;
+        animation-delay: 0.3s;
+    }
 }
 
 .requirements-preview {
@@ -94,12 +109,11 @@ details[open] {
     object-position: center;
     width: 100%;
     border-radius: 3px;
+    opacity: 0;
     .requirement-banner-text {
-        margin: auto 0;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%;
         font-family: Unbounded;
         font-size: 1rem;
         font-style: normal;
@@ -139,6 +153,7 @@ details[open] {
     line-height: normal;
     letter-spacing: 0.05625rem;
     text-transform: uppercase;
+    opacity: 0;
 }
 
 .accent {

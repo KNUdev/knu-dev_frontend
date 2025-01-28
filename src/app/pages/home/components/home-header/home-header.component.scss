@@ -7,6 +7,7 @@
     align-items: center;
     gap: 3.125rem;
     align-self: stretch;
+    max-height: 50.625rem;
 }
 
 .hero::before,
@@ -37,6 +38,7 @@
     flex-direction: column;
     align-items: center;
     gap: 2.19rem;
+    opacity: 0;
 }
 
 .hero-title {
@@ -61,10 +63,22 @@
     margin: 0;
     font: inherit;
     opacity: 0;
+
+    * {
+        transition: none;
+    }
 }
 
-.hero-heading.visible {
-    animation: slideDown 1s ease-out forwards;
+.hero-content.visible {
+    animation: slideDown 1s ease forwards;
+    .hero-heading {
+        animation: slideDown 1s ease forwards;
+    }
+
+    .hero-description {
+        animation: slideDown 1s ease forwards;
+        animation-delay: 0.5s;
+    }
 }
 
 .hero-highlight {
@@ -83,10 +97,7 @@
     line-height: 1.875rem;
     letter-spacing: 0.05rem;
     opacity: 0;
-}
-
-.hero-description.visible {
-    animation: slideDown 1s ease-out forwards;
+    margin: 0 auto;
 }
 
 .hero-banner {
@@ -102,7 +113,13 @@
 }
 
 .hero-banner.visible {
-    animation: slideUp 1s ease-out forwards;
+    animation: slideUp 1s ease forwards;
+    animation-delay: 1s;
+
+    .action-button {
+        animation: scaling 1s ease forwards;
+        animation-delay: 1.8s;
+    }
 }
 .banner-info {
     width: 100%;
@@ -171,10 +188,6 @@
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.04688rem;
-}
-
-.action-button.visible {
-    animation: scaling 1s ease-out forwards;
 }
 
 .action-button.primary {

@@ -1,18 +1,22 @@
 <section class="hero">
-    <div class="hero-content">
+    <div #animatedElement class="hero-content">
         <div class="hero-title">
-            <h1 #animatedElement class="hero-heading">
-                {{ "home-header.title.find" | translate }}
-                <span class="hero-highlight">{{
-                    "home-header.title.success" | translate
-                }}</span>
-                <br />
-                {{ "home-header.title.future" | translate }}
-            </h1>
+            <div class="reveal-container">
+                <h1 #animatedElement class="hero-heading">
+                    {{ "home-header.title.find" | translate }}
+                    <span class="hero-highlight">{{
+                        "home-header.title.success" | translate
+                    }}</span>
+                    <br />
+                    {{ "home-header.title.future" | translate }}
+                </h1>
+            </div>
         </div>
-        <p #animatedElement class="hero-description">
-            {{ "home-header.description" | translate }}
-        </p>
+        <div class="reveal-container">
+            <p #animatedElement class="hero-description">
+                {{ "home-header.description" | translate }}
+            </p>
+        </div>
     </div>
     <div #animatedElement class="hero-banner">
         <div class="banner-info">
@@ -26,7 +30,6 @@
             >
                 <div class="banner-actions">
                     <button
-                        #animatedElement
                         class="action-button primary"
                         (click)="onJoinCampus()"
                         tabindex="0"
@@ -42,7 +45,6 @@
                         <span class="divider-line"></span>
                     </div>
                     <button
-                        #animatedElement
                         class="action-button secondary"
                         (click)="onJoinPreCampus()"
                         tabindex="0"

@@ -1,65 +1,79 @@
 <section class="pre-campus-container">
-    <header class="header-info">
-        <div #animatedElement class="info-badge">
-            {{ "pre-campus.info-badge" | translate }}
+    <header #animatedElement class="header-info">
+        <div class="reveal-container">
+            <div #animatedElement class="info-badge">
+                {{ "pre-campus.info-badge" | translate }}
+            </div>
         </div>
-        <h1 #animatedElement class="title">
-            {{ "pre-campus.title" | translate }}
-        </h1>
+        <div class="reveal-container">
+            <h1 #animatedElement class="title">
+                {{ "pre-campus.title" | translate }}
+            </h1>
+        </div>
     </header>
 
     <main class="main-content">
         <section class="info-section">
             <article class="about-section">
-                <h2 #animatedElement class="section-title">
-                    {{ "pre-campus.about-section.title" | translate }}
-                </h2>
-                <p #animatedElement class="description">
-                    {{ "pre-campus.about-section.description" | translate }}
-                </p>
+                <div class="reveal-container">
+                    <h2 #animatedElement class="section-title">
+                        {{ "pre-campus.about-section.title" | translate }}
+                    </h2>
+                </div>
+                <div class="reveal-container">
+                    <p #animatedElement class="description">
+                        {{ "pre-campus.about-section.description" | translate }}
+                    </p>
+                </div>
             </article>
 
             <div class="vertical-divider" aria-hidden="true"></div>
 
             <article class="entrance-options">
-                <h2 #animatedElement class="entrance-title">
-                    <span>{{
-                        "pre-campus.entrance-options.title" | translate
-                    }}</span>
-                    <span class="highlight">{{
-                        "pre-campus.entrance-options.title-highlight"
-                            | translate
-                    }}</span>
-                </h2>
+                <div class="reveal-container">
+                    <h2 #animatedElement class="entrance-title">
+                        <span>{{
+                            "pre-campus.entrance-options.title" | translate
+                        }}</span>
+                        <span class="highlight">{{
+                            "pre-campus.entrance-options.title-highlight"
+                                | translate
+                        }}</span>
+                    </h2>
+                </div>
 
                 <div class="options-container">
-                    <div #animatedElement class="option-card">
-                        <div class="option-info">
-                            <p class="option-description">
-                                {{
-                                    "pre-campus.entrance-options.card-v1.title"
-                                        | translate
-                                }}
-                            </p>
+                    <div class="reveal-container">
+                        <div #animatedElement class="option-card">
+                            <div class="option-info">
+                                <p class="option-description">
+                                    {{
+                                        "pre-campus.entrance-options.card-v1.title"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
+                            <app-circular-progress
+                                [targetProgress]="80"
+                                [startOffset]="0"
+                            ></app-circular-progress>
                         </div>
-                        <app-circular-progress
-                            [targetProgress]="80"
-                            [startOffset]="0"
-                        ></app-circular-progress>
                     </div>
-                    <div #animatedElement class="option-card">
-                        <div class="option-info">
-                            <p class="option-description">
-                                {{
-                                    "pre-campus.entrance-options.card-v2.title"
-                                        | translate
-                                }}
-                            </p>
+                    <div class="reveal-container">
+                        <div #animatedElement class="option-card">
+                            <div class="option-info">
+                                <p class="option-description">
+                                    {{
+                                        "pre-campus.entrance-options.card-v2.title"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
+                            <app-circular-progress
+                                [targetProgress]="20"
+                                [startOffset]="80"
+                            ></app-circular-progress>
                         </div>
-                        <app-circular-progress
-                            [targetProgress]="20"
-                            [startOffset]="80"
-                        ></app-circular-progress>
                     </div>
                 </div>
             </article>
@@ -70,214 +84,256 @@
                 {{ "pre-campus.requirements-section.title" | translate }}
             </h2>
 
-            <div  #animatedElement class="requirements-card">
-                <div class="requirements-preview">
-                    <div class="requirement-banner-text">
-                        <div class="up-text">
-                            <p>
-                                {{
-                                    "pre-campus.requirements-section.banner-text.text-1"
-                                        | translate
-                                }}
-                            </p>
-                            <p>
-                                {{
-                                    "pre-campus.requirements-section.banner-text.text-2"
-                                        | translate
-                                }}
-                            </p>
+            <div class="reveal-container">
+                <div #animatedElement class="requirements-card">
+                    <div class="reveal-container">
+                        <div class="requirements-preview">
+                            <div class="requirement-banner-text">
+                                <div class="up-text">
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-1"
+                                                | translate
+                                        }}
+                                    </p>
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-2"
+                                                | translate
+                                        }}
+                                    </p>
+                                </div>
+                                <p>
+                                    {{
+                                        "pre-campus.requirements-section.banner-text.text-3"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
+                            <mat-icon
+                                svgIcon="education"
+                                class="requirement-banner-icon"
+                            ></mat-icon>
+                            <div class="requirement-banner-text">
+                                <div class="up-text">
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-4"
+                                                | translate
+                                        }}
+                                    </p>
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-5"
+                                                | translate
+                                        }}
+                                    </p>
+                                </div>
+                                <p>
+                                    {{
+                                        "pre-campus.requirements-section.banner-text.text-6"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
                         </div>
-                        <p>
-                            {{
-                                "pre-campus.requirements-section.banner-text.text-3"
-                                    | translate
-                            }}
-                        </p>
                     </div>
-                    <mat-icon
-                        svgIcon="education"
-                        class="requirement-banner-icon"
-                    ></mat-icon>
-                    <div class="requirement-banner-text">
-                        <div class="up-text">
-                            <p>
-                                {{
-                                    "pre-campus.requirements-section.banner-text.text-4"
-                                        | translate
-                                }}
-                            </p>
-                            <p>
-                                {{
-                                    "pre-campus.requirements-section.banner-text.text-5"
-                                        | translate
-                                }}
-                            </p>
-                        </div>
-                        <p>
-                            {{
-                                "pre-campus.requirements-section.banner-text.text-6"
-                                    | translate
-                            }}
-                        </p>
-                    </div>
-                </div>
 
-                <div class="requirements-content">
-                    <h3 class="highlight-title">
-                        {{
-                            "pre-campus.requirements-section.content-title.dream"
-                                | translate
-                        }}
-                        <span class="accent">{{
-                            "pre-campus.requirements-section.content-title.learn"
-                                | translate
-                        }}</span>
-                        {{
-                            "pre-campus.requirements-section.content-title.unik"
-                                | translate
-                        }}
-                    </h3>
-                    <p class="requirements-description">
-                        {{
-                            "pre-campus.requirements-section.content-description"
-                                | translate
-                        }}
-                    </p>
+                    <div class="requirements-content">
+                        <div class="reveal-container">
+                            <h3 class="highlight-title">
+                                {{
+                                    "pre-campus.requirements-section.content-title.dream"
+                                        | translate
+                                }}
+                                <span class="accent">{{
+                                    "pre-campus.requirements-section.content-title.learn"
+                                        | translate
+                                }}</span>
+                                {{
+                                    "pre-campus.requirements-section.content-title.unik"
+                                        | translate
+                                }}
+                            </h3>
+                        </div>
+                        <div class="reveal-container">
+                            <p class="requirements-description">
+                                {{
+                                    "pre-campus.requirements-section.content-description"
+                                        | translate
+                                }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="benefits-section">
-            <h2 class="benefits-title">
-                {{ "pre-campus.benefits-section.title" | translate }}
-            </h2>
+            <div class="reveal-container">
+                <h2 #animatedElement class="benefits-title">
+                    {{ "pre-campus.benefits-section.title" | translate }}
+                </h2>
+            </div>
 
             <div class="benefits-grid">
                 <div class="benefits-column">
-                    <details #animatedElement class="benefit-card" tabindex="0">
-                        <summary>
-                            <div class="benefit-title-wrapper">
-                                <mat-icon
+                    <div class="reveal-container">
+                        <details
+                            #animatedElement
+                            class="benefit-card"
+                            tabindex="0"
+                        >
+                            <summary>
+                                <div class="benefit-title-wrapper">
+                                    <mat-icon
+                                        aria-hidden="true"
+                                        svgIcon="consult"
+                                    ></mat-icon>
+                                    <h3 class="benefit-title">
+                                        {{
+                                            "pre-campus.benefits-section.card-1.title"
+                                                | translate
+                                        }}
+                                    </h3>
+                                </div>
+                                <img
+                                    [src]="iconPaths.arrowDown"
+                                    alt=""
+                                    class="benefit-icon arrow"
                                     aria-hidden="true"
-                                    svgIcon="consult"
-                                ></mat-icon>
-                                <h3 class="benefit-title">
-                                    {{
-                                        "pre-campus.benefits-section.card-1.title"
-                                            | translate
-                                    }}
-                                </h3>
-                            </div>
-                            <img
-                                [src]="iconPaths.arrowDown"
-                                alt=""
-                                class="benefit-icon arrow"
-                                aria-hidden="true"
-                            />
-                        </summary>
-                        <p>
-                            {{
-                                "pre-campus.benefits-section.card-1.description"
-                                    | translate
-                            }}
-                        </p>
-                    </details>
-                    <details #animatedElement class="benefit-card" tabindex="0">
-                        <summary>
-                            <div class="benefit-title-wrapper">
-                                <mat-icon
+                                />
+                            </summary>
+                            <p>
+                                {{
+                                    "pre-campus.benefits-section.card-1.description"
+                                        | translate
+                                }}
+                            </p>
+                        </details>
+                    </div>
+                    <div class="reveal-container">
+                        <details
+                            #animatedElement
+                            class="benefit-card"
+                            tabindex="0"
+                        >
+                            <summary>
+                                <div class="benefit-title-wrapper">
+                                    <mat-icon
+                                        aria-hidden="true"
+                                        svgIcon="work"
+                                    ></mat-icon>
+                                    <h3 class="benefit-title">
+                                        {{
+                                            "pre-campus.benefits-section.card-2.title"
+                                                | translate
+                                        }}
+                                    </h3>
+                                </div>
+                                <img
+                                    [src]="iconPaths.arrowDown"
+                                    alt=""
+                                    class="benefit-icon arrow"
                                     aria-hidden="true"
-                                    svgIcon="work"
-                                ></mat-icon>
-                                <h3 class="benefit-title">
-                                    {{
-                                        "pre-campus.benefits-section.card-2.title"
-                                            | translate
-                                    }}
-                                </h3>
-                            </div>
-                            <img
-                                [src]="iconPaths.arrowDown"
-                                alt=""
-                                class="benefit-icon arrow"
-                                aria-hidden="true"
-                            />
-                        </summary>
-                        <p>
-                            {{
-                                "pre-campus.benefits-section.card-2.description"
-                                    | translate
-                            }}
-                        </p>
-                    </details>
+                                />
+                            </summary>
+                            <p>
+                                {{
+                                    "pre-campus.benefits-section.card-2.description"
+                                        | translate
+                                }}
+                            </p>
+                        </details>
+                    </div>
                 </div>
                 <div class="benefits-column">
-                    <details #animatedElement class="benefit-card" tabindex="0">
-                        <summary>
-                            <div class="benefit-title-wrapper">
-                                <mat-icon
+                    <div class="reveal-container">
+                        <details
+                            #animatedElement
+                            class="benefit-card"
+                            tabindex="0"
+                        >
+                            <summary>
+                                <div class="benefit-title-wrapper">
+                                    <mat-icon
+                                        aria-hidden="true"
+                                        svgIcon="presentation"
+                                    ></mat-icon>
+                                    <h3 class="benefit-title">
+                                        {{
+                                            "pre-campus.benefits-section.card-3.title"
+                                                | translate
+                                        }}
+                                    </h3>
+                                </div>
+                                <img
+                                    [src]="iconPaths.arrowDown"
+                                    alt=""
+                                    class="benefit-icon arrow"
                                     aria-hidden="true"
-                                    svgIcon="presentation"
-                                ></mat-icon>
-                                <h3 class="benefit-title">
-                                    {{
-                                        "pre-campus.benefits-section.card-3.title"
-                                            | translate
-                                    }}
-                                </h3>
-                            </div>
-                            <img
-                                [src]="iconPaths.arrowDown"
-                                alt=""
-                                class="benefit-icon arrow"
-                                aria-hidden="true"
-                            />
-                        </summary>
-                        <p>
-                            {{
-                                "pre-campus.benefits-section.card-3.description"
-                                    | translate
-                            }}
-                        </p>
-                    </details>
-                    <details #animatedElement class="benefit-card" tabindex="0">
-                        <summary>
-                            <div class="benefit-title-wrapper">
-                                <mat-icon
+                                />
+                            </summary>
+                            <p>
+                                {{
+                                    "pre-campus.benefits-section.card-3.description"
+                                        | translate
+                                }}
+                            </p>
+                        </details>
+                    </div>
+                    <div class="reveal-container">
+                        <details
+                            #animatedElement
+                            class="benefit-card"
+                            tabindex="0"
+                        >
+                            <summary>
+                                <div class="benefit-title-wrapper">
+                                    <mat-icon
+                                        aria-hidden="true"
+                                        svgIcon="study"
+                                    ></mat-icon>
+                                    <h3 class="benefit-title">
+                                        {{
+                                            "pre-campus.benefits-section.card-4.title"
+                                                | translate
+                                        }}
+                                    </h3>
+                                </div>
+                                <img
+                                    [src]="iconPaths.arrowDown"
+                                    alt=""
+                                    class="benefit-icon arrow"
                                     aria-hidden="true"
-                                    svgIcon="study"
-                                ></mat-icon>
-                                <h3 class="benefit-title">
-                                    {{
-                                        "pre-campus.benefits-section.card-4.title"
-                                            | translate
-                                    }}
-                                </h3>
-                            </div>
-                            <img
-                                [src]="iconPaths.arrowDown"
-                                alt=""
-                                class="benefit-icon arrow"
-                                aria-hidden="true"
-                            />
-                        </summary>
-                        <p>
-                            {{
-                                "pre-campus.benefits-section.card-4.description"
-                                    | translate
-                            }}
-                        </p>
-                    </details>
+                                />
+                            </summary>
+                            <p>
+                                {{
+                                    "pre-campus.benefits-section.card-4.description"
+                                        | translate
+                                }}
+                            </p>
+                        </details>
+                    </div>
                 </div>
             </div>
 
-            <div #animatedElement class="cta-section">
-                <button class="cta-button" (click)="onEnrollClick()">
-                    {{ "cta-section.title" | translate }}
-                </button>
-                <p class="cta-description">
-                    {{ "cta-section.description" | translate }}
-                </p>
+            <div class="reveal-container">
+                <section #animatedElement class="cta-section">
+                    <button
+                        #animatedElement
+                        class="cta-button"
+                        (click)="onEnrollClick()"
+                    >
+                        {{ "cta-section.title" | translate }}
+                    </button>
+                    <div class="reveal-container">
+                        <p #animatedElement class="cta-description">
+                            {{ "cta-section.description" | translate }}
+                        </p>
+                    </div>
+                </section>
             </div>
         </section>
     </main>

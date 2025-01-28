@@ -1,5 +1,8 @@
-.team-section {
+.team-section-container {
     margin: 9.375rem 0;
+}
+
+.team-section {
     border-radius: 0.3125rem;
     background: #131313;
     display: flex;
@@ -11,6 +14,15 @@
 
 .team-section.visible {
     animation: slideDown 1s ease-out forwards;
+    .team-container {
+        animation: slideDown 1s ease-out forwards;
+        animation-delay: 0.1s;
+    }
+
+    .team-info-wrapper {
+        animation: slideDown 1s ease-out forwards;
+        animation-delay: 0.3s;
+    }
 }
 
 .team-container {
@@ -21,6 +33,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 1.5625rem;
+    opacity: 0;
 }
 
 .team-info-wrapper {
@@ -42,6 +55,7 @@
     position: relative;
 
     text-decoration: none;
+    opacity: 0;
 }
 
 .team-info-wrapper::before {

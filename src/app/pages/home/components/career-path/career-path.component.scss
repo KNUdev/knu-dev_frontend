@@ -20,7 +20,7 @@
 }
 
 .section-title.visible {
-    animation: slideDown 1s ease-out forwards;
+    animation: slideDown 1s ease forwards;
 }
 
 .role-list {
@@ -30,11 +30,54 @@
     gap: 0.94rem;
     justify-content: start;
     flex-wrap: wrap;
+    .reveal-container {
+        display: flex;
+        width: auto;
+    }
+
+    .reveal-container.card-container {
+        flex: 1;
+    }
+}
+
+.role-card,
+.progression-arrow-span > .progression-arrow {
     opacity: 0;
 }
 
-.role-list.visible {
-    animation: slideRight 1s ease-out forwards;
+.role-card.visible,
+.progression-arrow-span.visible > .progression-arrow {
+    animation: slideRight 1s ease forwards;
+}
+
+.role-list {
+    .reveal-container:nth-of-type(1) article.visible {
+        animation-delay: 0s;
+    }
+    .reveal-container:nth-of-type(2) span.visible > .progression-arrow {
+        animation-delay: 0.5s;
+    }
+    .reveal-container:nth-of-type(3) article.visible {
+        animation-delay: 1s;
+    }
+    .reveal-container:nth-of-type(4) span.visible > .progression-arrow {
+        animation-delay: 1.5s;
+    }
+    .reveal-container:nth-of-type(5) article.visible {
+        animation-delay: 2s;
+    }
+    .reveal-container:nth-of-type(6) span.visible > .progression-arrow {
+        animation-delay: 2.5s;
+    }
+    .reveal-container:nth-of-type(7) article.visible {
+        animation-delay: 3s;
+    }
+    .reveal-container:nth-of-type(8) span.visible > .progression-arrow {
+        animation-delay: 3.5s;
+    }
+    .reveal-container:nth-of-type(9) article.visible {
+        animation-delay: 4s;
+    }
 }
 
 .role-card {
@@ -111,7 +154,7 @@
 }
 
 .instruction-text.visible {
-    animation: slideDown 1s ease-out forwards;
+    animation: slideDown 1s ease forwards;
 }
 
 .intern-card {

@@ -10,7 +10,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { AnimationService } from '../../../../services/animation.services';
-import { CircularProgressComponent } from '../campus/circular-progress/circular-progress.component';
+import { CircularProgressComponent } from './circular-progress/circular-progress.component';
 
 @Component({
     selector: 'pre-campus',
