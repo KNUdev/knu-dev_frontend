@@ -47,7 +47,7 @@
 
 .role-card.visible,
 .progression-arrow-span.visible > .progression-arrow {
-    animation: slideRight 1s ease forwards;
+    animation: slideRight 0.35s ease forwards;
 }
 
 .role-list {
@@ -55,33 +55,32 @@
         animation-delay: 0s;
     }
     .reveal-container:nth-of-type(2) span.visible > .progression-arrow {
-        animation-delay: 0.5s;
+        animation-delay: 0.175s;
     }
     .reveal-container:nth-of-type(3) article.visible {
-        animation-delay: 1s;
+        animation-delay: 0.35s;
     }
     .reveal-container:nth-of-type(4) span.visible > .progression-arrow {
-        animation-delay: 1.5s;
+        animation-delay: 0.525s;
     }
     .reveal-container:nth-of-type(5) article.visible {
-        animation-delay: 2s;
+        animation-delay: 0.7s;
     }
     .reveal-container:nth-of-type(6) span.visible > .progression-arrow {
-        animation-delay: 2.5s;
+        animation-delay: 0.875s;
     }
     .reveal-container:nth-of-type(7) article.visible {
-        animation-delay: 3s;
+        animation-delay: 1.05s;
     }
     .reveal-container:nth-of-type(8) span.visible > .progression-arrow {
-        animation-delay: 3.5s;
+        animation-delay: 1.225s;
     }
     .reveal-container:nth-of-type(9) article.visible {
-        animation-delay: 4s;
+        animation-delay: 1.4s;
     }
 }
 
 .role-card {
-    min-width: 240px;
     align-items: start;
     gap: 10px;
     color: #fff;

@@ -95,7 +95,7 @@ details[open] {
 
 .requirement-card.visible,
 .decorative-arrow-span.visible > .decorative-arrow {
-    animation: slideRight 1s ease forwards;
+    animation: slideRight 0.5s ease forwards;
 }
 
 .requirements-grid {
@@ -103,16 +103,16 @@ details[open] {
         animation-delay: 0s;
     }
     .reveal-container:nth-of-type(2) span.visible > .decorative-arrow {
-        animation-delay: 0.5s;
+        animation-delay: 0.25s;
     }
     .reveal-container:nth-of-type(3) article.visible {
-        animation-delay: 1s;
+        animation-delay: 0.5s;
     }
     .reveal-container:nth-of-type(4) span.visible > .decorative-arrow {
-        animation-delay: 1.5s;
+        animation-delay: 0.75s;
     }
     .reveal-container:nth-of-type(5) article.visible {
-        animation-delay: 2s;
+        animation-delay: 1s;
     }
 }
 
