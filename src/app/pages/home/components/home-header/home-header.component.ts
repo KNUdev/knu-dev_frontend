@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    HostListener,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { AnimationService } from '../../../../services/animation.services';
 
@@ -20,6 +26,13 @@ export class HomeHeaderComponent {
 
     onJoinPreCampus(): void {
         console.log('Join pre-campus clicked');
+    }
+
+    currentWidth: number = window.innerWidth;
+
+    @HostListener('window:resize', ['$event'])
+    onResize() {
+        this.currentWidth = window.innerWidth;
     }
 
     @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;

@@ -463,3 +463,30 @@ details[open] {
     position: relative;
     width: 100%;
 }
+
+@media (max-width: 1336px) {
+    .benefits-grid {
+        flex-direction: column;
+        gap: 2.1875rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .home-container {
+        padding: 0 1.25rem;
+    }
+    .info-section {
+        flex-direction: column;
+        border: none;
+    }
+
+    .vertical-divider {
+        width: 100%;
+        height: 0;
+    }
+
+    .about-section,
+    .entrance-options {
+        margin-bottom: 0;
+    }
+}

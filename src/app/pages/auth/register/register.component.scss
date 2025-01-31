@@ -3,6 +3,7 @@
 .register {
     background-color: #101010;
     color: #ffffff;
+    padding: 0 2.2rem;
 
     p {
         margin: 0;
@@ -210,6 +211,31 @@
                     fill: #f09227 !important;
                 }
             }
+        }
+    }
+}
+
+@media (max-width: 820px) {
+    .fullName {
+        flex-direction: column;
+    }
+
+    .email {
+        padding: 1.8rem 0 !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .password,
+    .secondRow {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 550px) {
+    .register {
+        form {
+            padding: 3.125rem 0.9375rem;
         }
     }
 }

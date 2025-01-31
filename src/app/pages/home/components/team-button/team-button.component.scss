@@ -45,7 +45,7 @@
     align-items: center;
     gap: 40px 100px;
     justify-content: space-between;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 0 35px;
     cursor: pointer;
 
@@ -85,6 +85,7 @@
     flex-direction: column;
     justify-content: center;
     margin: auto 0;
+    min-width: fit-content;
 }
 
 .team-header {
@@ -134,4 +135,26 @@
     width: 598px;
     align-self: stretch;
     margin: auto 0;
+    flex-shrink: 0;
+    gap: 9.25rem;
+}
+
+@media (max-width: 640px) {
+    .team-image {
+        display: none;
+    }
+
+    .team-info,
+    .team-icon {
+        margin: auto;
+    }
+
+    .team-description {
+        text-align: center;
+    }
+
+    .team-header {
+        flex-direction: column;
+        text-align: center;
+    }
 }

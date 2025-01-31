@@ -64,6 +64,10 @@ details[open] {
         text-transform: uppercase;
         text-align: center;
     }
+
+    .section-title.visible {
+        animation: slideDown 1s ease forwards;
+    }
 }
 
 .requirements-card {
@@ -101,9 +105,9 @@ details[open] {
 
 .requirements-preview {
     aspect-ratio: 8.4;
-    padding: 3rem 11rem;
+    padding: 3rem 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     background-color: #e5383a;
     object-fit: contain;
     object-position: center;
@@ -170,4 +174,15 @@ details[open] {
     font-weight: 400;
     line-height: 1.625rem; /* 173.333% */
     letter-spacing: 0.01875rem;
+}
+@media (max-width: 820px) {
+    .requirement-banner-text {
+        display: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .requirement-banner-text {
+        display: none;
+    }
 }

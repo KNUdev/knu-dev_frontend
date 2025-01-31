@@ -26,7 +26,7 @@
 .role-list {
     display: flex;
     width: 100%;
-    align-items: center;
+    align-items: stretch;
     gap: 0.94rem;
     justify-content: start;
     flex-wrap: wrap;
@@ -86,6 +86,8 @@
     color: #fff;
     justify-content: start;
     height: 100%;
+    max-width: 62.5rem;
+    margin: auto;
     flex-basis: 0%;
 
     display: flex;
@@ -122,6 +124,7 @@
 }
 
 .role-description {
+    flex: 1;
     font-family: Geist;
     font-size: 0.9375rem;
     font-style: normal;
@@ -131,13 +134,18 @@
     color: #d1d1d1;
 }
 
+.progression-arrow-span {
+    display: flex;
+    margin: auto;
+}
+
 .progression-arrow {
     aspect-ratio: 4.55;
     object-fit: contain;
     object-position: center;
     width: 50px;
     align-self: stretch;
-    margin: auto 0;
+    margin: auto;
 }
 
 .instruction-text {
@@ -239,4 +247,35 @@
 
 .teamlead-card .role-divider {
     border: 1px solid #edd342;
+}
+
+@media (max-width: 1336px) {
+    .role-card.visible,
+    .progression-arrow-span.visible > .progression-arrow {
+        animation-delay: 0s !important;
+    }
+    .role-list {
+        flex-direction: column;
+    }
+
+    .progression-arrow {
+        rotate: 90deg;
+        height: 80px;
+    }
+
+    .role-card.visible {
+        animation: slideDown 1s ease forwards;
+    }
+
+    .progression-arrow-span.visible > .progression-arrow {
+        animation: slideRight 1s ease forwards;
+    }
+
+    .role-title {
+        text-align: center;
+    }
+
+    .role-description {
+        text-align: center;
+    }
 }

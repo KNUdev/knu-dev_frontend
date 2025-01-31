@@ -39,6 +39,7 @@
     align-items: center;
     gap: 2.19rem;
     opacity: 0;
+    width: 100%;
 }
 
 .hero-title {
@@ -89,7 +90,7 @@
 .hero-description {
     color: #d1d1d1;
     text-align: center;
-    width: 600px;
+    max-width: 37.5rem;
     font-family: Geist;
     font-size: 1rem;
     font-style: normal;
@@ -239,4 +240,44 @@
     background: #141414;
     padding: 10px;
     margin: 15px 0;
+}
+
+@media (max-width: 1224px) {
+    .hero {
+        padding: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .banner-actions {
+        flex-direction: column;
+        margin: auto 2.25rem;
+        width: 100%;
+    }
+
+    .action-button {
+        width: 100%;
+    }
+
+    .action-divider {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .divider-line {
+        width: 100%;
+        height: 0;
+    }
+
+    .hero-title {
+        font-size: 1.5625rem;
+    }
+
+    .hero-content {
+        margin-top: 5.13rem;
+    }
+
+    .hero-description {
+        font-size: 0.875rem;
+    }
 }

@@ -32,7 +32,7 @@ export class HeaderComponent {
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
-    isMobile = signal<boolean>(window.innerWidth < 1440);
+    isMobile = signal<boolean>(window.innerWidth <= 1440);
     isMenuOpen = signal<boolean>(false);
     readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
     readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
@@ -66,7 +66,7 @@ export class HeaderComponent {
 
     @HostListener('window:resize', ['$event'])
     onResize() {
-        this.isMobile.set(window.innerWidth < 1440);
+        this.isMobile.set(window.innerWidth <= 1440);
         if (!this.isMobile()) {
             this.isMenuOpen.set(false);
         }
@@ -90,24 +90,24 @@ export class HeaderComponent {
 
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent),
         );
 
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
                 this.i18nService.loadComponentTranslations(
                     'components/header',
-                    event.lang
-                )
-            )
+                    event.lang,
+                ),
+            ),
         );
 
         const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
+            switchMap(() => this.translate.get([MENU_TRANSLATIONS])),
         );
 
         this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
+            map((translations) => translations[MENU_TRANSLATIONS] || []),
         );
     }
 }

@@ -193,11 +193,40 @@ details[open] {
 }
 
 .decorative-arrow-span {
-    margin: auto 0;
+    margin: auto;
 }
 
 .decorative-arrow {
     width: 80px;
     object-fit: contain;
     color: #edd342;
+}
+
+@media (max-width: 1336px) {
+    .requirement-card.visible,
+    .decorative-arrow-span.visible > .decorative-arrow {
+        animation-delay: 0s !important;
+    }
+
+    .requirements-grid {
+        flex-direction: column;
+    }
+
+    .decorative-arrow {
+        rotate: 90deg;
+        width: 3.125rem;
+        height: 3.125rem;
+    }
+
+    .decorative-arrow > svg {
+        width: 3.125rem;
+    }
+
+    .requirement-card.visible {
+        animation: slideDown 1s ease forwards;
+    }
+
+    .decorative-arrow-span.visible > .decorative-arrow {
+        animation: slideRight 1s ease forwards;
+    }
 }
