@@ -133,7 +133,6 @@
     display: flex;
     align-items: center;
     color: #fff;
-    text-align: center;
     flex-wrap: wrap;
     margin: 0;
     gap: 0.625rem;
@@ -315,6 +314,7 @@ details[open] {
     gap: 1.25rem;
 
     svg {
+        margin: auto;
         color: #a0a0a0;
     }
 }
@@ -467,6 +467,10 @@ details[open] {
     .benefits-grid {
         flex-direction: column;
         gap: 2.1875rem;
+    }
+
+    .entrance-title {
+        gap: 0;
     }
 }
 

@@ -248,7 +248,7 @@
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1024px) {
     .banner-actions {
         flex-direction: column;
         margin: auto 2.25rem;
@@ -269,12 +269,14 @@
         height: 0;
     }
 
-    .hero-title {
-        font-size: 1.5625rem;
-    }
-
     .hero-content {
         margin-top: 5.13rem;
+    }
+}
+
+@media (max-width: 740px) {
+    .hero-title {
+        font-size: 1.5625rem;
     }
 
     .hero-description {
