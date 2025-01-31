@@ -459,12 +459,11 @@ details[open] {
 }
 
 .reveal-container {
-    overflow: hidden;
     position: relative;
     width: 100%;
 }
 
-@media (max-width: 1336px) {
+@media (max-width: 1390px) {
     .benefits-grid {
         flex-direction: column;
         gap: 2.1875rem;
