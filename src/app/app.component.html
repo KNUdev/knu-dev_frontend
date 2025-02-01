@@ -1,7 +1,9 @@
+@if (loadingService.isLoading()) {
+<app-loading-screen />
+}
+
 <app-header />
-
 <router-outlet></router-outlet>
-
 @if (!isAuthPage()) {
 <app-footer />
 }
