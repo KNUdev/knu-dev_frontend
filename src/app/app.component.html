@@ -1,5 +1,17 @@
+@defer (on viewport; prefetch on idle) {
 <app-header />
-<router-outlet></router-outlet>
-@if (!isAuthPage()) {
-<app-footer />
+} @placeholder (minimum 500ms) {
+<div class="header-placeholder">Loading header...</div>
+} @loading {
+<div class="header-loading">Loading...</div>
 }
+
+<router-outlet></router-outlet>
+
+@if (!isAuthPage()) { @defer (on viewport; prefetch on idle) {
+<app-footer />
+} @placeholder (minimum 500ms) {
+<div class="footer-placeholder">Loading footer...</div>
+} @loading {
+<div class="footer-loading">Loading...</div>
+} }
