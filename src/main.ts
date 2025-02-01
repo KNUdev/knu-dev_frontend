@@ -5,6 +5,8 @@ import {
     PreloadAllModules,
     provideRouter,
     withPreloading,
+    withComponentInputBinding,
+    withViewTransitions,
 } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app/app.component';
@@ -14,6 +16,11 @@ bootstrapApplication(AppComponent, {
     providers: [
         provideHttpClient(),
         provideTranslateService(),
-        provideRouter(routes, withPreloading(PreloadAllModules)),
+        provideRouter(
+            routes,
+            withPreloading(PreloadAllModules),
+            withComponentInputBinding(),
+            withViewTransitions()
+        ),
     ],
 }).catch((err) => console.error(err));

@@ -461,6 +461,11 @@ details[open] {
 .reveal-container {
     position: relative;
     width: 100%;
+    overflow: hidden;
+    padding: 1px;
+    &:not(:last-child) {
+        margin: -1px;
+    }
 }
 
 @media (max-width: 1390px) {

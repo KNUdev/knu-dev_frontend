@@ -2,11 +2,11 @@
     <div class="logo-scroll">
         @for (logo of doubledLogos; track logo.id) {
         <div class="logo-item">
-            <img [src]="logo.url" [alt]="logo.name" />
+            <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
         </div>
         } @for (logo of doubledLogos; track logo.id) {
         <div class="logo-item">
-            <img [src]="logo.url" [alt]="logo.name" />
+            <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
         </div>
         }
     </div>

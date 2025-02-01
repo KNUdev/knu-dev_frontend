@@ -35,7 +35,7 @@ export class CircularProgressComponent {
     }
 
     private startAnimation(): void {
-        const duration = 2000;
+        const duration = 1500;
         const interval = 20;
         const step = this.targetProgress / (duration / interval);
 
