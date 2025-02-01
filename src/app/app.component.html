@@ -1,9 +1,9 @@
 @if (loadingService.isLoading()) {
 <app-loading-screen />
-}
-
+} @defer (on immediate) {
 <app-header />
-<router-outlet></router-outlet>
-@if (!isAuthPage()) {
-<app-footer />
 }
+<router-outlet></router-outlet>
+@defer (on idle) { @if (!isAuthPage()) {
+<app-footer />
+} }

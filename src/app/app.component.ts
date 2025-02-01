@@ -18,19 +18,17 @@ import { LoadingService } from './services/loading.services';
     encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
-    constructor(protected loadingService: LoadingService) {}
-
-    ngOnInit() {
-        // Hide loading screen after resources are loaded
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                this.loadingService.hide();
-            }, 500); // Add small delay for smoother transition
-        });
-    }
     private router = inject(Router);
 
     isAuthPage(): boolean {
         return this.router.url.includes('auth');
+    }
+
+    constructor(protected loadingService: LoadingService) {
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                this.loadingService.hide();
+            }, 1000);
+        });
     }
 }
