@@ -5,4 +5,5 @@ export const environment = {
     apiBaseUrl: apiBaseUrl,
     apiDepartmentsUrl: `${apiBaseUrl}/departments`,
     apiRegisterUrl: `${apiBaseUrl}/account/register`,
+    apiGetAccountUrl: `${apiBaseUrl}/account`,
 };

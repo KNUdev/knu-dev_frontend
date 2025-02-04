@@ -1,0 +1,27 @@
+<div class="item-card">
+    <img [alt]="title" [src]="imageUrl" class="item-card__image"/>
+    <h2 class="item-card__title">{{ title }}</h2>
+    <p class="item-card__description">{{ description }}</p>
+    @if (details && details.length) {
+        <ng-container>
+            <div class="item-card__details">
+                @for (detail of details; let i = $index; track i) {
+                    <div class="item-card__details-row">
+                        <span class="item-card__details-label">{{ detail.label }}</span>
+                        <span class="item-card__details-value">{{ detail.value }}</span>
+                    </div>
+                    <hr class="profile__education-item-divider"/>
+                }
+            </div>
+        </ng-container>
+    }
+
+    @if (showButton) {
+        <ng-container>
+            <arrow-button [borderColor]="buttonColor"
+                          text="Читати детальніше"
+                          [fullWidth]="true"
+            />
+        </ng-container>
+    }
+</div>

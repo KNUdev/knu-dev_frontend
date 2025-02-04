@@ -1,0 +1,128 @@
+<div class="profile">
+    <main class="profile__main">
+        <section class="profile__header">
+            <div class="profile__banner">
+                @if(!accountProfile()?.bannerImageUrl) {
+                    <div class="profile__banner-text">
+                        <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
+                        <h1 class="profile__banner-title">Додати баннер</h1>
+                        <!--                    <h2 class="profile__banner-subtitle">Оптимальний розмір 3200x410px</h2>-->
+                    </div>
+                } @else {
+                    <img src="assets/dogg1.jpg" alt="" class="img-banner">
+                }
+<!--                <img src="assets/dogg1.jpg" alt="" class="img-banner">-->
+            </div>
+
+            <div class="profile__avatar-container">
+                <img [src]="accountProfile()?.avatarImageUrl" alt="Profile Image" class="profile__avatar"/>
+                <div class="profile__avatar-overlay">
+                    <mat-icon aria-hidden="true" class="profile__avatar-overlay-icon" svgIcon="changeAvatar"></mat-icon>
+                </div>
+            </div>
+
+            <div class="profile__info">
+                <div class="profile__info-text">
+                    <h1 class="profile__info-name"> {{ accountProfile()?.fullName }}</h1>
+                    <h2 class="profile__info-email"> {{ accountProfile()?.email }}</h2>
+                </div>
+                <div class="profile__info-corner">
+                    <p>{{ accountProfile()?.registeredAt }}</p>
+                </div>
+            </div>
+        </section>
+        <section aria-label="Profile Details" class="profile__meta-section">
+            <div class="profile__meta-block">
+                <div class="profile__meta-block-text">
+                    <h1 class="profile__meta-block-title">Роль</h1>
+                    <h2 class="profile__meta-block-subtitle">{{ accountProfile()?.technicalRole }}</h2>
+                </div>
+                <arrow-button borderColor="yellow" text="Підвищити роль"/>
+            </div>
+            <div class="profile__meta-group">
+                <div class="profile__meta-block profile__meta-block--group">
+                    <div class="profile__meta-block-text">
+                        <h1>Факультет</h1>
+                        <h2>{{ accountProfile()?.department?.name?.en }}</h2>
+                    </div>
+                </div>
+                <div class="profile__meta-block profile__meta-block--group">
+                    <div class="profile__meta-block-text">
+                        <h1>Спеціальність</h1>
+                        <h2>{{ accountProfile()?.specialty?.codeName + ' - ' + accountProfile()?.specialty?.name?.en }}</h2>
+                    </div>
+                </div>
+                <div class="profile__meta-block profile__meta-block--group">
+                    <div class="profile__meta-block-text">
+                        <h1>Експертиза</h1>
+                        <h2>{{ accountProfile()?.expertise }}</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="supportHeading" class="profile__support-section">
+            <div class="profile__support">
+                <h1 id="supportHeading">
+                    Якщо ви вказали невірні дані при реєстрації, які не можна змінити власноруч, зверніться, будь ласка,
+                    до
+                </h1>
+                <a class="profile__support-link" href="/">Підтримки</a>
+            </div>
+        </section>
+
+
+        <section aria-label="Projects in which I participated" class="profile__projects-section">
+            <div class="profile__divider">
+                <span class="profile__divider-title">Projects</span>
+            </div>
+            <div class="profile__projects">
+                @if (accountProfile()?.projects) {
+                    @for (project of accountProfile()?.projects; track $index) {
+                        <div>
+                            <profile-item-card
+                                imageUrl="assets/dogg1.jpg"
+                                [title]="project.name.en"
+                                [description]="project.description.en"
+                                buttonText="Читати детальніше"
+                                buttonAriaLabel="`Learn more about ` {{project.name.en}}}"
+                                buttonColor="yellow"
+                            >
+                            </profile-item-card>
+                        </div>
+                    }
+                } @else {
+                    <div class="profile__projects--not-found">
+
+                    </div>
+                }
+            </div>
+            <button aria-label="Load more projects" class="profile__more-projects" type="button">
+                Більше проектів
+            </button>
+        </section>
+
+        <section aria-label="Education Programs" class="profile__education-section">
+            <div class="profile__divider profile__divider--red">
+                <span class="profile__divider-title">Education Programs</span>
+            </div>
+            <div class="profile__education">
+                @for (detail of details; track $index) {
+                    <profile-item-card
+                        imageUrl="assets/dogg1.jpg"
+                        title="Навчальний реформатор 3000"
+                        [details]="[
+    { label: 'Тривала:', value: '8 місяців' },
+    { label: 'Технічний напрямок:', value: 'Frontend' },
+    { label: 'Сумарна кількість завдань:', value: '100' },
+    { label: 'Сумарна кількість тестів:', value: '15' }
+  ]"
+                        buttonText="Action"
+                        buttonAriaLabel="Learn more about Education Item 1"
+                        buttonColor="red">
+                    </profile-item-card>
+                }
+            </div>
+        </section>
+    </main>
+</div>
