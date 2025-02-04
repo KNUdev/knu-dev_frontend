@@ -25,11 +25,4 @@ export class RunningLineComponent {
         { name: 'Mongo', url: 'assets/icon/companyLogo/mongo.svg' },
         { name: 'RsJs', url: 'assets/icon/companyLogo/rsjs.svg' },
     ];
-
-    doubledLogos = [...this.logos, ...this.logos, ...this.logos].map(
-        (logo, index) => ({
-            ...logo,
-            id: `${logo.name}-${index}`,
-        })
-    );
 }

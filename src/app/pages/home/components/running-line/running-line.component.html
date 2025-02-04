@@ -1,13 +1,18 @@
 <div class="logo-line-container">
-    <div class="logo-scroll">
-        @for (logo of doubledLogos; track logo.id) {
-        <div class="logo-item">
-            <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+    <div class="logo-track">
+        <div class="logo-scroll">
+            @for (logo of logos; track logo.name) {
+            <div class="logo-item">
+                <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+            </div>
+            }
         </div>
-        } @for (logo of doubledLogos; track logo.id) {
-        <div class="logo-item">
-            <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+        <div class="logo-scroll">
+            @for (logo of logos; track logo.name) {
+            <div class="logo-item">
+                <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+            </div>
+            }
         </div>
-        }
     </div>
 </div>

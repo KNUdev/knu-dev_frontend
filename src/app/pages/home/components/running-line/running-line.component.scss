@@ -8,27 +8,32 @@
     display: flex;
 }
 
+.logo-track {
+    display: flex;
+    width: fit-content;
+    animation: scroll 15s linear infinite;
+}
+
 .logo-scroll {
     display: flex;
-    will-change: transform;
-    animation: scroll 35s linear infinite;
-    gap: 8.125rem;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .logo-item {
     display: flex;
+    flex-shrink: 0;
+    padding: 0 4.0625rem;
 }
 
 .logo-item img {
     object-fit: contain;
     margin: auto 0;
-}
-
-@keyframes scroll {
-    0% {
-        transform: translateX(-35%);
-    }
-    100% {
-        transform: translateX(-1%);
-    }
 }
