@@ -14,39 +14,6 @@
     border-bottom: 2px solid #edd342;
 }
 
-.option-card:hover {
-    border-color: #edd342;
-    box-shadow: 0px 0px 15px 0px rgba(237, 211, 66, 0.15);
-}
-
-.option-title {
-    color: #edd142;
-}
-
-.cta-section:hover {
-    border-color: #edd342;
-    .cta-description {
-        color: #fff;
-    }
-}
-
-.cta-button {
-    color: #101010;
-    background-color: #edd342;
-}
-
-.cta-button:hover {
-    background-color: #cdb945;
-}
-
-details:hover {
-    border-color: #edd342;
-}
-
-details[open] {
-    border-color: #edd142;
-}
-
 .requirements-section {
     margin: 6.25rem 0;
     display: flex;
@@ -87,15 +54,15 @@ details[open] {
         flex: 1;
     }
 }
-
+.requirements-grid.visible {
+    .requirement-card,
+    .decorative-arrow-span > .decorative-arrow {
+        animation: slideRight 0.5s ease forwards;
+    }
+}
 .requirement-card,
 .decorative-arrow-span > .decorative-arrow {
     opacity: 0;
-}
-
-.requirement-card.visible,
-.decorative-arrow-span.visible > .decorative-arrow {
-    animation: slideRight 0.5s ease forwards;
 }
 
 .requirements-grid {
@@ -222,11 +189,18 @@ details[open] {
         width: 3.125rem;
     }
 
+    .requirements-grid.visible {
+        .requirement-card,
+        .decorative-arrow-span > .decorative-arrow {
+            animation: none;
+        }
+    }
+
     .requirement-card.visible {
-        animation: slideDown 1s ease forwards;
+        animation: slideDown 1s ease forwards !important;
     }
 
     .decorative-arrow-span.visible > .decorative-arrow {
-        animation: slideRight 1s ease forwards;
+        animation: slideRight 1s ease forwards !important;
     }
 }

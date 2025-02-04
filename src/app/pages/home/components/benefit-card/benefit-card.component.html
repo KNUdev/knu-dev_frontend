@@ -1,0 +1,24 @@
+<details #animatedElement class="benefit-card" tabindex="0" [class]="color">
+    <summary>
+        <div class="benefit-title-wrapper">
+            <mat-icon
+                aria-hidden="true"
+                [svgIcon]="icon"
+                class="benefit-card-icon"
+            ></mat-icon>
+            <h3 class="benefit-title">
+                {{ title }}
+            </h3>
+        </div>
+        <img
+            [src]="iconPaths.arrowDown"
+            alt=""
+            class="benefit-icon arrow"
+            aria-hidden="true"
+            loading="lazy"
+        />
+    </summary>
+    <p>
+        {{ description }}
+    </p>
+</details>

@@ -9,18 +9,21 @@ import {
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { Cta } from '../../../../common/components/button/cta/cta.component';
+import { OptionCard } from '../../../../common/components/option-card/option-card.component';
 import { AnimationService } from '../../../../services/animation.services';
-import { CircularProgressComponent } from './circular-progress/circular-progress.component';
-
+import { Benefit_card } from '../benefit-card/benefit-card.component';
 @Component({
     selector: 'pre-campus',
     templateUrl: './pre-campus.component.html',
     styleUrl: './pre-campus.component.scss',
     imports: [
         CommonModule,
-        CircularProgressComponent,
         MatIconModule,
         TranslateModule,
+        OptionCard,
+        Benefit_card,
+        Cta,
     ],
 })
 export class PreCampusComponent {

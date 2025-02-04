@@ -1,0 +1,69 @@
+.option-card {
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+
+    display: flex;
+    max-width: 48.25rem;
+    width: 100%;
+    padding: 2.1875rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.9375rem;
+    opacity: 0;
+}
+
+.option-card.visible {
+    animation: slideLeft 1s ease forwards;
+}
+
+.option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9375rem;
+    height: 100%;
+    margin: auto 0;
+}
+
+.option-title-highlight {
+    font-family: Unbounded;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 178.571% */
+    letter-spacing: 0.04375rem;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.option-title {
+    color: #fff;
+    font-family: Unbounded;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem; /* 156.25% */
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    margin: auto 0;
+}
+
+.option-card.yellow {
+    &:hover {
+        border-color: #edd342;
+        box-shadow: 0px 0px 15px 0px rgba(237, 211, 66, 0.15);
+    }
+    .option-title-highlight {
+        color: #edd142;
+    }
+}
+
+.option-card.red {
+    &:hover {
+        border-color: #e5383a;
+        box-shadow: 0px 0px 15px 0px rgba(229, 56, 58, 0.15);
+    }
+
+    .option-title-highlight {
+        color: #ed4242;
+    }
+}

@@ -44,36 +44,26 @@
 
                 <div class="options-container">
                     <div class="reveal-container">
-                        <div #animatedElement class="option-card">
-                            <div class="option-info">
-                                <p class="option-description">
-                                    {{
-                                        "pre-campus.entrance-options.card-v1.title"
-                                            | translate
-                                    }}
-                                </p>
-                            </div>
-                            <app-circular-progress
-                                [targetProgress]="80"
-                                [startOffset]="0"
-                            ></app-circular-progress>
-                        </div>
+                        <option-card
+                            [title]="
+                                'pre-campus.entrance-options.card-v1.title'
+                                    | translate
+                            "
+                            color="red"
+                            [targetProgress]="80"
+                            [startOffset]="0"
+                        />
                     </div>
                     <div class="reveal-container">
-                        <div #animatedElement class="option-card">
-                            <div class="option-info">
-                                <p class="option-description">
-                                    {{
-                                        "pre-campus.entrance-options.card-v2.title"
-                                            | translate
-                                    }}
-                                </p>
-                            </div>
-                            <app-circular-progress
-                                [targetProgress]="20"
-                                [startOffset]="80"
-                            ></app-circular-progress>
-                        </div>
+                        <option-card
+                            [title]="
+                                'pre-campus.entrance-options.card-v2.title'
+                                    | translate
+                            "
+                            color="red"
+                            [targetProgress]="20"
+                            [startOffset]="80"
+                        />
                     </div>
                 </div>
             </article>
@@ -179,166 +169,68 @@
             <div class="benefits-grid">
                 <div class="benefits-column">
                     <div class="reveal-container">
-                        <details
-                            #animatedElement
-                            class="benefit-card"
-                            tabindex="0"
-                        >
-                            <summary>
-                                <div class="benefit-title-wrapper">
-                                    <mat-icon
-                                        aria-hidden="true"
-                                        svgIcon="consult"
-                                    ></mat-icon>
-                                    <h3 class="benefit-title">
-                                        {{
-                                            "pre-campus.benefits-section.card-1.title"
-                                                | translate
-                                        }}
-                                    </h3>
-                                </div>
-                                <img
-                                    [src]="iconPaths.arrowDown"
-                                    alt=""
-                                    class="benefit-icon arrow"
-                                    aria-hidden="true"
-                                    loading="lazy"
-                                />
-                            </summary>
-                            <p>
-                                {{
-                                    "pre-campus.benefits-section.card-1.description"
-                                        | translate
-                                }}
-                            </p>
-                        </details>
+                        <benefit-card
+                            icon="consult"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-1.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-1.description'
+                                    | translate
+                            "
+                        />
                     </div>
                     <div class="reveal-container">
-                        <details
-                            #animatedElement
-                            class="benefit-card"
-                            tabindex="0"
-                        >
-                            <summary>
-                                <div class="benefit-title-wrapper">
-                                    <mat-icon
-                                        aria-hidden="true"
-                                        svgIcon="work"
-                                    ></mat-icon>
-                                    <h3 class="benefit-title">
-                                        {{
-                                            "pre-campus.benefits-section.card-2.title"
-                                                | translate
-                                        }}
-                                    </h3>
-                                </div>
-                                <img
-                                    [src]="iconPaths.arrowDown"
-                                    alt=""
-                                    class="benefit-icon arrow"
-                                    aria-hidden="true"
-                                    loading="lazy"
-                                />
-                            </summary>
-                            <p>
-                                {{
-                                    "pre-campus.benefits-section.card-2.description"
-                                        | translate
-                                }}
-                            </p>
-                        </details>
+                        <benefit-card
+                            icon="work"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-2.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-2.description'
+                                    | translate
+                            "
+                        />
                     </div>
                 </div>
                 <div class="benefits-column">
                     <div class="reveal-container">
-                        <details
-                            #animatedElement
-                            class="benefit-card"
-                            tabindex="0"
-                        >
-                            <summary>
-                                <div class="benefit-title-wrapper">
-                                    <mat-icon
-                                        aria-hidden="true"
-                                        svgIcon="presentation"
-                                    ></mat-icon>
-                                    <h3 class="benefit-title">
-                                        {{
-                                            "pre-campus.benefits-section.card-3.title"
-                                                | translate
-                                        }}
-                                    </h3>
-                                </div>
-                                <img
-                                    [src]="iconPaths.arrowDown"
-                                    alt=""
-                                    class="benefit-icon arrow"
-                                    aria-hidden="true"
-                                    loading="lazy"
-                                />
-                            </summary>
-                            <p>
-                                {{
-                                    "pre-campus.benefits-section.card-3.description"
-                                        | translate
-                                }}
-                            </p>
-                        </details>
+                        <benefit-card
+                            icon="presentation"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-3.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-3.description'
+                                    | translate
+                            "
+                        />
                     </div>
                     <div class="reveal-container">
-                        <details
-                            #animatedElement
-                            class="benefit-card"
-                            tabindex="0"
-                        >
-                            <summary>
-                                <div class="benefit-title-wrapper">
-                                    <mat-icon
-                                        aria-hidden="true"
-                                        svgIcon="study"
-                                    ></mat-icon>
-                                    <h3 class="benefit-title">
-                                        {{
-                                            "pre-campus.benefits-section.card-4.title"
-                                                | translate
-                                        }}
-                                    </h3>
-                                </div>
-                                <img
-                                    [src]="iconPaths.arrowDown"
-                                    alt=""
-                                    class="benefit-icon arrow"
-                                    aria-hidden="true"
-                                    loading="lazy"
-                                />
-                            </summary>
-                            <p>
-                                {{
-                                    "pre-campus.benefits-section.card-4.description"
-                                        | translate
-                                }}
-                            </p>
-                        </details>
+                        <benefit-card
+                            icon="study"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-4.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-4.description'
+                                    | translate
+                            "
+                        />
                     </div>
                 </div>
             </div>
-
-            <div class="reveal-container">
-                <section #animatedElement class="cta-section">
-                    <button
-                        #animatedElement
-                        class="cta-button"
-                        (click)="onEnrollClick()"
-                    >
-                        {{ "cta-section.title" | translate }}
-                    </button>
-                    <div class="reveal-container">
-                        <p #animatedElement class="cta-description">
-                            {{ "cta-section.description" | translate }}
-                        </p>
-                    </div>
-                </section>
-            </div>
         </section>
+        <div class="reveal-container">
+            <cta color="red" />
+        </div>
     </main>
 </section>

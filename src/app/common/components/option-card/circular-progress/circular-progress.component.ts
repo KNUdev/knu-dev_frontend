@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
-import { AnimationService } from '../../../../../services/animation.services';
+import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
     selector: 'app-circular-progress',

@@ -168,46 +168,11 @@
 }
 
 .action-button {
-    border: none;
-    cursor: pointer;
     transform: scale(1.2);
     animation-delay: 1s;
 
-    display: flex;
     width: 16.9375rem;
     height: 3.4375rem;
-    padding: 1.125rem 1rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.625rem;
-    border-radius: 0.3125rem;
-    text-align: center;
-
-    font-family: Geist;
-    font-size: 0.9375rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.04688rem;
-}
-
-.action-button.primary {
-    border-radius: 0.3125rem;
-    background: #edd342;
-    color: #101010;
-}
-
-.action-button.primary:hover {
-    background: #eac72b;
-}
-
-.action-button.secondary {
-    background: #e5383a;
-    color: #fff;
-}
-
-.action-button.secondary:hover {
-    background: #d42e30;
 }
 
 .action-divider {

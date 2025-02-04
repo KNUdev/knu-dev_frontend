@@ -9,13 +9,23 @@ import {
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { Cta } from '../../../../common/components/button/cta/cta.component';
+import { OptionCard } from '../../../../common/components/option-card/option-card.component';
 import { AnimationService } from '../../../../services/animation.services';
+import { Benefit_card } from '../benefit-card/benefit-card.component';
 
 @Component({
     selector: 'campus',
     templateUrl: './campus.component.html',
     styleUrl: './campus.component.scss',
-    imports: [CommonModule, MatIcon, TranslateModule],
+    imports: [
+        CommonModule,
+        MatIcon,
+        TranslateModule,
+        OptionCard,
+        Benefit_card,
+        Cta,
+    ],
 })
 export class CampusComponent {
     readonly iconPaths = {
@@ -101,6 +111,4 @@ export class CampusComponent {
     ngAfterViewInit() {
         this.animationService.setupIntersectionObserver(this.animatedElements);
     }
-
-    onEnrollClick(): void {}
 }

@@ -14,38 +14,6 @@
     border-bottom: 2px solid #e5383a;
 }
 
-.option-card:hover {
-    border-color: #e5383a;
-    box-shadow: 0px 0px 15px 0px rgba(229, 56, 58, 0.15);
-}
-
-.option-title {
-    color: #ed4242;
-}
-
-.cta-section:hover {
-    border-color: #e5383a;
-    .cta-description {
-        color: #fff;
-    }
-}
-.cta-button {
-    color: #fff;
-    background-color: #e5383a;
-}
-
-.cta-button:hover {
-    background-color: #d42e30;
-}
-
-details:hover {
-    border-color: #e5383a;
-}
-
-details[open] {
-    border-color: #ed4242;
-}
-
 .requirements-section {
     display: flex;
     width: 100%;

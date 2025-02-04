@@ -1,10 +1,11 @@
-.fill-red {
+.fill-button {
+    display: flex;
     padding: 1.125rem 1rem;
     justify-content: center;
     align-items: center;
+    text-align: center;
 
     border-radius: 0.3125rem;
-    background: #e5383a;
     width: 100%;
     border: none;
 
@@ -14,7 +15,6 @@
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.04688rem;
-    color: #fff;
 
     cursor: pointer;
 }
