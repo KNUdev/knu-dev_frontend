@@ -12,7 +12,7 @@ $text-gray: #a0a0a0;
 }
 
 @mixin for-tablet {
-    @media (max-width: 1440px) {
+    @media (max-width: 1439px) {
         @content;
     }
 }

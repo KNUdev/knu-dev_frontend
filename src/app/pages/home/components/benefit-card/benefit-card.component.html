@@ -1,11 +1,20 @@
-<details #animatedElement class="benefit-card" tabindex="0" [class]="color">
+<details
+    #animatedElement
+    #details
+    class="benefit-card"
+    tabindex="0"
+    [class]="color"
+    (click)="toggleDetails($event, details)"
+>
     <summary>
         <div class="benefit-title-wrapper">
-            <mat-icon
-                aria-hidden="true"
-                [svgIcon]="icon"
-                class="benefit-card-icon"
-            ></mat-icon>
+            <div class="benefit-card-icon-container">
+                <mat-icon
+                    aria-hidden="true"
+                    [svgIcon]="icon"
+                    class="benefit-card-icon"
+                ></mat-icon>
+            </div>
             <h3 class="benefit-title">
                 {{ title }}
             </h3>

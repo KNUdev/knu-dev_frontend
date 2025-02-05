@@ -62,10 +62,15 @@ details[open] {
 .benefit-title-wrapper {
     display: flex;
     gap: 1.25rem;
+    .benefit-card-icon-container {
+        margin: auto;
+    }
 
     .benefit-card-icon {
-        margin: auto;
         color: #a0a0a0;
+
+        min-width: 1.125rem;
+        min-height: 1.125rem;
     }
 }
 

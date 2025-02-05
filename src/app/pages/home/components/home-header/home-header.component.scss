@@ -83,8 +83,27 @@
 }
 
 .hero-highlight {
-    color: #e5383a;
     white-space: nowrap;
+
+    background: linear-gradient(
+        to right,
+        #e5383a 20%,
+        #edd342 40%,
+        #edd342 60%,
+        #e5383a 80%
+    );
+    background-size: 200% auto;
+
+    color: #000;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: shine 8s linear infinite;
+    @keyframes shine {
+        to {
+            background-position: 200% center;
+        }
+    }
 }
 
 .hero-description {
@@ -158,6 +177,7 @@
     background-size: cover;
     background-position: center;
     border-radius: 0.3125rem 0.3125rem 0 0;
+    padding: 0 1rem;
 }
 
 .banner-actions {
@@ -216,7 +236,7 @@
 @media (max-width: 1024px) {
     .banner-actions {
         flex-direction: column;
-        margin: auto 2.25rem;
+        margin: auto 2.24rem;
         width: 100%;
     }
 

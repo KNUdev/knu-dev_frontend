@@ -31,4 +31,9 @@ export class Benefit_card {
         this.animationService.setupIntersectionObserver(this.animatedElements);
     }
     constructor(private animationService: AnimationService) {}
+
+    toggleDetails(event: Event, details: HTMLDetailsElement) {
+        event.preventDefault();
+        details.open = !details.open;
+    }
 }
