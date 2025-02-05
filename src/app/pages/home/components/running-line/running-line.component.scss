@@ -6,12 +6,15 @@
     overflow: hidden;
     position: relative;
     display: flex;
+    backface-visibility: hidden;
 }
 
 .logo-track {
     display: flex;
     width: fit-content;
     animation: scroll 15s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .logo-scroll {
@@ -31,9 +34,11 @@
     display: flex;
     flex-shrink: 0;
     padding: 0 4.0625rem;
+    backface-visibility: hidden;
 }
 
 .logo-item img {
     object-fit: contain;
     margin: auto 0;
+    backface-visibility: hidden;
 }

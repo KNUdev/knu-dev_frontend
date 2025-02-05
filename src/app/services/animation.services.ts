@@ -1,9 +1,26 @@
-import { ElementRef, Injectable, QueryList } from '@angular/core';
+import {
+    DestroyRef,
+    ElementRef,
+    Injectable,
+    QueryList,
+    effect,
+    inject,
+} from '@angular/core';
+import { LoadingService } from './loading.services';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AnimationService {
+    private destroyRef = inject(DestroyRef);
+    private isReady = false;
+
+    constructor(private loadingService: LoadingService) {
+        effect(() => {
+            this.isReady = !this.loadingService.isLoading();
+        });
+    }
+
     private isStylesLoaded(element: HTMLElement): Promise<boolean> {
         return new Promise((resolve) => {
             const checkStyles = () => {
@@ -16,7 +33,7 @@ export class AnimationService {
                 return;
             }
 
-            const observer = new MutationObserver((mutations, obs) => {
+            const observer = new MutationObserver((_, obs) => {
                 if (checkStyles()) {
                     obs.disconnect();
                     resolve(true);
@@ -37,32 +54,60 @@ export class AnimationService {
         });
     }
 
-    setupIntersectionObserver(elements: QueryList<ElementRef> | ElementRef[]) {
+    private waitForReady(): Promise<void> {
+        return new Promise((resolve) => {
+            if (this.isReady) {
+                resolve();
+                return;
+            }
+
+            const checkReady = () => {
+                if (this.isReady) {
+                    resolve();
+                } else {
+                    requestAnimationFrame(checkReady);
+                }
+            };
+            checkReady();
+        });
+    }
+
+    setupIntersectionObserver(
+        elements: QueryList<ElementRef> | ElementRef[]
+    ): void {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(async (entry) => {
-                    if (entry.isIntersecting) {
+                    if (!entry.isIntersecting) return;
+
+                    try {
+                        await this.waitForReady();
                         await this.isStylesLoaded(entry.target as HTMLElement);
                         entry.target.classList.add('visible');
                         observer.unobserve(entry.target);
+                    } catch (error) {
+                        console.error('Animation setup failed:', error);
                     }
                 });
             },
-            {
-                threshold: 0.2,
-            }
+            { threshold: 0.2 }
         );
 
-        if (document.readyState === 'complete') {
+        const setupObserver = async () => {
+            await this.waitForReady();
             elements.forEach((element) =>
                 observer.observe(element.nativeElement)
             );
+        };
+
+        if (document.readyState === 'complete') {
+            setupObserver();
         } else {
-            window.addEventListener('load', () => {
-                elements.forEach((element) =>
-                    observer.observe(element.nativeElement)
-                );
+            window.addEventListener('load', () => setupObserver(), {
+                once: true,
             });
         }
+
+        this.destroyRef.onDestroy(() => observer.disconnect());
     }
 }
