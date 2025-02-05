@@ -65,6 +65,10 @@
     font: inherit;
     opacity: 0;
 
+    .hero-headin-future {
+        opacity: 0;
+    }
+
     * {
         transition: none;
     }
@@ -74,6 +78,10 @@
     animation: slideDown 1s ease forwards;
     .hero-heading {
         animation: slideDown 1s ease forwards;
+        .hero-headin-future {
+            animation: slideDown 1s ease forwards;
+            animation-delay: 0.5s;
+        }
     }
 
     .hero-description {

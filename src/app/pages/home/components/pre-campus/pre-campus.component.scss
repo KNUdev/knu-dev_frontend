@@ -80,7 +80,7 @@
     object-fit: contain;
     object-position: center;
     width: 100%;
-    border-radius: 3px;
+    border-radius: 0.3125rem;
     opacity: 0;
     .requirement-banner-text {
         display: flex;
@@ -93,16 +93,17 @@
         line-height: 1.5625rem; /* 156.25% */
         letter-spacing: 0.05rem;
         text-transform: uppercase;
-        color: #010101;
+        color: #3b1818;
     }
     .up-text {
         display: flex;
-        gap: 4.5rem;
+        gap: 6rem;
     }
     .requirement-banner-icon {
         width: 8.125rem;
         height: 8.125rem;
         margin: auto 0;
+        color: #3b1818;
     }
 }
 
@@ -143,14 +144,8 @@
     line-height: 1.625rem; /* 173.333% */
     letter-spacing: 0.01875rem;
 }
-@media (max-width: 820px) {
+@media (max-width: 1023px) {
     .requirement-banner-text {
         display: none !important;
-    }
-}
-
-@media (max-width: 640px) {
-    .requirement-banner-text {
-        display: none;
     }
 }
