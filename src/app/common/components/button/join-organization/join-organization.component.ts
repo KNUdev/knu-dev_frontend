@@ -11,12 +11,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
-    selector: 'cta',
+    selector: 'join-organization',
     imports: [CommonModule, MatIconModule, TranslateModule],
-    templateUrl: './cta.component.html',
-    styleUrl: './cta.component.scss',
+    templateUrl: './join-organization.component.html',
+    styleUrl: './join-organization.component.scss',
 })
-export class Cta {
+export class Join_organization {
     @Input() color: string = '';
     @ViewChildren('animatedElement') animatedElements!: QueryList<ElementRef>;
 

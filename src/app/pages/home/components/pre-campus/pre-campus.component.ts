@@ -9,7 +9,7 @@ import {
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
-import { Cta } from '../../../../common/components/button/cta/cta.component';
+import { Join_organization } from '../../../../common/components/button/join-organization/join-organization.component';
 import { OptionCard } from '../../../../common/components/option-card/option-card.component';
 import { AnimationService } from '../../../../services/animation.services';
 import { Benefit_card } from '../benefit-card/benefit-card.component';
@@ -23,7 +23,7 @@ import { Benefit_card } from '../benefit-card/benefit-card.component';
         TranslateModule,
         OptionCard,
         Benefit_card,
-        Cta,
+        Join_organization,
     ],
 })
 export class PreCampusComponent {
