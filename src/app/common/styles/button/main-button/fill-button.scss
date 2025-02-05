@@ -9,7 +9,7 @@
     width: 100%;
     border: none;
 
-    font-family: Geist;
+    font-family: "Fixel Text", sans-serif;
     font-size: 0.9375rem;
     font-style: normal;
     font-weight: 500;
@@ -17,4 +17,22 @@
     letter-spacing: 0.04688rem;
 
     cursor: pointer;
+}
+
+.fill-red {
+    background: #e5383a;
+    color: #fff;
+
+    &:hover {
+        background: #d42e30;
+    }
+}
+
+.fill-yellow {
+    background: #edd342;
+    color: #101010;
+
+    &:hover {
+        background: #eac72b;
+    }
 }
