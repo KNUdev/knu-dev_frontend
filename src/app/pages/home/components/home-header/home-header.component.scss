@@ -1,3 +1,5 @@
+@use "../../../../common/styles/variables.scss" as *;
+
 .hero {
     overflow: hidden;
     display: flex;
@@ -235,13 +237,13 @@
     margin: 15px 0;
 }
 
-@media (max-width: 1224px) {
+@include tablet {
     .hero {
         padding: 0;
     }
 }
 
-@media (max-width: 1024px) {
+@include mobile-horizontal {
     .banner-actions {
         flex-direction: column;
         margin: auto 2.24rem;
@@ -267,7 +269,7 @@
     }
 }
 
-@media (max-width: 740px) {
+@include mobile {
     .hero-title {
         font-size: 1.5625rem;
     }

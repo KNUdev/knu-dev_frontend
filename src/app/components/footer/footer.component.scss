@@ -21,15 +21,15 @@ a {
     color: $text-light;
     padding: 3.13rem 7.5rem;
 
-    @include for-desktop {
+    @include desktop {
         padding: 3.13rem 4.06rem;
     }
 
-    @include for-tablet {
+    @include tablet-horizontal {
         padding: 3.13rem 2.63rem;
     }
 
-    @include for-mobile {
+    @include mobile-horizontal {
         padding: 3.13rem 1.25rem;
     }
 
@@ -40,12 +40,12 @@ a {
         justify-content: space-between;
         gap: 6.8rem;
 
-        @include for-tablet {
+        @include tablet-horizontal {
             flex-direction: column;
             gap: 3.75rem;
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             gap: 4.6rem;
         }
     }
@@ -56,7 +56,7 @@ a {
         padding-right: 3rem;
         border-right: 1px solid $border-gray;
 
-        @include for-tablet {
+        @include tablet-horizontal {
             display: flex;
             justify-content: space-between;
             width: auto;
@@ -66,7 +66,7 @@ a {
             padding-bottom: 4rem;
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             display: block;
             padding-bottom: 4rem;
         }
@@ -77,13 +77,13 @@ a {
         justify-content: flex-end;
         gap: 3.125rem;
 
-        @include for-tablet {
+        @include tablet-horizontal {
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 15rem;
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             flex-direction: column;
             gap: 4.75rem;
         }
@@ -115,11 +115,11 @@ a {
     &__support {
         margin-bottom: 4.5rem;
 
-        @include for-tablet {
+        @include tablet-horizontal {
             margin-bottom: 0;
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             margin-bottom: 2.75rem;
         }
 
@@ -143,7 +143,7 @@ a {
         display: flex;
         gap: 3.125rem;
 
-        @include for-tablet {
+        @include tablet-horizontal {
             margin: auto 0;
         }
     }
@@ -151,7 +151,7 @@ a {
     &__section {
         display: flex;
         flex-direction: column;
-        @include for-mobile {
+        @include mobile-horizontal {
             width: 100%;
         }
     }

@@ -1,3 +1,5 @@
+@use "../../styles/variables.scss" as *;
+
 .role-list {
     display: flex;
     width: 100%;
@@ -214,7 +216,7 @@
     border: 1px solid #edd342;
 }
 
-@media (max-width: 1336px) {
+@include tablet-horizontal {
     .role-card.visible,
     .progression-arrow-span.visible > .progression-arrow {
         animation-delay: 0s !important;

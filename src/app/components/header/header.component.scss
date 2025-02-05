@@ -12,15 +12,15 @@ a {
     padding: 1.25rem 7.5rem;
     animation: 1s show ease;
 
-    @include for-desktop {
+    @include desktop {
         padding: 1.25rem 4.06rem;
     }
 
-    @include for-tablet {
+    @include tablet-horizontal {
         padding: 1.25rem 2.63rem;
     }
 
-    @include for-mobile {
+    @include mobile-horizontal {
         padding: 1.25rem 2.62rem;
     }
 
@@ -82,7 +82,7 @@ a {
             padding: 0;
             margin: auto;
 
-            @include for-tablet {
+            @include tablet-horizontal {
                 margin: 0;
             }
             li {
@@ -95,7 +95,7 @@ a {
             }
         }
 
-        @include for-tablet {
+        @include tablet-horizontal {
             padding: 1.25rem 2.63rem;
             width: auto;
 
@@ -111,7 +111,7 @@ a {
             }
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             padding: 1.25rem 2.62rem;
             flex-direction: column;
 
@@ -156,7 +156,7 @@ a {
         margin: 0 1.219rem;
         height: 100%;
 
-        @include for-mobile {
+        @include mobile-horizontal {
             display: none;
         }
     }

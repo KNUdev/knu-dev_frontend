@@ -1,3 +1,5 @@
+@use "../../../../common/styles/variables.scss" as *;
+
 .team-section-container {
     margin: 9.375rem 0;
 }
@@ -134,7 +136,7 @@
     gap: 9.25rem;
 }
 
-@media (max-width: 640px) {
+@include mobile-horizontal {
     .team-info-wrapper {
         padding: 2.19rem;
     }

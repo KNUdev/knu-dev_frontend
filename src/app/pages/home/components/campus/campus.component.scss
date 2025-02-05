@@ -1,3 +1,5 @@
+@use "../../../../common/styles/variables.scss" as *;
+
 .campus-container {
     display: flex;
     flex-direction: column;
@@ -169,7 +171,7 @@
     color: #edd342;
 }
 
-@media (max-width: 1336px) {
+@include tablet-horizontal {
     .requirement-card.visible,
     .decorative-arrow-span.visible > .decorative-arrow {
         animation-delay: 0s !important;

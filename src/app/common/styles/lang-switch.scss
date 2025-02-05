@@ -48,7 +48,7 @@
     box-sizing: border-box;
     z-index: 1000;
 
-    @include for-mobile {
+    @include mobile {
         left: 0;
     }
 }
