@@ -5,20 +5,38 @@ $border-gray: #6d6d6d;
 $accent-yellow: #edd342;
 $text-gray: #a0a0a0;
 
-@mixin for-desktop {
-    @media (max-width: 1920px) {
+@mixin desktop {
+    @media (max-width: 1919px) {
         @content;
     }
 }
 
-@mixin for-tablet {
-    @media (max-width: 1440px) {
+@mixin tablet-horizontal {
+    @media (max-width: 1439px) {
         @content;
     }
 }
 
-@mixin for-mobile {
-    @media (max-width: 1024px) {
+@mixin tablet {
+    @media (max-width: 1335px) {
+        @content;
+    }
+}
+
+@mixin mobile-horizontal {
+    @media (max-width: 1023px) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: 639px) {
+        @content;
+    }
+}
+
+@mixin mobile-mini {
+    @media (max-width: 359px) {
         @content;
     }
 }

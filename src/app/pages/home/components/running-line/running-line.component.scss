@@ -1,0 +1,44 @@
+.logo-line-container {
+    width: 100%;
+    height: 5.625rem;
+    background-color: #232323;
+    padding: 0.8125rem 3.4375rem 0.75rem 3.4375rem;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    backface-visibility: hidden;
+}
+
+.logo-track {
+    display: flex;
+    width: fit-content;
+    animation: scroll 15s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.logo-scroll {
+    display: flex;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.logo-item {
+    display: flex;
+    flex-shrink: 0;
+    padding: 0 4.0625rem;
+    backface-visibility: hidden;
+}
+
+.logo-item img {
+    object-fit: contain;
+    margin: auto 0;
+    backface-visibility: hidden;
+}

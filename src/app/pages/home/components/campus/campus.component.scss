@@ -1,0 +1,208 @@
+@use "../../../../common/styles/variables.scss" as *;
+
+.campus-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 9.38rem;
+}
+
+.info-badge {
+    border: 2px solid #edd342;
+    background: #645b2a;
+}
+
+.highlight {
+    border-bottom: 2px solid #edd342;
+}
+
+.requirements-section {
+    margin: 6.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.81rem;
+    width: 100%;
+}
+
+.requirements-title {
+    color: #fff;
+    text-align: center;
+    font-family: "Unbounded", sans-serif;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.06875rem;
+    text-transform: uppercase;
+    opacity: 0;
+}
+
+.requirements-title.visible {
+    animation: slideDown 1s ease forwards;
+}
+
+.requirements-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3.125rem;
+    align-items: stretch;
+
+    .reveal-container {
+        display: flex;
+        width: auto;
+    }
+
+    .reveal-container.card-container {
+        flex: 1;
+    }
+}
+.requirements-grid.visible {
+    .requirement-card,
+    .decorative-arrow-span > .decorative-arrow {
+        animation: slideRight 0.5s ease forwards;
+    }
+}
+.requirement-card,
+.decorative-arrow-span > .decorative-arrow {
+    opacity: 0;
+}
+
+.requirements-grid {
+    .reveal-container:nth-of-type(1) article.visible {
+        animation-delay: 0s;
+    }
+    .reveal-container:nth-of-type(2) span.visible > .decorative-arrow {
+        animation-delay: 0.25s;
+    }
+    .reveal-container:nth-of-type(3) article.visible {
+        animation-delay: 0.5s;
+    }
+    .reveal-container:nth-of-type(4) span.visible > .decorative-arrow {
+        animation-delay: 0.75s;
+    }
+    .reveal-container:nth-of-type(5) article.visible {
+        animation-delay: 1s;
+    }
+}
+
+.requirement-card {
+    flex: 1;
+    padding: 2.1875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.1875rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+}
+
+.requirement-card:hover {
+    border-color: #edd342;
+}
+
+.icon-container {
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    border-radius: 4.4375rem;
+    background: #edd342;
+
+    box-shadow: 0px 0px 15px 0px rgba(237, 211, 66, 0.15);
+}
+
+.requirement-icon {
+    width: 3.125rem;
+    height: 3.125rem;
+    object-fit: contain;
+
+    ::ng-deep svg {
+        g path[fill] {
+            fill: #000000 !important;
+        }
+    }
+}
+
+.requirement-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.requirement-title {
+    color: #fff;
+
+    font-family: "Unbounded", sans-serif;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.05625rem;
+    text-transform: uppercase;
+    margin: 0;
+
+    .highlight-text {
+        color: #edd342;
+    }
+}
+
+.requirement-description {
+    color: #d1d1d1;
+    margin: 1.25rem 0 0;
+    flex: 1;
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
+}
+
+.decorative-arrow-span {
+    margin: auto;
+}
+
+.decorative-arrow {
+    width: 80px;
+    object-fit: contain;
+    color: #edd342;
+}
+
+@include tablet-horizontal {
+    .requirement-card.visible,
+    .decorative-arrow-span.visible > .decorative-arrow {
+        animation-delay: 0s !important;
+    }
+
+    .requirements-grid {
+        flex-direction: column;
+    }
+
+    .decorative-arrow {
+        rotate: 90deg;
+        width: 3.125rem;
+        height: 3.125rem;
+    }
+
+    .decorative-arrow > svg {
+        width: 3.125rem;
+    }
+
+    .requirements-grid.visible {
+        .requirement-card,
+        .decorative-arrow-span > .decorative-arrow {
+            animation: none;
+        }
+    }
+
+    .requirement-card.visible {
+        animation: slideDown 1s ease forwards !important;
+    }
+
+    .decorative-arrow-span.visible > .decorative-arrow {
+        animation: slideRight 1s ease forwards !important;
+    }
+}

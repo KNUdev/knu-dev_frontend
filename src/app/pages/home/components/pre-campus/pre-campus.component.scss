@@ -1,0 +1,153 @@
+@use "../../../../common/styles/variables.scss" as *;
+
+.pre-campus-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 5rem;
+}
+
+.info-badge {
+    background-color: #642a2a;
+    border: 2px solid #e5383a;
+}
+
+.highlight {
+    border-bottom: 2px solid #e5383a;
+}
+
+.requirements-section {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.81rem;
+    padding: 6.25rem 0;
+
+    .section-title {
+        font-family: "Unbounded", sans-serif;
+        font-size: 1.375rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.06875rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .section-title.visible {
+        animation: slideDown 1s ease forwards;
+    }
+}
+
+.requirements-card {
+    width: 100%;
+    text-align: center;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+
+    display: flex;
+    padding: 2.1875rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.1875rem;
+    opacity: 0;
+}
+
+.requirements-card.visible {
+    animation: slideDown 1s ease forwards;
+
+    .requirements-preview {
+        animation: slideDown 1s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .highlight-title {
+        animation: slideDown 1s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .requirements-description {
+        animation: scaling 1s ease forwards;
+        animation-delay: 0.3s;
+    }
+}
+
+.requirements-preview {
+    aspect-ratio: 8.4;
+    padding: 3rem 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #e5383a;
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+    border-radius: 0.3125rem;
+    opacity: 0;
+    .requirement-banner-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-family: "Unbounded", sans-serif;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.5625rem; /* 156.25% */
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+        color: #3b1818;
+    }
+    .up-text {
+        display: flex;
+        gap: 6rem;
+    }
+    .requirement-banner-icon {
+        width: 8.125rem;
+        height: 8.125rem;
+        margin: auto 0;
+        color: #3b1818;
+    }
+}
+
+.requirements-content {
+    display: flex;
+    gap: 1.25rem;
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+}
+
+.highlight-title {
+    color: #ffffff;
+    margin: 0 auto;
+
+    font-family: "Unbounded", sans-serif;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.05625rem;
+    text-transform: uppercase;
+    opacity: 0;
+}
+
+.accent {
+    color: #e5383a;
+}
+
+.requirements-description {
+    color: #d1d1d1;
+    margin: 0 auto;
+
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem; /* 173.333% */
+    letter-spacing: 0.01875rem;
+}
+@include tablet {
+    .requirement-banner-text {
+        display: none !important;
+    }
+}

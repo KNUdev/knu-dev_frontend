@@ -47,7 +47,13 @@ export class HeaderComponent {
     onWindowScroll() {
         const scrollPosition =
             window.scrollY || document.documentElement.scrollTop;
-        this.isScrolled.set(scrollPosition > 50);
+        const currentState = this.isScrolled();
+
+        if (!currentState && scrollPosition > 110) {
+            this.isScrolled.set(true);
+        } else if (currentState && scrollPosition < 40) {
+            this.isScrolled.set(false);
+        }
     }
 
     @HostListener('document:click', ['$event'])

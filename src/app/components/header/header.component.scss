@@ -10,16 +10,17 @@ a {
     top: 0;
     z-index: 100000;
     padding: 1.25rem 7.5rem;
+    animation: 1s show ease;
 
-    @include for-desktop {
+    @include desktop {
         padding: 1.25rem 4.06rem;
     }
 
-    @include for-tablet {
+    @include tablet-horizontal {
         padding: 1.25rem 2.63rem;
     }
 
-    @include for-mobile {
+    @include mobile-horizontal {
         padding: 1.25rem 2.62rem;
     }
 
@@ -32,6 +33,17 @@ a {
         justify-content: space-between;
         gap: 6.8rem;
         max-width: 105rem;
+    }
+
+    @keyframes show {
+        from {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .authPage {
@@ -70,15 +82,20 @@ a {
             padding: 0;
             margin: auto;
 
-            @include for-tablet {
+            @include tablet-horizontal {
                 margin: 0;
             }
             li {
                 padding: 0.62rem;
             }
         }
+        .menu__nav {
+            &.active {
+                color: #edd342;
+            }
+        }
 
-        @include for-tablet {
+        @include tablet-horizontal {
             padding: 1.25rem 2.63rem;
             width: auto;
 
@@ -94,7 +111,7 @@ a {
             }
         }
 
-        @include for-mobile {
+        @include mobile-horizontal {
             padding: 1.25rem 2.62rem;
             flex-direction: column;
 
@@ -139,7 +156,7 @@ a {
         margin: 0 1.219rem;
         height: 100%;
 
-        @include for-mobile {
+        @include mobile-horizontal {
             display: none;
         }
     }

@@ -32,6 +32,8 @@
                 <li>
                     <a
                         [routerLink]="[item.link]"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: item.link === '/' }"
                         rel="noopener noreferrer"
                         class="menu__nav"
                         [attr.aria-label]="item.name"

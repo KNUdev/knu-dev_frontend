@@ -1,0 +1,237 @@
+<section class="pre-campus-container">
+    <header #animatedElement class="header-info">
+        <div #animatedElement class="info-badge">
+            {{ "pre-campus.info-badge" | translate }}
+        </div>
+
+        <div class="reveal-container">
+            <h1 #animatedElement class="title">
+                {{ "pre-campus.title" | translate }}
+            </h1>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="info-section">
+            <article class="about-section">
+                <div class="reveal-container">
+                    <h2 #animatedElement class="section-title">
+                        {{ "pre-campus.about-section.title" | translate }}
+                    </h2>
+                </div>
+                <div class="reveal-container">
+                    <p #animatedElement class="description">
+                        {{ "pre-campus.about-section.description" | translate }}
+                    </p>
+                </div>
+            </article>
+
+            <div class="vertical-divider" aria-hidden="true"></div>
+
+            <article class="entrance-options">
+                <div class="reveal-container">
+                    <h2 #animatedElement class="entrance-title">
+                        <span
+                            >{{
+                                "pre-campus.entrance-options.title" | translate
+                            }}
+                        </span>
+                        <span class="highlight">{{
+                            "pre-campus.entrance-options.title-highlight"
+                                | translate
+                        }}</span>
+                    </h2>
+                </div>
+
+                <div class="options-container">
+                    <div class="reveal-container">
+                        <option-card
+                            [title]="
+                                'pre-campus.entrance-options.card-v1.title'
+                                    | translate
+                            "
+                            color="red"
+                            [targetProgress]="80"
+                            [startOffset]="0"
+                        />
+                    </div>
+                    <div class="reveal-container">
+                        <option-card
+                            [title]="
+                                'pre-campus.entrance-options.card-v2.title'
+                                    | translate
+                            "
+                            color="red"
+                            [targetProgress]="20"
+                            [startOffset]="80"
+                        />
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="requirements-section">
+            <h2 #animatedElement class="section-title">
+                {{ "pre-campus.requirements-section.title" | translate }}
+            </h2>
+
+            <div class="reveal-container">
+                <div #animatedElement class="requirements-card">
+                    <div class="reveal-container">
+                        <div class="requirements-preview">
+                            <div class="requirement-banner-text">
+                                <div class="up-text">
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-1"
+                                                | translate
+                                        }}
+                                    </p>
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-2"
+                                                | translate
+                                        }}
+                                    </p>
+                                </div>
+                                <p>
+                                    {{
+                                        "pre-campus.requirements-section.banner-text.text-3"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
+                            <mat-icon
+                                svgIcon="education"
+                                class="requirement-banner-icon"
+                            ></mat-icon>
+                            <div class="requirement-banner-text">
+                                <div class="up-text">
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-4"
+                                                | translate
+                                        }}
+                                    </p>
+                                    <p>
+                                        {{
+                                            "pre-campus.requirements-section.banner-text.text-5"
+                                                | translate
+                                        }}
+                                    </p>
+                                </div>
+                                <p>
+                                    {{
+                                        "pre-campus.requirements-section.banner-text.text-6"
+                                            | translate
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="requirements-content">
+                        <div class="reveal-container">
+                            <h3 class="highlight-title">
+                                {{
+                                    "pre-campus.requirements-section.content-title.dream"
+                                        | translate
+                                }}
+                                <span class="accent">{{
+                                    "pre-campus.requirements-section.content-title.learn"
+                                        | translate
+                                }}</span>
+                                {{
+                                    "pre-campus.requirements-section.content-title.unik"
+                                        | translate
+                                }}
+                            </h3>
+                        </div>
+                        <div class="reveal-container">
+                            <p class="requirements-description">
+                                {{
+                                    "pre-campus.requirements-section.content-description"
+                                        | translate
+                                }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits-section">
+            <div class="reveal-container">
+                <h2 #animatedElement class="benefits-title">
+                    {{ "pre-campus.benefits-section.title" | translate }}
+                </h2>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefits-column">
+                    <div class="reveal-container">
+                        <benefit-card
+                            icon="consult"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-1.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-1.description'
+                                    | translate
+                            "
+                        />
+                    </div>
+                    <div class="reveal-container">
+                        <benefit-card
+                            icon="work"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-2.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-2.description'
+                                    | translate
+                            "
+                        />
+                    </div>
+                </div>
+                <div class="benefits-column">
+                    <div class="reveal-container">
+                        <benefit-card
+                            icon="presentation"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-3.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-3.description'
+                                    | translate
+                            "
+                        />
+                    </div>
+                    <div class="reveal-container">
+                        <benefit-card
+                            icon="study"
+                            color="red"
+                            [title]="
+                                'pre-campus.benefits-section.card-4.title'
+                                    | translate
+                            "
+                            [description]="
+                                'pre-campus.benefits-section.card-4.description'
+                                    | translate
+                            "
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="reveal-container">
+            <join-organization color="red" />
+        </div>
+    </main>
+</section>
