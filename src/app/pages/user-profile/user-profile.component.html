@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="user-profile.component.scss">
 <div class="profile">
     @if (showUploadDialog) {
         <profile-image-upload-dialog
@@ -116,7 +115,7 @@
             </div>
                 <ul class="profile__activity-block">
                     @if (projectsExist) {
-                        @for (project of accountProfile()?.projects; track $index) {
+                        @for (project of accountProjects(); track $index) {
                             <profile-item-card
                                 imageUrl="assets/dogg1.jpg"
                                 [title]="project.name.en"
@@ -133,8 +132,9 @@
                         />
                     }
                 </ul>
-            @if(projectsExist) {
-                <button aria-label="Load more projects" class="profile__more-projects" type="button">
+            @if(showLoadMore) {
+                <button aria-label="Load more projects" class="profile__more-projects" type="button"
+                (click)="handleLoadAllAccountProjects()">
                     Більше проектів
                 </button>
             }

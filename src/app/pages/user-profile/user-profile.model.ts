@@ -26,10 +26,11 @@ export type AccountProfile = {
     specialty: Specialty;
     registeredAt: string;
     projects: Project[];
-    completedEducationPrograms: Education[]
+    hasMoreProjects: boolean;
+    completedEducationPrograms: Education[];
 };
 
-type Project = {
+export type Project = {
     name: {
         en: string;
         uk: string;

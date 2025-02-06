@@ -17,7 +17,7 @@ $meta-button-height: 3.438rem;
 
 .profile {
     width: calc(100% - 11rem);
-    margin: 0 auto;
+    margin: 5rem auto;
     position: relative;
     text-align: center;
 
@@ -433,7 +433,7 @@ $meta-button-height: 3.438rem;
         width: 100%;
         profile-item-card {
             flex: 1 1 0;
-            min-width: 15rem;
+            min-width: 25rem;
             max-width: 40rem;
             box-sizing: border-box;
             margin: 0;
