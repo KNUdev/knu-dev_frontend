@@ -1,4 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import {
+    PreloadAllModules,
+    withPreloading,
+    withComponentInputBinding,
+    withViewTransitions,
+} from '@angular/router';
 import { LOCALE_ID } from '@angular/core';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
@@ -27,7 +33,12 @@ bootstrapApplication(AppComponent, {
     providers: [
         provideHttpClient(),
         provideTranslateService(),
-        provideRouter(routes),
+        provideRouter(
+            routes,
+            withPreloading(PreloadAllModules),
+            withComponentInputBinding(),
+            withViewTransitions()
+        ),
         {
             provide: LOCALE_ID,
             useFactory: localeIdFactory

@@ -12,7 +12,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
 
-    @include for-mobile {
+    @include mobile {
         width: 8.44rem;
         height: 3.13rem;
     }

@@ -1,0 +1,38 @@
+.fill-button {
+    display: flex;
+    padding: 1.125rem 1rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 0.3125rem;
+    width: 100%;
+    border: none;
+
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.04688rem;
+
+    cursor: pointer;
+}
+
+.fill-red {
+    background: #e5383a;
+    color: #fff;
+
+    &:hover {
+        background: #d42e30;
+    }
+}
+
+.fill-yellow {
+    background: #edd342;
+    color: #101010;
+
+    &:hover {
+        background: #eac72b;
+    }
+}

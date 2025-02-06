@@ -1,0 +1,16 @@
+<div #animatedElement class="option-card" [class]="color">
+    <div class="option-info">
+        <h3 class="option-title-highlight">
+            {{ title_highlight }}
+        </h3>
+        <p class="option-title">
+            {{ title }}
+        </p>
+    </div>
+    @if(targetProgress !== 0) {
+    <app-circular-progress
+        [targetProgress]="targetProgress"
+        [startOffset]="startOffset"
+    ></app-circular-progress>
+    }
+</div>

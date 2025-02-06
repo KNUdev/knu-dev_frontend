@@ -1,0 +1,18 @@
+<div class="logo-line-container">
+    <div class="logo-track">
+        <div class="logo-scroll">
+            @for (logo of logos; track logo.name) {
+            <div class="logo-item">
+                <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+            </div>
+            }
+        </div>
+        <div class="logo-scroll">
+            @for (logo of logos; track logo.name) {
+            <div class="logo-item">
+                <img [src]="logo.url" [alt]="logo.name" loading="lazy" />
+            </div>
+            }
+        </div>
+    </div>
+</div>

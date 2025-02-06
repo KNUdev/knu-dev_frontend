@@ -13,7 +13,7 @@
     cursor: pointer;
     padding: 0.62rem;
     background: none;
-    border: none;
+    border: 1px solid transparent;
 
     &:hover {
         border-radius: 0.3125rem;
@@ -48,7 +48,7 @@
     box-sizing: border-box;
     z-index: 1000;
 
-    @include for-mobile {
+    @include mobile {
         left: 0;
     }
 }
@@ -72,7 +72,7 @@
     }
 
     span {
-        font-family: Geist;
+        font-family: "Fixel Text", sans-serif;
         font-size: 0.875rem;
         font-style: normal;
         font-weight: 400;

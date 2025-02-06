@@ -1,0 +1,63 @@
+<section class="hero">
+    <div #animatedElement class="hero-content">
+        <div class="hero-title">
+            <div class="reveal-container">
+                <h1 #animatedElement class="hero-heading">
+                    {{ "home-header.title.find" | translate }}
+                    <span class="hero-highlight">{{
+                        "home-header.title.success" | translate
+                    }}</span>
+                    <br />
+                    <div class="reveal-container">
+                        <div class="hero-headin-future">
+                            {{ "home-header.title.future" | translate }}
+                        </div>
+                    </div>
+                </h1>
+            </div>
+        </div>
+        <div class="reveal-container">
+            <p #animatedElement class="hero-description">
+                {{ "home-header.description" | translate }}
+            </p>
+        </div>
+    </div>
+    <div #animatedElement class="hero-banner">
+        <div class="banner-info">
+            <span class="banner-dimensions">{{ currentWidth }}x900px</span>
+            <span class="banner-type">Div block</span>
+        </div>
+        <div class="banner-container">
+            <div
+                [style.background-image]="'url(' + iconPaths.bgHeader + ')'"
+                class="banner-content"
+            >
+                <div class="banner-actions">
+                    <button
+                        class="action-button fill-button fill-yellow"
+                        (click)="onJoinCampus()"
+                        tabindex="0"
+                        role="button"
+                    >
+                        {{ "home-header.joinCampus" | translate }}
+                    </button>
+                    <div class="action-divider">
+                        <span class="divider-line"></span>
+                        <span class="divider-text">{{
+                            "home-header.or" | translate
+                        }}</span>
+                        <span class="divider-line"></span>
+                    </div>
+                    <button
+                        class="action-button fill-button fill-red"
+                        (click)="onJoinPreCampus()"
+                        tabindex="0"
+                        role="button"
+                    >
+                        {{ "home-header.joinPreCampus" | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -66,15 +66,15 @@
                                 [label]="
                                 'register.confirmPassword.label' | translate
                             "
-                                [errors]="VALIDATION_KEYS.confirmPassword"
-                                type="password"
-                                [preventClipboard]="true"
-                            ></label-input>
-                        </div>
+                            [errors]="VALIDATION_KEYS.confirmPassword"
+                            type="password"
+                            [preventClipboard]="true"
+                        ></label-input>
                     </div>
-                    <button type="submit" class="fill-red">
-                        {{ "register.continue" | translate }}
-                    </button>
+                </div>
+                <button type="submit" class="fill-button fill-red">
+                    {{ "register.continue" | translate }}
+                </button>
 
                     <div class="login">
                         <p>{{ "register.haveAccount.label" | translate }}</p>
@@ -253,15 +253,15 @@
                     </div>
                 </div>
 
-                <button class="fill-red" type="submit">
-                    {{ "register.register" | translate }}
-                </button>
-                <div class="goBack">
-                    <a class="hyperlink" (click)="returnToPreviousStep()">
-                        {{ "register.goBackLink" | translate }}
-                    </a>
-                </div>
-            </form>
+            <button class="fill-button fill-red" type="submit">
+                {{ "register.register" | translate }}
+            </button>
+            <div class="goBack">
+                <a class="hyperlink" (click)="returnToPreviousStep()">
+                    {{ "register.goBackLink" | translate }}
+                </a>
+            </div>
+        </form>
         }
         <div class="language-selector-container">
             <div
