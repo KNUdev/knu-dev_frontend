@@ -30,12 +30,12 @@ button {
         margin-left: 0.3125rem;
     }
 
-    @include for-mobile {
+    @include mobile{
         width: auto;
         align-self: start;
     }
 
-    @include for-tablet {
+    @include tablet {
         width: 100%;
     }
 }

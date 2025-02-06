@@ -17,8 +17,7 @@ $meta-button-height: 3.438rem;
 
 .profile {
     width: calc(100% - 11rem);
-    //margin: 5rem auto 0;
-    //margin: 0 auto;
+    margin: 0 auto;
     position: relative;
     text-align: center;
 
@@ -434,7 +433,10 @@ $meta-button-height: 3.438rem;
         gap: 1rem;
     }
 
-    @include for-tablet {
+    @include tablet {
+        width: 100%;
+        padding: 4rem 5rem;
+
         &__education, &__projects{
             @include flex-center(row, wrap);
         }
@@ -445,6 +447,11 @@ $meta-button-height: 3.438rem;
                 width: 100%;
             }
         }
+
+        .profile__info-corner {
+            position: static;
+        }
+
         .profile__projects-item,
         .profile__education-item {
             flex: 1 1 calc(50% - 1rem);
@@ -455,33 +462,34 @@ $meta-button-height: 3.438rem;
         }
     }
 
-    @include for-mobile {
+    @include mobile {
         width: 100%;
         padding: 1rem;
 
-        // Hide banner on mobile so that only the avatar appears.
         &__banner {
             display: none;
         }
-        // Center the avatar container horizontally and remove the absolute positioning adjustments.
+
         .profile__avatar-container {
             position: relative;
-            //margin: 0 auto;
             left: 0;
             top: 0;
             transform: translate(0);
         }
+
         .profile__info-corner {
             position: static;
         }
+
         &__info {
             margin-top: 1rem;
             text-align: center;
         }
+
         .profile__meta-section {
-            //gap: 0;
             margin-top: 1rem;
         }
+
         .profile__meta-block {
             flex-direction: column;
             align-items: start;
