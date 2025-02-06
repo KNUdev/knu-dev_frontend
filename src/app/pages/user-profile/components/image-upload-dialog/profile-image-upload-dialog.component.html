@@ -1,25 +1,78 @@
-<div class="upload-dialog__backdrop" (click)="onClose()"></div>
+<div
+    class="upload-dialog__backdrop"
+    (click)="onClose()"
+    aria-hidden="true"
+></div>
 
-<div class="upload-dialog">
-    <mat-icon svgIcon="closeDialog" class=" upload-dialog__close"
-              (click)="onClose()" aria-label="Close">
-    </mat-icon>
-
-    <div class="upload-dialog__content">
-        <div class="upload-dialog__preview upload-dialog__preview--avatar">
-            @if(currentImageUrl) {
-                <img [src]="currentImageUrl" [alt]="''"/>
-            } @else {
-                <mat-icon svgIcon="defaultAvatar" class=""></mat-icon>
-            }
-        </div>
-
-        <hr class="upload-dialog__divider">
-
-        <label class="upload-dialog__file-label">
-            <span class="upload-dialog__file-text">{{ selectedFileName }}</span>
-            <input type="file" accept="image/*" (change)="onFileChange($event)" hidden />
-        </label>
-        <button class="upload-dialog__remove-avatar" (click)="onFileRemove()">Видалити існуючий аватар</button>
+<div class="upload-dialog__wrapper">
+    <div class="upload-dialog__outer-close">
+        <button
+            class="upload-dialog__close"
+            (click)="onClose()"
+            type="button"
+            aria-label="Close dialog"
+        >
+            <mat-icon svgIcon="closeDialog"></mat-icon>
+        </button>
     </div>
+
+    <section
+        class="upload-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Image Upload Dialog"
+    >
+        <header class="upload-dialog__header">
+            <button
+                class="upload-dialog__close-desktop"
+                (click)="onClose()"
+                type="button"
+                aria-label="Close dialog"
+            >
+                <mat-icon svgIcon="closeDialog"></mat-icon>
+            </button>
+        </header>
+        <div class="upload-dialog__content">
+            <div class="upload-dialog__preview" aria-label="Avatar Preview">
+                @if (currentImageUrl) {
+                    <img
+                        [src]="currentImageUrl"
+                        alt="Current avatar image"
+                        class="upload-dialog__preview--avatar"
+                    />
+                } @else {
+                    <figure
+                        class="default-avatar-container"
+                        aria-label="Default avatar placeholder"
+                    >
+                        <mat-icon
+                            svgIcon="defaultAvatar"
+                            class="default-avatar-container__icon"
+                        ></mat-icon>
+                    </figure>
+                }
+            </div>
+            <hr class="upload-dialog__divider" aria-hidden="true" />
+            <label
+                class="upload-dialog__file-label"
+                aria-label="Select an image file to upload"
+            >
+                <span class="upload-dialog__file-text">{{ selectedFileName }}</span>
+                <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onFileChange($event)"
+                    hidden
+                />
+            </label>
+            <button
+                class="upload-dialog__remove-avatar"
+                type="button"
+                (click)="onFileRemove()"
+                aria-label="Remove existing avatar"
+            >
+                Видалити існуючий аватар
+            </button>
+        </div>
+    </section>
 </div>

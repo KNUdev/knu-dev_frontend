@@ -52,6 +52,4 @@ export class ProfileImageUploadDialogComponent {
         this.close.emit();
     }
 
-
-
 }

@@ -42,7 +42,9 @@
                          class="profile__avatar"
                     />
                 } @else {
-                    <mat-icon svgIcon="defaultAvatar" class="profile__avatar"></mat-icon>
+                    <div class="profile__avatar">
+                        <mat-icon svgIcon="defaultAvatar" class="profile__avatar-icon"></mat-icon>
+                    </div>
                 }
                 <div [ngClass]="{
                   'profile__avatar-overlay': true,
@@ -74,7 +76,7 @@
                     <h1 class="profile__meta-block-title">Роль</h1>
                     <h2 class="profile__meta-block-subtitle">{{ accountProfile()?.technicalRole }}</h2>
                 </div>
-                <arrow-button borderColor="yellow" text="Підвищити роль" />
+                <arrow-button borderColor="yellow" text="Підвищити роль" class="profile__meta-block-button" />
             </div>
             <div class="profile__meta-group">
                 <div class="profile__meta-block profile__meta-block--group">
@@ -108,14 +110,13 @@
             <a class="profile__support-link" href="/">Підтримки</a>
         </section>
 
-        <section aria-label="Projects in which I participated" class="profile__projects-section">
+        <section aria-label="Projects in which I participated">
             <div class="profile__divider">
                 <span class="profile__divider-title">Projects</span>
             </div>
-            <div class="profile__activity-block">
-                @if (projectsExist) {
-                    @for (project of accountProfile()?.projects; track $index) {
-                        <div>
+                <ul class="profile__activity-block">
+                    @if (projectsExist) {
+                        @for (project of accountProfile()?.projects; track $index) {
                             <profile-item-card
                                 imageUrl="assets/dogg1.jpg"
                                 [title]="project.name.en"
@@ -125,28 +126,26 @@
                                 buttonColor="yellow"
                             >
                             </profile-item-card>
-                        </div>
+                        }
+                    } @else {
+                        <profile-fallback-card fallbackIconName="projectsNotFound"
+                                               [fallbackText]="'Ви ще не брали участь ні одному проекті'"
+                        />
                     }
-                } @else {
-                    <profile-fallback-card fallbackIconName="projectsNotFound"
-                                           [fallbackText]="'Ви ще не брали участь ні одному проекті'"
-                    />
-                }
-            </div>
-            @if(!accountProfile()?.projects) {
+                </ul>
+            @if(projectsExist) {
                 <button aria-label="Load more projects" class="profile__more-projects" type="button">
                     Більше проектів
                 </button>
             }
         </section>
 
-        <section aria-label="Education Programs" class="profile__education-section">
+        <section aria-label="Education Programs">
             <div class="profile__divider profile__divider--red">
                 <span class="profile__divider-title">Education Programs</span>
             </div>
-            <div class="profile__activity-block">
+            <ul class="profile__activity-block">
                 @if (programsExist) {
-                    <h1>{{ accountProfile()?.completedEducationPrograms?.length }}</h1>
                     @for (program of accountProfile()?.completedEducationPrograms; track $index) {
                         <profile-item-card
                             imageUrl="assets/dogg1.jpg"
@@ -162,7 +161,7 @@
                                            [fallbackText]="'Ви ще не брали участь ні в 1 навчальній програмі'"
                     />
                 }
-            </div>
+            </ul>
         </section>
         <input
             #bannerInput

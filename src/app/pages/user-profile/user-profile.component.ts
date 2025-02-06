@@ -44,7 +44,7 @@ export class UserProfileComponent implements OnInit {
         arrowRightUp: 'assets/icon/system/arrowRightUp.svg',
         addBanner: 'assets/icon/system/pluse.svg',
         changeAvatar: 'assets/icon/system/edit.svg',
-        defaultAvatar: 'assets/icon/profile/defaultAvatar.svg',
+        defaultAvatar: 'assets/icon/profile/Vector.svg',
         programsFoundFound: 'assets/icon/profile/education.svg',
         projectsNotFound: 'assets/icon/profile/project.svg',
     } as const;

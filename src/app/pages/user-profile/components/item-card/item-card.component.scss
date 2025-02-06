@@ -2,12 +2,11 @@
 
 
 .item-card {
-    //width: 33rem;
     padding: 1.563rem;
-    box-sizing: border-box;
     border-radius: 5px;
     border: 1px solid #343434;
     text-align: left;
+    text-wrap: wrap;
 
     &__image {
         width: 100%;
@@ -28,6 +27,9 @@
     }
 
     &__description {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        text-wrap: wrap;
         margin: 0.938rem 0 1.563rem;
         color: #d1d1d1;
         font-size: 0.938em;
@@ -49,10 +51,10 @@
             line-height: 1.625rem;
             letter-spacing: 0.019rem;
 
-            @media (max-width: 1024px) {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            //@media (max-width: 1024px) {
+            //    flex-direction: column;
+            //    align-items: flex-start;
+            //}
         }
 
     }

@@ -135,16 +135,30 @@ $meta-button-height: 3.438rem;
 
     .profile__avatar-container {
         $size: 8.375rem;
-
         position: absolute;
         top: calc(18.75rem - 3.75rem);
         left: 50%;
         transform: translateX(-50%);
-        display: inline-block;
+        //display: inline-block;
         width: $size;
         height: $size;
         border-radius: 50%;
         overflow: hidden;
+        border: 10px solid $color-black;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    .profile__avatar-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+        @include flex-center();
     }
 
     .profile__avatar {
@@ -154,20 +168,15 @@ $meta-button-height: 3.438rem;
         border-radius: 50%;
         object-fit: cover;
         transition: filter 0.3s ease;
-    }
-
-    .profile__avatar-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
+        background-color: #D9D9D9;
         @include flex-center();
 
+        .profile__avatar-icon {
+            $size: 3.75rem;
+
+            width: 2.813rem;
+            height: 3.125rem;
+        }
 
     }
 
@@ -190,10 +199,6 @@ $meta-button-height: 3.438rem;
         opacity: 0;
         transition: opacity 0.3s ease;
     }
-
-    //.profile__avatar-container:hover .profile__avatar {
-    //    filter: blur(2px);
-    //}
 
     .profile__avatar-overlay-icon,
     .profile__avatar-container:hover .profile__avatar-overlay {
@@ -284,7 +289,7 @@ $meta-button-height: 3.438rem;
             @include flex-center(row);
             justify-content: center;
             margin-top: 2.188rem;
-            gap: 1rem;
+            gap: 2.188rem;
             .profile__meta-block--group {
                 width: 100%;
                 height: 9.375rem;
@@ -419,23 +424,29 @@ $meta-button-height: 3.438rem;
     }
 
     .profile__activity-block {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
         margin: 2.813rem 0 2.188rem;
-        @include flex-center(row);
         gap: 1rem;
-        padding: 2.188rem;
-    }
-
-
-    &__education {
-        margin-top: 2rem;
-        padding: 2rem;
-        @include flex-center(row);
-        gap: 1rem;
+        justify-content: left;
+        width: 100%;
+        profile-item-card {
+            flex: 1 1 0;
+            min-width: 15rem;
+            max-width: 40rem;
+            box-sizing: border-box;
+            margin: 0;
+        }
     }
 
     @include tablet {
         width: 100%;
         padding: 4rem 5rem;
+
+        .profile__avatar-container {
+            top: 18.75rem;
+        }
 
         &__education, &__projects{
             @include flex-center(row, wrap);
@@ -466,8 +477,16 @@ $meta-button-height: 3.438rem;
         width: 100%;
         padding: 1rem;
 
+        .profile__header {
+            @include flex-center(column);
+        }
+
         &__banner {
             display: none;
+        }
+
+        .profile__meta-block-button {
+            width: 100%;
         }
 
         .profile__avatar-container {
