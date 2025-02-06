@@ -88,6 +88,22 @@ export class HeaderComponent {
         return this.router.url.includes('auth');
     }
 
+    isHomePage(): boolean {
+        return this.router.url === '/';
+    }
+
+    getLogo(): string {
+        if (this.isAuthPage()) {
+            return this.logoFullPath;
+        }
+
+        if (this.isHomePage()) {
+            return this.isScrolled() ? this.logoMiniPath : this.logoFullPath;
+        }
+
+        return this.logoMiniPath;
+    }
+
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)

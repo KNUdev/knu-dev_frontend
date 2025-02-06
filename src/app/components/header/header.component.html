@@ -2,7 +2,7 @@
     <div class="header__container" [class.authPage]="isAuthPage()">
         <div class="header__logo">
             <a [routerLink]="['/']" aria-label="Go to homepage"
-                ><img [src]="isScrolled() ? logoMiniPath : logoFullPath"
+                ><img [src]="getLogo()"
             /></a>
         </div>
 
