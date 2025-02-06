@@ -24,7 +24,7 @@ export type AccountProfile = {
     bannerImageUrl: string;
     department: Department;
     specialty: Specialty;
-    registeredAt: Date;
+    registeredAt: string;
     projects: Project[];
     completedEducationPrograms: Education[]
 };
@@ -41,7 +41,7 @@ type Project = {
     avatarFilename: string;
 }
 
-type Education = {
+export type Education = {
     totalTasks: number,
     totalTests: number,
     durationInDays: number,

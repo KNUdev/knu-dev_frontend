@@ -1,23 +1,57 @@
+<link rel="stylesheet" href="user-profile.component.scss">
 <div class="profile">
+    @if (showUploadDialog) {
+        <profile-image-upload-dialog
+            [currentImageUrl]="currentAvatarUrl()"
+            (fileSelected)="handleFileSelected($event)"
+            (fileRemoved)="handleAvatarRemoved()"
+            (close)="closeUploadDialog()">
+        </profile-image-upload-dialog>
+    }
+
     <main class="profile__main">
         <section class="profile__header">
-            <div class="profile__banner">
-                @if(!accountProfile()?.bannerImageUrl) {
+            <div (click)="handleUpdateBanner()" class="profile__banner">
+                @if (!currentBannerUrl()) {
                     <div class="profile__banner-text">
                         <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
                         <h1 class="profile__banner-title">Додати баннер</h1>
-                        <!--                    <h2 class="profile__banner-subtitle">Оптимальний розмір 3200x410px</h2>-->
+                        <h2 class="profile__banner-subtitle">Оптимальний розмір 3200x410px</h2>
                     </div>
                 } @else {
-                    <img src="assets/dogg1.jpg" alt="" class="img-banner">
+                    <div class="profile__banner-container" (click)="handleUpdateBanner()">
+                        <img [src]="currentBannerUrl()" alt="" class="img-banner">
+                        <div class="profile__banner-overlay">
+                            <mat-icon aria-hidden="true" class="profile__banner-icon profile__change-banner-icon"
+                                      svgIcon="changeAvatar"></mat-icon>
+                            <h1 class="profile__change-banner-text" (click)="openUploadDialog('banner')">
+                                Зміни зоображення баннера
+                            </h1>
+                            <button-yellow text="Видалити існуюче зоображення"
+                                           (buttonClick)="handleBannerRemoved()"
+                                           ariaLabel="dsgsd"
+                            />
+                        </div>
+                    </div>
                 }
-<!--                <img src="assets/dogg1.jpg" alt="" class="img-banner">-->
             </div>
-
             <div class="profile__avatar-container">
-                <img [src]="accountProfile()?.avatarImageUrl" alt="Profile Image" class="profile__avatar"/>
-                <div class="profile__avatar-overlay">
-                    <mat-icon aria-hidden="true" class="profile__avatar-overlay-icon" svgIcon="changeAvatar"></mat-icon>
+                @if (currentAvatarUrl()) {
+                    <img [src]="currentAvatarUrl()"
+                         alt="Avatar Image"
+                         class="profile__avatar"
+                    />
+                } @else {
+                    <mat-icon svgIcon="defaultAvatar" class="profile__avatar"></mat-icon>
+                }
+                <div [ngClass]="{
+                  'profile__avatar-overlay': true,
+                  'avatar-present--hover': !!currentAvatarUrl(),
+                  'avatar-absent--hover': !currentAvatarUrl()
+                }">
+                    <mat-icon (click)="openUploadDialog('avatar')" aria-hidden="true"
+                              class="profile__avatar-overlay-icon"
+                              svgIcon="changeAvatar"></mat-icon>
                 </div>
             </div>
 
@@ -27,7 +61,10 @@
                     <h2 class="profile__info-email"> {{ accountProfile()?.email }}</h2>
                 </div>
                 <div class="profile__info-corner">
-                    <p>{{ accountProfile()?.registeredAt }}</p>
+                    <p>
+                        Registered at
+                        {{ accountProfile()?.registeredAt! | date: 'fullDate': 'UTC': locale }}
+                    </p>
                 </div>
             </div>
         </section>
@@ -37,7 +74,7 @@
                     <h1 class="profile__meta-block-title">Роль</h1>
                     <h2 class="profile__meta-block-subtitle">{{ accountProfile()?.technicalRole }}</h2>
                 </div>
-                <arrow-button borderColor="yellow" text="Підвищити роль"/>
+                <arrow-button borderColor="yellow" text="Підвищити роль" />
             </div>
             <div class="profile__meta-group">
                 <div class="profile__meta-block profile__meta-block--group">
@@ -49,7 +86,9 @@
                 <div class="profile__meta-block profile__meta-block--group">
                     <div class="profile__meta-block-text">
                         <h1>Спеціальність</h1>
-                        <h2>{{ accountProfile()?.specialty?.codeName + ' - ' + accountProfile()?.specialty?.name?.en }}</h2>
+                        <h2>
+                            {{ accountProfile()?.specialty?.codeName + ' - ' + accountProfile()?.specialty?.name?.en }}
+                        </h2>
                     </div>
                 </div>
                 <div class="profile__meta-block profile__meta-block--group">
@@ -61,23 +100,20 @@
             </div>
         </section>
 
-        <section aria-labelledby="supportHeading" class="profile__support-section">
-            <div class="profile__support">
-                <h1 id="supportHeading">
-                    Якщо ви вказали невірні дані при реєстрації, які не можна змінити власноруч, зверніться, будь ласка,
-                    до
-                </h1>
-                <a class="profile__support-link" href="/">Підтримки</a>
-            </div>
+        <section aria-labelledby="supportHeading" class="profile__support">
+            <h1 id="supportHeading">
+                Якщо ви вказали невірні дані при реєстрації, які не можна змінити власноруч, зверніться, будь ласка,
+                до
+            </h1>
+            <a class="profile__support-link" href="/">Підтримки</a>
         </section>
-
 
         <section aria-label="Projects in which I participated" class="profile__projects-section">
             <div class="profile__divider">
                 <span class="profile__divider-title">Projects</span>
             </div>
-            <div class="profile__projects">
-                @if (accountProfile()?.projects) {
+            <div class="profile__activity-block">
+                @if (projectsExist) {
                     @for (project of accountProfile()?.projects; track $index) {
                         <div>
                             <profile-item-card
@@ -92,37 +128,48 @@
                         </div>
                     }
                 } @else {
-                    <div class="profile__projects--not-found">
-
-                    </div>
+                    <profile-fallback-card fallbackIconName="projectsNotFound"
+                                           [fallbackText]="'Ви ще не брали участь ні одному проекті'"
+                    />
                 }
             </div>
-            <button aria-label="Load more projects" class="profile__more-projects" type="button">
-                Більше проектів
-            </button>
+            @if(!accountProfile()?.projects) {
+                <button aria-label="Load more projects" class="profile__more-projects" type="button">
+                    Більше проектів
+                </button>
+            }
         </section>
 
         <section aria-label="Education Programs" class="profile__education-section">
             <div class="profile__divider profile__divider--red">
                 <span class="profile__divider-title">Education Programs</span>
             </div>
-            <div class="profile__education">
-                @for (detail of details; track $index) {
-                    <profile-item-card
-                        imageUrl="assets/dogg1.jpg"
-                        title="Навчальний реформатор 3000"
-                        [details]="[
-    { label: 'Тривала:', value: '8 місяців' },
-    { label: 'Технічний напрямок:', value: 'Frontend' },
-    { label: 'Сумарна кількість завдань:', value: '100' },
-    { label: 'Сумарна кількість тестів:', value: '15' }
-  ]"
-                        buttonText="Action"
-                        buttonAriaLabel="Learn more about Education Item 1"
-                        buttonColor="red">
-                    </profile-item-card>
+            <div class="profile__activity-block">
+                @if (programsExist) {
+                    <h1>{{ accountProfile()?.completedEducationPrograms?.length }}</h1>
+                    @for (program of accountProfile()?.completedEducationPrograms; track $index) {
+                        <profile-item-card
+                            imageUrl="assets/dogg1.jpg"
+                            title="Навчальний реформатор 3000"
+                            [details]="label(program)"
+                            buttonText="Action"
+                            buttonAriaLabel="Learn more about Education Item 1"
+                            buttonColor="red">
+                        </profile-item-card>
+                    }
+                } @else {
+                    <profile-fallback-card fallbackIconName="programsNotFound"
+                                           [fallbackText]="'Ви ще не брали участь ні в 1 навчальній програмі'"
+                    />
                 }
             </div>
         </section>
+        <input
+            #bannerInput
+            (change)="handleBannerFileSelected($event)"
+            accept="image/*"
+            hidden
+            type="file"
+        />
     </main>
 </div>

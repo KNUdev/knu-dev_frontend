@@ -1,15 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import {
-    LangChangeEvent,
-    TranslateModule,
-    TranslateService,
-} from '@ngx-translate/core';
-import { map, Observable, startWith, switchMap } from 'rxjs';
-import { I18nService } from '../../services/languages/i18n.service';
-import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
+import {CommonModule} from '@angular/common';
+import {Component, HostListener, inject, signal} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {Router, RouterModule} from '@angular/router';
+import {LangChangeEvent, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {map, Observable, startWith, switchMap} from 'rxjs';
+import {I18nService} from '../../services/languages/i18n.service';
 
 const MENU_TRANSLATIONS = 'header.menu.items' as const;
 
@@ -21,32 +16,51 @@ type Menu = {
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrl: './header.component.scss',
+    styleUrls: ['./header.component.scss'],
     imports: [FormsModule, CommonModule, TranslateModule, RouterModule],
+    standalone: true,
 })
 export class HeaderComponent {
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
-    private router = inject(Router);
-    protected languageSwitcher = LanguageSwitcherService(this.translate);
-    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
     isMenuOpen = signal<boolean>(false);
+
     readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
     readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
     readonly arrowDownPath = 'assets/icon/system/arrowDown.svg';
     readonly defaultAvatarPath = 'assets/icon/defaultAvatar.svg';
     readonly menuIconPath = 'assets/icon/system/menu.svg';
     readonly closeIconPath = 'assets/icon/system/close.svg';
-
     menu$: Observable<Menu[]>;
+    protected i18nService = inject(I18nService);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private translate = inject(TranslateService);
+    private router = inject(Router);
+
+    constructor() {
+        const langChange$ = this.translate.onLangChange.pipe(
+            startWith({lang: this.translate.currentLang} as LangChangeEvent)
+        );
+
+        const loadTranslations$ = langChange$.pipe(
+            switchMap((event) =>
+                this.i18nService.loadComponentTranslations('components/header', event.lang)
+            )
+        );
+
+        const menuTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
+        );
+
+        this.menu$ = menuTranslations$.pipe(
+            map((translations) => translations[MENU_TRANSLATIONS] || [])
+        );
+    }
 
     @HostListener('window:scroll', [])
     onWindowScroll() {
-        const scrollPosition =
-            window.scrollY || document.documentElement.scrollTop;
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         this.isScrolled.set(scrollPosition > 50);
     }
 
@@ -65,6 +79,7 @@ export class HeaderComponent {
             this.isMenuOpen.set(false);
         }
     }
+
     toggleMenu() {
         this.isMenuOpen.update((value) => !value);
     }
@@ -74,34 +89,12 @@ export class HeaderComponent {
     }
 
     selectLanguage(code: string) {
-        this.languageSwitcher.switchLang(code as any);
+        this.i18nService.switchLang(code as any);
         this.isOpenLang.set(false);
     }
 
     isAuthPage(): boolean {
         return this.router.url.includes('auth');
     }
-
-    constructor() {
-        const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
-        );
-
-        const loadTranslations$ = langChange$.pipe(
-            switchMap((event) =>
-                this.i18nService.loadComponentTranslations(
-                    'components/header',
-                    event.lang
-                )
-            )
-        );
-
-        const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
-        );
-
-        this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
-        );
-    }
 }
+

@@ -1,0 +1,25 @@
+<div class="upload-dialog__backdrop" (click)="onClose()"></div>
+
+<div class="upload-dialog">
+    <mat-icon svgIcon="closeDialog" class=" upload-dialog__close"
+              (click)="onClose()" aria-label="Close">
+    </mat-icon>
+
+    <div class="upload-dialog__content">
+        <div class="upload-dialog__preview upload-dialog__preview--avatar">
+            @if(currentImageUrl) {
+                <img [src]="currentImageUrl" [alt]="''"/>
+            } @else {
+                <mat-icon svgIcon="defaultAvatar" class=""></mat-icon>
+            }
+        </div>
+
+        <hr class="upload-dialog__divider">
+
+        <label class="upload-dialog__file-label">
+            <span class="upload-dialog__file-text">{{ selectedFileName }}</span>
+            <input type="file" accept="image/*" (change)="onFileChange($event)" hidden />
+        </label>
+        <button class="upload-dialog__remove-avatar" (click)="onFileRemove()">Видалити існуючий аватар</button>
+    </div>
+</div>

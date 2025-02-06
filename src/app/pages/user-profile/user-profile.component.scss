@@ -18,15 +18,73 @@ $meta-button-height: 3.438rem;
 .profile {
     width: calc(100% - 11rem);
     //margin: 5rem auto 0;
-    margin: 0 auto;
+    //margin: 0 auto;
     position: relative;
     text-align: center;
 
-    .img-banner {
-        height: 18.75rem;
-        width: 100%;
-        object-fit: cover;
+    .profile__banner-container {
+        position: relative;
+        overflow: hidden;
+    }
 
+    .img-banner {
+        width: 100%;
+        height: 18.75rem;
+        transition: filter 0.3s ease;
+        object-fit: cover;
+    }
+
+    .profile__banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        @include flex-center(column);
+
+    }
+
+    .profile__banner-container:hover .img-banner {
+        filter: blur(5px);
+    }
+
+    .profile__banner-container:hover .profile__banner-overlay {
+        opacity: 1;
+    }
+
+    .profile__change-banner-text {
+        color: $color-white;
+        font-family: $font-family-base;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.563rem;
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+        text-align: center;
+        display: block;
+        margin-bottom: 1.2rem;
+    }
+
+    .profile__change-banner-icon {
+        ::ng-deep svg {
+            g path[fill] {
+                fill: #FFFFFF !important;
+            }
+        }
+    }
+
+    .profile__remove-banner-text {
+        color: #EDD342;
+        text-align: center;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.7px;
     }
 
     &__banner {
@@ -68,24 +126,25 @@ $meta-button-height: 3.438rem;
 
         height: $icon-size;
         width: $icon-size;
-        margin-bottom: 1.563rem;
+        margin-bottom: 1.2rem;
         ::ng-deep svg {
             g path[fill] {
-                fill: $color-light-gray !important;
+                fill: #FFFFFF !important;
             }
         }
     }
 
     .profile__avatar-container {
+        $size: 8.375rem;
+
         position: absolute;
         top: calc(18.75rem - 3.75rem);
         left: 50%;
         transform: translateX(-50%);
         display: inline-block;
-        width: 9.375rem;
-        height: 9.375rem;
+        width: $size;
+        height: $size;
         border-radius: 50%;
-        border: 10px solid $color-black;
         overflow: hidden;
     }
 
@@ -105,10 +164,24 @@ $meta-button-height: 3.438rem;
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background-color: rgba(237, 211, 66, 0.2);
         opacity: 0;
         transition: opacity 0.3s ease;
+        cursor: pointer;
         @include flex-center();
+
+
+    }
+
+    .avatar-present--hover {
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    .avatar-absent--hover {
+        &:hover {
+            background-color: #AFA674;
+        }
     }
 
     .profile__avatar-overlay-icon {
@@ -119,9 +192,9 @@ $meta-button-height: 3.438rem;
         transition: opacity 0.3s ease;
     }
 
-    .profile__avatar-container:hover .profile__avatar {
-        filter: blur(4px);
-    }
+    //.profile__avatar-container:hover .profile__avatar {
+    //    filter: blur(2px);
+    //}
 
     .profile__avatar-overlay-icon,
     .profile__avatar-container:hover .profile__avatar-overlay {
@@ -293,6 +366,14 @@ $meta-button-height: 3.438rem;
             font-size: 0.875em;
             font-weight: 400;
             letter-spacing: 0.044rem;
+            border: 1px solid $color-black;
+            padding: 0.625rem;
+            border-radius: 5px;
+            transition: border-color 0.2s ease;
+
+            &:hover {
+                border-color: $color-yellow;
+            }
         }
     }
 
@@ -338,16 +419,13 @@ $meta-button-height: 3.438rem;
         }
     }
 
-    &__projects {
+    .profile__activity-block {
         margin: 2.813rem 0 2.188rem;
         @include flex-center(row);
         gap: 1rem;
-
-        .profile__projects--not-found {
-            height: 185px;
-            border: 5px solid black;
-        }
+        padding: 2.188rem;
     }
+
 
     &__education {
         margin-top: 2rem;
@@ -378,45 +456,53 @@ $meta-button-height: 3.438rem;
     }
 
     @include for-mobile {
-        .profile__info-text,
+        width: 100%;
+        padding: 1rem;
+
+        // Hide banner on mobile so that only the avatar appears.
+        &__banner {
+            display: none;
+        }
+        // Center the avatar container horizontally and remove the absolute positioning adjustments.
+        .profile__avatar-container {
+            position: relative;
+            //margin: 0 auto;
+            left: 0;
+            top: 0;
+            transform: translate(0);
+        }
         .profile__info-corner {
             position: static;
-            display: block;
-            margin-top: 0;
-            //text-align: left;
         }
-        &__education, &__projects {
-            @include flex-center(row, wrap);
+        &__info {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .profile__meta-section {
+            //gap: 0;
+            margin-top: 1rem;
         }
         .profile__meta-block {
             flex-direction: column;
-            align-items: stretch;
+            align-items: start;
+            padding: 1.563rem;
+            gap: 1.563rem;
+            margin-bottom: 2.188rem;
+        }
+
+        .profile__meta-group {
             gap: 1rem;
-            &-text {
-                text-align: center;
-            }
-            .profile__meta-button {
-                width: 100%;
-                height: auto;
-            }
-        }
-        .profile__projects-item,
-        .profile__education-item {
-            flex: 1 1 100%;
         }
 
-        .profile__education-item-details-row {
-            flex-direction: column;
-            align-items: flex-start;
+        .profile__divider {
+            margin-top: 4rem;
         }
-
         .profile__divider-title {
-            white-space: normal;
             padding: 0 1rem;
         }
 
-        .profile__meta-block {
-            height: fit-content;
+        .profile__support {
+            margin: 3.75rem 0;
         }
     }
 }

@@ -1,0 +1,127 @@
+@use "../../../../common/styles/variables" as *;
+
+.upload-dialog__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.upload-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2.813rem;
+    width: 100%;
+    max-width: 45rem;
+    //height: 36.188rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+    border: 1px solid #343434;
+    background: #141414;
+}
+
+.upload-dialog__close {
+    position: absolute;
+    top: 0;
+    right: -5rem;
+    border: 1px solid #343434;
+    background-color: #101010;
+    border-radius: 5px;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    transition: all 0.3s ease;
+
+    ::ng-deep svg {
+        g path[fill] {
+            fill: #D1D1D1 !important;
+        }
+    }
+    &:hover {
+        ::ng-deep svg {
+            g path[fill] {
+                fill: #EDD342 !important;
+            }
+        }
+        border-color: #EDD342;
+    }
+}
+
+.upload-dialog__content {
+    width: 100%;
+    @include flex-center(column);
+    gap: 0;
+}
+
+.upload-dialog__preview {
+    overflow: hidden;
+    width: 100%;
+
+    mat-icon,
+    img {
+        $avatar-size: 17.5rem;
+        width: $avatar-size;
+        height: $avatar-size;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.upload-dialog__divider {
+    margin: 2.813em 0;
+    color: #343434;
+    height: 1px;
+    width: 100%;
+}
+
+
+.upload-dialog__file-label {
+    text-wrap: nowrap;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0.75px;
+    display: inline-block;
+    padding: 0.625rem;
+    background: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: 0.2s ease;
+    border-radius: 5px;
+    border: 1px solid var(--border-nat-400, #6D6D6D);
+
+    &:hover {
+        border-color: #EDD342;
+        color: #EDD342;
+    }
+}
+
+.upload-dialog__remove-avatar {
+    background: none;
+    margin-top: 1.563rem;
+    color: #EDD342;
+    border: 1px solid #141414;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    padding: 0.625rem;
+    transition: border-color 0.4s ease;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        border-color: #EDD342;
+    }
+}

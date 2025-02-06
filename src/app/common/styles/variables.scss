@@ -5,6 +5,8 @@ $border-gray: #6d6d6d;
 $accent-yellow: #edd342;
 $text-gray: #a0a0a0;
 
+$font-family-base: Unbounded, sans-serif;
+
 @mixin for-desktop {
     @media (max-width: 1920px) {
         @content;

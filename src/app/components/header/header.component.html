@@ -1,110 +1,106 @@
-<header class="header" [class.scrolled]="isScrolled()" role="banner">
-    <div class="header__container" [class.authPage]="isAuthPage()">
+<header [class.scrolled]="isScrolled()" class="header" role="banner">
+    <div [class.authPage]="isAuthPage()" class="header__container">
         <div class="header__logo">
-            <a [routerLink]="['/']" aria-label="Go to homepage"
-                ><img [src]="isScrolled() ? logoMiniPath : logoFullPath"
-            /></a>
+            <a [routerLink]="['/']" aria-label="Go to homepage">
+                <img [src]="isScrolled() ? logoMiniPath : logoFullPath" alt="Logo"/>
+            </a>
         </div>
 
-        @if (!isAuthPage()) { @if (isMobile()) {
-        <button
-            class="header__menu-button"
-            (click)="toggleMenu()"
-            aria-label="Toggle navigation menu"
-            [attr.aria-expanded]="isMenuOpen()"
-        >
-            <img
-                [src]="isMenuOpen() ? closeIconPath : menuIconPath"
-                alt="menu"
-                aria-hidden="true"
-            />
-        </button>
-        }
-
-        <div
-            class="header__menu-container"
-            [class.open]="isMenuOpen()"
-            role="navigation"
-            aria-label="Main navigation"
-        >
-            <ul class="header__menu-container__list">
-                @for (item of menu$ | async; track $index) {
-                <li>
-                    <a
-                        [routerLink]="[item.link]"
-                        rel="noopener noreferrer"
-                        class="menu__nav"
-                        [attr.aria-label]="item.name"
-                    >
-                        {{ item.name }}
-                    </a>
-                </li>
-                }
-            </ul>
-            <hr aria-hidden="true" />
-            <div class="header__menu-container__bottom">
-                <div
-                    class="language-selector"
-                    [class.open]="isOpenLang()"
-                    role="region"
-                    aria-label="Language selection"
+        @if (!isAuthPage()) {
+            @if (isMobile()) {
+                <button
+                    class="header__menu-button"
+                    (click)="toggleMenu()"
+                    aria-label="Toggle navigation menu"
+                    [attr.aria-expanded]="isMenuOpen()"
                 >
-                    <button
-                        class="selector-button"
-                        (click)="toggleDropdownLang()"
-                        aria-label="Select language"
-                        [attr.aria-expanded]="isOpenLang()"
-                        aria-controls="language-dropdown"
+                    <img
+                        [src]="isMenuOpen() ? closeIconPath : menuIconPath"
+                        alt="menu"
+                        aria-hidden="true"
+                    />
+                </button>
+            }
+
+            <div
+                class="header__menu-container"
+                [class.open]="isMenuOpen()"
+                role="navigation"
+                aria-label="Main navigation"
+            >
+                <ul class="header__menu-container__list">
+                    @for (item of menu$ | async; track $index) {
+                        <li>
+                            <a
+                                [routerLink]="[item.link]"
+                                rel="noopener noreferrer"
+                                class="menu__nav"
+                                [attr.aria-label]="item.name"
+                            >
+                                {{ item.name }}
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <hr aria-hidden="true"/>
+                <div class="header__menu-container__bottom">
+                    <div
+                        class="language-selector"
+                        [class.open]="isOpenLang()"
+                        role="region"
+                        aria-label="Language selection"
                     >
-                        @if(currentLanguage$ | async; as lang){
-                        <img
-                            [src]="lang.flagRound"
-                            [alt]="lang.name"
-                            class="flag-icon"
-                        />
-                        <img
-                            [src]="arrowDownPath"
-                            class="chevron"
-                            [class.up]="isOpenLang()"
-                            alt="arrowDown"
-                            aria-hidden="true"
-                        />
-                        }
-                    </button>
-                    @if (isOpenLang()) {
-                    <div class="dropdown-menu">
-                        @for ( lang of languageSwitcher.supportedLanguages();
-                        track lang.code ) {
                         <button
-                            class="language-option"
-                            [class.active]="
-                                lang.code === languageSwitcher.currentLang()
-                            "
-                            (click)="selectLanguage(lang.code)"
-                            [attr.aria-current]="
-                                lang.code === languageSwitcher.currentLang()
-                            "
-                            [attr.aria-label]="lang.name"
+                            class="selector-button"
+                            (click)="toggleDropdownLang()"
+                            aria-label="Select language"
+                            [attr.aria-expanded]="isOpenLang()"
+                            aria-controls="language-dropdown"
                         >
-                            <span>{{ lang.name }}</span>
-                            <img
-                                [src]="lang.imgMiniPath"
-                                [alt]="lang.name"
-                                class="flag-icon"
-                            />
+                            @if (currentLanguage$ | async; as lang) {
+                                <img
+                                    [src]="lang.flagRound"
+                                    [alt]="lang.name"
+                                    class="flag-icon"
+                                />
+                                <img
+                                    [src]="arrowDownPath"
+                                    class="chevron"
+                                    [class.up]="isOpenLang()"
+                                    alt="arrowDown"
+                                    aria-hidden="true"
+                                />
+                            }
                         </button>
+                        @if (isOpenLang()) {
+                            <div class="dropdown-menu">
+                                @for (lang of i18nService.supportedLanguages(); track lang.code) {
+                                    <button
+                                        class="language-option"
+                                        [class.active]="lang.code === i18nService.currentLang()"
+                                        (click)="selectLanguage(lang.code)"
+                                        [attr.aria-current]="lang.code === i18nService.currentLang()"
+                                        [attr.aria-label]="lang.name"
+                                    >
+                                        <span>{{ lang.name }}</span>
+                                        <img
+                                            [src]="lang.imgMiniPath"
+                                            [alt]="lang.name"
+                                            class="flag-icon"
+                                        />
+                                    </button>
+                                }
+                            </div>
                         }
                     </div>
-                    }
-                </div>
-                <div class="divider" aria-hidden="true"></div>
-                <div class="header__avatar">
-                    <a [routerLink]="['/auth/register']" aria-label="Register"
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="header__avatar">
+                        <a [routerLink]="['/auth/register']" aria-label="Register"
                         ><img [src]="defaultAvatarPath" alt="User avatar"
-                    /></a>
+                        /></a>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </header>

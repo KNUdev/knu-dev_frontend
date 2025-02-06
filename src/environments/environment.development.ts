@@ -6,4 +6,8 @@ export const environment = {
     apiDepartmentsUrl: `${apiBaseUrl}/departments`,
     apiRegisterUrl: `${apiBaseUrl}/account/register`,
     apiGetAccountUrl: `${apiBaseUrl}/account`,
+    apiRemoveAvatarUrl: `${apiBaseUrl}/account/avatar/remove`,
+    apiRemoveBannerUrl: `${apiBaseUrl}/account/banner/remove`,
+    apiUpdateBannerUrl: `${apiBaseUrl}/account/banner/update`,
+    apiUpdateAvatarUrl: `${apiBaseUrl}/account/avatar/update`,
 };

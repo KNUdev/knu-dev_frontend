@@ -29,4 +29,13 @@ button {
     mat-icon {
         margin-left: 0.3125rem;
     }
+
+    @include for-mobile {
+        width: auto;
+        align-self: start;
+    }
+
+    @include for-tablet {
+        width: 100%;
+    }
 }
