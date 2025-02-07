@@ -3,6 +3,8 @@ import {
     ArrowButtonComponent,
     BorderColor
 } from '../../../../common/components/buttons/arrow-button/arrow-button.component';
+import {MultiLanguageField} from '../../../../common/models/shared.model';
+import {MultiLangFieldPipe} from '../../../../common/pipes/multi-lang-field.pipe';
 
 export interface ItemDetail {
     label: string;
@@ -13,16 +15,17 @@ export interface ItemDetail {
     selector: 'profile-item-card',
     templateUrl: './item-card.component.html',
     imports: [
-        ArrowButtonComponent
+        ArrowButtonComponent,
+        MultiLangFieldPipe
     ],
     styleUrls: ['./item-card.component.scss'],
 })
 export class ItemCardComponent {
-    @Input() imageUrl: string = '';
-    @Input() title: string = '';
-    @Input() description: string = '';
+    @Input() banner: string = '';
+    @Input({required: true}) title!: MultiLanguageField;
+    @Input() description: MultiLanguageField = {};
     @Input() details: ItemDetail[] = [];
-    @Input() buttonText: string = 'Action';
+    @Input({required: true}) buttonText!: string;
     @Input() buttonAriaLabel: string = '';
     @Input() showButton: boolean = true;
     @Input({required: true}) buttonColor!: BorderColor;

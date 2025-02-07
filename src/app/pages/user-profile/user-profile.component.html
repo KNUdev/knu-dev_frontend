@@ -14,8 +14,12 @@
                 @if (!currentBannerUrl()) {
                     <div class="profile__banner-text">
                         <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
-                        <h1 class="profile__banner-title">Додати баннер</h1>
-                        <h2 class="profile__banner-subtitle">Оптимальний розмір 3200x410px</h2>
+                        <h1 class="profile__banner-title">
+                            {{'accountProfile.button.banner.uploadNew.title' | translate}}
+                        </h1>
+                        <h2 class="profile__banner-subtitle">
+                            {{'accountProfile.button.banner.uploadNew.subtitle' | translate}}
+                        </h2>
                     </div>
                 } @else {
                     <div class="profile__banner-container" (click)="handleUpdateBanner()">
@@ -24,9 +28,9 @@
                             <mat-icon aria-hidden="true" class="profile__banner-icon profile__change-banner-icon"
                                       svgIcon="changeAvatar"></mat-icon>
                             <h1 class="profile__change-banner-text" (click)="openUploadDialog('banner')">
-                                Зміни зоображення баннера
+                                {{'accountProfile.button.banner.change' | translate}}
                             </h1>
-                            <button-yellow text="Видалити існуюче зоображення"
+                            <button-yellow [text]="'accountProfile.button.banner.delete' | translate"
                                            (buttonClick)="handleBannerRemoved()"
                                            ariaLabel="dsgsd"
                             />
@@ -63,7 +67,7 @@
                 </div>
                 <div class="profile__info-corner">
                     <p>
-                        Registered at
+                        {{'accountProfile.registeredAt' | translate}}
                         {{ accountProfile()?.registeredAt! | date: 'fullDate': 'UTC': locale }}
                     </p>
                 </div>
@@ -72,21 +76,26 @@
         <section aria-label="Profile Details" class="profile__meta-section">
             <div class="profile__meta-block">
                 <div class="profile__meta-block-text">
-                    <h1 class="profile__meta-block-title">Роль</h1>
+                    <h1 class="profile__meta-block-title">
+                        {{'accountProfile.role' | translate}}
+                    </h1>
                     <h2 class="profile__meta-block-subtitle">{{ accountProfile()?.technicalRole }}</h2>
                 </div>
-                <arrow-button borderColor="yellow" text="Підвищити роль" class="profile__meta-block-button" />
+                <arrow-button borderColor="yellow"
+                              [text]="'accountProfile.button.rolePromotion' | translate"
+                              class="profile__meta-block-button"
+                />
             </div>
             <div class="profile__meta-group">
                 <div class="profile__meta-block profile__meta-block--group">
                     <div class="profile__meta-block-text">
-                        <h1>Факультет</h1>
+                        <h1>{{'accountProfile.faculty' | translate}}</h1>
                         <h2>{{ accountProfile()?.department?.name?.en }}</h2>
                     </div>
                 </div>
                 <div class="profile__meta-block profile__meta-block--group">
                     <div class="profile__meta-block-text">
-                        <h1>Спеціальність</h1>
+                        <h1>{{'accountProfile.specialty' | translate}}</h1>
                         <h2>
                             {{ accountProfile()?.specialty?.codeName + ' - ' + accountProfile()?.specialty?.name?.en }}
                         </h2>
@@ -94,7 +103,7 @@
                 </div>
                 <div class="profile__meta-block profile__meta-block--group">
                     <div class="profile__meta-block-text">
-                        <h1>Експертиза</h1>
+                        <h1>{{'accountProfile.expertise' | translate}}</h1>
                         <h2>{{ accountProfile()?.expertise }}</h2>
                     </div>
                 </div>
@@ -103,62 +112,69 @@
 
         <section aria-labelledby="supportHeading" class="profile__support">
             <h1 id="supportHeading">
-                Якщо ви вказали невірні дані при реєстрації, які не можна змінити власноруч, зверніться, будь ласка,
-                до
+                {{'accountProfile.support.description' | translate}}
             </h1>
-            <a class="profile__support-link" href="/">Підтримки</a>
+            <a class="profile__support-link" href="/">
+                {{'accountProfile.support.support' | translate}}
+            </a>
         </section>
 
         <section aria-label="Projects in which I participated">
             <div class="profile__divider">
-                <span class="profile__divider-title">Projects</span>
+                <span class="profile__divider-title">
+                {{'accountProfile.projects.title' | translate}}
+                </span>
             </div>
                 <ul class="profile__activity-block">
                     @if (projectsExist) {
                         @for (project of accountProjects(); track $index) {
                             <profile-item-card
-                                imageUrl="assets/dogg1.jpg"
-                                [title]="project.name.en"
-                                [description]="project.description.en"
-                                buttonText="Читати детальніше"
+                                banner="assets/dogg1.jpg"
+                                [title]="project.name"
+                                [description]="project.description"
+                                [buttonText]="'accountProfile.button.learnMore' | translate"
                                 buttonAriaLabel="`Learn more about ` {{project.name.en}}}"
                                 buttonColor="yellow"
                             >
                             </profile-item-card>
                         }
                     } @else {
-                        <profile-fallback-card fallbackIconName="projectsNotFound"
-                                               [fallbackText]="'Ви ще не брали участь ні одному проекті'"
+                        <profile-fallback-card
+                            fallbackIconName="projectsNotFound"
+                            [fallbackText]="'accountProfile.projects.notFoundFallbackText' | translate"
                         />
                     }
                 </ul>
             @if(showLoadMore) {
                 <button aria-label="Load more projects" class="profile__more-projects" type="button"
                 (click)="handleLoadAllAccountProjects()">
-                    Більше проектів
+                    {{'accountProfile.projects.moreProjects' | translate}}
                 </button>
             }
         </section>
 
         <section aria-label="Education Programs">
             <div class="profile__divider profile__divider--red">
-                <span class="profile__divider-title">Education Programs</span>
+                <span class="profile__divider-title">
+                    {{'accountProfile.educationPrograms.title' | translate}}
+                </span>
             </div>
             <ul class="profile__activity-block">
                 @if (programsExist) {
                     @for (program of accountProfile()?.completedEducationPrograms; track $index) {
                         <profile-item-card
-                            imageUrl="assets/dogg1.jpg"
-                            title="Навчальний реформатор 3000"
+                            [banner]="program.banner"
+                            [title]="program.name"
                             [details]="label(program)"
-                            buttonText="Action"
-                            buttonAriaLabel="Learn more about Education Item 1"
+                            [buttonText]="'accountProfile.button.learnMore' | translate"
+                            buttonAriaLabel="`Learn more about `{{program.name.en}}}"
                             buttonColor="red">
                         </profile-item-card>
                     }
                 } @else {
-                    <profile-fallback-card fallbackIconName="programsNotFound"
-                                           [fallbackText]="'Ви ще не брали участь ні в 1 навчальній програмі'"
+                    <profile-fallback-card
+                        fallbackIconName="programsNotFound"
+                        [fallbackText]="'accountProfile.educationPrograms.notFoundFallbackText' | translate"
                     />
                 }
             </ul>

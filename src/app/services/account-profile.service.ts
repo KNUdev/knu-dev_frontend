@@ -17,9 +17,9 @@ export class AccountProfileService {
     getById(accountId: string): Observable<AccountProfile> {
         return this.http.get<AccountProfile>(`${environment.apiGetAccountUrl}/${accountId}`).pipe(
             map(user => user),
-            catchError((error: HttpErrorResponse) => {
-                return throwError(() => error);
-            })
+            // catchError((error: HttpErrorResponse) => {
+            //     return throwError(() => error);
+            // })
         );
     }
 

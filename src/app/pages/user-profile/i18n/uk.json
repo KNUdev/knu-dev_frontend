@@ -1,0 +1,37 @@
+{
+    "accountProfile": {
+        "registeredAt": "Registered at",
+        "role": "Role",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "expertise": "Expertise",
+        "button": {
+            "rolePromotion": "Elevate Role",
+            "learnMore": "Learn More",
+            "avatar": {
+                "uploadNew": "Upload new avatar",
+                "delete": "Delete existing avatar"
+            },
+            "banner": {
+                "uploadNew": {
+                    "title": "Add banner",
+                    "subtitle": "Optimal size is 3400x480px"
+                },
+                "delete": "Delete existing banner",
+                "changeCurrent": "Change current banner"
+            }
+
+        },
+        "support": {
+            "description": "If you specified invalid data during registration, please contact",
+            "support": "support"
+        },
+        "projects": {
+            "title": "Projects",
+            "moreProjects": "More Projects"
+        },
+        "programsTitle": "Education Programs"
+
+
+    }
+}

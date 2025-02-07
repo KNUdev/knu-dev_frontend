@@ -444,6 +444,14 @@ $meta-button-height: 3.438rem;
         width: 100%;
         padding: 4rem 5rem;
 
+        .profile__activity-block {
+            @include flex-center(column, wrap);
+            profile-item-card {
+                min-width: 100%;
+                margin: 0;
+            }
+        }
+
         .profile__avatar-container {
             top: 18.75rem;
         }

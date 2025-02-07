@@ -90,4 +90,11 @@ export class I18nService {
             }))
         );
     }
+
+    public currentLang$(): Observable<LanguageCode> {
+        return this.translate.onLangChange.pipe(
+            startWith({ lang: this.translate.currentLang }),
+            map(evt => evt.lang as LanguageCode)
+        );
+    }
 }

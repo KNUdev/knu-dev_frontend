@@ -1,4 +1,5 @@
 import {Department, Specialty} from '../auth/register/register.model';
+import {MultiLanguageField} from '../../common/models/shared.model';
 
 export enum AccountTechnicalRole {
     INTERN,
@@ -31,18 +32,15 @@ export type AccountProfile = {
 };
 
 export type Project = {
-    name: {
-        en: string;
-        uk: string;
-    },
-    description: {
-        en: string;
-        uk: string;
-    },
+    name: MultiLanguageField,
+    description: MultiLanguageField,
     avatarFilename: string;
 }
 
 export type Education = {
+    name: MultiLanguageField,
+    description: MultiLanguageField,
+    banner: string;
     totalTasks: number,
     totalTests: number,
     durationInDays: number,

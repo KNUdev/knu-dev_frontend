@@ -57,7 +57,13 @@
                 class="upload-dialog__file-label"
                 aria-label="Select an image file to upload"
             >
-                <span class="upload-dialog__file-text">{{ selectedFileName }}</span>
+                <span class="upload-dialog__file-text">
+                     @if(isNewFileSelected()) {
+                         {{ 'accountProfile.button.avatar.uploadAnother' | translate }}
+                     } @else {
+                         {{ 'accountProfile.button.avatar.uploadNew' | translate }}
+                     }
+                </span>
                 <input
                     type="file"
                     accept="image/*"
@@ -65,13 +71,21 @@
                     hidden
                 />
             </label>
+            @if(isNewFileSelected()) {
+                <button type="button"
+                        class="upload-dialog__file-label upload-dialog__file-label--file-selected"
+                        aria-label="Select an image file to upload"
+                        (click)="handleFileUpload()">
+                    {{ 'accountProfile.button.submit' | translate }}
+                </button>
+            }
             <button
                 class="upload-dialog__remove-avatar"
                 type="button"
                 (click)="onFileRemove()"
                 aria-label="Remove existing avatar"
             >
-                Видалити існуючий аватар
+                {{'accountProfile.button.avatar.delete' | translate}}
             </button>
         </div>
     </section>

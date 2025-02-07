@@ -125,6 +125,7 @@ $text-gray: #a0a0a0;
 }
 
 .upload-dialog__file-label {
+    width: 100%;
     white-space: nowrap;
     font-size: 15px;
     font-weight: 400;
@@ -143,6 +144,10 @@ $text-gray: #a0a0a0;
         border-color: $accent-yellow;
         color: $accent-yellow;
     }
+}
+
+.upload-dialog__file-label--file-selected {
+    margin-top: 1rem;
 }
 
 .upload-dialog__remove-avatar {

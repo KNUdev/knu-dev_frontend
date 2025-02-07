@@ -1,7 +1,7 @@
 <li class="item-card">
-    <img [alt]="title" [src]="imageUrl" class="item-card__image"/>
-    <h2 class="item-card__title">{{ title }}</h2>
-    <p class="item-card__description">{{ description }}</p>
+    <img [alt]="title" [src]="banner" class="item-card__image"/>
+    <h2 class="item-card__title">{{ title | multiLangField }}</h2>
+    <p class="item-card__description">{{ description | multiLangField }}</p>
     @if (details && details.length) {
         <ng-container>
             <div class="item-card__details">
@@ -19,7 +19,7 @@
     @if (showButton) {
         <ng-container>
             <arrow-button [borderColor]="buttonColor"
-                          text="Читати детальніше"
+                          [text]="buttonText"
                           [fullWidth]="true"
             />
         </ng-container>

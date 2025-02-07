@@ -7,7 +7,7 @@ import {
 } from '@angular/router';
 import { LOCALE_ID } from '@angular/core';
 import { AppComponent } from './app/app.component';
-import { provideHttpClient } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors} from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/services/app.routes';
@@ -15,6 +15,7 @@ import { registerLocaleData } from '@angular/common';
 
 import localeUk from '@angular/common/locales/uk';
 import localeEn from '@angular/common/locales/en';
+import {notFoundInterceptor} from './app/pages/error/404/404.interceptor';
 
 const LANG_TO_LOCALE: { [key: string]: string } = {
     uk: 'uk-UA',
@@ -31,7 +32,9 @@ function localeIdFactory(): string {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideHttpClient(),
+        provideHttpClient(
+            withInterceptors([notFoundInterceptor])
+        ),
         provideTranslateService(),
         provideRouter(
             routes,
@@ -43,5 +46,10 @@ bootstrapApplication(AppComponent, {
             provide: LOCALE_ID,
             useFactory: localeIdFactory
         },
+        // {
+        //     provide: HTTP_INTERCEPTORS,
+        //     useClass: NotFoundInterceptor,
+        //     multi: true
+        // },
     ]
 }).catch((err) => console.error(err));

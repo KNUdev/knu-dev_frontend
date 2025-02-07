@@ -15,8 +15,6 @@ export class ProjectService {
     }
 
     getAll(accountId: string): Observable<Project[]> {
-        console.log("F")
-        console.log(`${environment.apiGetAccountUrl}/${accountId}/all`)
         return this.http.get<Project[]>(`${environment.apiGetAllProjectsByAccountId}/${accountId}/all`).pipe(
             map(project => project),
             catchError((error: HttpErrorResponse) => {

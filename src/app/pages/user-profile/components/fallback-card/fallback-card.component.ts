@@ -11,6 +11,5 @@ import {MatIcon} from '@angular/material/icon';
 })
 export class FallbackCardComponent {
     @Input({required: true}) fallbackText!: string;
-
     @Input({required: true}) fallbackIconName!: string;
 }
