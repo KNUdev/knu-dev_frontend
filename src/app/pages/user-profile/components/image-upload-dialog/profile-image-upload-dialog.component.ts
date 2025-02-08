@@ -3,8 +3,6 @@ import {MatIcon, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {TranslatePipe} from '@ngx-translate/core';
 
-export type UploadMode = 'avatar' | 'banner';
-
 @Component({
     selector: 'profile-image-upload-dialog',
     standalone: true,
@@ -18,7 +16,7 @@ export type UploadMode = 'avatar' | 'banner';
 export class ProfileImageUploadDialogComponent {
     isNewFileSelected = signal<boolean>(false);
     @Input({required: true}) currentImageUrl?: string;
-    @Output() fileSelected = new EventEmitter<File>();
+    @Output() fileSubmitted = new EventEmitter<File>();
     @Output() fileRemoved = new EventEmitter<never>();
     @Output() close = new EventEmitter<void>();
     private readonly closeDialogIconPath = "assets/icon/system/close.svg" as const;
@@ -52,7 +50,7 @@ export class ProfileImageUploadDialogComponent {
     }
 
     handleFileUpload() {
-        this.fileSelected.emit(this.selectedFile());
+        this.fileSubmitted.emit(this.selectedFile());
     }
 
 }

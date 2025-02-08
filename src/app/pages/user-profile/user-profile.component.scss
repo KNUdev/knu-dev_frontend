@@ -443,6 +443,7 @@ $meta-button-height: 3.438rem;
     @include tablet {
         width: 100%;
         padding: 4rem 5rem;
+        margin-top: 0;
 
         .profile__activity-block {
             @include flex-center(column, wrap);

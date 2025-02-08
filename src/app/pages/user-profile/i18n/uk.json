@@ -1,37 +1,39 @@
 {
     "accountProfile": {
-        "registeredAt": "Registered at",
-        "role": "Role",
-        "faculty": "Faculty",
-        "specialty": "Specialty",
-        "expertise": "Expertise",
+        "registeredAt": "Зареєстровано",
+        "role": "Роль",
+        "faculty": "Факультет",
+        "specialty": "Спеціальність",
+        "expertise": "Експертиза",
         "button": {
-            "rolePromotion": "Elevate Role",
-            "learnMore": "Learn More",
+            "submit": "Відправити",
+            "rolePromotion": "Підвищити роль",
+            "learnMore": "Дізнатися більше",
             "avatar": {
-                "uploadNew": "Upload new avatar",
-                "delete": "Delete existing avatar"
+                "uploadNew": "Завантажити новий аватар",
+                "uploadAnother": "Завантажити інший файл",
+                "delete": "Видалити існуючий аватар"
             },
             "banner": {
                 "uploadNew": {
-                    "title": "Add banner",
-                    "subtitle": "Optimal size is 3400x480px"
+                    "title": "Додати банер",
+                    "subtitle": "Оптимальний розмір: 3400x480px"
                 },
-                "delete": "Delete existing banner",
-                "changeCurrent": "Change current banner"
+                "delete": "Видалити існуючий банер",
+                "change": "Змінити поточний банер"
             }
-
         },
         "support": {
-            "description": "If you specified invalid data during registration, please contact",
-            "support": "support"
+            "description": "Якщо ви вказали некоректні дані під час реєстрації, будь ласка, зверніться",
+            "support": "Підтримка"
         },
         "projects": {
-            "title": "Projects",
-            "moreProjects": "More Projects"
+            "title": "Проекти",
+            "moreProjects": "Більше проектів"
         },
-        "programsTitle": "Education Programs"
-
-
+        "educationPrograms": {
+            "title": "Освітні програми",
+            "notFoundFallbackText": "Ви не брали участі в жодній програмі"
+        }
     }
 }

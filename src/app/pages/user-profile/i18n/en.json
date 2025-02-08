@@ -19,7 +19,7 @@
                     "title": "Add banner",
                     "subtitle": "Optimal size is 3400x480px"
                 },
-                "deleteExisting": "Delete existing banner",
+                "delete": "Delete existing banner",
                 "change": "Change current banner"
             }
         },

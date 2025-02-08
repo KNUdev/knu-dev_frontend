@@ -2,15 +2,15 @@
     @if (showUploadDialog) {
         <profile-image-upload-dialog
             [currentImageUrl]="currentAvatarUrl()"
-            (fileSelected)="handleFileSelected($event)"
-            (fileRemoved)="handleAvatarRemoved()"
+            (fileSubmitted)="onAvatarFileSubmitted($event)"
+            (fileRemoved)="removeAvatar()"
             (close)="closeUploadDialog()">
         </profile-image-upload-dialog>
     }
 
     <main class="profile__main">
         <section class="profile__header">
-            <div (click)="handleUpdateBanner()" class="profile__banner">
+            <div (click)="triggerBannerUpdate()" class="profile__banner">
                 @if (!currentBannerUrl()) {
                     <div class="profile__banner-text">
                         <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
@@ -22,16 +22,16 @@
                         </h2>
                     </div>
                 } @else {
-                    <div class="profile__banner-container" (click)="handleUpdateBanner()">
+                    <div class="profile__banner-container">
                         <img [src]="currentBannerUrl()" alt="" class="img-banner">
                         <div class="profile__banner-overlay">
                             <mat-icon aria-hidden="true" class="profile__banner-icon profile__change-banner-icon"
                                       svgIcon="changeAvatar"></mat-icon>
-                            <h1 class="profile__change-banner-text" (click)="openUploadDialog('banner')">
+                            <h1 class="profile__change-banner-text" (click)="openUploadDialog()">
                                 {{'accountProfile.button.banner.change' | translate}}
                             </h1>
                             <button-yellow [text]="'accountProfile.button.banner.delete' | translate"
-                                           (buttonClick)="handleBannerRemoved()"
+                                           (buttonClick)="removeBanner()"
                                            ariaLabel="dsgsd"
                             />
                         </div>
@@ -54,7 +54,7 @@
                   'avatar-present--hover': !!currentAvatarUrl(),
                   'avatar-absent--hover': !currentAvatarUrl()
                 }">
-                    <mat-icon (click)="openUploadDialog('avatar')" aria-hidden="true"
+                    <mat-icon (click)="openUploadDialog()" aria-hidden="true"
                               class="profile__avatar-overlay-icon"
                               svgIcon="changeAvatar"></mat-icon>
                 </div>
@@ -129,7 +129,7 @@
                     @if (projectsExist) {
                         @for (project of accountProjects(); track $index) {
                             <profile-item-card
-                                banner="assets/dogg1.jpg"
+                                [banner]="project.banner"
                                 [title]="project.name"
                                 [description]="project.description"
                                 [buttonText]="'accountProfile.button.learnMore' | translate"
@@ -147,7 +147,7 @@
                 </ul>
             @if(showLoadMore) {
                 <button aria-label="Load more projects" class="profile__more-projects" type="button"
-                (click)="handleLoadAllAccountProjects()">
+                (click)="loadAllProjects()">
                     {{'accountProfile.projects.moreProjects' | translate}}
                 </button>
             }
@@ -165,7 +165,7 @@
                         <profile-item-card
                             [banner]="program.banner"
                             [title]="program.name"
-                            [details]="label(program)"
+                            [details]="generateEducationLabels(program)"
                             [buttonText]="'accountProfile.button.learnMore' | translate"
                             buttonAriaLabel="`Learn more about `{{program.name.en}}}"
                             buttonColor="red">
@@ -181,7 +181,7 @@
         </section>
         <input
             #bannerInput
-            (change)="handleBannerFileSelected($event)"
+            (change)="onBannerFileSelected($event)"
             accept="image/*"
             hidden
             type="file"

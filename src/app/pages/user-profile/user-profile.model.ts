@@ -34,7 +34,7 @@ export type AccountProfile = {
 export type Project = {
     name: MultiLanguageField,
     description: MultiLanguageField,
-    avatarFilename: string;
+    banner: string;
 }
 
 export type Education = {
