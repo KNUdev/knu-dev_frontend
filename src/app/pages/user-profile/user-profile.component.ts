@@ -46,6 +46,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     public showUploadDialog = false;
     public locale: string;
     private subscriptions = new Subscription();
+    public uploadErrorMessage = signal<string>('');
     private readonly matIconRegistry = inject(MatIconRegistry);
     private readonly domSanitizer = inject(DomSanitizer);
     private readonly i18nService = inject(I18nService);
@@ -132,6 +133,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
     public closeUploadDialog(): void {
         this.showUploadDialog = false;
+        this.uploadErrorMessage.set('');
     }
 
     public onAvatarFileSubmitted(file: File): void {
@@ -140,19 +142,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.currentAvatarUrl.set(tempUrl);
 
         const avatarSub = this.userService.updateAvatar(this.userId(), file)
-            .pipe(finalize(() => this.closeUploadDialog()))
             .subscribe({
                 next: uploadedUrl => {
                     this.currentAvatarUrl.set(uploadedUrl);
                     URL.revokeObjectURL(tempUrl);
+                    this.uploadErrorMessage.set('');
+                    this.closeUploadDialog();
                 },
                 error: err => {
                     console.error(err);
                     this.currentAvatarUrl.set(previousUrl);
+                    this.uploadErrorMessage.set(
+                        this.translate.instant('accountProfile.button.avatar.errorMessage')
+                    );
                 }
             });
         this.subscriptions.add(avatarSub);
     }
+
 
     public triggerBannerUpdate(): void {
         this.bannerInput.nativeElement.click();

@@ -2,6 +2,7 @@
     @if (showUploadDialog) {
         <profile-image-upload-dialog
             [currentImageUrl]="currentAvatarUrl()"
+            [errorMessage]="uploadErrorMessage()"
             (fileSubmitted)="onAvatarFileSubmitted($event)"
             (fileRemoved)="removeAvatar()"
             (close)="closeUploadDialog()">

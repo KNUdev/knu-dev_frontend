@@ -1,78 +1,75 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {catchError, Observable, throwError} from 'rxjs';
-import {AccountProfile} from '../pages/user-profile/user-profile.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AccountProfile } from '../pages/user-profile/user-profile.model';
 import {environment} from '../../environments/environment.development';
-import {map} from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AccountProfileService {
-    private apiBaseUrl = 'http://localhost:5001';
+    private readonly apiBaseUrl = environment.apiBaseUrl;
 
-    constructor(private readonly http: HttpClient) {
-    }
+    constructor(private http: HttpClient) {}
 
     getById(accountId: string): Observable<AccountProfile> {
-        return this.http.get<AccountProfile>(`${environment.apiGetAccountUrl}/${accountId}`).pipe(
-            map(user => user),
-            catchError((error: HttpErrorResponse) => {
-                return throwError(() => error);
-            })
-        );
-    }
-
-    updateAvatar(accountId: string, newBanner: File): Observable<string> {
-        const formData = new FormData();
-        formData.append('newAvatar', newBanner);
-
-        return this.http.patch(`${this.apiBaseUrl}/account/${accountId}/avatar/update`,
-            formData, {responseType: 'text'})
+        const url = `${this.apiBaseUrl}/account/${accountId}`;
+        return this.http.get<AccountProfile>(url)
             .pipe(
-                map(newAvatar => {
-                    console.log("NEW AVATAR: ", newAvatar);
-                    return newAvatar;
-                }),
-                catchError((error: HttpErrorResponse) => {
-                    console.log("ERROR: ", error);
-                    return throwError(() => error);
-                })
+                catchError(this.handleError)
             );
     }
 
+    updateAvatar(accountId: string, newAvatar: File): Observable<string> {
+        const url = `${this.apiBaseUrl}/account/${accountId}/avatar/update`;
+        const formData = new FormData();
+        formData.append('newAvatar', newAvatar);
+
+        return this.http.patch(url, formData, { responseType: 'text' })
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
 
     removeAvatar(accountId: string): Observable<void> {
-        console.log("REMOVE")
-        return this.http.delete<void>(`${this.apiBaseUrl}/account/${accountId}/avatar/remove`).pipe(
-            catchError((error: HttpErrorResponse) => {
-                console.log("ERROR: ", error);
-                return throwError(() => error);
-            })
-        );
+        const url = `${this.apiBaseUrl}/account/${accountId}/avatar/remove`;
+        return this.http.delete<void>(url)
+            .pipe(
+                catchError(this.handleError)
+            );
     }
 
     removeBanner(accountId: string): Observable<void> {
-        console.log("REMOVE")
-        return this.http.delete<void>(`${this.apiBaseUrl}/account/${accountId}/banner/remove`).pipe(
-            catchError((error: HttpErrorResponse) => {
-                console.log("ERROR: ", error);
-                return throwError(() => error);
-            })
-        );
-    }
-
-    updateBanner(accountId: string, newBanner: File): Observable<string> {
-        const formData = new FormData();
-        formData.append('newBanner', newBanner);
-
-        return this.http.patch(`${this.apiBaseUrl}/account/${accountId}/banner/update`, formData, {responseType: 'text'})
+        const url = `${this.apiBaseUrl}/account/${accountId}/banner/remove`;
+        return this.http.delete<void>(url)
             .pipe(
-                catchError((error: HttpErrorResponse) => {
-                    console.log("ERROR: ", error);
-                    return throwError(() => error);
-                })
+                catchError(this.handleError)
             );
     }
 
+    updateBanner(accountId: string, newBanner: File): Observable<string> {
+        const url = `${this.apiBaseUrl}/account/${accountId}/banner/update`;
+        const formData = new FormData();
+        formData.append('newBanner', newBanner);
+
+        return this.http.patch(url, formData, { responseType: 'text' })
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    private handleError(error: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+
+        if (error.error instanceof ErrorEvent) {
+            errorMessage = `A client-side error occurred: ${error.error.message}`;
+        } else {
+            errorMessage = `Server returned code ${error.status}: ${error.message}`;
+        }
+
+        console.error('AccountProfileService error:', errorMessage);
+
+        return throwError(() => new Error(errorMessage));
+    }
 }

@@ -7,6 +7,16 @@ $border-gray: #6d6d6d;
 $accent-yellow: #edd342;
 $text-gray: #a0a0a0;
 
+.upload-dialog__error {
+    color: #E5383A;
+    font-size: 1rem;
+    margin-top: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.015rem;
+}
+
 .upload-dialog__backdrop {
     position: fixed;
     inset: 0;
@@ -169,14 +179,6 @@ $text-gray: #a0a0a0;
 
     &:hover {
         border-color: $accent-yellow;
-    }
-}
-
-@include tablet {
-    .upload-dialog {
-        width: 500px;
-        height: 579px;
-        max-width: none;
     }
 }
 

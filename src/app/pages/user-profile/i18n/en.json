@@ -12,7 +12,8 @@
             "avatar": {
                 "uploadNew": "Upload new avatar",
                 "uploadAnother": "Upload another file",
-                "delete": "Delete existing avatar"
+                "delete": "Delete existing avatar",
+                "errorMessage": "Upload avatar failed. Please try again later"
             },
             "banner": {
                 "uploadNew": {

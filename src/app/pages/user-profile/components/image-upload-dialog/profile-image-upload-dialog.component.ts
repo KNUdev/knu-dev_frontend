@@ -1,7 +1,7 @@
-import {Component, EventEmitter, inject, Input, Output, signal} from '@angular/core';
-import {MatIcon, MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-import {TranslatePipe} from '@ngx-translate/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'profile-image-upload-dialog',
@@ -14,10 +14,14 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProfileImageUploadDialogComponent {
     isNewFileSelected = signal<boolean>(false);
-    @Input({required: true}) currentImageUrl?: string;
+
+    @Input({ required: true }) currentImageUrl?: string;
+    @Input() errorMessage?: string;
+
     @Output() fileSubmitted = new EventEmitter<File>();
     @Output() fileRemoved = new EventEmitter<never>();
     @Output() close = new EventEmitter<void>();
+
     private readonly closeDialogIconPath = "assets/icon/system/close.svg" as const;
     private matIconRegistry = inject(MatIconRegistry);
     private domSanitizer = inject(DomSanitizer);
@@ -48,8 +52,7 @@ export class ProfileImageUploadDialogComponent {
         this.close.emit();
     }
 
-    handleFileUpload() {
+    handleFileUpload(): void {
         this.fileSubmitted.emit(this.selectedFile());
     }
-
 }
