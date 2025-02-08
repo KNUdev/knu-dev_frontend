@@ -1,0 +1,54 @@
+<section class="about-role__header">
+    <div class="page-overview__block">
+        <h1 class="about-role__title">{{ "about-role.title" | translate }}</h1>
+        <p class="about-role__description">{{ "about-role.page-description" | translate }}</p>
+        <div class="hero"></div>
+    </div>
+    <div class="wrapper">
+        <a href="#intern" class="role intern__role">INTERN</a>
+        <a class="role developer__role">DEVELOPER</a>
+        <a class="role pre-master__role">PRE-MASTER</a>
+        <div class="bottom-roles__block">
+            <a class="role master__role">MASTER</a>
+            <a class="role techlead__role">TECHLEAD</a>
+        </div>
+    </div>
+
+</section>
+<hr class="separator">
+<section id="intern" class="about-intern__info">
+    <a class="switch prev-role__arrow">
+        <mat-icon class="arrow left-arrow__button" svgIcon="arrowLeft"></mat-icon>
+    </a>
+    <div class="card-intern__info">
+        <span class="left-arrow__text">{{ "about-role.intern.intern-prev-role" | translate }}</span>
+        <span class="right-arrow__text">DEVELOPER</span>
+        <header class="role__header">
+            <span class="role__naming">INTERN</span>
+            <span class="department__naming">PRE-CAMPUS</span>
+        </header>
+        <p class="role__description">{{ "about-role.intern.intern-role-description" | translate }}</p>
+        <section class="card-data">
+            <div class="intern-card-info__part">
+                <h2 class="about-work__title">{{ "about-role.intern.about-work" | translate }}</h2>
+                <p class="work_type">1. {{ "about-role.intern.first-advantage" | translate }}</p>
+                <p class="work_type">2. {{ "about-role.intern.second-advantage" | translate }}</p>
+                <p class="work_type">3. {{ "about-role.intern.third-advantage" | translate }}</p>
+                <p class="work_type">4. {{ "about-role.intern.fourth-advantage" | translate }}</p>
+                <p class="work_type">5. {{ "about-role.intern.fifth-advantage" | translate }}</p>
+            </div>
+            <div class="intern-card-info__part">
+                <h2 class="about-advantages__title">{{ "about-role.intern.about-advantages" | translate }}</h2>
+                <p class="advantage">{{ "about-role.intern.advantages-text" | translate }}</p>
+            </div>
+        </section>
+    </div>
+    <a class="switch next-role_arrow">
+        <mat-icon class="arrow right-arrow__button" svgIcon="arrowRight"></mat-icon>
+    </a>
+</section>
+<hr class="separator">
+<section class="roles__hierarchy">
+    <span class="all-roles__title">{{ "about-role.all-roles" | translate }}</span>
+    <role-list/>
+</section>

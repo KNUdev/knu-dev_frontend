@@ -1,0 +1,465 @@
+@use "../../common/styles/variables" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.about-role__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-overview__block {
+  margin: 5% 5% 7%;
+}
+
+.about-role__title {
+  max-width: 600px;
+  font-size: 3.5rem;
+  font-weight: 500;
+  line-height: 4rem;
+  color: #ffffff;
+  font-family: Unbounded, sans-serif;
+  text-transform: uppercase;
+}
+
+.about-role__description {
+  max-width: 650px;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: initial;
+  line-height: 1.6;
+  color: #d1d1d1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 35vw;
+  height: 15vh;
+  filter: blur(72.9px);
+  z-index: -1;
+  transform: translate(-20%, 50%);
+  border-radius: 50%;
+  clip-path: polygon(-100% -100%, 200% -100%, 200% 50%, -100% 50%);
+  left: 13vw;
+  background: rgba(56, 55, 55, 0.5);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 10vw);
+  margin-right: 3%;
+  gap: 0.67rem;
+  grid-auto-rows: minmax(1rem, 3rem);
+  grid-template-areas:
+        "A B C"
+        "D D D";
+}
+
+.intern__role {
+  grid-area: A;
+  border: #201fa3 solid 1px;
+}
+
+.intern__role:hover {
+  background: #201fa3;
+  cursor: pointer;
+}
+
+.developer__role {
+  grid-area: B;
+  border: #a50000 solid 1px;
+}
+
+.developer__role:hover {
+  background: #a50000;
+  cursor: pointer;
+}
+
+.pre-master__role {
+  grid-area: C;
+  border: green solid 1px;
+}
+
+.pre-master__role:hover {
+  background: green;
+  cursor: pointer;
+}
+
+.bottom-roles__block {
+  grid-area: D;
+}
+
+.bottom-roles__block {
+  display: flex;
+  gap: 0.67rem;
+}
+
+.master__role {
+  border: blueviolet solid 1px;
+  width: 50%;
+}
+
+.master__role:hover {
+  background: blueviolet;
+  cursor: pointer;
+}
+
+.techlead__role {
+  border: #a3a319 solid 1px;
+  width: 50%;
+}
+
+.techlead__role:hover {
+  background: #a3a319;
+  color: black;
+  cursor: pointer;
+}
+
+.role {
+  display: flex;
+  color: white;
+  font-family: Unbounded, sans-serif;
+  font-size: 0.8rem;
+  font-weight: inherit;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 0.2rem;
+  transition: all 0.3s ease;
+}
+
+.separator {
+  position: relative;
+  border: #595959 solid 1px;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  width: 90vw;
+}
+
+.about-intern__info {
+  display: flex;
+  height: auto;
+  width: 90vw;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 5rem;
+}
+
+.arrow {
+  height: 2rem;
+  width: 2rem;
+  color: lightgray;
+}
+
+.switch:hover {
+  cursor: pointer;
+}
+
+.arrow__block {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  max-width: 10rem;
+}
+
+.left-arrow__button {
+  margin-right: 1rem;
+}
+
+.right-arrow__button {
+  margin-left: 1rem;
+}
+
+.left-arrow__text {
+  transform: rotate(-90deg);
+  font-weight: bolder;
+  font-family: Unbounded, sans-serif;
+  text-transform: uppercase;
+  color: lightgray;
+  position: absolute;
+  top: calc(50% - 1rem);
+  left: -60%;
+  text-align: center;
+  width: 100%;
+}
+
+.right-arrow__text {
+  transform: rotate(90deg);
+  font-weight: bolder;
+  font-family: Unbounded, sans-serif;
+  color: lightgray;
+  position: absolute;
+  right: -60%;
+  top: calc(50% - 1rem);
+  text-align: center;
+  width: 100%;
+}
+
+.card-intern__info {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 60vw;
+  align-items: start;
+  justify-content: space-between;
+  background: rgba(24, 24, 24, 0.5);
+  border-radius: 0.2rem;
+  border: #3e3d3d solid 2px;
+  position: relative;
+}
+
+.role__header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.role__naming {
+  padding: 2rem;
+  color: white;
+  font-family: Unbounded, sans-serif;
+  font-weight: 550;
+  font-size: 1.3rem;
+}
+
+.department__naming {
+  padding: 2rem;
+  color: lightgray;
+  font-family: Unbounded, sans-serif;
+  font-weight: 450;
+  font-size: 0.75rem;
+}
+
+.role__description {
+  text-wrap: wrap;
+  color: white;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+}
+
+.intern-card-info__part {
+  border: 2px solid #201fa3;
+  border-radius: 5px;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  width: 94%;
+}
+
+.card-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-work__title {
+  color: white;
+  font-family: Unbounded, sans-serif;
+  font-weight: 450;
+  font-size: 1rem;
+  padding-bottom: 1rem;
+}
+
+.work_type {
+  color: white;
+  line-height: 1.6rem;
+}
+
+.about-advantages__title {
+  color: white;
+  font-family: Unbounded, sans-serif;
+  font-weight: 450;
+  font-size: 1rem;
+  padding-bottom: 1rem;
+}
+
+.advantage {
+  color: white;
+  line-height: 1.6rem;
+}
+
+.roles__hierarchy {
+  margin: 5rem 7.5rem 7.5rem;
+}
+
+.all-roles__title {
+  display: flex;
+  color: white;
+  font-family: Unbounded, sans-serif;
+  font-weight: 450;
+  padding-bottom: 3rem;
+  font-size: 1.3rem;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1440px) {
+  @media (min-width: 1024px) {
+    .about-role__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 5% 5% 10%;
+    }
+
+    .page-overview__block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 27vw);
+      gap: 0.67rem;
+      grid-auto-rows: minmax(1rem, 3rem);
+      grid-template-areas:
+      "A B C"
+      "D D D";
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .hero::after {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  @media (min-width: 360px) {
+    .about-role__title {
+
+    }
+
+    .about-role__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 5% 5% 20%;
+    }
+
+    .page-overview__block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wrapper {
+      display: none;
+    }
+
+    .hero::after {
+      display: none;
+    }
+
+    .switch {
+      display: none;
+    }
+
+    .left-arrow__text {
+      display: none;
+    }
+
+    .right-arrow__text {
+      display: none;
+    }
+
+    .about-role__title {
+      font-size: 2.3rem;
+      font-family: Unbounded, sans-serif;
+    }
+
+    .role__header {
+        width: 94%;
+    }
+
+    .role__description {
+        width: 94%;
+    }
+
+    .about-intern__info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 3rem auto 1rem;
+    }
+
+    .card-intern__info {
+      display: flex;
+      width: 95%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .role__header {
+      display: grid;
+      flex-direction: column;
+      justify-content: start;
+      grid-template-areas:
+              "A"
+              "B";
+    }
+
+    .role__naming {
+      display: grid;
+      padding: 0 1rem 1rem;
+      grid-area: B;
+    }
+
+    .department__naming {
+      display: grid;
+      padding: 1rem;
+      grid-area: A;
+    }
+
+    .role__description {
+      padding: 1rem;
+    }
+
+    .card-data {
+      width: 95%;
+      margin: 1rem;
+    }
+
+    .intern-card-info__part {
+      padding: 1rem;
+      margin: 1rem;
+    }
+
+    .about-work__title {
+      padding-bottom: 1rem;
+      padding-top: 0.75rem;
+    }
+
+    .about-advantages__title {
+      padding-bottom: 1rem;
+      padding-top: 0.75rem;
+    }
+
+    .roles__hierarchy {
+      width: 95%;
+      margin: 3rem auto;
+    }
+  }
+}

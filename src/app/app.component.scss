@@ -14,3 +14,53 @@
 .form-group {
     width: 100%;
 }
+
+@keyframes slideDown {
+    from {
+        transform: translate3d(0, -100%, -100px);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate3d(0, 100%, -100px);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translate3d(100%, 0, -100px);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translate3d(-100%, 0, -100px);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+.visible {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+}

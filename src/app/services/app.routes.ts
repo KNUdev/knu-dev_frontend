@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {AboutRoleComponent} from '../pages/about-role/about-role.component';
 
 export const routes: Routes = [
     {
@@ -20,4 +21,8 @@ export const routes: Routes = [
                 (m) => m.RegisterComponent
             ),
     },
+    {
+        path: 'about-role',
+        component: AboutRoleComponent
+    }
 ];
