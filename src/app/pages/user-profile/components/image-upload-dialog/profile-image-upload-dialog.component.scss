@@ -1,12 +1,5 @@
 @use "../../../../common/styles/variables" as *;
 
-$bg-dark: #141414;
-$text-light: #d1d1d1;
-$text-white: #ffffff;
-$border-gray: #6d6d6d;
-$accent-yellow: #edd342;
-$text-gray: #a0a0a0;
-
 .upload-dialog__error {
     color: #E5383A;
     font-size: 1rem;

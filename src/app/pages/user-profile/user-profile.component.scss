@@ -1,11 +1,7 @@
 @use "../../common/styles/variables" as *;
 
-$color-white: #fff;
 $color-black: #101010;
 $color-dark-gray: #5d5d5d;
-$color-light-gray: #d1d1d1;
-$color-mid-gray: #a0a0a0;
-$color-yellow: #edd342;
 $color-red: #e5383a;
 
 $font-family-base: Unbounded, sans-serif;
@@ -21,7 +17,6 @@ $meta-button-height: 3.438rem;
     position: relative;
     text-align: center;
 
-    /* Banner Container and Image */
     .profile__banner-container {
         position: relative;
         overflow: hidden;
@@ -55,7 +50,7 @@ $meta-button-height: 3.438rem;
     }
 
     .profile__change-banner-text {
-        color: $color-white;
+        color: $text-white;
         font-family: $font-family-base;
         font-size: 1rem;
         font-style: normal;
@@ -89,7 +84,7 @@ $meta-button-height: 3.438rem;
             transform: translate(-50%, -50%);
             z-index: 20;
             text-align: center;
-            color: $color-white;
+            color: $text-white;
 
             .profile__banner-title {
                 letter-spacing: 0.05rem;
@@ -204,7 +199,7 @@ $meta-button-height: 3.438rem;
             position: relative;
 
             .profile__info-name {
-                color: $color-white;
+                color: $text-white;
                 font-family: $font-family-base;
                 text-transform: uppercase;
                 font-weight: 500;
@@ -213,7 +208,7 @@ $meta-button-height: 3.438rem;
             }
 
             .profile__info-email {
-                color: $color-mid-gray;
+                color: $text-gray;
                 margin-top: 0;
                 font-weight: 400;
                 font-size: 0.875rem;
@@ -227,7 +222,7 @@ $meta-button-height: 3.438rem;
             top: -5rem;
             right: 0;
             margin: 0;
-            color: $color-mid-gray;
+            color: $text-gray;
             z-index: 20;
             font-size: 0.875rem;
             font-weight: 400;
@@ -238,7 +233,7 @@ $meta-button-height: 3.438rem;
 
     .profile__divider {
         position: relative;
-        border-top: 0.063rem solid $color-yellow;
+        border-top: 0.063rem solid $accent-yellow;
         margin-top: 9.375rem;
 
         &--red {
@@ -252,7 +247,7 @@ $meta-button-height: 3.438rem;
             transform: translateX(-50%);
             background: $color-black;
             padding: 0 5rem;
-            color: $color-white;
+            color: $text-white;
             text-align: center;
             font-family: $font-family-base;
             font-size: 1.375em;
@@ -284,7 +279,7 @@ $meta-button-height: 3.438rem;
 
     .profile__more-projects {
         width: 100%;
-        color: $color-white;
+        color: $text-white;
         padding: 0.625rem;
         height: 3.75rem;
         background: none;
@@ -294,8 +289,8 @@ $meta-button-height: 3.438rem;
         cursor: pointer;
 
         &:hover {
-            border-color: $color-yellow;
-            color: $color-yellow;
+            border-color: $accent-yellow;
+            color: $accent-yellow;
         }
     }
 
@@ -316,7 +311,7 @@ $meta-button-height: 3.438rem;
     }
 
     .profile-meta-role-title {
-        color: $color-light-gray;
+        color: $text-light;
         text-align: left;
         font-family: $font-family-base;
         font-size: 1em;
@@ -329,7 +324,7 @@ $meta-button-height: 3.438rem;
 
     .profile-meta-role-subtitle {
         margin: 0;
-        color: $color-yellow;
+        color: $accent-yellow;
         text-align: left;
         font-family: $font-family-base;
         font-size: 0.875em;
@@ -372,7 +367,7 @@ $meta-button-height: 3.438rem;
     }
 
     .profile-meta-item-title {
-        color: $color-light-gray;
+        color: $text-light;
         font-family: $font-family-base;
         font-size: 1em;
         font-weight: 500;
@@ -383,7 +378,7 @@ $meta-button-height: 3.438rem;
 
     .profile-meta-item-subtitle {
         margin-top: 0.938rem;
-        color: $color-yellow;
+        color: $accent-yellow;
         font-family: $font-family-base;
         font-size: 0.875em;
         font-weight: 500;
