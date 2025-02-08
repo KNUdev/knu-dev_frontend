@@ -13,7 +13,7 @@ import { ArrowNext } from '../../../../assets/icon/system/arrowNext';
 import { AnimationService } from '../../../services/animation.services';
 
 @Component({
-    selector: 'role-list',
+    selector: 'app-role-list',
     imports: [CommonModule, MatIconModule, TranslateModule],
     templateUrl: './role-list.component.html',
     styleUrl: './role-list.component.scss',

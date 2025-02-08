@@ -19,7 +19,7 @@ import { I18nService } from '../../../../services/languages/i18n.service';
 import { FormErrorService } from './../../../../services/error.services';
 
 @Component({
-    selector: 'label-input',
+    selector: 'app-label-input',
     imports: [
         CommonModule,
         ReactiveFormsModule,

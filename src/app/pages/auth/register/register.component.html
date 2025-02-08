@@ -11,26 +11,26 @@
                 <h2>{{ "register.title" | translate }}</h2>
                 <div class="forms">
                     <div class="fullName">
-                        <label-input
+                        <app-label-input
                             controlName="firstName"
                             [label]="'register.firstName.label' | translate"
                             [errors]="VALIDATION_KEYS.firstName"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="lastName"
                             [label]="'register.lastName.label' | translate"
                             [errors]="VALIDATION_KEYS.lastName"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="middleName"
                             [label]="'register.middleName.label' | translate"
                             [errors]="VALIDATION_KEYS.middleName"
-                        ></label-input>
+                        ></app-label-input>
                     </div>
                     <div class="email">
-                        <label-input
+                        <app-label-input
                             controlName="email"
                             [label]="'register.email.label' | translate"
                             [errors]="VALIDATION_KEYS.email"
@@ -39,7 +39,7 @@
                             domainSuffix="@knu.ua"
                             (emailInput)="onEmailInput($event)"
                             (emailBlur)="formatEmailOnBlur()"
-                        ></label-input>
+                        ></app-label-input>
 
                         <div class="email-create">
                             <p>{{ "register.KNUEmail.label" | translate }}</p>
@@ -51,15 +51,15 @@
                         </div>
                     </div>
                     <div class="password">
-                        <label-input
+                        <app-label-input
                             controlName="password"
                             [label]="'register.password.label' | translate"
                             [errors]="VALIDATION_KEYS.password"
                             type="password"
                             [preventClipboard]="true"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="confirmPassword"
                             [label]="
                                 'register.confirmPassword.label' | translate
@@ -67,7 +67,7 @@
                             [errors]="VALIDATION_KEYS.confirmPassword"
                             type="password"
                             [preventClipboard]="true"
-                        ></label-input>
+                        ></app-label-input>
                     </div>
                 </div>
                 <button type="submit" class="fill-button fill-red">
@@ -92,7 +92,7 @@
             <div class="inputs">
                 <div class="firstRow">
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]="departmentLoadError()"
                             [options]="departments"
                             [placeholder]="
@@ -105,7 +105,7 @@
                             [errorMessage]="
                                 'errors.departmentLoadError' | translate
                             "
-                        ></write-dropdowns>
+                        ></register-write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("departmentId")?.errors?.[
                         "required" ] ) {
@@ -124,7 +124,7 @@
 
                     <div class="form-group">
                         @if (!academicInfoForm().get("departmentId")?.value) {
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
                                 'register.specialties.label' | translate
@@ -132,7 +132,7 @@
                             valueField="codeName"
                             formControlName="specialtyCodename"
                             class="disabled"
-                        ></write-dropdowns>
+                        ></register-write-dropdowns>
 
                         <p class="warning">
                             <mat-icon svgIcon="errorTriangle"></mat-icon>
@@ -143,7 +143,7 @@
                             </span>
                         </p>
                         } @else {
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]="specialtyLoadError()"
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
@@ -155,7 +155,7 @@
                             [errorMessage]="
                                 'errors.specialtyLoadError' | translate
                             "
-                        ></write-dropdowns>
+                        ></register-write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("specialtyCodename")?.errors?.[
                         "required" ] ) {
@@ -175,7 +175,7 @@
                 </div>
                 <div class="secondRow">
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
                         academicInfoForm().get("course")?.errors?.[
                         "required" ] || backendErrors()["course"])'
@@ -184,7 +184,7 @@
                             valueField="id"
                             displayField="displayedName"
                             formControlName="course"
-                        ></write-dropdowns>
+                        ></register-write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("course")?.errors?.["required"] )
                         {
@@ -202,7 +202,7 @@
                     </div>
 
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
                         academicInfoForm().get("expertise")?.errors?.[
                         "required" ] || backendErrors()["expertise"])'
@@ -213,7 +213,7 @@
                             valueField="id"
                             displayField="displayedName"
                             formControlName="expertise"
-                        ></write-dropdowns>
+                        ></register-write-dropdowns>
                         @if ( showValidationErrors() &&
                         academicInfoForm().get("expertise")?.errors?.[
                         "required" ] ) {
@@ -265,13 +265,13 @@
                         />
                         <span>{{ lang.name }}</span>
                     </div>
-                    <img
-                        [src]="iconPaths.arrowDown"
+                    <mat-icon
+                        svgIcon="arrowDown"
                         class="chevron"
                         [class.up]="isOpenLang()"
                         alt="arrowDown"
                         aria-hidden="true"
-                    />
+                    ></mat-icon>
                     }
                 </button>
                 @if (isOpenLang()) {

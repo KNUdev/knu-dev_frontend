@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
-    selector: 'team-button',
+    selector: 'home-team-button',
     templateUrl: './team-button.component.html',
     styleUrl: './team-button.component.scss',
     imports: [CommonModule, TranslateModule],

@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
-    selector: 'app-circular-progress',
+    selector: 'option-card-circular-progress',
     templateUrl: './circular-progress.component.html',
     styleUrl: './circular-progress.component.scss',
 })

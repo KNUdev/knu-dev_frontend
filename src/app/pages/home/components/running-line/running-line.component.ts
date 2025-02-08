@@ -8,7 +8,7 @@ interface Logo {
 }
 
 @Component({
-    selector: 'running-line',
+    selector: 'home-running-line',
     imports: [CommonModule],
     templateUrl: './running-line.component.html',
     styleUrl: './running-line.component.scss',

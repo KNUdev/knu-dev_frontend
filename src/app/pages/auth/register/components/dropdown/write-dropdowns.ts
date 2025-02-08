@@ -41,7 +41,7 @@ interface FilteredOption extends SelectOption {
 }
 
 @Component({
-    selector: 'write-dropdowns',
+    selector: 'register-write-dropdowns',
     imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
     encapsulation: ViewEncapsulation.None,
     providers: [

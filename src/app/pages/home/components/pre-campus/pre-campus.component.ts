@@ -14,7 +14,7 @@ import { OptionCard } from '../../../../common/components/option-card/option-car
 import { AnimationService } from '../../../../services/animation.services';
 import { Benefit_card } from '../benefit-card/benefit-card.component';
 @Component({
-    selector: 'pre-campus',
+    selector: 'home-pre-campus',
     templateUrl: './pre-campus.component.html',
     styleUrl: './pre-campus.component.scss',
     imports: [

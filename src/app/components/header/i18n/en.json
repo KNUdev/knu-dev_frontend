@@ -1,7 +1,7 @@
 {
     "header": {
         "menu": {
-            "items": [
+            "noAuth": [
                 {
                     "name": "Home",
                     "link": "/"
@@ -17,6 +17,19 @@
                 {
                     "name": "Developers",
                     "link": "/developers"
+                },
+                {
+                    "name": "Training form",
+                    "dropdown": [
+                        {
+                            "name": "Online",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "Offline",
+                            "link": "/offline"
+                        }
+                    ]
                 }
             ]
         }
