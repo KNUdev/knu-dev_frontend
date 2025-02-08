@@ -1,6 +1,5 @@
 @use "../../../../common/styles/variables" as *;
 
-
 .item-card {
     padding: 1.563rem;
     border-radius: 5px;
@@ -50,11 +49,6 @@
             font-weight: 400;
             line-height: 1.625rem;
             letter-spacing: 0.019rem;
-
-            //@media (max-width: 1024px) {
-            //    flex-direction: column;
-            //    align-items: flex-start;
-            //}
         }
 
     }
@@ -84,7 +78,7 @@
             background-color: #3c371a;
         }
 
-        @media (max-width: 1024px) {
+        @include mobile-horizontal {
             width: 100%;
             height: auto;
         }

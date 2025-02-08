@@ -15,12 +15,12 @@
                 @if (!currentBannerUrl()) {
                     <div class="profile__banner-text">
                         <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
-                        <h1 class="profile__banner-title">
+                        <p class="profile__banner-title">
                             {{ 'accountProfile.button.banner.uploadNew.title' | translate }}
-                        </h1>
-                        <h2 class="profile__banner-subtitle">
+                        </p>
+                        <p class="profile__banner-subtitle">
                             {{ 'accountProfile.button.banner.uploadNew.subtitle' | translate }}
-                        </h2>
+                        </p>
                     </div>
                 } @else {
                     <div class="profile__banner-container">
@@ -28,9 +28,9 @@
                         <div class="profile__banner-overlay">
                             <mat-icon aria-hidden="true" class="profile__banner-icon profile__change-banner-icon"
                                       svgIcon="changeAvatar"></mat-icon>
-                            <h1 class="profile__change-banner-text" (click)="openUploadDialog()">
+                            <p class="profile__change-banner-text" (click)="openUploadDialog()">
                                 {{ 'accountProfile.button.banner.change' | translate }}
-                            </h1>
+                            </p>
                             <button-yellow [text]="'accountProfile.button.banner.delete' | translate"
                                            (buttonClick)="removeBanner()"
                                            ariaLabel="dsgsd">

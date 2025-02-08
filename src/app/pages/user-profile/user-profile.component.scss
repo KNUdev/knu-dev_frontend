@@ -15,9 +15,6 @@ $transition-speed: 0.3s ease;
 $meta-button-width: 21.875rem;
 $meta-button-height: 3.438rem;
 
-/* ====================================================
-   Profile Page Styles
-==================================================== */
 .profile {
     width: calc(100% - 11rem);
     margin: 5rem auto;
@@ -94,7 +91,7 @@ $meta-button-height: 3.438rem;
             text-align: center;
             color: $color-white;
 
-            h1 {
+            .profile__banner-title {
                 letter-spacing: 0.05rem;
                 text-transform: uppercase;
                 font-size: 1em;
@@ -102,7 +99,7 @@ $meta-button-height: 3.438rem;
                 line-height: 1.563rem;
             }
 
-            h2 {
+            .profile__banner-subtitle {
                 letter-spacing: 0.019rem;
                 font-size: 0.938em;
                 font-weight: 400;
@@ -239,7 +236,6 @@ $meta-button-height: 3.438rem;
         }
     }
 
-    /* Divider */
     .profile__divider {
         position: relative;
         border-top: 0.063rem solid $color-yellow;
@@ -522,5 +518,3 @@ $meta-button-height: 3.438rem;
         }
     }
 }
-
-

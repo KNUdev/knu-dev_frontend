@@ -14,14 +14,11 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class ProfileImageUploadDialogComponent {
     isNewFileSelected = signal<boolean>(false);
-
     @Input({ required: true }) currentImageUrl?: string;
     @Input() errorMessage?: string;
-
     @Output() fileSubmitted = new EventEmitter<File>();
     @Output() fileRemoved = new EventEmitter<never>();
     @Output() close = new EventEmitter<void>();
-
     private readonly closeDialogIconPath = "assets/icon/system/close.svg" as const;
     private matIconRegistry = inject(MatIconRegistry);
     private domSanitizer = inject(DomSanitizer);
