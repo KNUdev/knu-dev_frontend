@@ -10,7 +10,7 @@ import {
     TranslateService,
 } from '@ngx-translate/core';
 import { map, Observable, startWith, switchMap } from 'rxjs';
-import { MenuNav_dropdown } from '../../common/components/button/menunav/dropdown/menunav.component';
+import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 import { I18nService } from '../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
 

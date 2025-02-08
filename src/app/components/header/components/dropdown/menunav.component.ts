@@ -5,6 +5,7 @@ import {
     HostListener,
     inject,
     Input,
+    signal,
 } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,7 +18,7 @@ interface MenuItem {
 }
 
 @Component({
-    selector: 'app-menunav-dropdown',
+    selector: 'header-menunav-dropdown',
     imports: [CommonModule, MatIconModule, TranslateModule, RouterModule],
     templateUrl: './menunav.component.html',
     styleUrl: './menunav.component.scss',
@@ -33,12 +34,12 @@ export class MenuNav_dropdown {
         arrowDown: 'assets/icon/system/arrowDown.svg',
     } as const;
 
-    isOpen = false;
+    isOpen = signal<boolean>(false);
 
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
         if (!this.elementRef.nativeElement.contains(event.target)) {
-            this.isOpen = false;
+            this.isOpen.set(false);
         }
     }
 
@@ -46,12 +47,12 @@ export class MenuNav_dropdown {
         if (event) {
             event.stopPropagation();
         }
-        this.isOpen = !this.isOpen;
+        this.isOpen.update((current) => !current);
     }
 
     selectItem(item: MenuItem): void {
         console.log('Selected:', item);
-        this.isOpen = false;
+        this.isOpen.set(false);
     }
 
     constructor() {
