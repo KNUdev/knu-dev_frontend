@@ -12,7 +12,7 @@ $text-gray: #a0a0a0;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(5px);
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .upload-dialog__wrapper {
@@ -20,6 +20,7 @@ $text-gray: #a0a0a0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1002;
 }
 
 .upload-dialog__outer-close {
@@ -35,6 +36,8 @@ $text-gray: #a0a0a0;
     border: 1px solid #343434;
     background: $bg-dark;
     border-radius: 5px;
+    z-index: 1005;
+
 }
 
 .upload-dialog__header {

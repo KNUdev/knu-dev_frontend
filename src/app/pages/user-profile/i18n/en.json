@@ -29,7 +29,8 @@
         },
         "projects": {
             "title": "Projects",
-            "moreProjects": "More Projects"
+            "moreProjects": "More Projects",
+            "notFoundFallbackText": "You did not participate in any project"
         },
         "educationPrograms": {
             "title": "Education Programs",

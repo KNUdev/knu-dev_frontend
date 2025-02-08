@@ -29,7 +29,8 @@
         },
         "projects": {
             "title": "Проекти",
-            "moreProjects": "Більше проектів"
+            "moreProjects": "Більше проектів",
+            "notFoundFallbackText": "Ви ще не розробляли жодних проектів"
         },
         "educationPrograms": {
             "title": "Освітні програми",

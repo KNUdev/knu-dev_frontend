@@ -16,6 +16,7 @@ import {FallbackCardComponent} from './components/fallback-card/fallback-card.co
 import {ArrowButtonComponent} from '../../common/components/buttons/arrow-button/arrow-button.component';
 import {ButtonYellowComponent} from '../../common/components/buttons/button-yellow/button-yellow.component';
 import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {MultiLangFieldPipe} from '../../common/pipes/multi-lang-field.pipe';
 
 @Component({
     selector: 'app-user-profile',
@@ -30,7 +31,8 @@ import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/c
         ButtonYellowComponent,
         TranslatePipe,
         MatIcon,
-        NgClass
+        NgClass,
+        MultiLangFieldPipe
     ]
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
@@ -119,7 +121,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                     this.accountProjects.set(allProjects);
                     this.showLoadMore = false;
                 },
-                error: err => console.error('Error loading projects:', err)
+                error: err => console.error(err)
             });
         this.subscriptions.add(loadSub);
     }
@@ -145,7 +147,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                     URL.revokeObjectURL(tempUrl);
                 },
                 error: err => {
-                    console.error('Error updating avatar:', err);
+                    console.error(err);
                     this.currentAvatarUrl.set(previousUrl);
                 }
             });
@@ -167,10 +169,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             const bannerSub = this.userService.updateBanner(this.userId(), file)
                 .subscribe({
                     next: serverUrl => this.currentBannerUrl.set(serverUrl),
-                    error: err => {
-                        console.error('Error updating banner:', err);
-                        this.currentBannerUrl.set(previousUrl);
-                    },
+                    error: err => this.currentBannerUrl.set(previousUrl),
                     complete: () => input.value = ''
                 });
             this.subscriptions.add(bannerSub);
@@ -185,7 +184,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             }))
             .subscribe({
                 next: () => console.log('Avatar removed'),
-                error: err => console.error('Error removing avatar:', err)
+                error: err => console.error(err)
             });
         this.subscriptions.add(removeSub);
     }
@@ -195,11 +194,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.currentBannerUrl.set('');
         const removeSub = this.userService.removeBanner(this.userId())
             .subscribe({
-                next: () => console.log('Banner removed'),
-                error: err => {
-                    console.error('Error removing banner:', err);
-                    this.currentBannerUrl.set(previousUrl);
-                }
+                error: () => this.currentBannerUrl.set(previousUrl)
             });
         this.subscriptions.add(removeSub);
     }

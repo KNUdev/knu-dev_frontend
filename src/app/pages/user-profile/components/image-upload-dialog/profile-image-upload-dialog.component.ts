@@ -5,7 +5,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
     selector: 'profile-image-upload-dialog',
-    standalone: true,
     templateUrl: './profile-image-upload-dialog.component.html',
     imports: [
         MatIcon,

@@ -71,7 +71,7 @@ export class I18nService {
                     return {};
                 }),
                 catchError((error) => {
-                    console.error(`Error loading translations from ${path}:`, error);
+                    console.error(error);
                     return of({});
                 })
             )

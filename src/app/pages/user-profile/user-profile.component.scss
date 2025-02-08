@@ -15,12 +15,16 @@ $transition-speed: 0.3s ease;
 $meta-button-width: 21.875rem;
 $meta-button-height: 3.438rem;
 
+/* ====================================================
+   Profile Page Styles
+==================================================== */
 .profile {
     width: calc(100% - 11rem);
     margin: 5rem auto;
     position: relative;
     text-align: center;
 
+    /* Banner Container and Image */
     .profile__banner-container {
         position: relative;
         overflow: hidden;
@@ -43,7 +47,6 @@ $meta-button-height: 3.438rem;
         opacity: 0;
         transition: opacity 0.3s ease;
         @include flex-center(column);
-
     }
 
     .profile__banner-container:hover .img-banner {
@@ -76,17 +79,7 @@ $meta-button-height: 3.438rem;
         }
     }
 
-    .profile__remove-banner-text {
-        color: #EDD342;
-        text-align: center;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-        letter-spacing: 0.7px;
-    }
-
-    &__banner {
+    .profile__banner {
         background-color: $color-dark-gray;
         height: 18.75rem;
         position: relative;
@@ -100,6 +93,7 @@ $meta-button-height: 3.438rem;
             z-index: 20;
             text-align: center;
             color: $color-white;
+
             h1 {
                 letter-spacing: 0.05rem;
                 text-transform: uppercase;
@@ -107,6 +101,7 @@ $meta-button-height: 3.438rem;
                 font-weight: 500;
                 line-height: 1.563rem;
             }
+
             h2 {
                 letter-spacing: 0.019rem;
                 font-size: 0.938em;
@@ -120,12 +115,13 @@ $meta-button-height: 3.438rem;
             background-color: #908337;
         }
     }
-    &__banner-icon {
-        $icon-size: 2.813rem;
 
+    .profile__banner-icon {
+        $icon-size: 2.813rem;
         height: $icon-size;
         width: $icon-size;
         margin-bottom: 1.2rem;
+
         ::ng-deep svg {
             g path[fill] {
                 fill: #FFFFFF !important;
@@ -139,7 +135,6 @@ $meta-button-height: 3.438rem;
         top: calc(18.75rem - 3.75rem);
         left: 50%;
         transform: translateX(-50%);
-        //display: inline-block;
         width: $size;
         height: $size;
         border-radius: 50%;
@@ -173,11 +168,9 @@ $meta-button-height: 3.438rem;
 
         .profile__avatar-icon {
             $size: 3.75rem;
-
             width: 2.813rem;
             height: 3.125rem;
         }
-
     }
 
     .avatar-present--hover {
@@ -205,24 +198,24 @@ $meta-button-height: 3.438rem;
         opacity: 1;
     }
 
-    &__info {
-        //height: 10.688rem;
-        background: none;
+    .profile__info {
         margin-top: 6.563rem;
         position: relative;
+
         &-text {
             text-align: center;
             position: relative;
-            h1 {
+
+            .profile__info-name {
                 color: $color-white;
                 font-family: $font-family-base;
                 text-transform: uppercase;
                 font-weight: 500;
                 font-size: 1.375rem;
                 letter-spacing: 0.069rem;
-                line-height: normal;
             }
-            h2 {
+
+            .profile__info-email {
                 color: $color-mid-gray;
                 margin-top: 0;
                 font-weight: 400;
@@ -231,6 +224,7 @@ $meta-button-height: 3.438rem;
                 line-height: 1.25rem;
             }
         }
+
         &-corner {
             position: absolute;
             top: -5rem;
@@ -245,165 +239,16 @@ $meta-button-height: 3.438rem;
         }
     }
 
-    .profile__meta-section {
-        margin-top: 5rem;
-    }
-
-    &__meta {
-        &-block {
-            width: 100%;
-            height: 9.375rem;
-            padding: 0.938rem 1.563rem;
-            border-radius: $border-radius;
-            border: 1px solid #343434;
-            @include flex-center(row);
-            justify-content: space-between;
-            box-sizing: border-box;
-            &-text {
-                h1 {
-                    color: $color-light-gray;
-                    text-align: left;
-                    font-family: $font-family-base;
-                    font-size: 1em;
-                    font-weight: 500;
-                    line-height: 1.563rem;
-                    letter-spacing: 0.05rem;
-                    text-transform: uppercase;
-                }
-                h2 {
-                    margin: 0;
-                    color: $color-yellow;
-                    text-align: left;
-                    font-family: $font-family-base;
-                    font-size: 0.875em;
-                    font-weight: 500;
-                    line-height: 1.563rem;
-                    letter-spacing: 0.044rem;
-                    text-transform: uppercase;
-                }
-            }
-        }
-
-        &-group {
-            width: 100%;
-            @include flex-center(row);
-            justify-content: center;
-            margin-top: 2.188rem;
-            gap: 2.188rem;
-            .profile__meta-block--group {
-                width: 100%;
-                height: 9.375rem;
-                padding: 0.938rem 1.563rem;
-                border-radius: $border-radius;
-                border: 1px solid #343434;
-                box-sizing: border-box;
-                text-align: center;
-                h1 {
-                    color: $color-light-gray;
-                    font-family: $font-family-base;
-                    font-size: 1em;
-                    font-weight: 500;
-                    letter-spacing: 0.05rem;
-                    text-transform: uppercase;
-                    margin: 0;
-                }
-                h2 {
-                    margin: 0;
-                    color: $color-yellow;
-                    font-family: $font-family-base;
-                    font-size: 0.875em;
-                    font-weight: 500;
-                    letter-spacing: 0.044rem;
-                    text-transform: uppercase;
-                }
-            }
-        }
-
-        &-button {
-            @include flex-center(row);
-            width: $meta-button-width;
-            height: $meta-button-height;
-            padding: 1.125rem 1.25rem;
-            border-radius: $border-radius;
-            border: 1px solid $color-yellow;
-            background: none;
-            color: $color-light-gray;
-            transition: background-color $transition-speed;
-            text-transform: uppercase;
-            font-family: $font-family-base;
-            font-size: 1em;
-            font-weight: 500;
-            letter-spacing: 0.05rem;
-            mat-icon {
-                margin-left: 0.3125rem;
-            }
-            &--full {
-                width: 100%;
-            }
-            &--red {
-                border: 1px solid $color-red;
-                &:hover {
-                    background-color: #301616 !important;
-                }
-            }
-            &:hover {
-                cursor: pointer;
-                background-color: #3C371A;
-            }
-        }
-    }
-
-    &__support {
-        margin-top: 5rem;
-        @include flex-center(column);
-        text-align: center;
-        h1 {
-            color: $color-mid-gray;
-            font-size: 0.875em;
-            font-weight: 500;
-            letter-spacing: 0.044rem;
-        }
-        a {
-            text-decoration: none;
-            margin-top: 1.25rem;
-            color: $color-yellow;
-            font-size: 0.875em;
-            font-weight: 400;
-            letter-spacing: 0.044rem;
-            border: 1px solid $color-black;
-            padding: 0.625rem;
-            border-radius: 5px;
-            transition: border-color 0.2s ease;
-
-            &:hover {
-                border-color: $color-yellow;
-            }
-        }
-    }
-
-    &__more-projects {
-        width: 100%;
-        color: $color-white;
-        padding: 0.625rem;
-        height: 3.75rem;
-        background: none;
-        border-radius: $border-radius;
-        border: 1px solid #6d6d6d;
-        transition: 0.4s ease;
-        cursor: pointer;
-        &:hover {
-            border-color: $color-yellow;
-            color: $color-yellow;
-        }
-    }
-
-    &__divider {
+    /* Divider */
+    .profile__divider {
         position: relative;
         border-top: 0.063rem solid $color-yellow;
         margin-top: 9.375rem;
+
         &--red {
             border-top: 0.063rem solid $color-red;
         }
+
         &-title {
             position: absolute;
             top: -0.9375rem;
@@ -431,6 +276,7 @@ $meta-button-height: 3.438rem;
         gap: 1rem;
         justify-content: left;
         width: 100%;
+
         profile-item-card {
             flex: 1 1 0;
             min-width: 25rem;
@@ -440,6 +286,115 @@ $meta-button-height: 3.438rem;
         }
     }
 
+    .profile__more-projects {
+        width: 100%;
+        color: $color-white;
+        padding: 0.625rem;
+        height: 3.75rem;
+        background: none;
+        border-radius: $border-radius;
+        border: 1px solid #6d6d6d;
+        transition: 0.4s ease;
+        cursor: pointer;
+
+        &:hover {
+            border-color: $color-yellow;
+            color: $color-yellow;
+        }
+    }
+
+    .profile-meta {
+        margin-top: 5rem;
+    }
+
+    .profile-meta-role {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 9.375rem;
+        padding: 0.938rem 1.563rem;
+        border-radius: $border-radius;
+        border: 1px solid #343434;
+        box-sizing: border-box;
+    }
+
+    .profile-meta-role-title {
+        color: $color-light-gray;
+        text-align: left;
+        font-family: $font-family-base;
+        font-size: 1em;
+        font-weight: 500;
+        line-height: 1.563rem;
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .profile-meta-role-subtitle {
+        margin: 0;
+        color: $color-yellow;
+        text-align: left;
+        font-family: $font-family-base;
+        font-size: 0.875em;
+        font-weight: 500;
+        line-height: 1.563rem;
+        letter-spacing: 0.044rem;
+        text-transform: uppercase;
+    }
+
+    .profile-meta-role-button {
+        @include flex-center(row);
+        width: $meta-button-width;
+        height: $meta-button-height;
+        padding: 1.125rem 1.25rem;
+    }
+
+    .profile-meta-role-button mat-icon {
+        margin-left: 0.3125rem;
+    }
+
+    .profile-meta-group {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        margin-top: 2.188rem;
+        gap: 2.188rem;
+    }
+
+    .profile-meta-item {
+        @include flex-center(column, nowrap);
+        align-items: start;
+        width: 100%;
+        height: 9.375rem;
+        padding: 0.938rem 1.563rem;
+        border-radius: $border-radius;
+        border: 1px solid #343434;
+        box-sizing: border-box;
+        text-align: left;
+    }
+
+    .profile-meta-item-title {
+        color: $color-light-gray;
+        font-family: $font-family-base;
+        font-size: 1em;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .profile-meta-item-subtitle {
+        margin-top: 0.938rem;
+        color: $color-yellow;
+        font-family: $font-family-base;
+        font-size: 0.875em;
+        font-weight: 500;
+        letter-spacing: 0.044rem;
+        text-transform: uppercase;
+    }
+
     @include tablet {
         width: 100%;
         padding: 4rem 5rem;
@@ -447,6 +402,7 @@ $meta-button-height: 3.438rem;
 
         .profile__activity-block {
             @include flex-center(column, wrap);
+
             profile-item-card {
                 min-width: 100%;
                 margin: 0;
@@ -457,28 +413,33 @@ $meta-button-height: 3.438rem;
             top: 18.75rem;
         }
 
-        &__education, &__projects{
+        .profile__info-corner {
+            position: static;
+        }
+
+        .profile__meta-section,
+        .profile__projects-item,
+        .profile__education-item {
             @include flex-center(row, wrap);
         }
+
         .profile__meta-group {
             flex-direction: column;
             gap: 1rem;
+
             .profile__meta-block--group {
                 width: 100%;
             }
         }
 
-        .profile__info-corner {
-            position: static;
+        .profile-meta-role-button {
+            width: $meta-button-width - 4rem;
         }
 
-        .profile__projects-item,
-        .profile__education-item {
-            flex: 1 1 calc(50% - 1rem);
-        }
-
-        .profile__meta-block {
-            height: fit-content;
+        .profile-meta-group {
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
         }
     }
 
@@ -490,12 +451,18 @@ $meta-button-height: 3.438rem;
             @include flex-center(column);
         }
 
-        &__banner {
+        .profile__banner {
             display: none;
         }
 
-        .profile__meta-block-button {
+        .profile-meta-role-button {
+            padding: 0;
             width: 100%;
+        }
+
+        .profile-meta-role {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .profile__avatar-container {
@@ -509,7 +476,7 @@ $meta-button-height: 3.438rem;
             position: static;
         }
 
-        &__info {
+        .profile__info {
             margin-top: 1rem;
             text-align: center;
         }
@@ -540,5 +507,20 @@ $meta-button-height: 3.438rem;
         .profile__support {
             margin: 3.75rem 0;
         }
+
+        .profile-meta-role {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1.563rem;
+            gap: 1.563rem;
+            margin-bottom: 2.188rem;
+            height: auto;
+        }
+        .profile-meta-group {
+            flex-direction: column;
+            gap: 1rem;
+        }
     }
 }
+
+

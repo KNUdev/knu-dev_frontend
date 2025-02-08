@@ -112,7 +112,7 @@ export class RegisterComponent {
 
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
-                console.error('Failed to load departments:', error);
+                console.error(error);
                 this.departmentLoadError.set(true);
                 return of([]);
             })
@@ -331,7 +331,7 @@ export class RegisterComponent {
                             email: ['This email is already registered'],
                         });
                     } else {
-                        console.error('Registration failed', error);
+                        console.error(error);
                     }
                 },
             });

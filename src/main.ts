@@ -1,17 +1,17 @@
-import { bootstrapApplication } from '@angular/platform-browser';
+import {bootstrapApplication} from '@angular/platform-browser';
 import {
     PreloadAllModules,
-    withPreloading,
+    provideRouter,
     withComponentInputBinding,
+    withPreloading,
     withViewTransitions,
 } from '@angular/router';
-import { LOCALE_ID } from '@angular/core';
-import { AppComponent } from './app/app.component';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors} from '@angular/common/http';
-import { provideTranslateService } from '@ngx-translate/core';
-import { provideRouter } from '@angular/router';
-import { routes } from './app/services/app.routes';
-import { registerLocaleData } from '@angular/common';
+import {LOCALE_ID} from '@angular/core';
+import {AppComponent} from './app/app.component';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {provideTranslateService} from '@ngx-translate/core';
+import {routes} from './app/services/app.routes';
+import {registerLocaleData} from '@angular/common';
 
 import localeUk from '@angular/common/locales/uk';
 import localeEn from '@angular/common/locales/en';
@@ -46,10 +46,5 @@ bootstrapApplication(AppComponent, {
             provide: LOCALE_ID,
             useFactory: localeIdFactory
         },
-        // {
-        //     provide: HTTP_INTERCEPTORS,
-        //     useClass: NotFoundInterceptor,
-        //     multi: true
-        // },
     ]
 }).catch((err) => console.error(err));

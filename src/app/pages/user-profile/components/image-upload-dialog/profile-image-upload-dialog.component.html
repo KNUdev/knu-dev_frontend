@@ -79,14 +79,16 @@
                     {{ 'accountProfile.button.submit' | translate }}
                 </button>
             }
-            <button
-                class="upload-dialog__remove-avatar"
-                type="button"
-                (click)="onFileRemove()"
-                aria-label="Remove existing avatar"
-            >
-                {{'accountProfile.button.avatar.delete' | translate}}
-            </button>
+            @if(currentImageUrl) {
+                <button
+                    class="upload-dialog__remove-avatar"
+                    type="button"
+                    (click)="onFileRemove()"
+                    aria-label="Remove existing avatar"
+                >
+                    {{'accountProfile.button.avatar.delete' | translate}}
+                </button>
+            }
         </div>
     </section>
 </div>
