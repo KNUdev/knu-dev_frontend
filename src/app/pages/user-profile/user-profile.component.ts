@@ -205,12 +205,23 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     public generateEducationLabels(education: Education): ItemDetail[] {
-        this.translate.get("accountProfile.role")
         return [
-            {label: 'Експертиза', value: education.programExpertise.toString()},
-            {label: 'Тривалість у днях', value: education.durationInDays.toString()},
-            {label: 'Кількість завдань', value: education.totalTasks.toString()},
-            {label: 'Кількість тестів', value: education.totalTests.toString()}
+            {
+                label: this.translate.instant('accountProfile.expertise'),
+                value: education.programExpertise.toString()
+            },
+            {
+                label: this.translate.instant('accountProfile.educationPrograms.meta.duration'),
+                value: education.durationInDays.toString()
+            },
+            {
+                label: this.translate.instant('accountProfile.educationPrograms.meta.totalTasks'),
+                value: education.totalTasks.toString()
+            },
+            {
+                label: this.translate.instant('accountProfile.educationPrograms.meta.totalTests'),
+                value: education.totalTests.toString()
+            }
         ];
     }
 }

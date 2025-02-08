@@ -33,7 +33,12 @@
         },
         "educationPrograms": {
             "title": "Освітні програми",
-            "notFoundFallbackText": "Ви не брали участі в жодній програмі"
+            "notFoundFallbackText": "Ви не брали участі в жодній програмі",
+            "meta": {
+                "duration": "Тривала:",
+                "totalTasks": "Сумарна кількість задань",
+                "totalTests": "Сумарна кількість тестів"
+            }
         }
     }
 }

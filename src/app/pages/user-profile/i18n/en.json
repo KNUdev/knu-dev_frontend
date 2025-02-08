@@ -33,7 +33,12 @@
         },
         "educationPrograms": {
             "title": "Education Programs",
-            "notFoundFallbackText": "You did not take place in a single program"
+            "notFoundFallbackText": "You did not take place in a single program",
+            "meta": {
+                "duration": "Duration:",
+                "totalTasks": "Total tasks",
+                "totalTests": "Total tests"
+            }
         }
 
 
