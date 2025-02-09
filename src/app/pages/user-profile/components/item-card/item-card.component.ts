@@ -19,6 +19,7 @@ export interface ItemDetail {
         MultiLangFieldPipe
     ],
     styleUrls: ['./item-card.component.scss'],
+    standalone: true
 })
 export class ItemCardComponent {
     @Input() banner: string = '';

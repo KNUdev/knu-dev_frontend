@@ -3,7 +3,7 @@ import {MatIcon, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {finalize, startWith, Subscription, switchMap} from 'rxjs';
-import {DatePipe, NgClass} from '@angular/common';
+import {DatePipe} from '@angular/common';
 import {AccountProfileService} from '../../services/account-profile.service';
 import {ProjectService} from '../../services/project.service';
 import {I18nService} from '../../services/languages/i18n.service';
@@ -31,22 +31,22 @@ import {MultiLangFieldPipe} from '../../common/pipes/multi-lang-field.pipe';
         ButtonYellowComponent,
         TranslatePipe,
         MatIcon,
-        NgClass,
         MultiLangFieldPipe
-    ]
+    ],
+    standalone: true
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
     @ViewChild('bannerInput') bannerInput!: ElementRef<HTMLInputElement>;
     public userId = signal<string>('');
     public accountProfile = signal<AccountProfile | null>(null);
     public accountProjects = signal<Project[]>([]);
-    public showLoadMore = false;
+    public showLoadMore = signal<boolean>(false);
     public currentBannerUrl = signal<string>('');
     public currentAvatarUrl = signal<string>('');
-    public showUploadDialog = false;
+    public showUploadDialog = signal<boolean>(false);
     public locale: string;
-    private subscriptions = new Subscription();
     public uploadErrorMessage = signal<string>('');
+    private subscriptions = new Subscription();
     private readonly matIconRegistry = inject(MatIconRegistry);
     private readonly domSanitizer = inject(DomSanitizer);
     private readonly i18nService = inject(I18nService);
@@ -57,10 +57,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private readonly iconPaths = {
         addBanner: 'assets/icon/system/pluse.svg',
         changeAvatar: 'assets/icon/system/edit.svg',
-        defaultAvatar: 'assets/icon/profile/Vector.svg',
+        defaultAvatar: 'assets/icon/profile/default-profile-avatar.svg',
         arrowRightUp: 'assets/icon/system/arrowRightUp.svg',
-        programsNotFound: 'assets/icon/profile/education.svg',
-        projectsNotFound: 'assets/icon/profile/project.svg'
+        programsNotFound: 'assets/icon/system/education.svg',
+        projectsNotFound: 'assets/icon/button/work.svg'
     } as const;
 
     constructor() {
@@ -105,7 +105,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             const projects = profile.projects ?? [];
             this.accountProjects.set(projects);
             if (projects.length === 3) {
-                this.showLoadMore = true;
+                this.showLoadMore.set(true);
             }
         });
         this.subscriptions.add(profileSub);
@@ -120,7 +120,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: allProjects => {
                     this.accountProjects.set(allProjects);
-                    this.showLoadMore = false;
+                    this.showLoadMore.set(true);
                 },
                 error: err => console.error(err)
             });
@@ -128,11 +128,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     public openUploadDialog(): void {
-        this.showUploadDialog = true;
+        this.showUploadDialog.set(true);
     }
 
     public closeUploadDialog(): void {
-        this.showUploadDialog = false;
+        this.showUploadDialog.set(false);
         this.uploadErrorMessage.set('');
     }
 

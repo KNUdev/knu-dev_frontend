@@ -1,5 +1,5 @@
 <div class="profile">
-    @if (showUploadDialog) {
+    @if (showUploadDialog()) {
         <profile-image-upload-dialog
             [currentImageUrl]="currentAvatarUrl()"
             [errorMessage]="uploadErrorMessage()"
@@ -47,11 +47,10 @@
                         <mat-icon svgIcon="defaultAvatar" class="profile__avatar-icon"></mat-icon>
                     </div>
                 }
-                <div [ngClass]="{
-              'profile__avatar-overlay': true,
-              'avatar-present--hover': !!currentAvatarUrl(),
-              'avatar-absent--hover': !currentAvatarUrl()
-            }">
+                <div class="profile__avatar-overlay"
+                    [class.avatar-present--hover]="!!currentAvatarUrl()"
+                    [class.avatar-absent--hover]="!currentAvatarUrl()"
+                >
                     <mat-icon (click)="openUploadDialog()" aria-hidden="true"
                               class="profile__avatar-overlay-icon"
                               svgIcon="changeAvatar"></mat-icon>
@@ -148,7 +147,7 @@
                     </profile-fallback-card>
                 }
             </ul>
-            @if (showLoadMore) {
+            @if (showLoadMore()) {
                 <button aria-label="Load more projects" class="profile__more-projects" type="button"
                         (click)="loadAllProjects()">
                     {{ 'accountProfile.projects.moreProjects' | translate }}

@@ -3,7 +3,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'button-yellow',
     templateUrl: './button-yellow.component.html',
-    styleUrls: ['./button-yellow.component.scss']
+    styleUrls: ['./button-yellow.component.scss'],
+    standalone: true
 })
 export class ButtonYellowComponent {
     // Text to display inside the button

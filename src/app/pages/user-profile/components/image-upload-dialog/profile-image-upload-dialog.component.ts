@@ -10,6 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
         MatIcon,
         TranslatePipe
     ],
+    standalone: true,
     styleUrls: ['./profile-image-upload-dialog.component.scss']
 })
 export class ProfileImageUploadDialogComponent {

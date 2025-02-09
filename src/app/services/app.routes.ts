@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
-import {UserProfileComponent} from '../pages/user-profile/user-profile.component';
-import {ErrorStateGuard} from '../pages/error/404/404.guard';
-import {NotFoundPage} from '../pages/error/404/404.component';
+import { ErrorStateGuard } from '../pages/error/404/404.guard';
+import { NotFoundPage } from '../pages/error/404/404.component';
 
 export const routes: Routes = [
     {
@@ -25,7 +24,10 @@ export const routes: Routes = [
     },
     {
         path: 'profile/:userId',
-        component: UserProfileComponent
+        loadComponent: () =>
+            import('../pages/user-profile/user-profile.component').then(
+                (m) => m.UserProfileComponent
+            ),
     },
     {
         path: 'error/404',

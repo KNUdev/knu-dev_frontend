@@ -7,6 +7,7 @@ import {MatIcon} from '@angular/material/icon';
     imports: [
         MatIcon
     ],
+    standalone: true,
     styleUrls: ['./fallback-card.component.scss']
 })
 export class FallbackCardComponent {

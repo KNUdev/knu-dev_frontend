@@ -113,12 +113,13 @@ $meta-button-height: 3.438rem;
         height: $icon-size;
         width: $icon-size;
         margin-bottom: 1.2rem;
+        fill: #FFFFFF;
 
-        ::ng-deep svg {
-            g path[fill] {
-                fill: #FFFFFF !important;
-            }
-        }
+        //::ng-deep svg {
+        //    g path[fill] {
+        //        fill: #FFFFFF !important;
+        //    }
+        //}
     }
 
     .profile__avatar-container {
