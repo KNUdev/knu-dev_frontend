@@ -1,6 +1,8 @@
 <section class="about-role__header">
     <div class="page-overview__block">
-        <h1 class="about-role__title">{{ "about-role.title" | translate }}</h1>
+<!--        <h1 class="about-role__title">{{ "about-role.title" | translate }}</h1>-->
+        <h1 class="about-role-title">Детальніше про <span>р</span></h1>
+
         <p class="about-role__description">{{ "about-role.page-description" | translate }}</p>
         <div class="hero"></div>
     </div>
@@ -8,6 +10,7 @@
         <a href="#intern" class="role intern__role">INTERN</a>
         <a class="role developer__role">DEVELOPER</a>
         <a class="role pre-master__role">PRE-MASTER</a>
+
         <div class="bottom-roles__block">
             <a class="role master__role">MASTER</a>
             <a class="role techlead__role">TECHLEAD</a>
@@ -17,12 +20,22 @@
 </section>
 <hr class="separator">
 <section id="intern" class="about-intern__info">
-    <a class="switch prev-role__arrow">
-        <mat-icon class="arrow left-arrow__button" svgIcon="arrowLeft"></mat-icon>
-    </a>
+
+    <div class="divv" style="display:flex; margin-left: 0; margin-right: 2rem; writing-mode:vertical-rl">
+        <!--        <a class="switch next-role_arrow">-->
+        <!--            <mat-icon class="arrow left-arrow__button" svgIcon="arrowRight"></mat-icon>-->
+        <!--            <p class="switch-text">Premaster</p>-->
+        <!--        </a>-->
+        <span class="switch-text">Premaster</span>
+        <mat-icon class="arrow" svgIcon="arrowLeft"></mat-icon>
+    </div>
+<!--    <a class="switch prev-role__arrow flex">-->
+<!--        <p class="switch-text">Developer</p>-->
+<!--        <mat-icon class="arrow left-arrow__button" svgIcon="arrowLeft"></mat-icon>-->
+<!--    </a>-->
     <div class="card-intern__info">
-        <span class="left-arrow__text">{{ "about-role.intern.intern-prev-role" | translate }}</span>
-        <span class="right-arrow__text">DEVELOPER</span>
+<!--        <span class="left-arrow__text">{{ "about-role.intern.intern-prev-role" | translate }}</span>-->
+<!--        <span class="right-arrow__text">DEVELOPER</span>-->
         <header class="role__header">
             <span class="role__naming">INTERN</span>
             <span class="department__naming">PRE-CAMPUS</span>
@@ -43,9 +56,14 @@
             </div>
         </section>
     </div>
-    <a class="switch next-role_arrow">
-        <mat-icon class="arrow right-arrow__button" svgIcon="arrowRight"></mat-icon>
-    </a>
+    <div class="divv" style="display: flex">
+<!--        <a class="switch next-role_arrow">-->
+<!--            <mat-icon class="arrow left-arrow__button" svgIcon="arrowRight"></mat-icon>-->
+<!--            <p class="switch-text">Premaster</p>-->
+<!--        </a>-->
+        <mat-icon class="arrow" svgIcon="arrowRight"></mat-icon>
+        <span class="switch-text">Premaster</span>
+    </div>
 </section>
 <hr class="separator">
 <section class="roles__hierarchy">

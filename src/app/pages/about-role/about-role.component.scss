@@ -11,6 +11,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-sizing: content-box !important;
 }
 
 .page-overview__block {
@@ -34,6 +37,24 @@
   font-weight: initial;
   line-height: 1.6;
   color: #d1d1d1;
+}
+
+.hero {
+    //background-color: red;
+    width: 700px;
+    height: 250px;
+    position: absolute;
+    bottom: -12rem   ;
+    left: 10rem;
+    //rotate: 60deg;
+
+    filter: blur(72.9px);
+    //transform: translate(-20%, 50%);
+    border-radius: 50%;
+    clip-path: polygon(-100% -100%, 200% -100%, 200% 50%, -100% 50%);
+    background: rgba(56, 55, 55, 0.4);
+
+
 }
 
 .hero::after {
@@ -154,9 +175,36 @@
 
 .arrow {
   height: 2rem;
-  width: 2rem;
+  //width: 2rem;
   color: lightgray;
 }
+
+.switch {
+    display: flex;
+}
+
+.divv {
+    align-items: center;
+    justify-content: center;
+    margin-left: 5rem;
+    cursor: pointer;
+    gap: 1.5rem;
+}
+
+.switch-text {
+    //transform: rotate(-90deg);
+    writing-mode:vertical-lr;
+    font-weight: bolder;
+    font-family: Unbounded, sans-serif;
+    text-transform: uppercase;
+    color: lightgray;
+    //position: absolute;
+    //top: calc(50% - 1rem);
+    //left: -60%;
+    //text-align: center;
+    //width: 100%;
+}
+
 
 .switch:hover {
   cursor: pointer;
