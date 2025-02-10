@@ -10,7 +10,7 @@
     --cursor-color: white;
 }
 
-.page {
+.container {
     padding-left: 5.5vw;
     padding-right: 5.5vw;
     padding-bottom: 5.5vw;
@@ -28,8 +28,8 @@
     height: 30rem;
 }
 
-.header__page-title {
-    max-width: 550px;
+.header-text__title-first-part {
+    max-width: 34.375rem;
     font-weight: 500;
     color: #ffffff;
     font-family: Unbounded, sans-serif;
@@ -38,13 +38,13 @@
     overflow-wrap: break-word;
     font-size: clamp(2.7rem, 5vw, 3.125rem);
     font-style: normal;
-    letter-spacing: 2.5px;
+    letter-spacing: 0.1563rem;
     line-height: 1.2;
 }
 
-.header__page-title__second-part {
+.header-text__title-second-part {
     display: inline-block;
-    border-right: 1px solid var(--cursor-color);
+    border-right: 0.0624rem solid var(--cursor-color);
     animation: blinking 1s steps(1, end) infinite,
     typing 4s steps(40, end);
     overflow: hidden;
@@ -72,8 +72,8 @@
     }
 }
 
-.header__page-description {
-    max-width: 600px;
+.header-text__description {
+    max-width: 375rem;
     margin-top: 1.25rem;
     font-weight: initial;
     line-height: 1.6;
@@ -82,18 +82,18 @@
 }
 
 .header__shadow {
-    width: 700px;
-    height: 250px;
+    width: 43.75rem;
+    height: 15.625rem;
     position: absolute;
     bottom: -12rem;
     left: 10rem;
-    filter: blur(72.9px);
+    filter: blur(4.5563rem);
     border-radius: 50%;
     clip-path: polygon(-100% -100%, 200% -100%, 200% 50%, -100% 50%);
     background: rgba(56, 55, 55, 0.4);
 }
 
-.header__roles-wrapper {
+.roles-wrapper {
     display: grid;
     max-width: 43.75rem;
     grid-template-columns: repeat(3, 11vw);
@@ -104,75 +104,80 @@
         "D D D";
 }
 
-.header__roles-wrapper__intern {
+.roles-wrapper__intern {
     grid-area: A;
-    border: #201fa3 solid 1px;
+    border: #4264ED solid 0.0624rem;
     padding: 0.9rem;
 }
 
-.header__roles-wrapper__intern:hover {
-    background: #201fa3;
+.roles-wrapper__intern:hover {
+    background: #4264ED;
     cursor: pointer;
     padding: 0.9rem;
+    box-shadow: 0 0 0.3125rem #4264ED;
 }
 
-.header__roles-wrapper__developer {
+.roles-wrapper__developer {
     grid-area: B;
-    border: #a50000 solid 1px;
+    border: #E5383A solid 0.0624rem;
     padding: 0.9rem;
 }
 
-.header__roles-wrapper__developer:hover {
-    background: #a50000;
+.roles-wrapper__developer:hover {
+    background: #E5383A;
     cursor: pointer;
     padding: 0.9rem;
+    box-shadow: 0 0 0.3125rem #E5383A;
 }
 
-.header__roles-wrapper__pre-master {
+.roles-wrapper__premaster {
     grid-area: C;
-    border: green solid 1px;
+    border: #3FCB49 solid 0.0624rem;
     padding: 0.9rem;
 }
 
-.header__roles-wrapper__pre-master:hover {
-    background: green;
+.roles-wrapper__premaster:hover {
+    background: #3FCB49;
     cursor: pointer;
     padding: 0.9rem;
+    box-shadow: 0 0 0.3125rem #3FCB49;
 }
 
-.header__roles-wrapper__bottom-roles-block {
+.roles-wrapper__bottom-roles-block {
     grid-area: D;
 }
 
-.header__roles-wrapper__bottom-roles-block {
+.roles-wrapper__bottom-roles-block {
     display: flex;
     gap: 1.56rem;
 }
 
-.header__roles-wrapper__master {
-    border: blueviolet solid 1px;
+.bottom-roles-block__master {
+    border: #9542ED solid 0.0624rem;
     width: 50%;
     padding: 0.9rem;
 }
 
-.header__roles-wrapper__master:hover {
-    background: blueviolet;
+.bottom-roles-block__master:hover {
+    background: #9542ED;
     cursor: pointer;
     padding: 0.9rem;
+    box-shadow: 0 0 0.3125rem #9542ED;
 }
 
-.header__roles-wrapper__techlead {
-    border: #a3a319 solid 1px;
+.bottom-roles-block__techlead {
+    border: #EDD342 solid 0.0624rem;
     width: 50%;
 }
 
-.header__roles-wrapper__techlead:hover {
-    background: #a3a319;
+.bottom-roles-block__techlead:hover {
+    background: #EDD342;
     color: black;
     cursor: pointer;
+    box-shadow: 0 0 0.3125rem #EDD342;
 }
 
-.header__roles-wrapper__role {
+.roles-wrapper__role {
     display: flex;
     color: white;
     font-family: Unbounded, sans-serif;
@@ -187,7 +192,7 @@
 
 .blocks-separator {
     position: relative;
-    border: #a0a0a0 outset 1px;
+    border: #a0a0a0 outset 0.0625rem;
     width: 90vw;
 }
 
@@ -211,7 +216,7 @@
     display: flex;
 }
 
-.info-card__card-switcher-block__next {
+.info-card__next-role-switcher {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -220,7 +225,7 @@
     gap: 1.5rem;
 }
 
-.info-card__card-switcher-block__next:hover {
+.info-card__next-role-switcher:hover {
     .arrow {
         color: white;
     }
@@ -230,7 +235,7 @@
     }
 }
 
-.info-card__card-switcher-block__prev:hover {
+.info-card__prew-role-switcher:hover {
     .arrow {
         color: white;
     }
@@ -240,7 +245,7 @@
     }
 }
 
-.info-card__card-switcher-block__prev {
+.info-card__prew-role-switcher {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -257,6 +262,10 @@
     color: #a0a0a0;
 }
 
+.prev-role-text {
+    writing-mode: sideways-lr;
+}
+
 .switch:hover {
     cursor: pointer;
 }
@@ -270,12 +279,12 @@
     justify-content: space-between;
     background: rgba(24, 24, 24, 0.5);
     border-radius: 0.2rem;
-    border: #3e3d3d solid 2px;
+    border: #3e3d3d solid 0.125rem;
     position: relative;
     padding: 2.187rem;
 }
 
-.info-card__intern__header {
+.intern__header {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -283,21 +292,29 @@
     justify-content: space-between;
 }
 
-.info-card__intern__header__title {
+.header__title {
     color: white;
-    font-family: Unbounded, sans-serif;
-    font-weight: 550;
-    font-size: 1.3rem;
+    font-family: Unbounded;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.0688rem;
+    text-transform: uppercase;
 }
 
-.info-card__intern__header__subtitle {
-    color: lightgray;
-    font-family: Unbounded, sans-serif;
-    font-weight: 450;
-    font-size: 0.75rem;
+.header__subtitle {
+    color: #D1D1D1;
+    font-family: Unbounded;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5625rem;
+    letter-spacing: 0.0437rem;
+    text-transform: uppercase;
 }
 
-.info-card__intern__role-description {
+.intern__role-description {
     text-wrap: wrap;
     color: white;
     margin-top: 1.56rem;
@@ -306,74 +323,74 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.625;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.0187rem;
 }
 
-.info-card__intern__data__duties {
-    border: 2px solid #201fa3;
-    border-radius: 5px;
+.data__duties {
+    border: 0.125rem solid #201fa3;
+    border-radius: 0.3125rem;
     margin-top: 3.125rem;
     margin-bottom: 3.125rem;
     padding: 1.56rem;
     width: 100%;
 }
 
-.info-card__intern__data__advantages {
-    border: 2px solid #201fa3;
-    border-radius: 5px;
+.data__advantages {
+    border: 0.125rem solid #201fa3;
+    border-radius: 0.3125rem;
     padding: 1.56rem;
     width: 100%;
 }
 
-.info-card__intern__data {
+.intern__data {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.info-card__intern__data__duties__title {
+.duties__title {
     color: white;
-    font-family: Unbounded, sans-serif;
+    font-family: Unbounded;
     font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.625;
     font-style: normal;
-    letter-spacing: 0.8px;
+    font-weight: 500;
+    line-height: 1.5625rem;
+    letter-spacing: 0.05rem;
     text-transform: uppercase;
     margin-bottom: 0.9rem;
 }
 
-.info-card__intern__data__duties__duty-type {
+.duties__duty-type {
     color: white;
     font-family: "Fixel Text";
     font-size: 0.9rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1.625;
-    letter-spacing: 0.3px;
+    line-height: 1.56rem;
+    letter-spacing: 0.0187rem;
 }
 
-.info-card__intern__data__advantages__title {
+.advantages__title {
     color: white;
-    font-family: Unbounded, sans-serif;
+    font-family: Unbounded;
     font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.625;
     font-style: normal;
-    letter-spacing: 0.8px;
+    font-weight: 500;
+    line-height: 1.56rem;
+    letter-spacing: 0.05rem;
     text-transform: uppercase;
     margin-bottom: 0.9rem;
 }
 
-.info-card__intern__data__description {
+.advantages__description {
     color: white;
     font-family: "Fixel Text";
     font-size: 0.9rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1.625;
-    letter-spacing: 0.3px;
+    line-height: 1.56rem;
+    letter-spacing: 0.0187rem;
 }
 
 .roles-hierarchy {
@@ -401,14 +418,14 @@
         padding: 6.25rem 2.1875rem;
     }
 
-    .header__main-text {
+    .header-text {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .header__roles-wrapper {
+    .roles-wrapper {
         display: grid;
         grid-template-columns: repeat(3, minmax(0rem, 27vw));
         gap: 1.5625rem;
@@ -420,8 +437,8 @@
     }
 
     .header__shadow {
-        width: 500px;
-        height: 200px;
+        width: 31.25rem;
+        height: 12.5rem;
         left: unset;
     }
 
@@ -439,34 +456,34 @@
     }
 
     .header__shadow {
-        height: 250px;
-        width: 250px;
+        height: 15.625rem;
+        width: 15.625rem;
     }
 
-    .header__main-text {
+    .header-text {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .header__page-title {
+    .header-text__title-first-part {
         font-size: clamp(2rem, 5vw, 3.125rem);
     }
 
-    .header__page-description {
+    .header-text__description {
         font-size: clamp(0.6rem, 5vw, 1rem);
     }
 
-    .header__roles-wrapper {
+    .roles-wrapper {
         display: none;
     }
 
-    .info-card__card-switcher-block__next {
+    .info-card__next-role-switcher {
         display: none;
     }
 
-    .info-card__card-switcher-block__prev {
+    .info-card__prew-role-switcher {
         display: none;
     }
 
@@ -479,11 +496,11 @@
         padding-top: 2.1875rem;
     }
 
-    .info-card__intern__header__title {
+    .header__title {
         margin-bottom: 0.625rem;
     }
 
-    .info-card__intern__header {
+    .intern__header {
         display: grid;
         flex-direction: column;
         justify-content: start;
