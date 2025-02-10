@@ -1,4 +1,5 @@
 @use "../../common/styles/variables" as *;
+@use "../../common/styles/hyperlink" as hyperlink;
 
 $color-black: #101010;
 $color-dark-gray: #5d5d5d;
@@ -42,7 +43,7 @@ $meta-button-height: 3.438rem;
     }
 
     .profile__banner-container:hover .img-banner {
-        filter: blur(5px);
+        filter: blur(6px);
     }
 
     .profile__banner-container:hover .profile__banner-overlay {
@@ -63,21 +64,16 @@ $meta-button-height: 3.438rem;
         margin-bottom: 1.2rem;
     }
 
-    .profile__change-banner-icon {
-        ::ng-deep svg {
-            g path[fill] {
-                fill: #FFFFFF !important;
-            }
-        }
+    .profile__change-banner-btn {
+        background: none;
     }
 
     .profile__banner {
-        background-color: $color-dark-gray;
         height: 18.75rem;
         position: relative;
         transition: background-color $transition-speed;
 
-        &-text {
+        .profile__banner_is-absent-text-container {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -100,10 +96,18 @@ $meta-button-height: 3.438rem;
                 font-weight: 400;
                 line-height: 1.625rem;
             }
+
         }
 
         &:hover {
             cursor: pointer;
+        }
+    }
+
+    .profile-banner__absent {
+        background-color: $color-dark-gray;
+
+        &:hover {
             background-color: #908337;
         }
     }
@@ -113,13 +117,6 @@ $meta-button-height: 3.438rem;
         height: $icon-size;
         width: $icon-size;
         margin-bottom: 1.2rem;
-        fill: #FFFFFF;
-
-        //::ng-deep svg {
-        //    g path[fill] {
-        //        fill: #FFFFFF !important;
-        //    }
-        //}
     }
 
     .profile__avatar-container {
@@ -333,6 +330,20 @@ $meta-button-height: 3.438rem;
         line-height: 1.563rem;
         letter-spacing: 0.044rem;
         text-transform: uppercase;
+    }
+
+    .profile__support {
+        margin-top: 5rem;
+        @include flex-center(column);
+        text-align: center;
+
+        .support__heading {
+            color: $text-gray;
+            font-size: 0.875em;
+            font-weight: 500;
+            letter-spacing: 0.044rem;
+            margin-bottom: 1.25rem;
+        }
     }
 
     .profile-meta-role-button {

@@ -13,10 +13,9 @@ import {
 } from './components/image-upload-dialog/profile-image-upload-dialog.component';
 import {ItemCardComponent, ItemDetail} from './components/item-card/item-card.component';
 import {FallbackCardComponent} from './components/fallback-card/fallback-card.component';
-import {ArrowButtonComponent} from '../../common/components/buttons/arrow-button/arrow-button.component';
-import {ButtonYellowComponent} from '../../common/components/buttons/button-yellow/button-yellow.component';
 import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {MultiLangFieldPipe} from '../../common/pipes/multi-lang-field.pipe';
+import {BorderButtonComponent} from '../../common/components/button/arrow-button/border-button.component';
 
 @Component({
     selector: 'app-user-profile',
@@ -26,12 +25,11 @@ import {MultiLangFieldPipe} from '../../common/pipes/multi-lang-field.pipe';
         DatePipe,
         ProfileImageUploadDialogComponent,
         ItemCardComponent,
-        ArrowButtonComponent,
         FallbackCardComponent,
-        ButtonYellowComponent,
         TranslatePipe,
         MatIcon,
-        MultiLangFieldPipe
+        MultiLangFieldPipe,
+        BorderButtonComponent
     ],
     standalone: true
 })
@@ -196,7 +194,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.subscriptions.add(removeSub);
     }
 
-    public removeBanner(): void {
+    public removeBanner(event: Event): void {
+        event.stopPropagation();
+
         const previousUrl = this.currentBannerUrl();
         this.currentBannerUrl.set('');
         const removeSub = this.userService.removeBanner(this.userId())

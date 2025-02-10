@@ -30,6 +30,7 @@
     display: none;
 }
 
+
 .upload-dialog {
     position: relative;
     padding: 2.813rem;
@@ -60,26 +61,19 @@
     background-color: #101010;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
     line-height: 0;
 
-    mat-icon,
-    ::ng-deep svg {
+    .close-desktop__icon {
         width: 1.2rem;
         height: 1.2rem;
-    }
-
-    ::ng-deep svg {
-        g path[fill] {
-            fill: $text-light !important;
-        }
+        color: $text-light;
     }
 
     &:hover {
         border-color: $accent-yellow;
 
-        ::ng-deep svg g path[fill] {
-            fill: $accent-yellow !important;
+        .close-desktop__icon {
+            color: $accent-yellow !important;
         }
     }
 }
@@ -98,11 +92,11 @@
     height: $avatar-size;
     padding: 2rem;
     @include flex-center(column);
+}
 
-    .default-avatar-container__icon {
-        width: 10rem;
-        height: 10rem;
-    }
+.default-avatar-container__icon {
+    width: 10rem;
+    height: 10rem;
 }
 
 .upload-dialog__preview {
@@ -141,7 +135,6 @@
     background: none;
     color: $text-white;
     cursor: pointer;
-    transition: 0.2s ease;
     border-radius: 5px;
     border: 1px solid var(--border-nat-400, $border-gray);
 
@@ -166,7 +159,6 @@
     line-height: normal;
     letter-spacing: 0.7px;
     padding: 0.625rem;
-    transition: border-color 0.4s ease;
     border-radius: 5px;
     cursor: pointer;
 
@@ -189,19 +181,16 @@
         left: 0;
         width: 100%;
         height: 2.188rem;
-
         border-radius: 5px;
         border: 1px solid #343434;
         background: #101010;
 
-       &:hover {
-           ::ng-deep svg {
-               g path[fill] {
-                   fill: $accent-yellow;
-               }
-           }
+        &:hover {
+            border-color: $accent-yellow;;
 
-           border-color: $accent-yellow;;
+            .close__icon {
+                color: $accent-yellow;
+            }
         }
     }
 
@@ -214,15 +203,15 @@
         justify-content: center;
         align-items: center;
 
-        mat-icon,
-        ::ng-deep svg {
+        .close__icon {
             width: 1.2rem;
             height: 1.2rem;
+            color: $text-white;
         }
 
         &:hover {
-            ::ng-deep svg g path[fill] {
-                fill: $accent-yellow !important;
+            .close__icon {
+                color: $accent-yellow;
             }
         }
     }

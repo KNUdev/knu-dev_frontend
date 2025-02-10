@@ -3,14 +3,14 @@
 <div class="upload-dialog__wrapper">
     <div class="upload-dialog__outer-close" (click)="onClose()">
         <button aria-label="Close dialog" class="upload-dialog__close" type="button">
-            <mat-icon svgIcon="closeDialog"></mat-icon>
+            <mat-icon svgIcon="closeDialog" class="close__icon"></mat-icon>
         </button>
     </div>
 
     <section aria-label="Image Upload Dialog" aria-modal="true" class="upload-dialog" role="dialog">
         <header class="upload-dialog__header">
             <button (click)="onClose()" aria-label="Close dialog" class="upload-dialog__close-desktop" type="button">
-                <mat-icon svgIcon="closeDialog"></mat-icon>
+                <mat-icon svgIcon="closeDialog" class="close-desktop__icon"></mat-icon>
             </button>
         </header>
         <div class="upload-dialog__content">

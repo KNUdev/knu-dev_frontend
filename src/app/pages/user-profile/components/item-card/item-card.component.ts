@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
-import {
-    ArrowButtonComponent,
-    BorderColor
-} from '../../../../common/components/buttons/arrow-button/arrow-button.component';
 import {MultiLanguageField} from '../../../../common/models/shared.model';
+import {
+    BorderButtonComponent,
+    BorderColor
+} from '../../../../common/components/button/arrow-button/border-button.component';
 import {MultiLangFieldPipe} from '../../../../common/pipes/multi-lang-field.pipe';
 
 export interface ItemDetail {
@@ -15,8 +15,8 @@ export interface ItemDetail {
     selector: 'profile-item-card',
     templateUrl: './item-card.component.html',
     imports: [
-        ArrowButtonComponent,
-        MultiLangFieldPipe
+        MultiLangFieldPipe,
+        BorderButtonComponent,
     ],
     styleUrls: ['./item-card.component.scss'],
     standalone: true

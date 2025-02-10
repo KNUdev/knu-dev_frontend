@@ -11,9 +11,12 @@
 
     <main class="profile__main">
         <section class="profile__header">
-            <div (click)="triggerBannerUpdate()" class="profile__banner">
+            <div (click)="triggerBannerUpdate()"
+                 [class.profile-banner__absent]="!currentBannerUrl()"
+                 class="profile__banner"
+            >
                 @if (!currentBannerUrl()) {
-                    <div class="profile__banner-text">
+                    <div class="profile__banner_is-absent-text-container">
                         <mat-icon aria-hidden="true" class="profile__banner-icon" svgIcon="addBanner"></mat-icon>
                         <p class="profile__banner-title">
                             {{ 'accountProfile.button.banner.uploadNew.title' | translate }}
@@ -31,10 +34,10 @@
                             <p class="profile__change-banner-text" (click)="openUploadDialog()">
                                 {{ 'accountProfile.button.banner.change' | translate }}
                             </p>
-                            <button-yellow [text]="'accountProfile.button.banner.delete' | translate"
-                                           (buttonClick)="removeBanner()"
-                                           ariaLabel="dsgsd">
-                            </button-yellow>
+                            <button type="button" (click)="removeBanner($event)"
+                                    class="hyperlink profile__change-banner-btn">
+                                {{ 'accountProfile.button.banner.delete' | translate }}
+                            </button>
                         </div>
                     </div>
                 }
@@ -47,9 +50,9 @@
                         <mat-icon svgIcon="defaultAvatar" class="profile__avatar-icon"></mat-icon>
                     </div>
                 }
-                <div class="profile__avatar-overlay"
-                    [class.avatar-present--hover]="!!currentAvatarUrl()"
-                    [class.avatar-absent--hover]="!currentAvatarUrl()"
+                <div [class.avatar-absent--hover]="!currentAvatarUrl()"
+                     [class.avatar-present--hover]="currentAvatarUrl()"
+                     class="profile__avatar-overlay"
                 >
                     <mat-icon (click)="openUploadDialog()" aria-hidden="true"
                               class="profile__avatar-overlay-icon"
@@ -79,11 +82,11 @@
                         {{ accountProfile()?.technicalRole }}
                     </p>
                 </div>
-                <arrow-button
+                <border-button
                     [text]="'accountProfile.button.rolePromotion' | translate"
                     borderColor="yellow"
                     class="profile-meta-role-button">
-                </arrow-button>
+                </border-button>
             </div>
             <div class="profile-meta-group">
                 <div class="profile-meta-item">
@@ -121,6 +124,14 @@
                     </div>
                 </div>
             </div>
+        </section>
+        <section aria-labelledby="supportHeading" class="profile__support">
+            <h2 class="support__heading" id="supportHeading">
+                {{ 'accountProfile.support.description' | translate }}
+            </h2>
+            <a class="hyperlink" href="/">
+                {{ 'accountProfile.support.support' | translate }}
+            </a>
         </section>
         <section aria-label="Projects in which I participated">
             <header class="profile__divider">
