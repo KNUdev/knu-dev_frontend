@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
     {
@@ -18,6 +18,13 @@ export const routes: Routes = [
         loadComponent: () =>
             import('../pages/auth/register/register.component').then(
                 (m) => m.RegisterComponent
+            ),
+    },
+    {
+        path: 'origins-and-founders',
+        loadComponent: () =>
+            import('../pages/origins-and-founders/origins-and-founders.component').then(
+                (m) => m.OriginsAndFoundersComponent
             ),
     },
 ];
