@@ -26,7 +26,7 @@
     font-weight: 500;
     font-style: normal;
     line-height: normal;
-    letter-spacing: 1.75px;
+    letter-spacing: 0.1094rem;
     text-transform: uppercase;
     margin-bottom: 1.25rem;
     text-align: center;
@@ -40,7 +40,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.6rem;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.01875rem;
     text-align: center;
 }
 
@@ -51,7 +51,7 @@
     justify-content: center;
     padding: 1.56rem;
     border-radius: 0.3rem;
-    border: 1px solid transparent;
+    border: 0.0625rem solid transparent;
     background: linear-gradient(#101010, #101010) padding-box,
     linear-gradient(to right, #EDD342, #524f2e, #EDD342) border-box;
 }
@@ -69,7 +69,7 @@
     justify-content: center;
     width: 4.375rem;
     height: 4.375rem;
-    border: 1px solid #615f4c;
+    border: 0.0625rem solid #615f4c;
     border-radius: 100%;
     margin-bottom: 1.25rem;
 }
@@ -83,7 +83,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    letter-spacing: 1.1px;
+    letter-spacing: 0.0688rem;
     margin-bottom: 2.2rem;
 }
 
@@ -95,12 +95,12 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.6rem;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.0187rem;
 }
 
 .separation-line {
     color: #606060;
-    height: 1px;
+    height: 0.0625rem;
     margin-top: 5rem;
     margin-bottom: 5rem;
 }
@@ -121,7 +121,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    letter-spacing: 1.1px;
+    letter-spacing: 0.0688rem;
     text-transform: uppercase;
     margin-bottom: 2.8125rem;
 }
@@ -137,7 +137,7 @@
 .avatar {
     position: relative;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
 }
 
 .founder {
@@ -145,7 +145,7 @@
     background: #141414;
     flex-direction: column;
     justify-content: center;
-    border: #606060 solid 1px;
+    border: #606060 solid 0.0625rem;
     border-radius: 0.67rem;
     padding: 1.5625rem;
     align-items: stretch;
@@ -160,7 +160,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    letter-spacing: 0.9px;
+    letter-spacing: 0.0563rem;
     text-transform: uppercase;
     margin-top: 2.25rem;
     margin-bottom: 1.55rem;
@@ -184,8 +184,8 @@
     align-self: stretch;
     justify-content: center;
     padding: 0.9rem;
-    border: #606060 solid 1px;
-    border-radius: 2.5px;
+    border: #606060 solid 0.0625rem;
+    border-radius: 0.1563rem;
 }
 
 .founder__work-experience {
@@ -196,8 +196,8 @@
     align-self: stretch;
     justify-content: center;
     padding: 0.9rem;
-    border: #606060 solid 1px;
-    border-radius: 2.5px;
+    border: #606060 solid 0.0625rem;
+    border-radius: 0.1563rem;
 }
 
 .expertise__title {
@@ -248,12 +248,12 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.2rem;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.0187rem;
 }
 
 .joint-photo {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     object-fit: cover;
 }
 
