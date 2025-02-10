@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
@@ -8,21 +10,31 @@ import {
     TranslateService,
 } from '@ngx-translate/core';
 import { map, Observable, startWith, switchMap } from 'rxjs';
+import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 import { I18nService } from '../../services/languages/i18n.service';
 import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
 
-const MENU_TRANSLATIONS = 'header.menu.items' as const;
-
-type Menu = {
+interface Menu {
     name: string;
-    link: string;
-};
+    link?: string;
+    dropdown?: {
+        name: string;
+        link: string;
+    }[];
+}
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    imports: [FormsModule, CommonModule, TranslateModule, RouterModule],
+    imports: [
+        FormsModule,
+        CommonModule,
+        TranslateModule,
+        RouterModule,
+        MenuNav_dropdown,
+        MatIconModule,
+    ],
 })
 export class HeaderComponent {
     private i18nService = inject(I18nService);
@@ -30,18 +42,23 @@ export class HeaderComponent {
     private router = inject(Router);
     protected languageSwitcher = LanguageSwitcherService(this.translate);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
     isMenuOpen = signal<boolean>(false);
-    readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
-    readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
-    readonly arrowDownPath = 'assets/icon/system/arrowDown.svg';
-    readonly defaultAvatarPath = 'assets/icon/defaultAvatar.svg';
-    readonly menuIconPath = 'assets/icon/system/menu.svg';
-    readonly closeIconPath = 'assets/icon/system/close.svg';
+    readonly iconPaths = {
+        logoFullPath: 'assets/logo/KNUDEVLogoFull.svg',
+        logoMiniPath: 'assets/logo/KNUDEVLogoMini.svg',
+        arrowDown: 'assets/icon/system/arrowDown.svg',
+        defaultAvatarPath: 'assets/icon/defaultAvatar.svg',
+        menuIconPath: 'assets/icon/system/menu.svg',
+        closeIconPath: 'assets/icon/system/close.svg',
+    } as const;
 
     menu$: Observable<Menu[]>;
+    userRole = 'noAuth';
 
     @HostListener('window:scroll', [])
     onWindowScroll() {
@@ -88,6 +105,24 @@ export class HeaderComponent {
         return this.router.url.includes('auth');
     }
 
+    isHomePage(): boolean {
+        return this.router.url === '/';
+    }
+
+    getLogo(): string {
+        if (this.isAuthPage()) {
+            return this.iconPaths.logoFullPath;
+        }
+
+        if (this.isHomePage()) {
+            return this.isScrolled()
+                ? this.iconPaths.logoMiniPath
+                : this.iconPaths.logoFullPath;
+        }
+
+        return this.iconPaths.logoMiniPath;
+    }
+
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
@@ -103,11 +138,30 @@ export class HeaderComponent {
         );
 
         const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
+            switchMap(() =>
+                this.translate.get(['header.menu.' + this.userRole])
+            )
         );
 
         this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
+            map(
+                (translations) =>
+                    translations['header.menu.' + this.userRole] || []
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
         );
     }
+
+    dropdownName = 'menu_nav';
+
+    navigationItems: Menu[] = [
+        { name: 'Відкриті набори', link: '/open-sets' },
+        { name: 'Закриті набори', link: '/closed-sets' },
+    ];
 }
