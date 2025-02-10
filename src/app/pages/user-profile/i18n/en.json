@@ -1,0 +1,48 @@
+{
+    "accountProfile": {
+        "registeredAt": "Registered at",
+        "role": "Role",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "expertise": "Expertise",
+        "button": {
+            "submit": "Submit",
+            "rolePromotion": "Elevate Role",
+            "learnMore": "Learn More",
+            "avatar": {
+                "uploadNew": "Upload new avatar",
+                "uploadAnother": "Upload another file",
+                "delete": "Delete existing avatar",
+                "errorMessage": "Upload avatar failed. Please try again later"
+            },
+            "banner": {
+                "uploadNew": {
+                    "title": "Add banner",
+                    "subtitle": "Optimal size is 3400x480px"
+                },
+                "delete": "Delete existing banner",
+                "change": "Change current banner"
+            }
+        },
+        "support": {
+            "description": "If you specified invalid data during registration, please contact",
+            "support": "Support"
+        },
+        "projects": {
+            "title": "Projects",
+            "moreProjects": "More Projects",
+            "notFoundFallbackText": "You did not participate in any project"
+        },
+        "educationPrograms": {
+            "title": "Education Programs",
+            "notFoundFallbackText": "You did not take place in a single program",
+            "meta": {
+                "duration": "Duration:",
+                "totalTasks": "Total tasks",
+                "totalTests": "Total tests"
+            }
+        }
+
+
+    }
+}

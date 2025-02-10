@@ -1,9 +1,10 @@
 .dropdown-container {
     position: relative;
-    width: fit-content;
+    //width: fit-content;
 }
 
 button {
+    cursor: pointer;
     display: inline-flex;
     justify-content: center;
     align-items: center;

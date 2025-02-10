@@ -1,0 +1,69 @@
+@use "../../../../common/styles/variables" as *;
+
+:host {
+    width: 100%;
+}
+
+.items-not-found {
+    width: 100%;
+    height: 11.563rem;
+    padding: 2.188rem;
+    border-radius: 5px;
+    border: 1px solid #343434;
+    gap: 1.25rem;
+    @include flex-center(column);
+
+    .items-not-found__icon {
+        width: 3.774rem;
+        height: 3.36rem;
+        font-size: 0;
+        display: inline-block;
+        color: #888888;
+    }
+
+    .items-not-found__icon__fallback-text {
+        color: #888;
+        text-align: center;
+        font-family: Unbounded, sans-serif;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.563rem;
+        letter-spacing: 0.044rem;
+        text-transform: uppercase;
+    }
+}
+
+@include tablet {
+    .items-not-found {
+        height: auto;
+        padding: 1.75rem;
+        gap: 1rem;
+
+        .items-not-found__icon {
+            width: 3.0rem;
+            height: 2.8rem;
+        }
+        .items-not-found__icon__fallback-text {
+            font-size: 0.8rem;
+            line-height: 1.3rem;
+        }
+    }
+}
+
+@include mobile {
+    .items-not-found {
+        width: 100%;
+        padding: 1rem;
+        gap: 1rem;
+
+        .items-not-found__icon {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        .items-not-found__icon__fallback-text {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+    }
+}

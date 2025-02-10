@@ -40,3 +40,11 @@ $text-gray: #a0a0a0;
         @content;
     }
 }
+
+@mixin flex-center($direction: row, $wrap: nowrap) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: $wrap;
+}
