@@ -80,7 +80,7 @@ a {
             list-style: none;
             gap: 2.81rem;
             padding: 0;
-            margin: auto;
+            margin: auto 0;
 
             @include tablet-horizontal {
                 margin: 0;

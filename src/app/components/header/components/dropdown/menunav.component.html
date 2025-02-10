@@ -1,0 +1,38 @@
+<nav class="dropdown-container" [class.active]="isOpen()">
+    <button
+        (click)="toggleDropdown()"
+        [attr.aria-expanded]="isOpen()"
+        aria-haspopup="true"
+        [class.active]="isOpen()"
+        aria-controls="dropdown-menu"
+    >
+        <span class="menu__nav">{{ label }}</span>
+        <mat-icon
+            svgIcon="arrowDown"
+            [class.rotated]="isOpen()"
+            alt=""
+            class="arrow"
+            aria-hidden="true"
+            loading="lazy"
+        ></mat-icon>
+    </button>
+
+    @if (isOpen()) {
+    <ul id="dropdown-menu" class="dropdown-menu" role="menu">
+        @for (item of items; track item.link; let i = $index) {
+        <li>
+            <a
+                class="menu__nav menu-item"
+                role="menuitem"
+                [routerLink]="item.link"
+            >
+                {{ item.name }}
+            </a>
+            @if (i < items.length - 1) {
+            <hr class="menu-divider" aria-hidden="true" />
+            }
+        </li>
+        }
+    </ul>
+    }
+</nav>

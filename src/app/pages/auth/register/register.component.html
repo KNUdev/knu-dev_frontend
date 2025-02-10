@@ -1,257 +1,236 @@
 <main class="register">
     <div class="register__container">
         @if (currentRegistrationPhase() === 1) {
-            <div class="form-container">
-                <a [routerLink]="['/']" class="hyperlink homePageLink"
-                >
-                    <mat-icon svgIcon="arrowLeft"></mat-icon
-                    >
-                    <span> {{ "register.goHomeLink" | translate }}</span></a
-                >
+        <div class="form-container">
+            <a [routerLink]="['/']" class="hyperlink homePageLink"
+                ><mat-icon svgIcon="arrowLeft"></mat-icon
+                ><span> {{ "register.goHomeLink" | translate }}</span></a
+            >
 
-                <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
-                    <h2>{{ "register.title" | translate }}</h2>
-                    <div class="forms">
-                        <div class="fullName">
-                            <label-input
-                                controlName="firstName"
-                                [label]="'register.firstName.label' | translate"
-                                [errors]="VALIDATION_KEYS.firstName"
-                            ></label-input>
+            <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
+                <h2>{{ "register.title" | translate }}</h2>
+                <div class="forms">
+                    <div class="fullName">
+                        <app-label-input
+                            controlName="firstName"
+                            [label]="'register.firstName.label' | translate"
+                            [errors]="VALIDATION_KEYS.firstName"
+                        ></app-label-input>
 
-                            <label-input
-                                controlName="lastName"
-                                [label]="'register.lastName.label' | translate"
-                                [errors]="VALIDATION_KEYS.lastName"
-                            ></label-input>
+                        <app-label-input
+                            controlName="lastName"
+                            [label]="'register.lastName.label' | translate"
+                            [errors]="VALIDATION_KEYS.lastName"
+                        ></app-label-input>
 
-                            <label-input
-                                controlName="middleName"
-                                [label]="'register.middleName.label' | translate"
-                                [errors]="VALIDATION_KEYS.middleName"
-                            ></label-input>
-                        </div>
-                        <div class="email">
-                            <label-input
-                                controlName="email"
-                                [label]="'register.email.label' | translate"
-                                [errors]="VALIDATION_KEYS.email"
-                                type="email"
-                                [isEmail]="true"
-                                domainSuffix="@knu.ua"
-                                (emailInput)="onEmailInput($event)"
-                                (emailBlur)="formatEmailOnBlur()"
-                            ></label-input>
+                        <app-label-input
+                            controlName="middleName"
+                            [label]="'register.middleName.label' | translate"
+                            [errors]="VALIDATION_KEYS.middleName"
+                        ></app-label-input>
+                    </div>
+                    <div class="email">
+                        <app-label-input
+                            controlName="email"
+                            [label]="'register.email.label' | translate"
+                            [errors]="VALIDATION_KEYS.email"
+                            type="email"
+                            [isEmail]="true"
+                            domainSuffix="@knu.ua"
+                            (emailInput)="onEmailInput($event)"
+                            (emailBlur)="formatEmailOnBlur()"
+                        ></app-label-input>
 
-                            <div class="email-create">
-                                <p>{{ "register.KNUEmail.label" | translate }}</p>
-                                <a
-                                    href="https://student.triton.knu.ua/CorporativeMail"
-                                    class="hyperlink"
+                        <div class="email-create">
+                            <p>{{ "register.KNUEmail.label" | translate }}</p>
+                            <a
+                                href="https://student.triton.knu.ua/CorporativeMail"
+                                class="hyperlink"
                                 >{{ "register.KNUEmail.link" | translate }}</a
-                                >
-                            </div>
+                            >
                         </div>
-                        <div class="password">
-                            <label-input
-                                controlName="password"
-                                [label]="'register.password.label' | translate"
-                                [errors]="VALIDATION_KEYS.password"
-                                type="password"
-                                [preventClipboard]="true"
-                            ></label-input>
+                    </div>
+                    <div class="password">
+                        <app-label-input
+                            controlName="password"
+                            [label]="'register.password.label' | translate"
+                            [errors]="VALIDATION_KEYS.password"
+                            type="password"
+                            [preventClipboard]="true"
+                        ></app-label-input>
 
-                            <label-input
-                                controlName="confirmPassword"
-                                [label]="
+                        <app-label-input
+                            controlName="confirmPassword"
+                            [label]="
                                 'register.confirmPassword.label' | translate
                             "
                             [errors]="VALIDATION_KEYS.confirmPassword"
                             type="password"
                             [preventClipboard]="true"
-                        ></label-input>
+                        ></app-label-input>
                     </div>
                 </div>
                 <button type="submit" class="fill-button fill-red">
                     {{ "register.continue" | translate }}
                 </button>
 
-                    <div class="login">
-                        <p>{{ "register.haveAccount.label" | translate }}</p>
-                        <a [routerLink]="['/auth/login']" class="hyperlink">{{
-                                "register.haveAccount.link" | translate
-                            }}</a>
-                    </div>
-                </form>
-            </div>
-        }
-        @if (currentRegistrationPhase() === 2) {
-            <form
-                [formGroup]="academicInfoForm()"
-                (ngSubmit)="onSubmit()"
-                class="formSecond"
-            >
-                <h2>{{ "register.title" | translate }}</h2>
-                <div class="inputs">
-                    <div class="firstRow">
-                        <div class="form-group">
-                            <write-dropdowns
-                                [class.drop-down__error]="departmentLoadError()"
-                                [options]="departments"
-                                [placeholder]="
+                <div class="login">
+                    <p>{{ "register.haveAccount.label" | translate }}</p>
+                    <a [routerLink]="['/auth/login']" class="hyperlink">{{
+                        "register.haveAccount.link" | translate
+                    }}</a>
+                </div>
+            </form>
+        </div>
+        } @if (currentRegistrationPhase() === 2) {
+        <form
+            [formGroup]="academicInfoForm()"
+            (ngSubmit)="onSubmit()"
+            class="formSecond"
+        >
+            <h2>{{ "register.title" | translate }}</h2>
+            <div class="inputs">
+                <div class="firstRow">
+                    <div class="form-group">
+                        <register-write-dropdowns
+                            [class.drop-down__error]="departmentLoadError()"
+                            [options]="departments"
+                            [placeholder]="
                                 'register.departments.label' | translate
                             "
-                                valueField="id"
-                                formControlName="departmentId"
-                                (selectionChange)="onDepartmentChange()"
-                                [hasError]="departmentLoadError()"
-                                [errorMessage]="
+                            valueField="id"
+                            formControlName="departmentId"
+                            (selectionChange)="onDepartmentChange()"
+                            [hasError]="departmentLoadError()"
+                            [errorMessage]="
                                 'errors.departmentLoadError' | translate
                             "
-                            ></write-dropdowns>
-                            @if (showValidationErrors() &&
-                            academicInfoForm().get("departmentId")?.errors?.[
-                                "required"]) {
-                                <div class="error">
-                                    <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                    >
-                                    You must select a department
-                                </div>
-                            }
-                            @if (backendErrors()["departmentId"]) {
-                                @for (error
-                                    of backendErrors()["departmentId"]; track $index) {
-                                    <div class="error">
-                                        <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                        >
-                                        {{ error }}
-                                    </div>
-                                }
-                            }
+                        ></register-write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("departmentId")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a department
                         </div>
+                        } @if (backendErrors()["departmentId"]) { @for ( error
+                        of backendErrors()["departmentId"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
 
-                        <div class="form-group">
-                            @if (!academicInfoForm().get("departmentId")?.value) {
-                                <write-dropdowns
-                                    [options]="(specialties$ | async) || []"
-                                    [placeholder]="
+                    <div class="form-group">
+                        @if (!academicInfoForm().get("departmentId")?.value) {
+                        <register-write-dropdowns
+                            [options]="(specialties$ | async) || []"
+                            [placeholder]="
                                 'register.specialties.label' | translate
                             "
-                                    valueField="codeName"
-                                    formControlName="specialtyCodename"
-                                    class="disabled"
-                                ></write-dropdowns>
+                            valueField="codeName"
+                            formControlName="specialtyCodename"
+                            class="disabled"
+                        ></register-write-dropdowns>
 
-                                <p class="warning">
-                                    <mat-icon svgIcon="errorTriangle"></mat-icon>
-                                    <span
-                                    >{{
-                                            "register.mustSelectDepartment" | translate
-                                        }}
+                        <p class="warning">
+                            <mat-icon svgIcon="errorTriangle"></mat-icon>
+                            <span
+                                >{{
+                                    "register.mustSelectDepartment" | translate
+                                }}
                             </span>
-                                </p>
-                            } @else {
-                                <write-dropdowns
-                                    [class.drop-down__error]="specialtyLoadError()"
-                                    [options]="(specialties$ | async) || []"
-                                    [placeholder]="
+                        </p>
+                        } @else {
+                        <register-write-dropdowns
+                            [class.drop-down__error]="specialtyLoadError()"
+                            [options]="(specialties$ | async) || []"
+                            [placeholder]="
                                 'register.specialties.label' | translate
                             "
-                                    valueField="codeName"
-                                    formControlName="specialtyCodename"
-                                    [hasError]="specialtyLoadError()"
-                                    [errorMessage]="
+                            valueField="codeName"
+                            formControlName="specialtyCodename"
+                            [hasError]="specialtyLoadError()"
+                            [errorMessage]="
                                 'errors.specialtyLoadError' | translate
                             "
-                                ></write-dropdowns>
-                                @if (showValidationErrors() &&
-                                academicInfoForm().get("specialtyCodename")?.errors?.[
-                                    "required"]) {
-                                    <div class="error">
-                                        <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                        >
-                                        You must select a specialty
-                                    </div>
-                                }
-                                @if (backendErrors()["specialtyCodename"]) {
-                                    @for (error of backendErrors()["specialtyCodename"]; track
-                                        $index) {
-                                        <div class="error">
-                                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                            >
-                                            {{ error }}
-                                        </div>
-                                    }
-                                }
-                            }
+                        ></register-write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("specialtyCodename")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a specialty
                         </div>
-                    </div>
-                    <div class="secondRow">
-                        <div class="form-group">
-                            <write-dropdowns
-                                [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("course")?.errors?.[
-                        "required" ] || backendErrors()["course"])'
-                                [options]="courses"
-                                [placeholder]="'register.courses.label' | translate"
-                                valueField="id"
-                                displayField="displayedName"
-                                formControlName="course"
-                            ></write-dropdowns>
-                            @if (showValidationErrors() &&
-                            academicInfoForm().get("course")?.errors?.["required"]) {
-                                <div class="error">
-                                    <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                    >
-                                    You must select a course
-                                </div>
-                            }
-                            @if (backendErrors()["course"]) {
-                                @for (error of
-                                    backendErrors()["course"]; track $index) {
-                                    <div class="error">
-                                        <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                        >
-                                        {{ error }}
-                                    </div>
-                                }
-                            }
+                        } @if (backendErrors()["specialtyCodename"]) { @for (
+                        error of backendErrors()["specialtyCodename"]; track
+                        $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
                         </div>
-
-                        <div class="form-group">
-                            <write-dropdowns
-                                [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("expertise")?.errors?.[
-                        "required" ] || backendErrors()["expertise"])'
-                                [options]="expertises"
-                                [placeholder]="
-                                'register.expertises.label' | translate
-                            "
-                                valueField="id"
-                                displayField="displayedName"
-                                formControlName="expertise"
-                            ></write-dropdowns>
-                            @if (showValidationErrors() &&
-                            academicInfoForm().get("expertise")?.errors?.[
-                                "required"]) {
-                                <div class="error">
-                                    <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                                    >
-                                    You must select a expertise
-                                </div>
-                            }
-                            @if (backendErrors()["expertise"]) {
-                                @for (error of
-                                    backendErrors()["expertise"]; track $index) {
-                                    <div class="error">
-                                        <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
-                                        {{ error }}
-                                    </div>
-                                }
-                            }
-                        </div>
+                        } } }
                     </div>
                 </div>
+                <div class="secondRow">
+                    <div class="form-group">
+                        <register-write-dropdowns
+                            [class.drop-down__error]='(showValidationErrors() &&
+                        academicInfoForm().get("course")?.errors?.[
+                        "required" ] || backendErrors()["course"])'
+                            [options]="courses"
+                            [placeholder]="'register.courses.label' | translate"
+                            valueField="id"
+                            displayField="displayedName"
+                            formControlName="course"
+                        ></register-write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("course")?.errors?.["required"] )
+                        {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a course
+                        </div>
+                        } @if (backendErrors()["course"]) { @for ( error of
+                        backendErrors()["course"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
+
+                    <div class="form-group">
+                        <register-write-dropdowns
+                            [class.drop-down__error]='(showValidationErrors() &&
+                        academicInfoForm().get("expertise")?.errors?.[
+                        "required" ] || backendErrors()["expertise"])'
+                            [options]="expertises"
+                            [placeholder]="
+                                'register.expertises.label' | translate
+                            "
+                            valueField="id"
+                            displayField="displayedName"
+                            formControlName="expertise"
+                        ></register-write-dropdowns>
+                        @if ( showValidationErrors() &&
+                        academicInfoForm().get("expertise")?.errors?.[
+                        "required" ] ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >You must select a expertise
+                        </div>
+                        } @if (backendErrors()["expertise"]) { @for ( error of
+                        backendErrors()["expertise"]; track $index ) {
+                        <div class="error">
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
+                            >{{ error }}
+                        </div>
+                        } }
+                    </div>
+                </div>
+            </div>
 
             <button class="fill-button fill-red" type="submit">
                 {{ "register.register" | translate }}
@@ -265,55 +244,55 @@
         }
         <div class="language-selector-container">
             <div
-                [class.open]="isOpenLang()"
-                aria-label="Language selection"
                 class="language-selector"
+                [class.open]="isOpenLang()"
                 role="region"
+                aria-label="Language selection"
             >
                 <button
+                    class="selector-button"
                     (click)="toggleDropdownLang()"
+                    aria-label="Select language"
                     [attr.aria-expanded]="isOpenLang()"
                     aria-controls="language-dropdown"
-                    aria-label="Select language"
-                    class="selector-button"
                 >
-                    @if (currentLanguage$ | async; as lang) {
-                        <div>
-                            <img
-                                [src]="lang.flagSquare"
-                                [alt]="lang.name"
-                                class="flag-icon"
-                            />
-                            <span>{{ lang.name }}</span>
-                        </div>
+                    @if(currentLanguage$ | async; as lang){
+                    <div>
                         <img
-                            [src]="iconPaths.arrowDown"
-                            class="chevron"
-                            [class.up]="isOpenLang()"
-                            alt="arrowDown"
-                            aria-hidden="true"
+                            [src]="lang.flagSquare"
+                            [alt]="lang.name"
+                            class="flag-icon"
                         />
+                        <span>{{ lang.name }}</span>
+                    </div>
+                    <mat-icon
+                        svgIcon="arrowDown"
+                        class="chevron"
+                        [class.up]="isOpenLang()"
+                        alt="arrowDown"
+                        aria-hidden="true"
+                    ></mat-icon>
                     }
                 </button>
                 @if (isOpenLang()) {
-                    <div class="dropdown-menu">
-                        @for (lang of i18nService.supportedLanguages(); track lang.code) {
-                            @if (lang.code !== i18nService.currentLang()) {
-                                <button
-                                    class="language-option"
-                                    (click)="selectLanguage(lang.code)"
-                                    [attr.aria-label]="lang.name"
-                                >
-                                    <img
-                                        [src]="lang.imgFullPath"
-                                        [alt]="lang.name"
-                                        class="flag-icon"
-                                    />
-                                    <span>{{ lang.name }}</span>
-                                </button>
-                            }
-                        }
-                    </div>
+                <div class="dropdown-menu">
+                    @for (lang of languageSwitcher.supportedLanguages(); track
+                    lang.code) { @if (lang.code !==
+                    languageSwitcher.currentLang()) {
+                    <button
+                        class="language-option"
+                        (click)="selectLanguage(lang.code)"
+                        [attr.aria-label]="lang.name"
+                    >
+                        <img
+                            [src]="lang.imgFullPath"
+                            [alt]="lang.name"
+                            class="flag-icon"
+                        />
+                        <span>{{ lang.name }}</span>
+                    </button>
+                    } }
+                </div>
                 }
             </div>
         </div>

@@ -15,7 +15,7 @@ import { AnimationService } from '../../../../services/animation.services';
 import { Benefit_card } from '../benefit-card/benefit-card.component';
 
 @Component({
-    selector: 'campus',
+    selector: 'home-campus',
     templateUrl: './campus.component.html',
     styleUrl: './campus.component.scss',
     imports: [

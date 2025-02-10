@@ -90,6 +90,13 @@ export class RegisterComponent {
         );
 
         this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
             'errorTriangle',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.errorTriangle
