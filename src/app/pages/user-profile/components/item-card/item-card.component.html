@@ -5,7 +5,7 @@
     @if (details && details.length) {
         <ng-container>
             <div class="item-card__details">
-                @for (detail of details; let i = $index; track i) {
+                @for (detail of details; track $index) {
                     <div class="item-card__details-row">
                         <span class="item-card__details-label">{{ detail.label }}</span>
                         <span class="item-card__details-value">{{ detail.value }}</span>
