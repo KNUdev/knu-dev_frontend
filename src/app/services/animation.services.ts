@@ -86,7 +86,7 @@ export class AnimationService {
                         entry.target.classList.add('visible');
                         observer.unobserve(entry.target);
                     } catch (error) {
-                        console.error('Animation setup failed:', error);
+                        console.error(error);
                     }
                 });
             },

@@ -1,4 +1,6 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
+import { ErrorStateGuard } from '../pages/error/404/404.guard';
+import { NotFoundPage } from '../pages/error/404/404.component';
 
 export const routes: Routes = [
     {
@@ -19,6 +21,18 @@ export const routes: Routes = [
             import('../pages/auth/register/register.component').then(
                 (m) => m.RegisterComponent
             ),
+    },
+    {
+        path: 'profile/:userId',
+        loadComponent: () =>
+            import('../pages/user-profile/user-profile.component').then(
+                (m) => m.UserProfileComponent
+            ),
+    },
+    {
+        path: 'error/404',
+        component: NotFoundPage,
+        canActivate: [ErrorStateGuard],
     },
     {
         path: 'origins-and-founders',

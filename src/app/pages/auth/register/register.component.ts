@@ -1,39 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, HostListener, inject, signal } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators,
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import {
-    LangChangeEvent,
-    TranslateModule,
-    TranslateService,
-} from '@ngx-translate/core';
-import {
-    BehaviorSubject,
-    catchError,
-    map,
-    Observable,
-    of,
-    startWith,
-    switchMap,
-} from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
-import { LabelInput } from '../../../common/components/input/label-input/label-input';
-import { DepartmentService } from '../../../services/department.services';
-import { FormErrorService } from '../../../services/error.services';
-import { I18nService } from '../../../services/languages/i18n.service';
-import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
-import {
-    SelectOption,
-    WriteDropDowns,
-} from './components/dropdown/write-dropdowns';
+import {CommonModule} from '@angular/common';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Component, HostListener, inject, signal} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {RouterModule} from '@angular/router';
+import {LangChangeEvent, TranslateModule, TranslateService,} from '@ngx-translate/core';
+import {BehaviorSubject, catchError, map, Observable, of, startWith, switchMap,} from 'rxjs';
+import {environment} from '../../../../environments/environment.development';
+import {LabelInput} from '../../../common/components/input/label-input/label-input';
+import {DepartmentService} from '../../../services/department.services';
+import {FormErrorService} from '../../../services/error.services';
+import {I18nService} from '../../../services/languages/i18n.service';
+import {SelectOption, WriteDropDowns,} from './components/dropdown/write-dropdowns';
 import {
     Course,
     Department,
@@ -52,6 +31,7 @@ const REGISTER_CONSTANTS = {
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
+
 @Component({
     selector: 'app-register',
     imports: [
@@ -67,12 +47,6 @@ const REGISTER_CONSTANTS = {
     styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
-    protected languageSwitcher = LanguageSwitcherService(this.translate);
-    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
     currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
@@ -89,31 +63,18 @@ export class RegisterComponent {
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
-
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
         arrowDown: 'assets/icon/system/arrowDown.svg',
         errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
         errorTriangle: 'assets/icon/system/errorTriangle.svg',
     } as const;
-
-    @HostListener('document:click', ['$event'])
-    onDocumentClick(event: MouseEvent) {
-        const target = event.target as HTMLElement;
-        if (!target.closest('.language-selector')) {
-            this.isOpenLang.set(false);
-        }
-    }
-
-    toggleDropdownLang() {
-        this.isOpenLang.update((value) => !value);
-    }
-
-    selectLanguage(code: string) {
-        this.languageSwitcher.switchLang(code as any);
-        this.isOpenLang.set(false);
-    }
+    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
+    protected i18nService = inject(I18nService);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -125,6 +86,13 @@ export class RegisterComponent {
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.arrowLeft
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
             )
         );
 
@@ -151,7 +119,7 @@ export class RegisterComponent {
 
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
-                console.error('Failed to load departments:', error);
+                console.error(error);
                 this.departmentLoadError.set(true);
                 return of([]);
             })
@@ -171,28 +139,28 @@ export class RegisterComponent {
             switchMap((departmentId) =>
                 departmentId
                     ? this.departmentService.getSpecialties(departmentId).pipe(
-                          map((specialties) => {
-                              this.specialtyLoadError.set(false);
-                              return specialties.map((specialty) => ({
-                                  id: specialty.codeName,
-                                  codeName: specialty.codeName,
-                                  name: {
-                                      en: specialty.name.en,
-                                      uk: specialty.name.uk,
-                                  },
-                              }));
-                          }),
-                          catchError(() => {
-                              this.specialtyLoadError.set(true);
-                              return of([]);
-                          })
-                      )
+                        map((specialties) => {
+                            this.specialtyLoadError.set(false);
+                            return specialties.map((specialty) => ({
+                                id: specialty.codeName,
+                                codeName: specialty.codeName,
+                                name: {
+                                    en: specialty.name.en,
+                                    uk: specialty.name.uk,
+                                },
+                            }));
+                        }),
+                        catchError(() => {
+                            this.specialtyLoadError.set(true);
+                            return of([]);
+                        })
+                    )
                     : of([])
             )
         );
 
         const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+            startWith({lang: this.translate.currentLang} as LangChangeEvent)
         );
 
         const loadTranslations$ = langChange$.pipe(
@@ -229,56 +197,29 @@ export class RegisterComponent {
         });
     }
 
-    private initPersonalInfoForm(): FormGroup {
-        return this.fb.group(
-            {
-                firstName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                lastName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                middleName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                email: ['', [Validators.required]],
-                password: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.minLength(
-                            REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
-                        ),
-                        Validators.maxLength(
-                            REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
-                        ),
-                    ],
-                ],
-                confirmPassword: ['', Validators.required],
-            },
-            { validators: [this.passwordMatchValidator], updateOn: 'change' }
-        );
+    get supportedLanguages() {
+        return this.i18nService.supportedLanguages;
     }
 
-    private initAcademicInfoForm(): FormGroup {
-        return this.fb.group({
-            departmentId: ['', Validators.required],
-            specialtyCodename: ['', Validators.required],
-            course: ['', Validators.required],
-            expertise: ['', Validators.required],
-        });
+    get currentLang() {
+        return this.i18nService.getCurrentLanguage();
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.language-selector')) {
+            this.isOpenLang.set(false);
+        }
+    }
+
+    toggleDropdownLang() {
+        this.isOpenLang.update((value) => !value);
+    }
+
+    selectLanguage(code: string) {
+        this.i18nService.switchLang(code as any);
+        this.isOpenLang.set(false);
     }
 
     passwordMatchValidator(form: FormGroup) {
@@ -286,8 +227,8 @@ export class RegisterComponent {
         const confirmPassword = form.get('confirmPassword');
 
         if (password?.value !== confirmPassword?.value) {
-            confirmPassword?.setErrors({ passwordMismatch: true });
-            return { passwordMismatch: true };
+            confirmPassword?.setErrors({passwordMismatch: true});
+            return {passwordMismatch: true};
         }
 
         confirmPassword?.setErrors(null);
@@ -334,7 +275,7 @@ export class RegisterComponent {
 
         this.personalInfoForm()
             .get('email')
-            ?.setValue(value, { emitEvent: false });
+            ?.setValue(value, {emitEvent: false});
 
         if (inputElement.type !== 'email') {
             setTimeout(() => {
@@ -376,7 +317,7 @@ export class RegisterComponent {
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
-            const { confirmPassword, ...personalInfo } =
+            const {confirmPassword, ...personalInfo} =
                 this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
@@ -405,11 +346,63 @@ export class RegisterComponent {
                             email: ['This email is already registered'],
                         });
                     } else {
-                        console.error('Registration failed', error);
+                        console.error(error);
                     }
                 },
             });
         }
+    }
+
+    private initPersonalInfoForm(): FormGroup {
+        return this.fb.group(
+            {
+                firstName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                lastName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                middleName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                email: ['', [Validators.required]],
+                password: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.minLength(
+                            REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
+                        ),
+                        Validators.maxLength(
+                            REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
+                        ),
+                    ],
+                ],
+                confirmPassword: ['', Validators.required],
+            },
+            {validators: [this.passwordMatchValidator], updateOn: 'change'}
+        );
+    }
+
+    private initAcademicInfoForm(): FormGroup {
+        return this.fb.group({
+            departmentId: ['', Validators.required],
+            specialtyCodename: ['', Validators.required],
+            course: ['', Validators.required],
+            expertise: ['', Validators.required],
+        });
     }
 
     private handleValidationErrors(errors: any) {
@@ -438,4 +431,5 @@ export class RegisterComponent {
             this.currentRegistrationPhase.set(1);
         }
     }
+
 }

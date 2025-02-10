@@ -13,7 +13,7 @@
     transition: all 0.3s ease;
 
     &:hover {
-        color: $text-light;
+        color: $text-light !important;
     }
 
     &:focus-visible {
@@ -21,10 +21,10 @@
         border-radius: 5px;
         border: 1px solid $text-light;
         opacity: 0;
-        color: $text-light;
+        color: $text-light !important;
     }
 
     &:active {
-        color: #888888;
+        color: #888888 !important;
     }
 }

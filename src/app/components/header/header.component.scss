@@ -8,7 +8,7 @@ a {
     background: rgb(16, 16, 16);
     transition: all 0.3s ease;
     top: 0;
-    z-index: 100000;
+    z-index: 100;
     padding: 1.25rem 7.5rem;
     animation: 1s show ease;
 
@@ -54,7 +54,8 @@ a {
         border: none;
         background: none;
 
-        img {
+        .header__menu-button-icon {
+            color: $text-white;
             width: 1.75rem;
             height: 1.75rem;
         }
@@ -80,13 +81,14 @@ a {
             list-style: none;
             gap: 2.81rem;
             padding: 0;
-            margin: auto;
+            margin: auto 0;
 
             @include tablet-horizontal {
                 margin: 0;
             }
             li {
                 padding: 0.62rem;
+                cursor: pointer;
             }
         }
         .menu__nav {
