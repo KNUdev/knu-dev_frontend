@@ -54,7 +54,8 @@ a {
         border: none;
         background: none;
 
-        img {
+        .header__menu-button-icon {
+            color: $text-white;
             width: 1.75rem;
             height: 1.75rem;
         }
@@ -87,6 +88,7 @@ a {
             }
             li {
                 padding: 0.62rem;
+                cursor: pointer;
             }
         }
         .menu__nav {

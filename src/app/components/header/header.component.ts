@@ -1,27 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router, RouterModule } from '@angular/router';
-import {
-    LangChangeEvent,
-    TranslateModule,
-    TranslateService,
-} from '@ngx-translate/core';
-import { map, Observable, startWith, switchMap } from 'rxjs';
-import { MenuNav_dropdown } from './components/dropdown/menunav.component';
-import { I18nService } from '../../services/languages/i18n.service';
-import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
 import {CommonModule} from '@angular/common';
 import {Component, HostListener, inject, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 import {Router, RouterModule} from '@angular/router';
-import {LangChangeEvent, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {LangChangeEvent, TranslateModule, TranslateService,} from '@ngx-translate/core';
 import {map, Observable, startWith, switchMap} from 'rxjs';
+import {MenuNav_dropdown} from './components/dropdown/menunav.component';
 import {I18nService} from '../../services/languages/i18n.service';
-
-const MENU_TRANSLATIONS = 'header.menu.items' as const;
 
 interface Menu {
     name: string;
@@ -47,13 +33,6 @@ interface Menu {
     ],
 })
 export class HeaderComponent {
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
-    private router = inject(Router);
-    protected languageSwitcher = LanguageSwitcherService(this.translate);
-    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
@@ -66,23 +45,19 @@ export class HeaderComponent {
         menuIconPath: 'assets/icon/system/menu.svg',
         closeIconPath: 'assets/icon/system/close.svg',
     } as const;
-
     menu$: Observable<Menu[]>;
-    // protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    userRole = 'noAuth';
+    public i18nService = inject(I18nService);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private translate = inject(TranslateService);
+    private router = inject(Router);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
 
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({lang: this.translate.currentLang} as LangChangeEvent)
         );
-
-        const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
-        );
-
-        this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
-        );
-
 
         const loadTranslations$ = langChange$.pipe(
             switchMap((event) =>
@@ -90,6 +65,12 @@ export class HeaderComponent {
                     'components/header',
                     event.lang
                 )
+            )
+        );
+
+        const menuTranslations$ = loadTranslations$.pipe(
+            switchMap(() =>
+                this.translate.get(['header.menu.' + this.userRole])
             )
         );
 
@@ -106,8 +87,20 @@ export class HeaderComponent {
                 this.iconPaths.arrowDown
             )
         );
+
+        this.matIconRegistry.addSvgIcon(
+            'closeMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.closeIconPath
+            )
+        );
+        this.matIconRegistry.addSvgIcon(
+            'openMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.menuIconPath
+            )
+        );
     }
-    userRole = 'noAuth';
 
     @HostListener('window:scroll', [])
     onWindowScroll() {
@@ -172,12 +165,5 @@ export class HeaderComponent {
 
         return this.iconPaths.logoMiniPath;
     }
-
-    dropdownName = 'menu_nav';
-
-    navigationItems: Menu[] = [
-        { name: 'Відкриті набори', link: '/open-sets' },
-        { name: 'Закриті набори', link: '/closed-sets' },
-    ];
 }
 

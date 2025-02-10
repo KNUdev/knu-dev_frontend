@@ -197,6 +197,14 @@ export class RegisterComponent {
         });
     }
 
+    get supportedLanguages() {
+        return this.i18nService.supportedLanguages;
+    }
+
+    get currentLang() {
+        return this.i18nService.getCurrentLanguage();
+    }
+
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
@@ -422,14 +430,6 @@ export class RegisterComponent {
         ) {
             this.currentRegistrationPhase.set(1);
         }
-    }
-
-    get supportedLanguages() {
-        return this.i18nService.supportedLanguages;
-    }
-
-    get currentLang() {
-        return this.i18nService.getCurrentLanguage();
     }
 
 }
