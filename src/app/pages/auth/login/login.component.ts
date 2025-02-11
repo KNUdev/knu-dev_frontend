@@ -15,15 +15,7 @@ import {
     TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
-import {
-    BehaviorSubject,
-    catchError,
-    map,
-    Observable,
-    of,
-    startWith,
-    switchMap,
-} from 'rxjs';
+import { startWith, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { FormErrorService } from '../../../services/error.services';
@@ -77,34 +69,34 @@ export class LoginComponent {
     constructor(
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
-        private readonly formErrorService: FormErrorService,
+        private readonly formErrorService: FormErrorService
     ) {
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowLeft,
-            ),
+                this.iconPaths.arrowLeft
+            )
         );
 
         this.matIconRegistry.addSvgIcon(
             'arrowDown',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowDown,
-            ),
+                this.iconPaths.arrowDown
+            )
         );
 
         this.matIconRegistry.addSvgIcon(
             'errorTriangle',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.errorTriangle,
-            ),
+                this.iconPaths.errorTriangle
+            )
         );
 
         this.matIconRegistry.addSvgIcon(
             'errorQuadrilateral',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.errorQuadrilateral,
-            ),
+                this.iconPaths.errorQuadrilateral
+            )
         );
 
         this.personalInfoForm.set(this.initPersonalInfoForm());
@@ -120,10 +112,10 @@ export class LoginComponent {
                 } as LangChangeEvent),
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
-                        'pages/home',
-                        event.lang,
-                    ),
-                ),
+                        'pages/auth/login',
+                        event.lang
+                    )
+                )
             )
             .subscribe();
     }
@@ -240,10 +232,10 @@ export class LoginComponent {
                 [
                     Validators.required,
                     Validators.minLength(
-                        REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH,
+                        REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
                     ),
                     Validators.maxLength(
-                        REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH,
+                        REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
                     ),
                 ],
             ],
@@ -258,7 +250,7 @@ export class LoginComponent {
                 if (errors[errorKey]?.length > 0) {
                     newErrors[formControlName] = errors[errorKey];
                 }
-            },
+            }
         );
 
         this.formErrorService.setBackendErrors(newErrors);
