@@ -2,111 +2,129 @@
     <div [class.authPage]="isAuthPage()" class="header__container">
         <div class="header__logo">
             <a [routerLink]="['/']" aria-label="Go to homepage">
-                <img [src]="getLogo()" alt="KNUdev Logo" loading="lazy"/>
+                <img [src]="getLogo()" alt="KNUdev Logo" loading="lazy" />
             </a>
         </div>
 
-        @if (!isAuthPage()) {
-            @if (isMobile()) {
-                <button
-                    class="header__menu-button"
-                    (click)="toggleMenu()"
-                    aria-label="Toggle navigation menu"
-                    [attr.aria-expanded]="isMenuOpen()"
-                >
-                    <mat-icon
-                        [svgIcon]="isMenuOpen() ? 'closeMenu' : 'openMenu'"
-                        class="header__menu-button-icon"
-                    ></mat-icon>
-                </button>
-            }
-            <div
-                class="header__menu-container"
-                [class.open]="isMenuOpen()"
-                role="navigation"
-                aria-label="Main navigation"
-            >
-                <ul class="header__menu-container__list">
-                    @for (item of menu$ | async; track $index) {
-                        <li>
-                            @if (!item.dropdown) {
-                                <a
-                                    [routerLink]="[item.link]"
-                                    routerLinkActive="active"
-                                    [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-                                    rel="noopener noreferrer"
-                                    class="menu__nav"
-                                    [attr.aria-label]="item.name"
-                                >
-                                    {{ item.name }}
-                                </a>
-                            } @else {
-                                <header-menunav-dropdown
-                                    [label]="item.name"
-                                    [items]="item.dropdown"
-                                />
-                            }
-                        </li>
-                    }
-                </ul>
-                <hr aria-hidden="true"/>
-                <div class="header__menu-container__bottom">
-                    <div
-                        class="language-selector"
-                        [class.open]="isOpenLang()"
-                        role="region"
-                        aria-label="Language selection"
+        @if (!isAuthPage()) { @if (isMobile()) {
+        <button
+            class="header__menu-button"
+            (click)="toggleMenu()"
+            aria-label="Toggle navigation menu"
+            [attr.aria-expanded]="isMenuOpen()"
+        >
+            <mat-icon
+                [svgIcon]="isMenuOpen() ? 'closeMenu' : 'openMenu'"
+                class="header__menu-button-icon"
+            ></mat-icon>
+        </button>
+        }
+        <div
+            class="header__menu-container"
+            [class.open]="isMenuOpen()"
+            role="navigation"
+            aria-label="Main navigation"
+        >
+            <ul class="header__menu-container__list">
+                @for (item of menu$ | async; track $index) {
+                <li>
+                    @if (!item.dropdown) {
+                    <a
+                        [routerLink]="[item.link]"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+                        rel="noopener noreferrer"
+                        class="menu__nav"
+                        [attr.aria-label]="item.name"
                     >
+                        {{ item.name }}
+                    </a>
+                    } @else {
+                    <header-menunav-dropdown
+                        [label]="item.name"
+                        [items]="item.dropdown"
+                    />
+                    }
+                </li>
+                }
+            </ul>
+            <hr aria-hidden="true" />
+            <div class="header__menu-container__bottom">
+                <div
+                    class="language-selector"
+                    [class.open]="isOpenLang()"
+                    role="region"
+                    aria-label="Language selection"
+                >
+                    <button
+                        class="selector-button"
+                        (click)="toggleDropdownLang()"
+                        aria-label="Select language"
+                        [attr.aria-expanded]="isOpenLang()"
+                        aria-controls="language-dropdown"
+                    >
+                        @if (currentLanguage$ | async; as lang) {
+                        <img
+                            [src]="lang.flagRound"
+                            [alt]="lang.name"
+                            class="flag-icon"
+                        />
+                        <mat-icon
+                            svgIcon="arrowDown"
+                            class="chevron"
+                            [class.up]="isOpenLang()"
+                            aria-hidden="true"
+                        ></mat-icon>
+                        }
+                    </button>
+                    @if (isOpenLang()) {
+                    <div class="dropdown-menu">
+                        @for (lang of i18nService.supportedLanguages(); track
+                        lang.code) {
                         <button
-                            class="selector-button"
-                            (click)="toggleDropdownLang()"
-                            aria-label="Select language"
-                            [attr.aria-expanded]="isOpenLang()"
-                            aria-controls="language-dropdown"
+                            class="language-option"
+                            [class.active]="
+                                lang.code === i18nService.currentLang()
+                            "
+                            (click)="selectLanguage(lang.code)"
+                            [attr.aria-current]="
+                                lang.code === i18nService.currentLang()
+                            "
+                            [attr.aria-label]="lang.name"
                         >
-                            @if (currentLanguage$ | async; as lang) {
-                                <img
-                                    [src]="lang.flagRound"
-                                    [alt]="lang.name"
-                                    class="flag-icon"
-                                />
-                                <mat-icon
-                                    svgIcon="arrowDown"
-                                    class="chevron"
-                                    [class.up]="isOpenLang()"
-                                    aria-hidden="true"
-                                ></mat-icon>
-                            }
+                            <span>{{ lang.name }}</span>
+                            <img
+                                [src]="lang.imgMiniPath"
+                                [alt]="lang.name"
+                                class="flag-icon"
+                            />
                         </button>
-                        @if (isOpenLang()) {
-                            <div class="dropdown-menu">
-                                @for (lang of i18nService.supportedLanguages(); track lang.code) {
-                                    <button
-                                        class="language-option"
-                                        [class.active]="lang.code === i18nService.currentLang()"
-                                        (click)="selectLanguage(lang.code)"
-                                        [attr.aria-current]="lang.code === i18nService.currentLang()"
-                                        [attr.aria-label]="lang.name"
-                                    >
-                                        <span>{{ lang.name }}</span>
-                                        <img
-                                            [src]="lang.imgMiniPath"
-                                            [alt]="lang.name"
-                                            class="flag-icon"
-                                        />
-                                    </button>
-                                }
-                            </div>
                         }
                     </div>
-                    <div class="divider" aria-hidden="true"></div>
-                    <div class="header__avatar">
-                        <a [routerLink]="['/auth/register']" aria-label="Register">
-                            <img [src]="iconPaths.defaultAvatarPath" alt="User avatar"/>
-                        </a>
-                    </div>
+                    }
                 </div>
+                <div class="divider" aria-hidden="true"></div>
+                @if(userRole == "noAuth"){
+                <app-nofill-button
+                    [text]="'header.loginButton' | translate"
+                    route="/auth/register"
+                >
+                </app-nofill-button>
+                } @else {
+                <div class="header__avatar">
+                    <a
+                        [routerLink]="['/profile/:userId']"
+                        aria-label="userProfile"
+                    >
+                        <img
+                            [src]="iconPaths.defaultAvatarPath"
+                            alt="User avatar"
+                        />
+                    </a>
+                </div>
+                }
             </div>
+        </div>
         }
     </div>
 </header>

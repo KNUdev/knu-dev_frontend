@@ -1,5 +1,6 @@
 {
     "header": {
+        "loginButton": "Увійти/Зареєструватися",
         "menu": {
             "noAuth": [
                 {

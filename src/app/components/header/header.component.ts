@@ -1,13 +1,19 @@
-import {CommonModule} from '@angular/common';
-import {Component, HostListener, inject, signal} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Router, RouterModule} from '@angular/router';
-import {LangChangeEvent, TranslateModule, TranslateService,} from '@ngx-translate/core';
-import {map, Observable, startWith, switchMap} from 'rxjs';
-import {MenuNav_dropdown} from './components/dropdown/menunav.component';
-import {I18nService} from '../../services/languages/i18n.service';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router, RouterModule } from '@angular/router';
+import {
+    LangChangeEvent,
+    TranslateModule,
+    TranslateService,
+} from '@ngx-translate/core';
+import { map, Observable, startWith, switchMap } from 'rxjs';
+import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
+import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
+import { I18nService } from '../../services/languages/i18n.service';
+import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
 interface Menu {
     name: string;
@@ -30,6 +36,8 @@ interface Menu {
         RouterModule,
         MenuNav_dropdown,
         MatIconModule,
+        BorderButtonComponent,
+        NoFillButtonComponent,
     ],
 })
 export class HeaderComponent {
@@ -56,7 +64,7 @@ export class HeaderComponent {
 
     constructor() {
         const langChange$ = this.translate.onLangChange.pipe(
-            startWith({lang: this.translate.currentLang} as LangChangeEvent)
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
 
         const loadTranslations$ = langChange$.pipe(
@@ -166,4 +174,3 @@ export class HeaderComponent {
         return this.iconPaths.logoMiniPath;
     }
 }
-
