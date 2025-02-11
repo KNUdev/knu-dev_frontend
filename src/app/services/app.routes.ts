@@ -1,6 +1,6 @@
-import { Routes } from '@angular/router';
-import { ErrorStateGuard } from '../pages/error/404/404.guard';
-import { NotFoundPage } from '../pages/error/404/404.component';
+import {Routes} from '@angular/router';
+import {ErrorStateGuard} from '../pages/error/404/404.guard';
+import {NotFoundPage} from '../pages/error/404/404.component';
 
 export const routes: Routes = [
     {
@@ -29,9 +29,23 @@ export const routes: Routes = [
                 (m) => m.UserProfileComponent
             ),
     },
+    // {
+    //     path: 'error/404',
+    //     component: NotFoundPage,
+    //     canActivate: [ErrorStateGuard],
+    // },
     {
         path: 'error/404',
-        component: NotFoundPage,
-        canActivate: [ErrorStateGuard],
+        loadComponent: () =>
+            import('../pages/error/404/404.component').then(
+                (m) => m.NotFoundPage
+            )
+    },
+    {
+        path: 'error/500',
+        loadComponent: () =>
+            import('../pages/error/500/500.component').then(
+                (m) => m.InternalErrorPage
+            )
     },
 ];

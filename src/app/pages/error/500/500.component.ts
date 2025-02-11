@@ -7,14 +7,14 @@ import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
-    selector: 'error-not-found',
+    selector: 'error-internal',
     imports: [
         TranslatePipe
     ],
-    templateUrl: './404.component.html',
-    styleUrl: './404.component.scss',
+    templateUrl: './500.component.html',
+    styleUrl: './500.component.scss',
 })
-export class NotFoundPage {
+export class InternalErrorPage {
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
     private router = inject(Router);
@@ -22,7 +22,7 @@ export class NotFoundPage {
     private matIconRegistry = inject(MatIconRegistry);
 
     readonly iconPaths = {
-        error: 'assets/icon/system/error404.svg',
+        error: 'assets/icon/system/error500.svg',
     } as const;
 
     constructor() {
@@ -33,7 +33,7 @@ export class NotFoundPage {
                 } as LangChangeEvent),
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
-                        'pages/error/404',
+                        'pages/error/500',
                         event.lang
                     )
                 )
