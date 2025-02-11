@@ -9,24 +9,24 @@ export const routes: Routes = [
             import('../pages/home/home.component').then((m) => m.HomeComponent),
     },
     {
-        path: 'login',
+        path: 'auth/login',
         loadComponent: () =>
             import('../pages/auth/login/login.component').then(
-                (m) => m.LoginComponent
+                (m) => m.LoginComponent,
             ),
     },
     {
         path: 'auth/register',
         loadComponent: () =>
             import('../pages/auth/register/register.component').then(
-                (m) => m.RegisterComponent
+                (m) => m.RegisterComponent,
             ),
     },
     {
         path: 'profile/:userId',
         loadComponent: () =>
             import('../pages/user-profile/user-profile.component').then(
-                (m) => m.UserProfileComponent
+                (m) => m.UserProfileComponent,
             ),
     },
     {
