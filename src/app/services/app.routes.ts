@@ -29,11 +29,11 @@ export const routes: Routes = [
                 (m) => m.UserProfileComponent
             ),
     },
-    // {
-    //     path: 'error/404',
-    //     component: NotFoundPage,
-    //     canActivate: [ErrorStateGuard],
-    // },
+    {
+        path: 'error/404',
+        component: NotFoundPage,
+        canActivate: [ErrorStateGuard],
+    },
     {
         path: 'error/404',
         loadComponent: () =>

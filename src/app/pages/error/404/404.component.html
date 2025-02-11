@@ -1,8 +1,8 @@
 <div class="container">
     <section class="error">
         <img class="error__image" alt="Page not found" [src]="iconPaths.error"/>
-        <span class="error__title">{{ "error.title" | translate }}</span>
+        <h1 class="error__title">{{ "error.title" | translate }}</h1>
         <p class="error__description">{{ "error.description" | translate }}</p>
-        <a href="/" class="error__go-back-button">{{ "error.return-button-text" | translate }}</a>
+        <a routerLink="/" class="error__go-back-button">{{ "error.return-button-text" | translate }}</a>
     </section>
 </div>

@@ -1,5 +1,5 @@
 import { Component, inject, ViewEncapsulation } from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {I18nService} from '../../../services/languages/i18n.service';
 import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {startWith, switchMap} from 'rxjs';
@@ -9,7 +9,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 @Component({
     selector: 'error-not-found',
     imports: [
-        TranslatePipe
+        TranslatePipe,
+        RouterLink
     ],
     templateUrl: './404.component.html',
     styleUrl: './404.component.scss',
