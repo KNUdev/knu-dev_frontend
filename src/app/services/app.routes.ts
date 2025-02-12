@@ -43,4 +43,11 @@ export const routes: Routes = [
                 (m) => m.InternalErrorPage
             )
     },
+    {
+        path: 'origins-and-founders',
+        loadComponent: () =>
+            import('../pages/origins-and-founders/origins-and-founders.component').then(
+                (m) => m.OriginsAndFoundersComponent
+            ),
+    },
 ];
