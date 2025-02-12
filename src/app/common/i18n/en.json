@@ -51,7 +51,7 @@
             ]
         }
     },
-    "course": [
+    "yearOfStudy": [
         {
             "id": "1",
             "displayedName": "1st Bachelor"
@@ -93,21 +93,21 @@
             "displayedName": "4th PhD"
         }
     ],
-    "expertises": [
+    "expertise": [
         {
-            "id": "Fullstack",
-            "displayedName": "Fullstack"
+            "id": "FULLSTACK1",
+            "displayedName": "Fullstack1"
         },
         {
-            "id": "Backend",
+            "id": "BACKEND",
             "displayedName": "Backend"
         },
         {
-            "id": "Frontend",
+            "id": "FRONTEND",
             "displayedName": "Frontend"
         },
         {
-            "id": "Ui-Ux",
+            "id": "UI_UX_DESIGNER",
             "displayedName": "Ui/Ux designer"
         }
     ],

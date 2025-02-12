@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -20,18 +20,32 @@ import { environment } from '../../../../environments/environment.development';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
-import {
-    ERROR_KEY_TO_CONTROL,
-    VALIDATION_KEYS,
-    ValidationErrors,
-} from '../register/register.model';
+import { AuthService } from '../../../services/login.service';
+export interface ValidationErrors {
+    [key: string]: string[];
+}
 
-const REGISTER_CONSTANTS = {
+export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
+    emailErrors: 'email',
+    passwordErrors: 'password',
+};
+
+export const VALIDATION_KEYS = {
+    password: ['required', 'minlength', 'maxlength', 'pattern'],
+    email: ['required', 'invalidDomain'],
+} as const;
+
+const LOGIN_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
     PASSWORD_MAX_LENGTH: 64,
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
+
+export interface AuthResponse {
+    accessToken: string;
+    refreshToken: string;
+}
 
 @Component({
     selector: 'app-login',
@@ -69,7 +83,9 @@ export class LoginComponent {
     constructor(
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
-        private readonly formErrorService: FormErrorService
+        private readonly formErrorService: FormErrorService,
+        private readonly router: Router,
+        private readonly authService: AuthService
     ) {
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
@@ -164,7 +180,7 @@ export class LoginComponent {
 
         if (
             value.includes('@') &&
-            !value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)
+            !value.endsWith(LOGIN_CONSTANTS.EMAIL_DOMAIN)
         ) {
             this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
@@ -186,9 +202,9 @@ export class LoginComponent {
         let value = this.personalInfoForm().get('email')?.value.trim();
 
         if (value && !value.includes('@')) {
-            value += REGISTER_CONSTANTS.EMAIL_DOMAIN;
+            value += LOGIN_CONSTANTS.EMAIL_DOMAIN;
             this.personalInfoForm().get('email')?.setValue(value);
-        } else if (value && !value.endsWith(REGISTER_CONSTANTS.EMAIL_DOMAIN)) {
+        } else if (value && !value.endsWith(LOGIN_CONSTANTS.EMAIL_DOMAIN)) {
             this.personalInfoForm().get('email')?.setErrors({
                 invalidDomain: true,
             });
@@ -201,26 +217,43 @@ export class LoginComponent {
         this.formErrorService.setBackendErrors({});
 
         if (this.personalInfoForm().valid) {
-            const formData = new FormData();
+            const loginData = {
+                email: this.personalInfoForm().get('email')?.value,
+                password: this.personalInfoForm().get('password')?.value,
+            };
 
-            this.http.post(environment.apiRegisterUrl, formData).subscribe({
-                next: (response) => {
-                    console.log('Registration successful', response);
-                },
-                error: (error: HttpErrorResponse) => {
-                    if (error.status === 400 && error.error) {
-                        this.handleValidationErrors(error.error);
-                    }
-                    if (error.status === 200 && error.error) {
-                        this.currentRegistrationPhase.set(1);
-                        this.backendErrors.set({
-                            email: ['This email is already registered'],
-                        });
-                    } else {
-                        console.error(error);
-                    }
-                },
-            });
+            this.http
+                .post<AuthResponse>(
+                    `${environment.apiBaseUrl}/auth/login`,
+                    loginData
+                )
+                .subscribe({
+                    next: (response) => {
+                        // Сохраняем токены в куках
+                        document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
+                        document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
+
+                        // TODO: Дополнительно можно вызвать сервис, обновляющий данные пользователя (email, роли и т.п.)
+                        // и переадресовать на dashboard
+                        // this.router.navigate(['/dashboard']);
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        if (error.status === 400) {
+                            this.handleValidationErrors(error.error);
+                        } else if (error.status === 401) {
+                            this.formErrorService.setBackendErrors({
+                                password: ['Invalid email or password'],
+                            });
+                        } else {
+                            console.error('Login failed:', error);
+                            this.formErrorService.setBackendErrors({
+                                email: [
+                                    'An unexpected error occurred. Please try again later.',
+                                ],
+                            });
+                        }
+                    },
+                });
         }
     }
 
@@ -231,12 +264,8 @@ export class LoginComponent {
                 '',
                 [
                     Validators.required,
-                    Validators.minLength(
-                        REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
-                    ),
-                    Validators.maxLength(
-                        REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
-                    ),
+                    Validators.minLength(LOGIN_CONSTANTS.PASSWORD_MIN_LENGTH),
+                    Validators.maxLength(LOGIN_CONSTANTS.PASSWORD_MAX_LENGTH),
                 ],
             ],
         });

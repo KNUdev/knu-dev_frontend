@@ -10,7 +10,6 @@ import {
     TranslateService,
 } from '@ngx-translate/core';
 import { map, Observable, startWith, switchMap } from 'rxjs';
-import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
 import { I18nService } from '../../services/languages/i18n.service';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
@@ -22,6 +21,12 @@ interface Menu {
         name: string;
         link: string;
     }[];
+}
+
+interface JwtPayload {
+    sub: string; // email или имя пользователя
+    roles: string[];
+    // ...допустимые поля из токена
 }
 
 @Component({
@@ -36,7 +41,6 @@ interface Menu {
         RouterModule,
         MenuNav_dropdown,
         MatIconModule,
-        BorderButtonComponent,
         NoFillButtonComponent,
     ],
 })
@@ -54,15 +58,27 @@ export class HeaderComponent {
         closeIconPath: 'assets/icon/system/close.svg',
     } as const;
     menu$: Observable<Menu[]>;
-    userRole = 'noAuth';
     public i18nService = inject(I18nService);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     private translate = inject(TranslateService);
     private router = inject(Router);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    public userEmail = signal<string>('');
+    public roles = signal<string[]>(['noAuth']);
 
     constructor() {
+        const token = this.getCookie('accessToken');
+        if (token) {
+            const payload = this.decodeJwt(token);
+            if (payload) {
+                this.userEmail.set(payload.sub);
+                this.roles.set(payload.roles); // Now accepts string[]
+            }
+        }
+
+        console.log(this.roles()[0]);
+
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
@@ -78,14 +94,14 @@ export class HeaderComponent {
 
         const menuTranslations$ = loadTranslations$.pipe(
             switchMap(() =>
-                this.translate.get(['header.menu.' + this.userRole])
+                this.translate.get(['header.menu.' + this.roles()[0]])
             )
         );
 
         this.menu$ = menuTranslations$.pipe(
             map(
                 (translations) =>
-                    translations['header.menu.' + this.userRole] || []
+                    translations['header.menu.' + this.roles()[0]] || []
             )
         );
 
@@ -172,5 +188,40 @@ export class HeaderComponent {
         }
 
         return this.iconPaths.logoMiniPath;
+    }
+
+    private getCookie(name: string): string | null {
+        const matches = document.cookie.match(
+            new RegExp(
+                '(?:^|; )' +
+                    name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
+                    '=([^;]*)'
+            )
+        );
+        return matches ? decodeURIComponent(matches[1]) : null;
+    }
+
+    private decodeJwt(token: string): JwtPayload | null {
+        try {
+            const payloadPart = token.split('.')[1];
+            const decoded = atob(payloadPart);
+            return JSON.parse(decoded);
+        } catch (e) {
+            console.error('Не удалось декодировать токен:', e);
+            return null;
+        }
+    }
+
+    logout(): void {
+        // Очищаем куки, устанавливая дату истечения в прошлом
+        document.cookie =
+            'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        document.cookie =
+            'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        // Сбрасываем данные пользователя
+        this.userEmail.set('');
+        this.roles.set(['noAuth']);
+        // Переход на страницу логина
+        this.router.navigate(['/auth/login']);
     }
 }
