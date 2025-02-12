@@ -45,6 +45,9 @@ const LOGIN_CONSTANTS = {
 export interface AuthResponse {
     accessToken: string;
     refreshToken: string;
+    userId: string;
+    roles: string[];
+    email: string;
 }
 
 @Component({
@@ -229,13 +232,10 @@ export class LoginComponent {
                 )
                 .subscribe({
                     next: (response) => {
-                        // Сохраняем токены в куках
                         document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
                         document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
 
-                        // TODO: Дополнительно можно вызвать сервис, обновляющий данные пользователя (email, роли и т.п.)
-                        // и переадресовать на dashboard
-                        // this.router.navigate(['/dashboard']);
+                        this.router.navigate(['/profile']);
                     },
                     error: (error: HttpErrorResponse) => {
                         if (error.status === 400) {

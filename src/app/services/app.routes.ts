@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ErrorStateGuard } from '../pages/error/404/404.guard';
 import { NotFoundPage } from '../pages/error/404/404.component';
+import { ErrorStateGuard } from '../pages/error/404/404.guard';
 
 export const routes: Routes = [
     {
@@ -12,23 +12,24 @@ export const routes: Routes = [
         path: 'auth/login',
         loadComponent: () =>
             import('../pages/auth/login/login.component').then(
-                (m) => m.LoginComponent,
+                (m) => m.LoginComponent
             ),
     },
     {
         path: 'auth/register',
         loadComponent: () =>
             import('../pages/auth/register/register.component').then(
-                (m) => m.RegisterComponent,
+                (m) => m.RegisterComponent
             ),
     },
     {
-        path: 'profile/:userId',
+        path: 'profile',
         loadComponent: () =>
             import('../pages/user-profile/user-profile.component').then(
-                (m) => m.UserProfileComponent,
+                (m) => m.UserProfileComponent
             ),
     },
+
     {
         path: 'error/404',
         component: NotFoundPage,

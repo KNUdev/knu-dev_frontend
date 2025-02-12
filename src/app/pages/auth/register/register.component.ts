@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -41,6 +41,7 @@ import {
     ValidationErrors,
     YearOfStudy,
 } from './register.model';
+import { AuthService } from '../../../services/login.service';
 
 const YEAR_OF_STUDY_TRANSLATIONS = 'yearOfStudy' as const;
 const EXPERTISE_TRANSLATIONS = 'expertise' as const;
@@ -51,6 +52,11 @@ const REGISTER_CONSTANTS = {
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
+
+export interface AuthResponse {
+    accessToken: string;
+    refreshToken: string;
+}
 
 @Component({
     selector: 'app-register',
@@ -100,7 +106,9 @@ export class RegisterComponent {
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
         private readonly departmentService: DepartmentService,
-        readonly formErrorService: FormErrorService
+        readonly formErrorService: FormErrorService,
+        private readonly router: Router,
+        private readonly authService: AuthService
     ) {
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
@@ -352,24 +360,29 @@ export class RegisterComponent {
             formData.append('yearOfStudy', academicInfo.yearOfStudy);
             formData.append('expertise', academicInfo.expertise);
 
-            this.http.post(environment.apiRegisterUrl, formData).subscribe({
-                next: (response) => {
-                    console.log('Registration successful', response);
-                },
-                error: (error: HttpErrorResponse) => {
-                    if (error.status === 400 && error.error) {
-                        this.handleValidationErrors(error.error);
-                    }
-                    if (error.status === 200 && error.error) {
-                        this.currentRegistrationPhase.set(1);
-                        this.backendErrors.set({
-                            email: ['This email is already registered'],
-                        });
-                    } else {
-                        console.error(error);
-                    }
-                },
-            });
+            this.http
+                .post<AuthResponse>(environment.apiRegisterUrl, formData)
+                .subscribe({
+                    next: (response) => {
+                        document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
+                        document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
+
+                        this.router.navigate(['/profile']);
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        if (error.status === 400 && error.error) {
+                            this.handleValidationErrors(error.error);
+                        }
+                        if (error.status === 200 && error.error) {
+                            this.currentRegistrationPhase.set(1);
+                            this.backendErrors.set({
+                                email: ['This email is already registered'],
+                            });
+                        } else {
+                            console.error(error);
+                        }
+                    },
+                });
         }
     }
 

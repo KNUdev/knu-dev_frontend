@@ -9,7 +9,7 @@
         @if (!isAuthPage()) { @if (isMobile()) {
         <button
             class="header__menu-button"
-            (click)="toggleMenu()"
+            (click)="toggleMenu($event)"
             aria-label="Toggle navigation menu"
             [attr.aria-expanded]="isMenuOpen()"
         >
@@ -104,7 +104,7 @@
                     }
                 </div>
                 <div class="divider" aria-hidden="true"></div>
-                @if(roles()[0] == "noAuth"){
+                @if(userRoles()[0] === 'noAuth'){
                 <app-nofill-button
                     [text]="'header.loginButton' | translate"
                     route="/auth/register"
@@ -113,7 +113,7 @@
                 } @else {
                 <div class="header__avatar">
                     <a
-                        [routerLink]="['/profile/:userId']"
+                        [routerLink]="['/profile', userId()]"
                         aria-label="userProfile"
                     >
                         <img
@@ -123,7 +123,7 @@
                     </a>
                 </div>
                 <span>{{ userEmail() }}</span>
-                <span> {{ roles() }}</span>
+                <span> {{ userRoles() }}</span>
                 <button (click)="logout()">Выход</button>
                 }
             </div>

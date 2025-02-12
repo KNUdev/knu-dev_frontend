@@ -12,6 +12,7 @@ import {
 import { map, Observable, startWith, switchMap } from 'rxjs';
 import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
 import { I18nService } from '../../services/languages/i18n.service';
+import { AuthService } from '../../services/login.service';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
 interface Menu {
@@ -24,6 +25,7 @@ interface Menu {
 }
 
 interface JwtPayload {
+    iat: string;
     sub: string; // email или имя пользователя
     roles: string[];
     // ...допустимые поля из токена
@@ -64,20 +66,29 @@ export class HeaderComponent {
     private router = inject(Router);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+
+    public authService = inject(AuthService);
+
     public userEmail = signal<string>('');
-    public roles = signal<string[]>(['noAuth']);
+    public userRoles = signal<string[]>(['noAuth']);
+    public userId = signal<string>('');
+
+    logout() {
+        this.authService.logout();
+    }
 
     constructor() {
         const token = this.getCookie('accessToken');
         if (token) {
             const payload = this.decodeJwt(token);
             if (payload) {
+                this.userId.set(payload.iat);
                 this.userEmail.set(payload.sub);
-                this.roles.set(payload.roles); // Now accepts string[]
+                this.userRoles.set(payload.roles); // Now accepts string[]
             }
         }
 
-        console.log(this.roles()[0]);
+        console.log(this.userRoles()[0]);
 
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
@@ -94,14 +105,14 @@ export class HeaderComponent {
 
         const menuTranslations$ = loadTranslations$.pipe(
             switchMap(() =>
-                this.translate.get(['header.menu.' + this.roles()[0]])
+                this.translate.get(['header.menu.' + this.userRoles()[0]])
             )
         );
 
         this.menu$ = menuTranslations$.pipe(
             map(
                 (translations) =>
-                    translations['header.menu.' + this.roles()[0]] || []
+                    translations['header.menu.' + this.userRoles()[0]] || []
             )
         );
 
@@ -139,14 +150,6 @@ export class HeaderComponent {
         }
     }
 
-    @HostListener('document:click', ['$event'])
-    onDocumentClick(event: MouseEvent) {
-        const target = event.target as HTMLElement;
-        if (!target.closest('.language-selector')) {
-            this.isOpenLang.set(false);
-        }
-    }
-
     @HostListener('window:resize', ['$event'])
     onResize() {
         this.isMobile.set(window.innerWidth < 1440);
@@ -155,8 +158,31 @@ export class HeaderComponent {
         }
     }
 
-    toggleMenu() {
+    toggleMenu(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation();
+        }
         this.isMenuOpen.update((value) => !value);
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+
+        if (this.isMobile()) {
+            const isMenuLink = target.closest(
+                'a:not(.language-selector *, .dropdown-menu *)'
+            );
+
+            if (isMenuLink) {
+                this.isMenuOpen.set(false);
+                return;
+            }
+
+            if (!target.closest('.header')) {
+                this.isMenuOpen.set(false);
+            }
+        }
     }
 
     toggleDropdownLang() {
@@ -210,18 +236,5 @@ export class HeaderComponent {
             console.error('Не удалось декодировать токен:', e);
             return null;
         }
-    }
-
-    logout(): void {
-        // Очищаем куки, устанавливая дату истечения в прошлом
-        document.cookie =
-            'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-        document.cookie =
-            'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-        // Сбрасываем данные пользователя
-        this.userEmail.set('');
-        this.roles.set(['noAuth']);
-        // Переход на страницу логина
-        this.router.navigate(['/auth/login']);
     }
 }
