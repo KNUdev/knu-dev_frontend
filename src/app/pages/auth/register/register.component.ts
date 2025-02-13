@@ -29,6 +29,7 @@ import { LabelInput } from '../../../common/components/input/label-input/label-i
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
+import { AuthService } from '../../../services/login.service';
 import {
     SelectOption,
     WriteDropDowns,
@@ -41,7 +42,6 @@ import {
     ValidationErrors,
     YearOfStudy,
 } from './register.model';
-import { AuthService } from '../../../services/login.service';
 
 const YEAR_OF_STUDY_TRANSLATIONS = 'yearOfStudy' as const;
 const EXPERTISE_TRANSLATIONS = 'expertise' as const;
@@ -364,10 +364,7 @@ export class RegisterComponent {
                 .post<AuthResponse>(environment.apiRegisterUrl, formData)
                 .subscribe({
                     next: (response) => {
-                        document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
-                        document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
-
-                        this.router.navigate(['/profile']);
+                        this.router.navigate(['/auth/login']);
                     },
                     error: (error: HttpErrorResponse) => {
                         if (error.status === 400 && error.error) {

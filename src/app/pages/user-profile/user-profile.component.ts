@@ -20,6 +20,7 @@ import { BorderButtonComponent } from '../../common/components/button/arrow-butt
 import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
 import { AccountProfileService } from '../../services/account-profile.service';
 import { I18nService } from '../../services/languages/i18n.service';
+import { AuthService } from '../../services/login.service';
 import { ProjectService } from '../../services/project.service';
 import { FallbackCardComponent } from './components/fallback-card/fallback-card.component';
 import { ProfileImageUploadDialogComponent } from './components/image-upload-dialog/profile-image-upload-dialog.component';
@@ -28,12 +29,6 @@ import {
     ItemDetail,
 } from './components/item-card/item-card.component';
 import { AccountProfile, Education, Project } from './user-profile.model';
-
-interface JwtPayload {
-    iat: string;
-    sub: string;
-    roles: string[];
-}
 
 @Component({
     selector: 'app-user-profile',
@@ -53,9 +48,6 @@ interface JwtPayload {
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
     @ViewChild('bannerInput') bannerInput!: ElementRef<HTMLInputElement>;
-    public userEmail = signal<string>('');
-    public userRoles = signal<string[]>(['noAuth']);
-    public userId = signal<string>('');
     public accountProfile = signal<AccountProfile | null>(null);
     public accountProjects = signal<Project[]>([]);
     public showLoadMore = signal<boolean>(false);
@@ -71,6 +63,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private readonly userService = inject(AccountProfileService);
     private readonly projectService = inject(ProjectService);
     private readonly translate = inject(TranslateService);
+    private readonly authService = inject(AuthService);
     private readonly iconPaths = {
         addBanner: 'assets/icon/system/pluse.svg',
         changeAvatar: 'assets/icon/system/edit.svg',
@@ -115,6 +108,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         return !!(programs && programs.length);
     }
 
+    private get userId(): string {
+        return this.authService.getCurrentUserId();
+    }
+
     ngOnInit(): void {
         const localeSub = this.i18nService.currentLocale$.subscribe(
             (locale) => {
@@ -123,30 +120,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         );
         this.subscriptions.add(localeSub);
 
-        const token = this.getCookie('accessToken');
-        let id: string = '';
-        if (token) {
-            const payload = this.decodeJwt(token);
-
-            if (payload) {
-                id = payload.iat;
-                this.userId.set(payload.iat);
-                this.userEmail.set(payload.sub);
-                this.userRoles.set(payload.roles);
-            }
+        const userId = this.userId;
+        if (!userId) {
+            console.warn('No userId available');
+            return;
         }
 
-        if (!id) return;
-
-        const profileSub = this.userService.getById(id).subscribe((profile) => {
-            this.accountProfile.set(profile);
-            this.currentBannerUrl.set(profile.bannerImageUrl);
-            this.currentAvatarUrl.set(profile.avatarImageUrl);
-            const projects = profile.projects ?? [];
-            this.accountProjects.set(projects);
-            if (projects.length === 3) {
-                this.showLoadMore.set(true);
-            }
+        const profileSub = this.userService.getById(userId).subscribe({
+            next: (profile) => {
+                console.log('Received profile:', profile);
+                this.accountProfile.set(profile);
+            },
+            error: (error) => {
+                console.error('Error fetching profile:', error);
+            },
         });
         this.subscriptions.add(profileSub);
     }
@@ -156,7 +143,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     public loadAllProjects(): void {
-        const loadSub = this.projectService.getAll(this.userId()).subscribe({
+        const loadSub = this.projectService.getAll(this.userId).subscribe({
             next: (allProjects) => {
                 this.accountProjects.set(allProjects);
                 this.showLoadMore.set(true);
@@ -181,7 +168,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.currentAvatarUrl.set(tempUrl);
 
         const avatarSub = this.userService
-            .updateAvatar(this.userId(), file)
+            .updateAvatar(this.userId, file)
             .subscribe({
                 next: (uploadedUrl) => {
                     this.currentAvatarUrl.set(uploadedUrl);
@@ -215,7 +202,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             this.currentBannerUrl.set(tempUrl);
 
             const bannerSub = this.userService
-                .updateBanner(this.userId(), file)
+                .updateBanner(this.userId, file)
                 .subscribe({
                     next: (serverUrl) => this.currentBannerUrl.set(serverUrl),
                     error: (err) => this.currentBannerUrl.set(previousUrl),
@@ -227,7 +214,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
     public removeAvatar(): void {
         const removeSub = this.userService
-            .removeAvatar(this.userId())
+            .removeAvatar(this.userId)
             .pipe(
                 finalize(() => {
                     this.closeUploadDialog();
@@ -246,11 +233,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
         const previousUrl = this.currentBannerUrl();
         this.currentBannerUrl.set('');
-        const removeSub = this.userService
-            .removeBanner(this.userId())
-            .subscribe({
-                error: () => this.currentBannerUrl.set(previousUrl),
-            });
+        const removeSub = this.userService.removeBanner(this.userId).subscribe({
+            error: () => this.currentBannerUrl.set(previousUrl),
+        });
         this.subscriptions.add(removeSub);
     }
 
@@ -279,27 +264,5 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                 value: education.totalTests.toString(),
             },
         ];
-    }
-
-    private getCookie(name: string): string | null {
-        const matches = document.cookie.match(
-            new RegExp(
-                '(?:^|; )' +
-                    name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
-                    '=([^;]*)'
-            )
-        );
-        return matches ? decodeURIComponent(matches[1]) : null;
-    }
-
-    private decodeJwt(token: string): JwtPayload | null {
-        try {
-            const payloadPart = token.split('.')[1];
-            const decoded = atob(payloadPart);
-            return JSON.parse(decoded);
-        } catch (e) {
-            console.error('Не удалось декодировать токен:', e);
-            return null;
-        }
     }
 }

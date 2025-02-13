@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
+import {
+    Component,
+    computed,
+    HostListener,
+    inject,
+    signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -25,7 +31,7 @@ interface Menu {
 }
 
 interface JwtPayload {
-    iat: string;
+    userid: string;
     sub: string; // email или имя пользователя
     roles: string[];
     // ...допустимые поля из токена
@@ -47,6 +53,8 @@ interface JwtPayload {
     ],
 })
 export class HeaderComponent {
+    readonly isAuthenticated: any;
+    readonly userInfo: any;
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
@@ -66,29 +74,11 @@ export class HeaderComponent {
     private router = inject(Router);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-
-    public authService = inject(AuthService);
-
-    public userEmail = signal<string>('');
-    public userRoles = signal<string[]>(['noAuth']);
-    public userId = signal<string>('');
-
-    logout() {
-        this.authService.logout();
-    }
+    private authService = inject(AuthService);
 
     constructor() {
-        const token = this.getCookie('accessToken');
-        if (token) {
-            const payload = this.decodeJwt(token);
-            if (payload) {
-                this.userId.set(payload.iat);
-                this.userEmail.set(payload.sub);
-                this.userRoles.set(payload.roles); // Now accepts string[]
-            }
-        }
-
-        console.log(this.userRoles()[0]);
+        this.isAuthenticated = this.authService.isAuthenticated;
+        this.userInfo = computed(() => this.authService.getUserInfo());
 
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
@@ -105,14 +95,14 @@ export class HeaderComponent {
 
         const menuTranslations$ = loadTranslations$.pipe(
             switchMap(() =>
-                this.translate.get(['header.menu.' + this.userRoles()[0]])
+                this.translate.get(['header.menu.' + this.getUserRoles()[0]])
             )
         );
 
         this.menu$ = menuTranslations$.pipe(
             map(
                 (translations) =>
-                    translations['header.menu.' + this.userRoles()[0]] || []
+                    translations['header.menu.' + this.getUserRoles()[0]] || []
             )
         );
 
@@ -135,6 +125,10 @@ export class HeaderComponent {
                 this.iconPaths.menuIconPath
             )
         );
+    }
+
+    logout() {
+        this.authService.logout();
     }
 
     @HostListener('window:scroll', [])
@@ -202,6 +196,10 @@ export class HeaderComponent {
         return this.router.url === '/';
     }
 
+    private getUserRoles(): string[] {
+        return this.authService.getUserInfo().roles;
+    }
+
     getLogo(): string {
         if (this.isAuthPage()) {
             return this.iconPaths.logoFullPath;
@@ -214,27 +212,5 @@ export class HeaderComponent {
         }
 
         return this.iconPaths.logoMiniPath;
-    }
-
-    private getCookie(name: string): string | null {
-        const matches = document.cookie.match(
-            new RegExp(
-                '(?:^|; )' +
-                    name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
-                    '=([^;]*)'
-            )
-        );
-        return matches ? decodeURIComponent(matches[1]) : null;
-    }
-
-    private decodeJwt(token: string): JwtPayload | null {
-        try {
-            const payloadPart = token.split('.')[1];
-            const decoded = atob(payloadPart);
-            return JSON.parse(decoded);
-        } catch (e) {
-            console.error('Не удалось декодировать токен:', e);
-            return null;
-        }
     }
 }

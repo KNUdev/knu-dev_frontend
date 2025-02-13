@@ -82,6 +82,9 @@ export class LoginComponent {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    public userEmail = signal<string>('');
+    public userRoles = signal<string[]>(['noAuth']);
+    public userId = signal<string>('');
 
     constructor(
         private readonly fb: FormBuilder,
@@ -232,10 +235,11 @@ export class LoginComponent {
                 )
                 .subscribe({
                     next: (response) => {
-                        document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
-                        document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
-
-                        this.router.navigate(['/profile']);
+                        this.authService.updateAuthState(response);
+                        this.router.navigate([
+                            '/profile/',
+                            this.authService.getCurrentUserId(),
+                        ]);
                     },
                     error: (error: HttpErrorResponse) => {
                         if (error.status === 400) {

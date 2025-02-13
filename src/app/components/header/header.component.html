@@ -104,7 +104,7 @@
                     }
                 </div>
                 <div class="divider" aria-hidden="true"></div>
-                @if(userRoles()[0] === 'noAuth'){
+                @if(!isAuthenticated()){
                 <app-nofill-button
                     [text]="'header.loginButton' | translate"
                     route="/auth/register"
@@ -113,7 +113,7 @@
                 } @else {
                 <div class="header__avatar">
                     <a
-                        [routerLink]="['/profile', userId()]"
+                        [routerLink]="['/profile', userInfo().id]"
                         aria-label="userProfile"
                     >
                         <img
@@ -122,8 +122,8 @@
                         />
                     </a>
                 </div>
-                <span>{{ userEmail() }}</span>
-                <span> {{ userRoles() }}</span>
+                <span>{{ userInfo().email }}</span>
+                <span>{{ userInfo().roles }}</span>
                 <button (click)="logout()">Выход</button>
                 }
             </div>

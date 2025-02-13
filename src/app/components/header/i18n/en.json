@@ -33,6 +33,37 @@
                     ]
                 }
             ],
+            "INTERN": [
+                {
+                    "name": "Головна",
+                    "link": "/"
+                },
+                {
+                    "name": "Кампус",
+                    "link": "/campus"
+                },
+                {
+                    "name": "Пре-кампус",
+                    "link": "/pre-campus"
+                },
+                {
+                    "name": "Розробники",
+                    "link": "/developers"
+                },
+                {
+                    "name": "Форма навчання",
+                    "dropdown": [
+                        {
+                            "name": "Онлайн",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "Офлайн",
+                            "link": "/offline"
+                        }
+                    ]
+                }
+            ],
             "TEST": [
                 {
                     "name": "test1",

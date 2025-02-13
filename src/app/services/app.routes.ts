@@ -23,13 +23,12 @@ export const routes: Routes = [
             ),
     },
     {
-        path: 'profile',
+        path: 'profile/:userId',
         loadComponent: () =>
             import('../pages/user-profile/user-profile.component').then(
                 (m) => m.UserProfileComponent
             ),
     },
-
     {
         path: 'error/404',
         component: NotFoundPage,
