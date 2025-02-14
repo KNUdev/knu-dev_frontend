@@ -154,16 +154,6 @@ a {
         margin: auto 0;
     }
 
-    .divider {
-        border: 1px solid #343434;
-        margin: 0 1.219rem;
-        height: 100%;
-
-        @include mobile-horizontal {
-            display: none;
-        }
-    }
-
     img {
         transition: all 0.3s ease;
     }
