@@ -1,0 +1,20 @@
+{
+    "header": {
+        "title": "Creation story and founders",
+        "subtitle": "Place where every your idea can find place for life, where you can try every dreams and don`t be afraid about errors. So here you can feel free and happy, WELCOME HOME!"
+    },
+    "history": {
+        "title": "creation history",
+        "main-text": "In 1995, Amazon went live on the world wide web, which was still in its early stages. Two years later, Amazon went public with an initial public offering (IPO). In 1999, Amazon moved beyond just selling books and began offering music and videos; then, in 2000, Amazon opened the website to third-party sellers. In 2006, Amazon Web Services—which, as of 2024, provides a majority of Amazon’s operating profits—was launched to provide cloud-computing services."
+    },
+    "founders": {
+        "title": "founders",
+        "first-founder-name": "denys leonenko",
+        "about-first-founder": "Jobs was raised by adoptive parents in Cupertino, California, located in what is now known as Silicon Valley. Though he was interested in engineering, his passions of youth varied. He dropped out of Reed College, in Portland, Oregon, took a job at Atari Corporation as a video game designer in early 1974, and saved enough money for a pilgrimage to India to experience Buddhism.",
+        "second-founder-name": "vladyslav shtaiier",
+        "about-second-founder": "Jobs was raised by adoptive parents in Cupertino, California, located in what is now known as Silicon Valley. Though he was interested in engineering, his passions of youth varied. He dropped out of Reed College, in Portland, Oregon, took a job at Atari Corporation as a video game designer in early 1974, and saved enough money for a pilgrimage to India to experience Buddhism.",
+        "expertise": "Expertise",
+        "work-experience": "Work experience",
+        "year-suffix": "year"
+    }
+}

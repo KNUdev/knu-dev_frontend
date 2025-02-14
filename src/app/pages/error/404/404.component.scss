@@ -1,0 +1,105 @@
+@use '../../../common/styles/variables' as *;
+
+.container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 28.125rem;
+}
+
+.error__image {
+    width: 24.12rem;
+    height: 8.75rem;
+}
+
+.error__title {
+    color: #fff;
+    text-align: center;
+    font-family: Unbounded, sans-serif;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.0688rem;
+    text-transform: uppercase;
+    margin-top: 2.1875rem;
+    margin-bottom: 0.9375rem;
+}
+
+.error__description {
+    text-align: center;
+    color: #d1d1d1;
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem;
+    letter-spacing: 0.01875rem;
+    margin-bottom: 2.1875rem;
+}
+
+.error__go-back-button {
+    display: flex;
+    color: #d1d1d1;
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.0469rem;
+    text-align: center;
+    text-decoration: none;
+    padding: 1.125rem 1.25rem;
+    width: 28.125rem;
+    height: 3.4375rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid #EDD342;
+}
+
+.error__go-back-button:hover {
+    background-color: #605824;
+}
+
+@include mobile {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1.25rem;
+    }
+
+    .error {
+        width: 20rem;
+    }
+
+    .error__image {
+        width: 17.5rem;
+    }
+
+    .error__title {
+        font-size: 1.125rem;
+        letter-spacing: 0.05625rem;
+    }
+
+    .error__description {
+        font-size: 0.8125rem;
+        line-height: 1.625rem;
+        letter-spacing: 0.01625rem;
+    }
+
+    .error__go-back-button {
+        height: 3.4375rem;
+        width: 20rem;
+    }
+}
