@@ -128,8 +128,14 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
         const profileSub = this.userService.getById(userId).subscribe({
             next: (profile) => {
-                console.log('Received profile:', profile);
                 this.accountProfile.set(profile);
+                this.currentBannerUrl.set(profile.bannerImageUrl);
+                this.currentAvatarUrl.set(profile.avatarImageUrl);
+                const projects = profile.projects ?? [];
+                this.accountProjects.set(projects);
+                if (projects.length === 3) {
+                    this.showLoadMore.set(true);
+                }
             },
             error: (error) => {
                 console.error('Error fetching profile:', error);

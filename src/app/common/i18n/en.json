@@ -95,8 +95,8 @@
     ],
     "expertise": [
         {
-            "id": "FULLSTACK1",
-            "displayedName": "Fullstack1"
+            "id": "FULLSTACK",
+            "displayedName": "Fullstack"
         },
         {
             "id": "BACKEND",

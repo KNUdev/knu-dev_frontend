@@ -56,14 +56,6 @@
         border-radius: 0.625rem;
         border: 5px solid #1a1a1a;
         background: #131313;
-        .fullName {
-            display: flex;
-            justify-content: space-between;
-            gap: 1.88rem;
-            input {
-                padding: 0 1rem;
-            }
-        }
         .password {
             display: block;
             gap: 1.88rem;
@@ -74,7 +66,7 @@
             padding: 2.19rem 0;
         }
 
-        .email-create {
+        .forget-password {
             display: flex;
             gap: 0.62rem;
             margin-top: 1rem;
