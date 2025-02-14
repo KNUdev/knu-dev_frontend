@@ -26,10 +26,10 @@ import {
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
+import { AuthService } from '../../../services/auth.service';
 import { DepartmentService } from '../../../services/department.services';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
-import { AuthService } from '../../../services/login.service';
 import {
     SelectOption,
     WriteDropDowns,

@@ -17,8 +17,9 @@ import {
 } from '@ngx-translate/core';
 import { map, Observable, startWith, switchMap } from 'rxjs';
 import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
+import { AccountProfileService } from '../../services/account-profile.service';
+import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/languages/i18n.service';
-import { AuthService } from '../../services/login.service';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
 interface Menu {
@@ -75,10 +76,26 @@ export class HeaderComponent {
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
     private authService = inject(AuthService);
+    currentAvatarUrl = signal<string>('');
+    private readonly userService = inject(AccountProfileService);
 
     constructor() {
         this.isAuthenticated = this.authService.isAuthenticated;
         this.userInfo = computed(() => this.authService.getUserInfo());
+
+        if (this.isAuthenticated()) {
+            const userId = this.authService.getCurrentUserId();
+            if (userId) {
+                this.userService.getById(userId).subscribe({
+                    next: (profile) => {
+                        this.currentAvatarUrl.set(profile.avatarImageUrl);
+                    },
+                    error: (error) => {
+                        console.error('Error fetching avatar:', error);
+                    },
+                });
+            }
+        }
 
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)

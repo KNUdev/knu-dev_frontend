@@ -107,7 +107,7 @@
                 @if(!isAuthenticated()){
                 <app-nofill-button
                     [text]="'header.loginButton' | translate"
-                    route="/auth/register"
+                    route="/auth/login"
                 >
                 </app-nofill-button>
                 } @else {
@@ -117,7 +117,10 @@
                         aria-label="userProfile"
                     >
                         <img
-                            [src]="iconPaths.defaultAvatarPath"
+                            [src]="
+                                currentAvatarUrl() ||
+                                iconPaths.defaultAvatarPath
+                            "
                             alt="User avatar"
                         />
                     </a>

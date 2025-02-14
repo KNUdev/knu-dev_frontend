@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+
 interface AuthResponse {
     accessToken: string;
     refreshToken: string;
@@ -64,13 +65,11 @@ export class AuthService {
     }
 
     logout() {
-        // Clear cookies
         document.cookie =
             'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict; Secure';
         document.cookie =
             'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict; Secure';
 
-        // Reset user info
         this.userInfo.set({
             id: '',
             email: '',
@@ -78,16 +77,13 @@ export class AuthService {
         });
         this.isAuthenticated.set(false);
 
-        // Redirect to login page
         this.router.navigate(['/auth/login']);
     }
 
     updateAuthState(response: AuthResponse) {
-        // Set cookies
         document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
         document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
 
-        // Update user info from token
         const payload = this.decodeJwt(response.accessToken);
         if (payload) {
             this.userInfo.set({

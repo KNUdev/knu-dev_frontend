@@ -18,9 +18,9 @@ import {
 import { startWith, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
+import { AuthService } from '../../../services/auth.service';
 import { FormErrorService } from '../../../services/error.services';
 import { I18nService } from '../../../services/languages/i18n.service';
-import { AuthService } from '../../../services/login.service';
 export interface ValidationErrors {
     [key: string]: string[];
 }
