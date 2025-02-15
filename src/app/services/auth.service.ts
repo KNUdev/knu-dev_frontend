@@ -34,6 +34,8 @@ export class AuthService {
     public readonly isAuthenticated = signal<boolean>(false);
     private currentUser = new BehaviorSubject<UserInfo | null>(null);
     currentUser$ = this.currentUser.asObservable();
+    private authStateSubject = new BehaviorSubject<boolean>(false);
+    authStateChange$ = this.authStateSubject.asObservable();
 
     setCurrentUser(user: UserInfo) {
         this.currentUser.next(user);
@@ -76,6 +78,7 @@ export class AuthService {
             roles: ['noAuth'],
         });
         this.isAuthenticated.set(false);
+        this.authStateSubject.next(false);
 
         this.router.navigate(['/auth/login']);
     }
@@ -92,6 +95,7 @@ export class AuthService {
                 roles: payload.roles,
             });
             this.isAuthenticated.set(true);
+            this.authStateSubject.next(true);
         }
     }
 
@@ -130,6 +134,7 @@ export class AuthService {
                     roles: payload.roles,
                 });
                 this.isAuthenticated.set(true);
+                this.authStateSubject.next(true);
             }
         }
     }

@@ -4,6 +4,7 @@ import {
     computed,
     HostListener,
     inject,
+    OnDestroy,
     signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,10 +16,18 @@ import {
     TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
-import { map, Observable, startWith, switchMap } from 'rxjs';
+import {
+    map,
+    Observable,
+    startWith,
+    Subject,
+    switchMap,
+    takeUntil,
+} from 'rxjs';
 import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
 import { AccountProfileService } from '../../services/account-profile.service';
 import { AuthService } from '../../services/auth.service';
+import { AvatarService } from '../../services/avatar.service';
 import { I18nService } from '../../services/languages/i18n.service';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
@@ -53,7 +62,7 @@ interface JwtPayload {
         NoFillButtonComponent,
     ],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
     readonly isAuthenticated: any;
     readonly userInfo: any;
     isOpenLang = signal<boolean>(false);
@@ -76,26 +85,52 @@ export class HeaderComponent {
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
     private authService = inject(AuthService);
-    currentAvatarUrl = signal<string>('');
     private readonly userService = inject(AccountProfileService);
+    private destroy$ = new Subject<void>();
+    currentAvatarUrl = signal<string>('');
 
-    constructor() {
+    constructor(private avatarService: AvatarService) {
         this.isAuthenticated = this.authService.isAuthenticated;
         this.userInfo = computed(() => this.authService.getUserInfo());
 
-        if (this.isAuthenticated()) {
-            const userId = this.authService.getCurrentUserId();
-            if (userId) {
-                this.userService.getById(userId).subscribe({
-                    next: (profile) => {
-                        this.currentAvatarUrl.set(profile.avatarImageUrl);
-                    },
-                    error: (error) => {
-                        console.error('Error fetching avatar:', error);
-                    },
-                });
-            }
-        }
+        this.authService.authStateChange$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((isAuthenticated) => {
+                if (isAuthenticated) {
+                    const userId = this.authService.getCurrentUserId();
+                    if (userId) {
+                        this.userService.getById(userId).subscribe({
+                            next: (profile) => {
+                                this.currentAvatarUrl.set(
+                                    profile.avatarImageUrl
+                                );
+                                this.avatarService.updateAvatarUrl(
+                                    profile.avatarImageUrl
+                                );
+                            },
+                            error: (error) => {
+                                console.error('Error fetching avatar:', error);
+                                this.currentAvatarUrl.set(
+                                    this.iconPaths.defaultAvatarPath
+                                );
+                            },
+                        });
+                    }
+                } else {
+                    this.currentAvatarUrl.set(this.iconPaths.defaultAvatarPath);
+                    this.avatarService.updateAvatarUrl('');
+                }
+            });
+
+        this.avatarService.currentAvatarUrl$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((url) => {
+                if (url) {
+                    this.currentAvatarUrl.set(url);
+                } else {
+                    this.currentAvatarUrl.set(this.iconPaths.defaultAvatarPath);
+                }
+            });
 
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
@@ -146,6 +181,11 @@ export class HeaderComponent {
 
     logout() {
         this.authService.logout();
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     @HostListener('window:scroll', [])

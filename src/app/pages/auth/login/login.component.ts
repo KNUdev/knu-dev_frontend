@@ -31,15 +31,12 @@ export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
 };
 
 export const VALIDATION_KEYS = {
-    password: ['required', 'minlength', 'maxlength', 'pattern'],
+    password: ['required'],
     email: ['required', 'invalidDomain'],
 } as const;
 
 const LOGIN_CONSTANTS = {
-    PASSWORD_MIN_LENGTH: 8,
-    PASSWORD_MAX_LENGTH: 64,
     EMAIL_DOMAIN: '@knu.ua',
-    NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
 
 export interface AuthResponse {
@@ -65,7 +62,6 @@ export interface AuthResponse {
 })
 export class LoginComponent {
     isOpenLang = signal<boolean>(false);
-    currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
     isPasswordVisible = signal(false);
@@ -82,9 +78,6 @@ export class LoginComponent {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-    public userEmail = signal<string>('');
-    public userRoles = signal<string[]>(['noAuth']);
-    public userId = signal<string>('');
 
     constructor(
         private readonly fb: FormBuilder,
@@ -93,40 +86,28 @@ export class LoginComponent {
         private readonly router: Router,
         private readonly authService: AuthService
     ) {
-        this.matIconRegistry.addSvgIcon(
-            'arrowLeft',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowLeft
-            )
-        );
+        this.registerIcons();
+        this.initForm();
+        this.initTranslations();
+    }
 
-        this.matIconRegistry.addSvgIcon(
-            'arrowDown',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowDown
-            )
-        );
+    private registerIcons(): void {
+        Object.entries(this.iconPaths).forEach(([name, path]) => {
+            this.matIconRegistry.addSvgIcon(
+                name,
+                this.domSanitizer.bypassSecurityTrustResourceUrl(path)
+            );
+        });
+    }
 
-        this.matIconRegistry.addSvgIcon(
-            'errorTriangle',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.errorTriangle
-            )
-        );
-
-        this.matIconRegistry.addSvgIcon(
-            'errorQuadrilateral',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.errorQuadrilateral
-            )
-        );
-
+    private initForm(): void {
         this.personalInfoForm.set(this.initPersonalInfoForm());
-
         this.formErrorService.showValidationErrors$.subscribe((value) => {
             this.showValidationErrors.set(value);
         });
+    }
 
+    private initTranslations(): void {
         this.translate.onLangChange
             .pipe(
                 startWith({
@@ -264,14 +245,7 @@ export class LoginComponent {
     private initPersonalInfoForm(): FormGroup {
         return this.fb.group({
             email: ['', [Validators.required]],
-            password: [
-                '',
-                [
-                    Validators.required,
-                    Validators.minLength(LOGIN_CONSTANTS.PASSWORD_MIN_LENGTH),
-                    Validators.maxLength(LOGIN_CONSTANTS.PASSWORD_MAX_LENGTH),
-                ],
-            ],
+            password: ['', [Validators.required]],
         });
     }
 
@@ -288,17 +262,7 @@ export class LoginComponent {
 
         this.formErrorService.setBackendErrors(newErrors);
 
-        const criticalFields = [
-            'firstName',
-            'lastName',
-            'middleName',
-            'email',
-            'password',
-        ];
-        if (
-            Object.keys(newErrors).some((key) => criticalFields.includes(key))
-        ) {
-            this.currentRegistrationPhase.set(1);
-        }
+        const criticalFields = ['email', 'password'];
+        Object.keys(newErrors).some((key) => criticalFields.includes(key));
     }
 }

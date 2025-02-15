@@ -20,6 +20,7 @@ import { BorderButtonComponent } from '../../common/components/button/arrow-butt
 import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
 import { AccountProfileService } from '../../services/account-profile.service';
 import { AuthService } from '../../services/auth.service';
+import { AvatarService } from '../../services/avatar.service';
 import { I18nService } from '../../services/languages/i18n.service';
 import { ProjectService } from '../../services/project.service';
 import { FallbackCardComponent } from './components/fallback-card/fallback-card.component';
@@ -73,7 +74,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         projectsNotFound: 'assets/icon/button/work.svg',
     } as const;
 
-    constructor() {
+    constructor(private avatarService: AvatarService) {
         const langSub = this.translate.onLangChange
             .pipe(
                 startWith({
@@ -178,6 +179,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (uploadedUrl) => {
                     this.currentAvatarUrl.set(uploadedUrl);
+                    this.avatarService.updateAvatarUrl(uploadedUrl);
                     URL.revokeObjectURL(tempUrl);
                     this.uploadErrorMessage.set('');
                     this.closeUploadDialog();
@@ -225,6 +227,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                 finalize(() => {
                     this.closeUploadDialog();
                     this.currentAvatarUrl.set('');
+                    this.avatarService.updateAvatarUrl('');
                 })
             )
             .subscribe({
