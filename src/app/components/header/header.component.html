@@ -112,19 +112,19 @@
                 } @else {
                 <div class="header__avatar">
                     <a
-                        [routerLink]="['/profile', userInfo().id]"
+                        [routerLink]="['/profile', user().id]"
                         aria-label="userProfile"
                     >
                         <img
                             [src]="
-                                currentAvatarUrl() ||
+                                userProfile()?.avatarImageUrl ||
                                 iconPaths.defaultAvatarPath
                             "
                             alt="User avatar"
                         />
                     </a>
                 </div>
-                <span>{{ userInfo().roles }}</span>
+                <span>{{ user().roles }}</span>
                 <button (click)="logout()">Выход</button>
                 }
             </div>

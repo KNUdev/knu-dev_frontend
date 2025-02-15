@@ -28,7 +28,7 @@ import { NoFillButtonComponent } from '../../common/components/button/no-fill/no
 import { I18nService } from '../../services/languages/i18n.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
 import { AuthService } from '../../services/user/auth.service';
-import { AvatarService } from '../../services/user/avatar.service';
+import { UserStateService } from '../../services/user/user.state';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
 interface Menu {
@@ -63,8 +63,12 @@ interface JwtPayload {
     ],
 })
 export class HeaderComponent implements OnDestroy {
-    readonly isAuthenticated: any;
-    readonly userInfo: any;
+    private readonly userState: UserStateService = inject(UserStateService);
+
+    readonly user = computed(() => this.userState.currentUser);
+    readonly isAuthenticated = computed(() => this.userState.isAuthenticated);
+    readonly userProfile = computed(() => this.userState.userProfile);
+
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
@@ -77,7 +81,7 @@ export class HeaderComponent implements OnDestroy {
         menuIconPath: 'assets/icon/system/menu.svg',
         closeIconPath: 'assets/icon/system/close.svg',
     } as const;
-    menu$: Observable<Menu[]>;
+    menu$!: Observable<Menu[]>;
     public i18nService = inject(I18nService);
     protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     private translate = inject(TranslateService);
@@ -89,94 +93,56 @@ export class HeaderComponent implements OnDestroy {
     private destroy$ = new Subject<void>();
     currentAvatarUrl = signal<string>('');
 
-    constructor(private avatarService: AvatarService) {
-        this.isAuthenticated = this.authService.isAuthenticated;
-        this.userInfo = computed(() => this.authService.getUserInfo());
+    private readonly BREAKPOINT = 1440;
+    private readonly SCROLL_THRESHOLDS = {
+        SHOW: 110,
+        HIDE: 40,
+    } as const;
 
-        this.authService.authStateChange$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((isAuthenticated) => {
-                if (isAuthenticated) {
-                    const userId = this.authService.getCurrentUserId();
-                    if (userId) {
-                        this.userService.getById(userId).subscribe({
-                            next: (profile) => {
-                                this.currentAvatarUrl.set(
-                                    profile.avatarImageUrl
-                                );
-                                this.avatarService.updateAvatarUrl(
-                                    profile.avatarImageUrl
-                                );
-                            },
-                            error: (error) => {
-                                console.error('Error fetching avatar:', error);
-                                this.currentAvatarUrl.set(
-                                    this.iconPaths.defaultAvatarPath
-                                );
-                            },
-                        });
-                    }
-                } else {
-                    this.currentAvatarUrl.set(this.iconPaths.defaultAvatarPath);
-                    this.avatarService.updateAvatarUrl('');
-                }
-            });
+    constructor() {
+        this.initializeUserProfile();
+        this.initializeMenuTranslations();
+        this.registerIcons();
+    }
 
-        this.avatarService.currentAvatarUrl$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((url) => {
-                if (url) {
-                    this.currentAvatarUrl.set(url);
-                } else {
-                    this.currentAvatarUrl.set(this.iconPaths.defaultAvatarPath);
-                }
-            });
+    private initializeUserProfile(): void {
+        if (this.isAuthenticated()) {
+            const userId = this.user().id;
+            if (userId) {
+                this.userService
+                    .getById(userId)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: (profile) => {
+                            this.userState.updateState({ profile });
+                        },
+                        error: (error) => {
+                            console.error('Error fetching profile:', error);
+                        },
+                    });
+            }
+        }
+    }
 
-        const langChange$ = this.translate.onLangChange.pipe(
-            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
-        );
+    @HostListener('window:scroll')
+    onWindowScroll() {
+        const scrollPosition =
+            window.scrollY || document.documentElement.scrollTop;
+        const shouldBeScrolled =
+            (!this.isScrolled() &&
+                scrollPosition > this.SCROLL_THRESHOLDS.SHOW) ||
+            (this.isScrolled() && scrollPosition < this.SCROLL_THRESHOLDS.HIDE);
 
-        const loadTranslations$ = langChange$.pipe(
-            switchMap((event) =>
-                this.i18nService.loadComponentTranslations(
-                    'components/header',
-                    event.lang
-                )
-            )
-        );
+        if (shouldBeScrolled) {
+            this.isScrolled.update((current) => !current);
+        }
+    }
 
-        const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() =>
-                this.translate.get(['header.menu.' + this.getUserRoles()[0]])
-            )
-        );
-
-        this.menu$ = menuTranslations$.pipe(
-            map(
-                (translations) =>
-                    translations['header.menu.' + this.getUserRoles()[0]] || []
-            )
-        );
-
-        this.matIconRegistry.addSvgIcon(
-            'arrowDown',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowDown
-            )
-        );
-
-        this.matIconRegistry.addSvgIcon(
-            'closeMenu',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.closeIconPath
-            )
-        );
-        this.matIconRegistry.addSvgIcon(
-            'openMenu',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.menuIconPath
-            )
-        );
+    @HostListener('window:resize')
+    onResize() {
+        const isMobile = window.innerWidth < this.BREAKPOINT;
+        this.isMobile.set(isMobile);
+        if (!isMobile) this.isMenuOpen.set(false);
     }
 
     logout() {
@@ -186,34 +152,6 @@ export class HeaderComponent implements OnDestroy {
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
-    }
-
-    @HostListener('window:scroll', [])
-    onWindowScroll() {
-        const scrollPosition =
-            window.scrollY || document.documentElement.scrollTop;
-        const currentState = this.isScrolled();
-
-        if (!currentState && scrollPosition > 110) {
-            this.isScrolled.set(true);
-        } else if (currentState && scrollPosition < 40) {
-            this.isScrolled.set(false);
-        }
-    }
-
-    @HostListener('window:resize', ['$event'])
-    onResize() {
-        this.isMobile.set(window.innerWidth < 1440);
-        if (!this.isMobile()) {
-            this.isMenuOpen.set(false);
-        }
-    }
-
-    toggleMenu(event?: MouseEvent) {
-        if (event) {
-            event.stopPropagation();
-        }
-        this.isMenuOpen.update((value) => !value);
     }
 
     @HostListener('document:click', ['$event'])
@@ -234,6 +172,13 @@ export class HeaderComponent implements OnDestroy {
                 this.isMenuOpen.set(false);
             }
         }
+    }
+
+    toggleMenu(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation();
+        }
+        this.isMenuOpen.update((value) => !value);
     }
 
     toggleDropdownLang() {
@@ -269,5 +214,55 @@ export class HeaderComponent implements OnDestroy {
         }
 
         return this.iconPaths.logoMiniPath;
+    }
+
+    private initializeMenuTranslations() {
+        const langChange$ = this.translate.onLangChange.pipe(
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
+        );
+
+        const loadTranslations$ = langChange$.pipe(
+            switchMap((event) =>
+                this.i18nService.loadComponentTranslations(
+                    'components/header',
+                    event.lang
+                )
+            )
+        );
+
+        const menuTranslations$ = loadTranslations$.pipe(
+            switchMap(() =>
+                this.translate.get(['header.menu.' + this.getUserRoles()[0]])
+            )
+        );
+
+        this.menu$ = menuTranslations$.pipe(
+            map(
+                (translations) =>
+                    translations['header.menu.' + this.getUserRoles()[0]] || []
+            )
+        );
+    }
+
+    private registerIcons() {
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'closeMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.closeIconPath
+            )
+        );
+        this.matIconRegistry.addSvgIcon(
+            'openMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.menuIconPath
+            )
+        );
     }
 }

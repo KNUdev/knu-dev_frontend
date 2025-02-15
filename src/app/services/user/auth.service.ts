@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { UserStateService } from './user.state';
 
 interface AuthResponse {
     accessToken: string;
@@ -22,6 +23,11 @@ export interface UserInfo {
     roles: string[];
 }
 
+export interface TokenService {
+    accessToken: string;
+    refreshToken: string;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -37,6 +43,14 @@ export class AuthService {
     private authStateSubject = new BehaviorSubject<boolean>(false);
     authStateChange$ = this.authStateSubject.asObservable();
 
+    private readonly TOKEN_CONFIG = {
+        ACCESS_TOKEN: 'accessToken',
+        REFRESH_TOKEN: 'refreshToken',
+        TOKEN_EXPIRES: 'Thu, 01 Jan 1970 00:00:01 GMT',
+        COOKIE_PATH: '/',
+        COOKIE_ATTRIBUTES: 'SameSite=Strict; Secure',
+    } as const;
+
     setCurrentUser(user: UserInfo) {
         this.currentUser.next(user);
     }
@@ -48,7 +62,11 @@ export class AuthService {
     clearCurrentUser() {
         this.currentUser.next(null);
     }
-    constructor(private http: HttpClient, private router: Router) {
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private userState: UserStateService
+    ) {
         this.initializeFromToken();
     }
 
@@ -66,36 +84,33 @@ export class AuthService {
         );
     }
 
+    private setToken(name: string, value: string): void {
+        document.cookie = `${name}=${value}; path=${this.TOKEN_CONFIG.COOKIE_PATH}; ${this.TOKEN_CONFIG.COOKIE_ATTRIBUTES}`;
+    }
+
+    private clearToken(name: string): void {
+        document.cookie = `${name}=; path=${this.TOKEN_CONFIG.COOKIE_PATH}; expires=${this.TOKEN_CONFIG.TOKEN_EXPIRES}; ${this.TOKEN_CONFIG.COOKIE_ATTRIBUTES}`;
+    }
+
     logout() {
-        document.cookie =
-            'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict; Secure';
-        document.cookie =
-            'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict; Secure';
-
-        this.userInfo.set({
-            id: '',
-            email: '',
-            roles: ['noAuth'],
-        });
-        this.isAuthenticated.set(false);
-        this.authStateSubject.next(false);
-
+        this.clearToken(this.TOKEN_CONFIG.ACCESS_TOKEN);
+        this.clearToken(this.TOKEN_CONFIG.REFRESH_TOKEN);
+        this.userState.clearState();
         this.router.navigate(['/auth/login']);
     }
 
     updateAuthState(response: AuthResponse) {
-        document.cookie = `accessToken=${response.accessToken}; path=/; SameSite=Strict; Secure`;
-        document.cookie = `refreshToken=${response.refreshToken}; path=/; SameSite=Strict; Secure`;
+        this.setToken(this.TOKEN_CONFIG.ACCESS_TOKEN, response.accessToken);
+        this.setToken(this.TOKEN_CONFIG.REFRESH_TOKEN, response.refreshToken);
 
         const payload = this.decodeJwt(response.accessToken);
         if (payload) {
-            this.userInfo.set({
+            this.userState.updateState({
                 id: payload.userid,
                 email: payload.sub,
                 roles: payload.roles,
+                isAuthenticated: true,
             });
-            this.isAuthenticated.set(true);
-            this.authStateSubject.next(true);
         }
     }
 
@@ -128,13 +143,12 @@ export class AuthService {
         if (token) {
             const payload = this.decodeJwt(token);
             if (payload) {
-                this.userInfo.set({
+                this.userState.updateState({
                     id: payload.userid,
                     email: payload.sub,
                     roles: payload.roles,
+                    isAuthenticated: true,
                 });
-                this.isAuthenticated.set(true);
-                this.authStateSubject.next(true);
             }
         }
     }

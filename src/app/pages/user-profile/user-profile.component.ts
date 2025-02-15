@@ -21,8 +21,7 @@ import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
 import { I18nService } from '../../services/languages/i18n.service';
 import { ProjectService } from '../../services/project.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
-import { AuthService } from '../../services/user/auth.service';
-import { AvatarService } from '../../services/user/avatar.service';
+import { UserStateService } from '../../services/user/user.state';
 import { FallbackCardComponent } from './components/fallback-card/fallback-card.component';
 import { ProfileImageUploadDialogComponent } from './components/image-upload-dialog/profile-image-upload-dialog.component';
 import {
@@ -56,6 +55,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     public currentAvatarUrl = signal<string>('');
     public showUploadDialog = signal<boolean>(false);
     public locale: string;
+    private userId: string;
     public uploadErrorMessage = signal<string>('');
     private subscriptions = new Subscription();
     private readonly matIconRegistry = inject(MatIconRegistry);
@@ -64,7 +64,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private readonly userService = inject(AccountProfileService);
     private readonly projectService = inject(ProjectService);
     private readonly translate = inject(TranslateService);
-    private readonly authService = inject(AuthService);
+    private readonly userState = inject(UserStateService);
     private readonly iconPaths = {
         addBanner: 'assets/icon/system/pluse.svg',
         changeAvatar: 'assets/icon/system/edit.svg',
@@ -74,7 +74,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         projectsNotFound: 'assets/icon/button/work.svg',
     } as const;
 
-    constructor(private avatarService: AvatarService) {
+    constructor() {
         const langSub = this.translate.onLangChange
             .pipe(
                 startWith({
@@ -91,6 +91,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.subscriptions.add(langSub);
 
         this.locale = this.i18nService.currentLocale;
+
+        this.userId = this.userState.currentUser.id;
 
         Object.entries(this.iconPaths).forEach(([name, path]) => {
             this.matIconRegistry.addSvgIcon(
@@ -109,10 +111,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         return !!(programs && programs.length);
     }
 
-    private get userId(): string {
-        return this.authService.getCurrentUserId();
-    }
-
     ngOnInit(): void {
         const localeSub = this.i18nService.currentLocale$.subscribe(
             (locale) => {
@@ -121,17 +119,22 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         );
         this.subscriptions.add(localeSub);
 
-        const userId = this.userId;
+        const userId = this.userState.currentUser.id;
         if (!userId) {
             console.warn('No userId available');
             return;
         }
 
+        this.loadUserProfile(userId);
+    }
+
+    private loadUserProfile(userId: string): void {
         const profileSub = this.userService.getById(userId).subscribe({
             next: (profile) => {
                 this.accountProfile.set(profile);
                 this.currentBannerUrl.set(profile.bannerImageUrl);
                 this.currentAvatarUrl.set(profile.avatarImageUrl);
+                this.userState.updateState({ profile });
                 const projects = profile.projects ?? [];
                 this.accountProjects.set(projects);
                 if (projects.length === 3) {
@@ -174,12 +177,21 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         const tempUrl = URL.createObjectURL(file);
         this.currentAvatarUrl.set(tempUrl);
 
+        const userId = this.userState.currentUser.id;
         const avatarSub = this.userService
-            .updateAvatar(this.userId, file)
+            .updateAvatar(userId, file)
             .subscribe({
                 next: (uploadedUrl) => {
                     this.currentAvatarUrl.set(uploadedUrl);
-                    this.avatarService.updateAvatarUrl(uploadedUrl);
+                    const currentProfile = this.userState.userProfile;
+                    if (currentProfile) {
+                        this.userState.updateState({
+                            profile: {
+                                ...currentProfile,
+                                avatarImageUrl: uploadedUrl,
+                            },
+                        });
+                    }
                     URL.revokeObjectURL(tempUrl);
                     this.uploadErrorMessage.set('');
                     this.closeUploadDialog();
@@ -221,13 +233,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
 
     public removeAvatar(): void {
+        const userId = this.userState.currentUser.id;
         const removeSub = this.userService
-            .removeAvatar(this.userId)
+            .removeAvatar(userId)
             .pipe(
                 finalize(() => {
                     this.closeUploadDialog();
                     this.currentAvatarUrl.set('');
-                    this.avatarService.updateAvatarUrl('');
+                    const currentProfile = this.userState.userProfile;
+                    if (currentProfile) {
+                        this.userState.updateState({
+                            profile: { ...currentProfile, avatarImageUrl: '' },
+                        });
+                    }
                 })
             )
             .subscribe({
