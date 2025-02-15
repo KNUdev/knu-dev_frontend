@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../../environments/environment.development';
 
 interface AuthResponse {
     accessToken: string;

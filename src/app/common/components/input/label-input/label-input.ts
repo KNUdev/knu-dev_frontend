@@ -16,7 +16,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../../../../services/languages/i18n.service';
-import { FormErrorService } from './../../../../services/error.services';
+import { FormErrorService } from './../../../../services/error.service';
 
 @Component({
     selector: 'app-label-input',

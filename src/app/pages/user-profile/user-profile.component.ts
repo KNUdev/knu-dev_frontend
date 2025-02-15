@@ -18,11 +18,11 @@ import {
 import { finalize, startWith, Subscription, switchMap } from 'rxjs';
 import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
-import { AccountProfileService } from '../../services/account-profile.service';
-import { AuthService } from '../../services/auth.service';
-import { AvatarService } from '../../services/avatar.service';
 import { I18nService } from '../../services/languages/i18n.service';
 import { ProjectService } from '../../services/project.service';
+import { AccountProfileService } from '../../services/user/account-profile.service';
+import { AuthService } from '../../services/user/auth.service';
+import { AvatarService } from '../../services/user/avatar.service';
 import { FallbackCardComponent } from './components/fallback-card/fallback-card.component';
 import { ProfileImageUploadDialogComponent } from './components/image-upload-dialog/profile-image-upload-dialog.component';
 import {

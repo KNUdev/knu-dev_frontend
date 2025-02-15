@@ -25,10 +25,10 @@ import {
     takeUntil,
 } from 'rxjs';
 import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
-import { AccountProfileService } from '../../services/account-profile.service';
-import { AuthService } from '../../services/auth.service';
-import { AvatarService } from '../../services/avatar.service';
 import { I18nService } from '../../services/languages/i18n.service';
+import { AccountProfileService } from '../../services/user/account-profile.service';
+import { AuthService } from '../../services/user/auth.service';
+import { AvatarService } from '../../services/user/avatar.service';
 import { MenuNav_dropdown } from './components/dropdown/menunav.component';
 
 interface Menu {
