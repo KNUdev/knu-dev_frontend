@@ -5,12 +5,15 @@ import {
     HostListener,
     inject,
     OnDestroy,
+    QueryList,
     signal,
+    ViewChildren,
+    ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -29,7 +32,8 @@ import { I18nService } from '../../services/languages/i18n.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
 import { AuthService } from '../../services/user/auth.service';
 import { UserStateService } from '../../services/user/user.state';
-import { MenuNav_dropdown } from './components/dropdown/menunav.component';
+import { Avatar_dropdown } from './components/dropdown/avatar/avatar.component';
+import { MenuNav_dropdown } from './components/dropdown/menunav/menunav.component';
 
 interface Menu {
     name: string;
@@ -40,18 +44,10 @@ interface Menu {
     }[];
 }
 
-interface JwtPayload {
-    userid: string;
-    sub: string; // email или имя пользователя
-    roles: string[];
-    // ...допустимые поля из токена
-}
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    standalone: true,
     imports: [
         FormsModule,
         CommonModule,
@@ -60,7 +56,9 @@ interface JwtPayload {
         MenuNav_dropdown,
         MatIconModule,
         NoFillButtonComponent,
+        Avatar_dropdown,
     ],
+    encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnDestroy {
     private readonly userState: UserStateService = inject(UserStateService);
@@ -80,6 +78,7 @@ export class HeaderComponent implements OnDestroy {
         defaultAvatarPath: 'assets/icon/defaultAvatar.svg',
         menuIconPath: 'assets/icon/system/menu.svg',
         closeIconPath: 'assets/icon/system/close.svg',
+        key: 'assets/icon/system/key.svg',
     } as const;
     menu$!: Observable<Menu[]>;
     public i18nService = inject(I18nService);
@@ -103,7 +102,35 @@ export class HeaderComponent implements OnDestroy {
         this.initializeUserProfile();
         this.initializeMenuTranslations();
         this.registerIcons();
+        this.setupNavigationHandler();
     }
+
+    private setupNavigationHandler(): void {
+        this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.closeAllMenus();
+            }
+        });
+    }
+
+    private closeAllMenus(): void {
+        this.isOpenLang.set(false);
+        this.isMenuOpen.set(false);
+        if (this.menuNavDropdowns) {
+            this.menuNavDropdowns.forEach((dropdown) =>
+                dropdown.isOpen.set(false)
+            );
+        }
+        if (this.avatarDropdowns) {
+            this.avatarDropdowns.forEach((dropdown) =>
+                dropdown.isOpen.set(false)
+            );
+        }
+    }
+
+    @ViewChildren(MenuNav_dropdown)
+    menuNavDropdowns?: QueryList<MenuNav_dropdown>;
+    @ViewChildren(Avatar_dropdown) avatarDropdowns?: QueryList<Avatar_dropdown>;
 
     private initializeUserProfile(): void {
         if (this.isAuthenticated()) {
@@ -145,10 +172,6 @@ export class HeaderComponent implements OnDestroy {
         if (!isMobile) this.isMenuOpen.set(false);
     }
 
-    logout() {
-        this.authService.logout();
-    }
-
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
@@ -158,16 +181,11 @@ export class HeaderComponent implements OnDestroy {
     onDocumentClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
 
+        if (!target.closest('.language-selector, .dropdown-menu')) {
+            this.isOpenLang.set(false);
+        }
+
         if (this.isMobile()) {
-            const isMenuLink = target.closest(
-                'a:not(.language-selector *, .dropdown-menu *)'
-            );
-
-            if (isMenuLink) {
-                this.isMenuOpen.set(false);
-                return;
-            }
-
             if (!target.closest('.header')) {
                 this.isMenuOpen.set(false);
             }
@@ -263,6 +281,11 @@ export class HeaderComponent implements OnDestroy {
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.menuIconPath
             )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'key',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.iconPaths.key)
         );
     }
 }

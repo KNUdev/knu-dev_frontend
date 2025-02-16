@@ -11,6 +11,7 @@ a {
     z-index: 100;
     padding: 1.25rem 7.5rem;
     animation: 1s show ease;
+    border-bottom: 1px solid #343434;
 
     @include desktop {
         padding: 1.25rem 4.06rem;
@@ -156,5 +157,19 @@ a {
 
     img {
         transition: all 0.3s ease;
+    }
+
+    .roles {
+        text-align: center;
+
+        font-family: "Fixel Text", sans-serif;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.25rem; /* 142.857% */
+
+        .technicalRoles {
+            color: #4264ed;
+        }
     }
 }

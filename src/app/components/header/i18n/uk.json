@@ -1,6 +1,11 @@
 {
     "header": {
         "loginButton": "Увійти/Зареєструватися",
+        "avatarDropDown": {
+            "profile": "Профіль",
+            "settings": "Налаштування",
+            "logout": "Вийти"
+        },
         "menu": {
             "noAuth": [
                 {

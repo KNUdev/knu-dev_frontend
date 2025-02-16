@@ -103,6 +103,7 @@
                     </div>
                     }
                 </div>
+
                 @if(!isAuthenticated()){
                 <app-nofill-button
                     [text]="'header.loginButton' | translate"
@@ -110,22 +111,24 @@
                 >
                 </app-nofill-button>
                 } @else {
+                <mat-icon
+                    svgIcon="key"
+                    aria-hidden="true"
+                    style="color: #ffffff"
+                ></mat-icon>
                 <div class="header__avatar">
-                    <a
-                        [routerLink]="['/profile', user().id]"
-                        aria-label="userProfile"
-                    >
-                        <img
-                            [src]="
-                                userProfile()?.avatarImageUrl ||
-                                iconPaths.defaultAvatarPath
-                            "
-                            alt="User avatar"
-                        />
-                    </a>
+                    <header-avatar-dropdown
+                        [userId]="user().id"
+                        [avatar]="
+                            userProfile()?.avatarImageUrl ||
+                            iconPaths.defaultAvatarPath
+                        "
+                    />
                 </div>
-                <span>{{ user().roles }}</span>
-                <button (click)="logout()">Выход</button>
+                <div class="roles">
+                    <span class="technicalRoles">{{ user().roles }}</span>
+                </div>
+
                 }
             </div>
         </div>
