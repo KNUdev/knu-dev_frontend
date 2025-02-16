@@ -50,85 +50,92 @@
             </ul>
             <hr aria-hidden="true" />
             <div class="header__menu-container__bottom">
-                <div
-                    class="language-selector"
-                    [class.open]="isOpenLang()"
-                    role="region"
-                    aria-label="Language selection"
-                >
-                    <button
-                        class="selector-button"
-                        (click)="toggleDropdownLang()"
-                        aria-label="Select language"
-                        [attr.aria-expanded]="isOpenLang()"
-                        aria-controls="language-dropdown"
+                <div class="permition-lang">
+                    <div
+                        class="language-selector"
+                        [class.open]="isOpenLang()"
+                        role="region"
+                        aria-label="Language selection"
                     >
-                        @if (currentLanguage$ | async; as lang) {
-                        <img
-                            [src]="lang.flagRound"
-                            [alt]="lang.name"
-                            class="flag-icon"
-                        />
-                        <mat-icon
-                            svgIcon="arrowDown"
-                            class="chevron"
-                            [class.up]="isOpenLang()"
-                            aria-hidden="true"
-                        ></mat-icon>
-                        }
-                    </button>
-                    @if (isOpenLang()) {
-                    <div class="dropdown-menu">
-                        @for (lang of i18nService.supportedLanguages(); track
-                        lang.code) {
                         <button
-                            class="language-option"
-                            [class.active]="
-                                lang.code === i18nService.currentLang()
-                            "
-                            (click)="selectLanguage(lang.code)"
-                            [attr.aria-current]="
-                                lang.code === i18nService.currentLang()
-                            "
-                            [attr.aria-label]="lang.name"
+                            class="selector-button"
+                            (click)="toggleDropdownLang()"
+                            aria-label="Select language"
+                            [attr.aria-expanded]="isOpenLang()"
+                            aria-controls="language-dropdown"
                         >
-                            <span>{{ lang.name }}</span>
+                            @if (currentLanguage$ | async; as lang) {
                             <img
-                                [src]="lang.imgMiniPath"
+                                [src]="lang.flagRound"
                                 [alt]="lang.name"
                                 class="flag-icon"
                             />
+                            <mat-icon
+                                svgIcon="arrowDown"
+                                class="chevron"
+                                [class.up]="isOpenLang()"
+                                aria-hidden="true"
+                            ></mat-icon>
+                            }
                         </button>
+                        @if (isOpenLang()) {
+                        <div class="dropdown-menu">
+                            @for (lang of i18nService.supportedLanguages();
+                            track lang.code) {
+                            <button
+                                class="language-option"
+                                [class.active]="
+                                    lang.code === i18nService.currentLang()
+                                "
+                                (click)="selectLanguage(lang.code)"
+                                [attr.aria-current]="
+                                    lang.code === i18nService.currentLang()
+                                "
+                                [attr.aria-label]="lang.name"
+                            >
+                                <span>{{ lang.name }}</span>
+                                <img
+                                    [src]="lang.imgMiniPath"
+                                    [alt]="lang.name"
+                                    class="flag-icon"
+                                />
+                            </button>
+                            }
+                        </div>
                         }
+                    </div>
+                    @if(isAuthenticated()){
+                    <div class="permition">
+                        <mat-icon
+                            svgIcon="key"
+                            aria-hidden="true"
+                            class="permition-key"
+                        ></mat-icon>
                     </div>
                     }
                 </div>
-
                 @if(!isAuthenticated()){
+
                 <app-nofill-button
                     [text]="'header.loginButton' | translate"
                     route="/auth/login"
                 >
                 </app-nofill-button>
                 } @else {
-                <mat-icon
-                    svgIcon="key"
-                    aria-hidden="true"
-                    style="color: #ffffff"
-                ></mat-icon>
-                <div class="header__avatar">
-                    <header-avatar-dropdown
-                        [userId]="user().id"
-                        [avatar]="
-                            userProfile()?.avatarImageUrl ||
-                            iconPaths.defaultAvatarPath
-                        "
-                    />
+                <div class="avatar-role">
+                    <div class="header__avatar">
+                        <header-avatar-dropdown
+                            [userId]="user().id"
+                            [avatar]="
+                                userProfile()?.avatarImageUrl ||
+                                iconPaths.defaultAvatarPath
+                            "
+                        />
+                    </div>
+                    <div class="roles">
+                        <span class="technicalRoles">{{ user().roles }}</span>
+                    </div>
                 </div>
-                <div class="roles">
-                    <span class="technicalRoles">{{ user().roles }}</span>
-                </div>
-
                 }
             </div>
         </div>

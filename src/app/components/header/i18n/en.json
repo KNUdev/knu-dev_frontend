@@ -40,30 +40,30 @@
             ],
             "INTERN": [
                 {
-                    "name": "Головна",
+                    "name": "Home",
                     "link": "/"
                 },
                 {
-                    "name": "Кампус",
+                    "name": "Campus",
                     "link": "/campus"
                 },
                 {
-                    "name": "Пре-кампус",
+                    "name": "Pre-campus",
                     "link": "/pre-campus"
                 },
                 {
-                    "name": "Розробники",
+                    "name": "Developers",
                     "link": "/developers"
                 },
                 {
-                    "name": "Форма навчання",
+                    "name": "Training form",
                     "dropdown": [
                         {
-                            "name": "Онлайн",
+                            "name": "Online",
                             "link": "/online"
                         },
                         {
-                            "name": "Офлайн",
+                            "name": "Offline",
                             "link": "/offline"
                         }
                     ]

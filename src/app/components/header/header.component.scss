@@ -75,6 +75,12 @@ a {
             display: flex;
             align-items: center;
             gap: 1.219rem;
+
+            div {
+                display: flex;
+                margin: auto 0;
+                gap: 1.219rem;
+            }
         }
 
         &__list {
@@ -92,6 +98,14 @@ a {
                 cursor: pointer;
             }
         }
+
+        .permition-key {
+            color: #ffffff;
+            width: 1.6875rem;
+            height: 1.6875rem;
+            margin: 0.81rem;
+        }
+
         .menu__nav {
             &.active {
                 color: #edd342;
@@ -142,6 +156,22 @@ a {
 
             div {
                 order: 1;
+            }
+        }
+
+        @include mobile {
+            &__bottom {
+                flex-direction: column-reverse;
+
+                .avatar-role,
+                .permition-lang {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+            }
+
+            .avatar-role {
+                flex-direction: row-reverse;
             }
         }
     }
