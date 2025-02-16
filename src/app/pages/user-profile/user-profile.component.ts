@@ -21,14 +21,18 @@ import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
 import { I18nService } from '../../services/languages/i18n.service';
 import { ProjectService } from '../../services/project.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
-import { UserStateService } from '../../services/user/user.state';
+import { UserStateService } from '../../services/user/user-state.module';
+import {
+    AccountProfile,
+    Education,
+    Project,
+} from '../../services/user/user.model';
 import { FallbackCardComponent } from './components/fallback-card/fallback-card.component';
 import { ProfileImageUploadDialogComponent } from './components/image-upload-dialog/profile-image-upload-dialog.component';
 import {
     ItemCardComponent,
     ItemDetail,
 } from './components/item-card/item-card.component';
-import { AccountProfile, Education, Project } from './user-profile.model';
 
 @Component({
     selector: 'app-user-profile',

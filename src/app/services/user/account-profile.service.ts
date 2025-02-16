@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.development';
-import { AccountProfile } from '../../pages/user-profile/user-profile.model';
+import { AccountProfile } from './user.model';
 
 @Injectable({
     providedIn: 'root',

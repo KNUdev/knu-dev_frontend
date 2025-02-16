@@ -1,18 +1,21 @@
-import {Department, Specialty} from '../auth/register/register.model';
-import {MultiLanguageField} from '../../common/models/shared.model';
+import { MultiLanguageField } from '../../common/models/shared.model';
+import {
+    Department,
+    Specialty,
+} from '../../pages/auth/register/register.model';
 
 export enum AccountTechnicalRole {
     INTERN,
     DEVELOPER,
     PREMASTER,
     MASTER,
-    TECHLEAD
+    TECHLEAD,
 }
 
 export enum Expertise {
     BACKEND,
     FRONTEND,
-    FULLSTACK
+    FULLSTACK,
 }
 
 export type AccountProfile = {
@@ -32,17 +35,17 @@ export type AccountProfile = {
 };
 
 export type Project = {
-    name: MultiLanguageField,
-    description: MultiLanguageField,
+    name: MultiLanguageField;
+    description: MultiLanguageField;
     banner: string;
-}
+};
 
 export type Education = {
-    name: MultiLanguageField,
-    description: MultiLanguageField,
+    name: MultiLanguageField;
+    description: MultiLanguageField;
     banner: string;
-    totalTasks: number,
-    totalTests: number,
-    durationInDays: number,
-    programExpertise: Expertise
-}
+    totalTasks: number;
+    totalTests: number;
+    durationInDays: number;
+    programExpertise: Expertise;
+};

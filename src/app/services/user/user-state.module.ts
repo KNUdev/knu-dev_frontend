@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AccountProfile } from '../../pages/user-profile/user-profile.model';
+import { AccountProfile } from './user.model';
 
 export interface UserState {
     id: string;

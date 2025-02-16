@@ -31,7 +31,7 @@ import { NoFillButtonComponent } from '../../common/components/button/no-fill/no
 import { I18nService } from '../../services/languages/i18n.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
 import { AuthService } from '../../services/user/auth.service';
-import { UserStateService } from '../../services/user/user.state';
+import { UserStateService } from '../../services/user/user-state.module';
 import { Avatar_dropdown } from './components/dropdown/avatar/avatar.component';
 import { MenuNav_dropdown } from './components/dropdown/menunav/menunav.component';
 
