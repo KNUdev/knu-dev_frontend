@@ -24,11 +24,13 @@
             </h2>
         </div>
         <div class="summary__control">
+            <!-- We add (click)="onEditProgram()" so we open the dialog in edit mode for the program -->
             <img
                 alt="Edit Program Summary"
                 class="control__icon"
                 loading="lazy"
                 src="assets/icon/system/edit.svg"
+                (click)="onEditProgram()"
             >
             <hr class="vertical-line">
             <img
@@ -81,7 +83,6 @@
                 <h2 class="section__title-text">Модулі</h2>
                 <p class="section__title-amount">12</p>
             </div>
-
             @if (selectedSection) {
                 <button
                     class="section__create-section-btn"

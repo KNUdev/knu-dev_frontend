@@ -19,14 +19,13 @@ import { BorderButtonComponent } from '../../../common/components/button/arrow-b
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 
 import {
+    EducationProgramDto,
     ProgramSectionDto,
     ProgramModuleDto,
     ProgramTopicDto
 } from '../../../common/models/shared.model';
+import { ProgramService } from '../../../services/program.service';
 
-/**
- * Dialog to create or update a single entity: section, module, or topic.
- */
 @Component({
     selector: 'upload-dialog',
     templateUrl: './upload-dialog.component.html',
@@ -43,106 +42,115 @@ import {
 })
 export class UploadDialogComponent implements OnInit {
 
-    /**
-     * 'create' => a new section/module/topic. 'edit' => update existing.
-     */
     @Input() mode: 'create' | 'edit' = 'create';
 
     /**
-     * The type of entity we manage: 'section', 'module', or 'topic'.
+     * 'program', 'section', 'module', or 'topic'
      */
-    @Input() entityType: 'section' | 'module' | 'topic' = 'section';
+    @Input() entityType: 'program' | 'section' | 'module' | 'topic' = 'section';
 
     /**
-     * If creating, might need a parentId to know which parent (program or section) it belongs to.
+     * If creating, we might need the parentId
      */
     @Input() parentId?: string;
 
     /**
-     * If editing, pass the existing data for pre-population.
+     * If editing, we pass the existing data
      */
-    @Input() entityData?: ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
+    @Input() entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
 
     /**
-     * Emitted when the user finishes creating/updating the item.
-     * The parent merges this result into the local data model.
+     * Emitted when the user finishes
      */
     @Output() close = new EventEmitter<{
-        createdSection?: ProgramSectionDto;
+        updatedProgram?: EducationProgramDto;
         updatedSection?: ProgramSectionDto;
-        createdModule?: ProgramModuleDto;
         updatedModule?: ProgramModuleDto;
-        createdTopic?: ProgramTopicDto;
         updatedTopic?: ProgramTopicDto;
+        createdSection?: ProgramSectionDto;
+        createdModule?: ProgramModuleDto;
+        createdTopic?: ProgramTopicDto;
     } | null>();
 
-    /**
-     * We create this signal with an empty FormGroup initially,
-     * then define it in ngOnInit (avoiding TS2729).
-     */
     public dialogForm = signal<FormGroup>(new FormGroup({}));
-
     public selectedFile = signal<File | undefined>(undefined);
     public isFileSelectedd = signal<boolean>(false);
 
-    // We'll instantiate our FormBuilder in the constructor so it's available in ngOnInit
     private fb = inject(FormBuilder);
     private matIconRegistry = inject(MatIconRegistry);
     private domSanitizer = inject(DomSanitizer);
+    private programService = inject(ProgramService);
 
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
     ngOnInit(): void {
-        // Register icons if needed
+        // Register icon if needed
         this.matIconRegistry.addSvgIcon(
             'fileUploaded',
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/done.svg')
         );
 
-        // Now we can safely build the form (since fb is available)
+        // Build form
         const group = this.fb.group({
             nameUk: [''],
             nameEn: [''],
             descriptionUk: [''],
             descriptionEn: ['']
-            // If you had more fields (like 'difficulty'), add them here if entityType === 'topic'.
         });
         this.dialogForm.set(group);
 
-        // If editing, patch existing data
+        // If editing, patch
         if (this.mode === 'edit' && this.entityData) {
             this.patchForm(this.entityData);
         }
     }
 
-    private patchForm(entity: ProgramSectionDto | ProgramModuleDto | ProgramTopicDto): void {
-        // All have "name" and "description".
-        const patchValues = {
-            nameUk: entity.name.uk ?? '',
-            nameEn: entity.name.en ?? '',
-            descriptionUk: entity.description.uk ?? '',
-            descriptionEn: entity.description.en ?? ''
-        };
-
-        this.dialogForm().patchValue(patchValues);
-
-        // If there's a file in the existing entity, show it as selected.
-        if (this.entityType === 'section') {
-            const section = entity as ProgramSectionDto;
-            if (section.finalTaskFile) {
-                this.selectedFile.set(section.finalTaskFile);
+    private patchForm(entity: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto): void {
+        // For a program
+        if (this.entityType === 'program') {
+            const prog = entity as EducationProgramDto;
+            this.dialogForm().patchValue({
+                nameUk: prog.name.uk ?? '',
+                nameEn: prog.name.en ?? '',
+                descriptionUk: prog.description.uk ?? '',
+                descriptionEn: prog.description.en ?? ''
+            });
+            // If program had a finalTaskFile or bannerFile, you could show it
+        }
+        else if (this.entityType === 'section') {
+            const sec = entity as ProgramSectionDto;
+            this.dialogForm().patchValue({
+                nameUk: sec.name.uk ?? '',
+                nameEn: sec.name.en ?? '',
+                descriptionUk: sec.description.uk ?? '',
+                descriptionEn: sec.description.en ?? ''
+            });
+            if (sec.finalTaskFile) {
+                this.selectedFile.set(sec.finalTaskFile);
                 this.isFileSelectedd.set(true);
             }
         }
         else if (this.entityType === 'module') {
-            const module = entity as ProgramModuleDto;
-            if (module.finalTaskFile) {
-                this.selectedFile.set(module.finalTaskFile);
+            const mod = entity as ProgramModuleDto;
+            this.dialogForm().patchValue({
+                nameUk: mod.name.uk ?? '',
+                nameEn: mod.name.en ?? '',
+                descriptionUk: mod.description.uk ?? '',
+                descriptionEn: mod.description.en ?? ''
+            });
+            if (mod.finalTaskFile) {
+                this.selectedFile.set(mod.finalTaskFile);
                 this.isFileSelectedd.set(true);
             }
         }
         else if (this.entityType === 'topic') {
             const topic = entity as ProgramTopicDto;
+            this.dialogForm().patchValue({
+                nameUk: topic.name.uk ?? '',
+                nameEn: topic.name.en ?? '',
+                descriptionUk: topic.description.uk ?? '',
+                descriptionEn: topic.description.en ?? ''
+            });
             if (topic.taskFile) {
                 this.selectedFile.set(topic.taskFile);
                 this.isFileSelectedd.set(true);
@@ -177,19 +185,21 @@ export class UploadDialogComponent implements OnInit {
             this.dialogForm().markAllAsTouched();
             return;
         }
-        const formVals = this.dialogForm().value;
+
         if (this.mode === 'create') {
-            this.createEntity(formVals);
+            this.handleCreate();
         } else {
-            this.updateEntity(formVals);
+            this.handleUpdate();
         }
     }
 
-    private createEntity(formVals: any): void {
+    private handleCreate(): void {
+        // For a new item, we do local creation, or we can call an API if you want immediate creation
+        const formVals = this.dialogForm().value;
+
         if (this.entityType === 'section') {
-            // No ID => let the backend generate it
             const newSection: ProgramSectionDto = {
-                id: '', // or undefined
+                id: '', // let backend assign
                 name: {
                     en: formVals.nameEn,
                     uk: formVals.nameUk
@@ -199,14 +209,15 @@ export class UploadDialogComponent implements OnInit {
                     uk: formVals.descriptionUk
                 },
                 modules: [],
-                // If user selected a file for the final task:
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
+            // We can create it locally or call an immediate API
+            // For now, let's just emit it:
             this.close.emit({ createdSection: newSection });
         }
         else if (this.entityType === 'module') {
             const newModule: ProgramModuleDto = {
-                id: '', // or undefined
+                id: '',
                 name: {
                     en: formVals.nameEn,
                     uk: formVals.nameUk
@@ -223,7 +234,7 @@ export class UploadDialogComponent implements OnInit {
         }
         else if (this.entityType === 'topic') {
             const newTopic: ProgramTopicDto = {
-                id: '', // or undefined
+                id: '',
                 name: {
                     en: formVals.nameEn,
                     uk: formVals.nameUk
@@ -238,82 +249,92 @@ export class UploadDialogComponent implements OnInit {
             };
             this.close.emit({ createdTopic: newTopic });
         }
+        else if (this.entityType === 'program') {
+            // Possibly create a new program?
+            // Typically you'd do that from a different screen, but here's how:
+            const newProgram: EducationProgramDto = {
+                id: '',
+                name: {
+                    en: formVals.nameEn,
+                    uk: formVals.nameUk
+                },
+                description: {
+                    en: formVals.descriptionEn,
+                    uk: formVals.descriptionUk
+                },
+                isPublished: false,
+                version: 1,
+                expertise: '',
+                // finalTaskUrl: '',
+                sections: [],
+                ...(this.selectedFile()! && { finalTaskFile: this.selectedFile()! })
+            };
+            this.close.emit({ updatedProgram: newProgram }); // or createdProgram
+        }
         else {
             this.close.emit(null);
         }
     }
 
-    private updateEntity(formVals: any): void {
+    private handleUpdate(): void {
+        // For immediate updates, we call separate endpoints in ProgramService
         if (!this.entityData) {
             this.close.emit(null);
             return;
         }
 
-        if (this.entityType === 'section') {
-            const currentSection = this.entityData as ProgramSectionDto;
-            const updatedSection: ProgramSectionDto = {
-                ...currentSection,
-                name: {
-                    en: formVals.nameEn,
-                    uk: formVals.nameUk
-                },
-                description: {
-                    en: formVals.descriptionEn,
-                    uk: formVals.descriptionUk
-                },
-                modules: currentSection.modules,
-                // If new file is chosen, set finalTaskFile. Otherwise keep the old.
-                finalTaskFile: this.selectedFile() || currentSection.finalTaskFile
-            };
-            this.close.emit({ updatedSection });
+        const formVals = this.dialogForm().value;
+        const file = this.selectedFile();
+
+        if (this.entityType === 'program') {
+            const prog = this.entityData as EducationProgramDto;
+            this.programService.updateProgram(prog.id, {
+                ukName: formVals.nameUk,
+                enName: formVals.nameEn,
+                ukDesc: formVals.descriptionUk,
+                enDesc: formVals.descriptionEn
+            }, file).subscribe(updatedProgram => {
+                this.close.emit({ updatedProgram });
+            });
+        }
+        else if (this.entityType === 'section') {
+            const sec = this.entityData as ProgramSectionDto;
+            this.programService.updateSection(sec.id, {
+                ukName: formVals.nameUk,
+                enName: formVals.nameEn,
+                ukDesc: formVals.descriptionUk,
+                enDesc: formVals.descriptionEn
+            }, file).subscribe(updatedSection => {
+                this.close.emit({ updatedSection });
+            });
         }
         else if (this.entityType === 'module') {
-            const currentModule = this.entityData as ProgramModuleDto;
-            const updatedModule: ProgramModuleDto = {
-                ...currentModule,
-                name: {
-                    en: formVals.nameEn,
-                    uk: formVals.nameUk
-                },
-                description: {
-                    en: formVals.descriptionEn,
-                    uk: formVals.descriptionUk
-                },
-                // preserve finalTaskUrl & topics
-                finalTaskUrl: currentModule.finalTaskUrl,
-                topics: currentModule.topics,
-                // if new file is selected, store it in finalTaskFile; else keep old
-                finalTaskFile: this.selectedFile() || currentModule.finalTaskFile
-            };
-            this.close.emit({ updatedModule });
+            const mod = this.entityData as ProgramModuleDto;
+            this.programService.updateModule(mod.id, {
+                ukName: formVals.nameUk,
+                enName: formVals.nameEn,
+                ukDesc: formVals.descriptionUk,
+                enDesc: formVals.descriptionEn
+            }, file).subscribe(updatedModule => {
+                this.close.emit({ updatedModule });
+            });
         }
         else if (this.entityType === 'topic') {
-            const currentTopic = this.entityData as ProgramTopicDto;
-            const updatedTopic: ProgramTopicDto = {
-                ...currentTopic,
-                name: {
-                    en: formVals.nameEn,
-                    uk: formVals.nameUk
-                },
-                description: {
-                    en: formVals.descriptionEn,
-                    uk: formVals.descriptionUk
-                },
-                learningResources: currentTopic.learningResources,
-                taskUrl: currentTopic.taskUrl,
-                // if new file is selected, store it; else keep old
-                taskFile: this.selectedFile() || currentTopic.taskFile
-            };
-            this.close.emit({ updatedTopic });
+            const top = this.entityData as ProgramTopicDto;
+            this.programService.updateTopic(top.id, {
+                ukName: formVals.nameUk,
+                enName: formVals.nameEn,
+                ukDesc: formVals.descriptionUk,
+                enDesc: formVals.descriptionEn
+            }, file).subscribe(updatedTopic => {
+                this.close.emit({ updatedTopic });
+            });
         }
         else {
             this.close.emit(null);
         }
     }
 
-    /**
-     * Optional close button event
-     */
     public onCloseClick(): void {
         this.close.emit(null);
     }

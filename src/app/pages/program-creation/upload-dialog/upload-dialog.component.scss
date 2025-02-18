@@ -1,8 +1,6 @@
 @use "../../../common/styles/variables" as *;
 @use "../../../common/styles/hyperlink" as hyperlink;
 
-
-
 .upload-dialog__backdrop {
     position: fixed;
     inset: 0;
@@ -20,6 +18,11 @@
 }
 
 .upload-dialog {
+    max-height: 85vh;
+    height: fit-content;
+    overflow-y: scroll;
+
+    overflow-x: auto;
     width: 600px;
     border-radius: 5px;
     border: 1px solid var(--border-nat-900, #343434);
@@ -213,5 +216,35 @@
         width: 25px;
         height:25px;
         color: $accent-yellow;
+    }
+}
+
+.upload-dialog__close-desktop {
+    position: absolute;
+    top: 0;
+    right: -5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #343434;
+    background-color: #101010;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 0;
+
+    .close-desktop__icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        color: $text-light;
+    }
+
+    &:hover {
+        border-color: $accent-yellow;
+
+        .close-desktop__icon {
+            color: $accent-yellow !important;
+        }
     }
 }

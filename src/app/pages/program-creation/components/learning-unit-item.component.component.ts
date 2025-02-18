@@ -7,9 +7,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class LearningUnitItem implements OnInit {
 
+    /** The name/title of the learning unit (section/module/topic). */
     @Input({ required: true }) name!: string;
 
+    /** Fires when user clicks the edit icon. */
     @Output() editClicked = new EventEmitter<void>();
+
+    /** Fires when user clicks the delete icon. */
     @Output() deleteClicked = new EventEmitter<void>();
 
     ngOnInit(): void {}

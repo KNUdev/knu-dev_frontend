@@ -15,16 +15,14 @@ import { LearningUnitItem } from './components/learning-unit-item.component.comp
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 
 /**
- * A local interface representing how we open the "upload-dialog"
- * for a single entity (section, module, or topic).
+ * For opening our dialog with a certain mode/entity
  */
 interface DialogConfig {
     isOpen: boolean;
     mode: 'create' | 'edit';
-    // entityType: 'program' | 'section' | 'module' | 'topic';
-    entityType: 'section' | 'module' | 'topic';
-    parentId?: string; // e.g., if creating a module, we store the sectionId
-    entityData?: ProgramSectionDto | ProgramModuleDto | ProgramTopicDto; // used for editing
+    entityType: 'program' | 'section' | 'module' | 'topic';
+    entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
+    parentId?: string; // used for create
 }
 
 @Component({
@@ -38,20 +36,13 @@ interface DialogConfig {
 })
 export class ProgramCreationComponent implements OnInit {
 
-    /**
-     * Holds the entire program in memory (sections, modules, topics).
-     * If `id` is present, we are editing an existing program. Otherwise new.
-     */
+    /** Holds the entire program loaded from backend. */
     public programSignal = signal<EducationProgramDto | null>(null);
 
-    /**
-     * If we are showing a dialog to create or edit a section/module/topic.
-     */
+    /** Controls when the dialog is open and what entity is being created/edited. */
     public dialogConfig = signal<DialogConfig | null>(null);
 
-    /**
-     * Selected items for highlighting in the UI
-     */
+    /** Currently selected section / module */
     public selectedSection: ProgramSectionDto | null = null;
     public selectedModule: ProgramModuleDto | null = null;
 
@@ -65,19 +56,18 @@ export class ProgramCreationComponent implements OnInit {
     ngOnInit(): void {
         this.programId = this.route.snapshot.paramMap.get('programId')!;
 
-        // If editing an existing program, load it. Otherwise, start a new empty program locally.
-        const program$: Observable<EducationProgramDto> =
+        const programObs: Observable<EducationProgramDto> =
             this.programService.getProgramById(this.programId);
 
-        program$.subscribe(program => {
-            // Store in signal
+        programObs.subscribe(program => {
+            console.log(program)
             this.programSignal.set(program);
         });
     }
 
-    // ---------------------------------------------
-    // Selection
-    // ---------------------------------------------
+    // -----------------------------------------------------------------
+    // Selecting items for highlight
+    // -----------------------------------------------------------------
 
     public onSelectSection(section: ProgramSectionDto): void {
         this.selectedSection = section;
@@ -88,25 +78,36 @@ export class ProgramCreationComponent implements OnInit {
         this.selectedModule = module;
     }
 
-    // ---------------------------------------------
-    // CREATE / EDIT (open the dialog)
-    // ---------------------------------------------
+    // -----------------------------------------------------------------
+    // Program Edit (immediate update)
+    // -----------------------------------------------------------------
+
+    /**
+     * Called when user clicks the "Edit Program Summary" icon at the top.
+     * Opens a dialog in edit mode for the entire Program.
+     */
+    public onEditProgram(): void {
+        const program = this.programSignal();
+        if (!program) return;
+
+        this.dialogConfig.set({
+            isOpen: true,
+            mode: 'edit',
+            entityType: 'program',
+            entityData: program
+        });
+    }
+
+    // -----------------------------------------------------------------
+    // CREATE - local add (Section, Module, Topic)
+    // -----------------------------------------------------------------
 
     public onAddSection(): void {
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'section',
-            parentId: this.programSignal()?.id ?? undefined
-        });
-    }
-
-    public onEditSection(section: ProgramSectionDto): void {
-        this.dialogConfig.set({
-            isOpen: true,
-            mode: 'edit',
-            entityType: 'section',
-            entityData: section
+            parentId: this.programSignal()?.id // if you want a parent ID
         });
     }
 
@@ -119,21 +120,34 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
-    public onEditModule(module: ProgramModuleDto): void {
-        this.dialogConfig.set({
-            isOpen: true,
-            mode: 'edit',
-            entityType: 'module',
-            entityData: module
-        });
-    }
-
     public onAddTopic(module: ProgramModuleDto): void {
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'topic',
             parentId: module.id
+        });
+    }
+
+    // -----------------------------------------------------------------
+    // EDIT - immediate update (Section, Module, Topic)
+    // -----------------------------------------------------------------
+
+    public onEditSection(section: ProgramSectionDto): void {
+        this.dialogConfig.set({
+            isOpen: true,
+            mode: 'edit',
+            entityType: 'section',
+            entityData: section
+        });
+    }
+
+    public onEditModule(module: ProgramModuleDto): void {
+        this.dialogConfig.set({
+            isOpen: true,
+            mode: 'edit',
+            entityType: 'module',
+            entityData: module
         });
     }
 
@@ -146,10 +160,9 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
-    // ---------------------------------------------
-    // DELETE
-    // (Exact logic depends on your approach. Typically you'd just remove from local data.)
-    // ---------------------------------------------
+    // -----------------------------------------------------------------
+    // DELETE - local removal
+    // -----------------------------------------------------------------
 
     public onDeleteSection(section: ProgramSectionDto): void {
         const program = this.programSignal();
@@ -160,206 +173,236 @@ export class ProgramCreationComponent implements OnInit {
 
     public onDeleteModule(module: ProgramModuleDto): void {
         if (!this.selectedSection) return;
-        this.selectedSection.modules = this.selectedSection.modules.filter(m => m !== module);
+        this.selectedSection.modules =
+            this.selectedSection.modules.filter(m => m !== module);
         this.programSignal.update(p => p);
     }
 
     public onDeleteTopic(topic: ProgramTopicDto): void {
         if (!this.selectedModule) return;
-        this.selectedModule.topics = this.selectedModule.topics.filter(t => t !== topic);
+        this.selectedModule.topics =
+            this.selectedModule.topics.filter(t => t !== topic);
         this.programSignal.update(p => p);
     }
 
-    // ---------------------------------------------
-    // Handle dialog close
-    // (the dialog returns a partial item that we
-    // either push or patch in our local data).
-    // ---------------------------------------------
+    // -----------------------------------------------------------------
+    // Dialog close
+    // -----------------------------------------------------------------
 
-    public onDialogClose(result?: {
-        createdSection?: ProgramSectionDto;
-        updatedSection?: ProgramSectionDto;
-        createdModule?: ProgramModuleDto;
-        updatedModule?: ProgramModuleDto;
-        createdTopic?: ProgramTopicDto;
-        updatedTopic?: ProgramTopicDto;
-    }): void {
+    /**
+     * The dialog can either create a new item (locally) or perform an immediate update.
+     */
+    public onDialogClose(result: any): void {
+        // If the user canceled, result is null or undefined
         if (!result) {
-            // The dialog was cancelled
             this.dialogConfig.set(null);
             return;
         }
 
-        const program = this.programSignal();
-        if (!program) {
-            this.dialogConfig.set(null);
-            return;
-        }
-
-        // If we created a new section
+        // 1) If user created a new section
         if (result.createdSection) {
+            const program = this.programSignal();
+            if (!program) { this.dialogConfig.set(null); return; }
             program.sections.push(result.createdSection);
             this.programSignal.set({ ...program });
         }
 
-        // If we updated a section
-        if (result.updatedSection) {
-            const idx = program.sections.findIndex(s => s.id === result.updatedSection?.id);
-            if (idx >= 0) {
-                program.sections[idx] = result.updatedSection;
-            }
-            this.programSignal.set({ ...program });
-        }
-
-        // If we created a module
+        // 2) If user created a new module
         if (result.createdModule && this.selectedSection) {
             this.selectedSection.modules.push(result.createdModule);
             this.programSignal.update(p => p);
         }
 
-        // If we updated a module
-        if (result.updatedModule && this.selectedSection) {
-            const idx = this.selectedSection.modules.findIndex(m => m.id === result.updatedModule?.id);
-            if (idx >= 0) {
-                this.selectedSection.modules[idx] = result.updatedModule;
-                this.programSignal.update(p => p);
-            }
-        }
-
-        // If we created a topic
+        // 3) If user created a new topic
         if (result.createdTopic && this.selectedModule) {
             this.selectedModule.topics.push(result.createdTopic);
             this.programSignal.update(p => p);
         }
 
-        // If we updated a topic
-        if (result.updatedTopic && this.selectedModule) {
-            const idx = this.selectedModule.topics.findIndex(t => t.id === result.updatedTopic?.id);
+        // 4) If user updated (program, section, module, topic) => data was saved to backend
+        // The 'result.updatedProgram' / 'result.updatedSection' / etc. is the updated item from server
+        if (result.updatedProgram) {
+            // Replace our local program with that updated version
+            this.programSignal.set(result.updatedProgram);
+        }
+        if (result.updatedSection) {
+            // Find that section in local data and replace
+            const program = this.programSignal();
+            if (!program) { this.dialogConfig.set(null); return; }
+            const idx = program.sections.findIndex(s => s.id === result.updatedSection.id);
             if (idx >= 0) {
-                this.selectedModule.topics[idx] = result.updatedTopic;
-                this.programSignal.update(p => p);
+                program.sections[idx] = result.updatedSection;
+                this.programSignal.set({ ...program });
+            }
+        }
+        if (result.updatedModule) {
+            // We can find that module in the selectedSection
+            if (this.selectedSection) {
+                const idx = this.selectedSection.modules
+                    .findIndex(m => m.id === result.updatedModule.id);
+                if (idx >= 0) {
+                    this.selectedSection.modules[idx] = result.updatedModule;
+                    this.programSignal.update(p => p);
+                }
+            }
+        }
+        if (result.updatedTopic) {
+            if (this.selectedModule) {
+                const idx = this.selectedModule.topics
+                    .findIndex(t => t.id === result.updatedTopic.id);
+                if (idx >= 0) {
+                    this.selectedModule.topics[idx] = result.updatedTopic;
+                    this.programSignal.update(p => p);
+                }
             }
         }
 
+        // Close dialog
         this.dialogConfig.set(null);
     }
 
-    // ---------------------------------------------
-    // Convert the local `EducationProgramDto`
-    // into `FormData` that matches your
-    // "EducationProgramCreationRequest" structure.
-    // Then send to /save in a single call.
-    // ---------------------------------------------
-
+    // -----------------------------------------------------------------
+    // Save entire Program
+    // (If you want a single final call for newly created items, etc.)
+    // -----------------------------------------------------------------
     public onSaveProgram(): void {
         const program = this.programSignal();
         if (!program) return;
 
-        // Build the FormData
+        // If you still do a big single call for newly created items (no existing ID):
         const formData = this.mapProgramToFormData(program);
 
-        // Post it
-        this.programService.saveProgramInOneCall(formData).subscribe(updated => {
-            // Update local data
-            this.programSignal.set(updated);
-        });
+        this.programService.saveProgramInOneCall(formData)
+            .subscribe(updatedProgram => {
+                this.programSignal.set(updatedProgram);
+            });
     }
 
-    /**
-     * Map the entire program to a single FormData structure
-     * matching your `EducationProgramCreationRequest`
-     * (and nested SectionCreationRequest, ModuleCreationRequest, TopicCreationRequest).
-     */
+    // -----------------------------------------------------------------
+    // Construct the single call for newly created items
+    // Only pass 'existing' IDs (no other fields) if an item already exists
+    // If it's new (id is empty or ""), pass name, description, finalTask, etc.
+    // -----------------------------------------------------------------
     private mapProgramToFormData(program: EducationProgramDto): FormData {
         const formData = new FormData();
 
-        // -- Program-level fields
-        if (program.id) {
+        // Check if program is existing
+        const isProgramExisting = !!program.id && program.id.trim() !== '';
+        if (isProgramExisting) {
+            // Only existingProgramId
             formData.append('existingProgramId', program.id);
-        }
-
-        // MultiLanguageFieldDto for name
-        formData.append('name.en', program.name.en ?? '');
-        formData.append('name.uk', program.name.uk ?? '');
-
-        // Program-level description
-        formData.append('description.en', program.description.en ?? '');
-        formData.append('description.uk', program.description.uk ?? '');
-
-        // Example: if you track "expertise" somewhere
-        // If your program has an `expertise` field
-        // formData.append('expertise', program.expertise);
-
-        // If you store a File object for finalTask in `program.finalTaskFile`, for example
-        if ((program as any).finalTaskFile) {
-            formData.append('finalTask', (program as any).finalTaskFile);
-        }
-
-        // If there's a banner file
-        if ((program as any).bannerFile) {
-            formData.append('banner', (program as any).bannerFile);
-        }
-
-        // -- Sections
-        const sections = program.sections || [];
-        sections.forEach((section, sectionIndex) => {
-            if (section.id) {
-                formData.append(`sections[${sectionIndex}].existingSectionId`, section.id);
+        } else {
+            // It's new, pass name, desc, finalTask, etc.
+            if (program.name.en) formData.append('name.en', program.name.en);
+            if (program.name.uk) formData.append('name.uk', program.name.uk);
+            if (program.description.en) {
+                formData.append('description.en', program.description.en);
             }
-            // Name
-            formData.append(`sections[${sectionIndex}].name.en`, section.name.en ?? '');
-            formData.append(`sections[${sectionIndex}].name.uk`, section.name.uk ?? '');
-            // Description
-            formData.append(`sections[${sectionIndex}].description.en`, section.description.en ?? '');
-            formData.append(`sections[${sectionIndex}].description.uk`, section.description.uk ?? '');
-            // If you keep an orderIndex
-            formData.append(`sections[${sectionIndex}].orderIndex`, String(sectionIndex));
+            if (program.description.uk) {
+                formData.append('description.uk', program.description.uk);
+            }
+            if (program.finalTaskFile) {
+                formData.append('finalTask', program.finalTaskFile);
+            }
+        }
 
-            // If there's a file for this section's finalTask
-            if ((section as any).finalTaskFile) {
-                formData.append(`sections[${sectionIndex}].finalTask`, (section as any).finalTaskFile);
+        // sections
+        const sections = program.sections || [];
+        sections.forEach((section, sIndex) => {
+            const isSecExisting = !!section.id && section.id.trim() !== '';
+            if (isSecExisting) {
+                formData.append(`sections[${sIndex}].existingSectionId`, section.id);
+            } else {
+                // new
+                if (section.name.en) {
+                    formData.append(`sections[${sIndex}].name.en`, section.name.en);
+                }
+                if (section.name.uk) {
+                    formData.append(`sections[${sIndex}].name.uk`, section.name.uk);
+                }
+                if (section.description.en) {
+                    formData.append(`sections[${sIndex}].description.en`, section.description.en);
+                }
+                if (section.description.uk) {
+                    formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
+                }
+                formData.append(`sections[${sIndex}].orderIndex`, String(sIndex + 1));
+                if (section.finalTaskFile) {
+                    formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
+                }
             }
 
             // modules
             const modules = section.modules || [];
-            modules.forEach((module, moduleIndex) => {
-                if (module.id) {
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].existingModuleId`, module.id);
-                }
-                formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].name.en`, module.name.en ?? '');
-                formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].name.uk`, module.name.uk ?? '');
-                formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].description.en`, module.description.en ?? '');
-                formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].description.uk`, module.description.uk ?? '');
-                // orderIndex
-                formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].orderIndex`, String(moduleIndex));
-
-                // If there's a file for this module's finalTask
-                if ((module as any).finalTaskFile) {
-                    formData.append(
-                        `sections[${sectionIndex}].modules[${moduleIndex}].finalTask`,
-                        (module as any).finalTaskFile
-                    );
+            modules.forEach((module, mIndex) => {
+                const isModExisting = !!module.id && module.id.trim() !== '';
+                if (isModExisting) {
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].existingModuleId`, module.id);
+                } else {
+                    // new
+                    if (module.name.en) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.en`, module.name.en);
+                    }
+                    if (module.name.uk) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.uk`, module.name.uk);
+                    }
+                    if (module.description.en) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.en`, module.description.en);
+                    }
+                    if (module.description.uk) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
+                    }
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(mIndex + 1));
+                    if (module.finalTaskFile) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
+                    }
                 }
 
                 // topics
                 const topics = module.topics || [];
-                topics.forEach((topic, topicIndex) => {
-                    if (topic.id) {
-                        formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].existingTopicId`, topic.id);
-                    }
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].name.en`, topic.name.en ?? '');
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].name.uk`, topic.name.uk ?? '');
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].description.en`, topic.description.en ?? '');
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].description.uk`, topic.description.uk ?? '');
-                    // orderIndex
-                    formData.append(`sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].orderIndex`, String(topicIndex));
-
-                    // If there's a file for this topic's "task"
-                    if ((topic as any).taskFile) {
+                topics.forEach((topic, tIndex) => {
+                    const isTopicExisting = !!topic.id && topic.id.trim() !== '';
+                    if (isTopicExisting) {
                         formData.append(
-                            `sections[${sectionIndex}].modules[${moduleIndex}].topics[${topicIndex}].task`,
-                            (topic as any).taskFile
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].existingTopicId`,
+                            topic.id
                         );
+                    } else {
+                        // new
+                        if (topic.name.en) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`,
+                                topic.name.en
+                            );
+                        }
+                        if (topic.name.uk) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.uk`,
+                                topic.name.uk
+                            );
+                        }
+                        if (topic.description.en) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.en`,
+                                topic.description.en
+                            );
+                        }
+                        if (topic.description.uk) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.uk`,
+                                topic.description.uk
+                            );
+                        }
+                        formData.append(
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
+                            String(tIndex + 1)
+                        );
+                        if (topic.taskFile) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].task`,
+                                topic.taskFile
+                            );
+                        }
                     }
                 });
             });

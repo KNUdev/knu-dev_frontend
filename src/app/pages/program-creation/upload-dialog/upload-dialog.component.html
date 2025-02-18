@@ -3,65 +3,43 @@
 <div class="upload-dialog__wrapper">
     <form [formGroup]="dialogForm()" (ngSubmit)="onSubmit()">
         <div class="upload-dialog">
+            <button (click)="onCloseClick()" aria-label="Close dialog" class="upload-dialog__close-desktop" type="button">
+                <mat-icon svgIcon="closeDialog" class="close-desktop__icon"></mat-icon>
+            </button>
 
-            <!-- Ukrainian name -->
-<!--            <app-label-input-->
-<!--                [controlName]="'nameUk'"-->
-<!--                [label]="-->
-<!--          entityType === 'topic'-->
-<!--            ? 'Назва теми українською*'-->
-<!--            : entityType === 'module'-->
-<!--            ? 'Назва модуля українською*'-->
-<!--            : entityType === 'program'-->
-<!--            ? 'Назва програми українською*'-->
-<!--            : 'Назва секції українською*'-->
-<!--        "-->
-<!--            ></app-label-input>-->
+            <!-- Ukrainian Name -->
             <app-label-input
                 [controlName]="'nameUk'"
-                [label]="'Тестоав лейбочка укр'"
+                [label]="
+          entityType === 'topic' ? 'Назва теми українською*'
+          : entityType === 'module' ? 'Назва модуля українською*'
+          : entityType === 'program' ? 'Назва програми українською*'
+          : 'Назва секції українською*'
+        "
             ></app-label-input>
 
-
-            <!-- English name -->
-<!--            <app-label-input-->
-<!--                [controlName]="'nameEn'"-->
-<!--                [label]="-->
-<!--          entityType === 'topic'-->
-<!--            ? 'Назва теми англійською*'-->
-<!--            : entityType === 'module'-->
-<!--            ? 'Назва модуля англійською*'-->
-<!--            : entityType === 'program'-->
-<!--            ? 'Назва програми англійською*'-->
-<!--            : 'Назва секції англійською*'-->
-<!--        "-->
-<!--            ></app-label-input>-->
+            <!-- English Name -->
             <app-label-input
                 [controlName]="'nameEn'"
-                [label]="'Тестова лейбочка'"
+                [label]="
+          entityType === 'topic' ? 'Назва теми англійською*'
+          : entityType === 'module' ? 'Назва модуля англійською*'
+          : entityType === 'program' ? 'Назва програми англійською*'
+          : 'Назва секції англійською*'
+        "
             ></app-label-input>
 
-
-            <!-- Ukrainian description -->
+            <!-- Ukrainian Description -->
             <app-label-input
                 [controlName]="'descriptionUk'"
                 [label]="'Опис українською'"
             ></app-label-input>
 
-            <!-- English description -->
+            <!-- English Description -->
             <app-label-input
                 [controlName]="'descriptionEn'"
                 [label]="'Опис англійською'"
             ></app-label-input>
-
-            <!-- If it's a topic, optionally show difficulty -->
-            <!-- If you added a difficulty control in code:
-            <app-label-input
-              *ngIf="entityType==='topic'"
-              [controlName]="'difficulty'"
-              [label]="'Рівень складності'"
-            ></app-label-input>
-            -->
 
             <div class="profile__divider">
                 <h3 class="profile__divider-title">Або</h3>
@@ -73,7 +51,7 @@
             ></border-button>
 
             <div class="upload-dialog__file-input-label-wrapper">
-                <p class="upload-dialog__file-input-label">Фінальне завдання</p>
+                <p class="upload-dialog__file-input-label">Фінальне завдання / Task</p>
                 @if (isFileSelected) {
                     <p class="hyperlink" (click)="removeFile()">Видалити файл</p>
                 }
@@ -104,7 +82,6 @@
             <button class="upload-dialog__submit-btn" type="submit">
                 {{ mode === 'create' ? 'Створити' : 'Оновити' }}
             </button>
-
         </div>
 
         <!-- Hidden file input -->

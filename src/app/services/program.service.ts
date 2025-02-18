@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EducationProgramDto } from '../common/models/shared.model';
+import {
+    EducationProgramDto,
+    ProgramSectionDto,
+    ProgramModuleDto,
+    ProgramTopicDto
+} from '../common/models/shared.model';
 import {environment} from '../../environments/environment.development';
 
 @Injectable({
@@ -13,21 +18,127 @@ export class ProgramService {
     constructor(private http: HttpClient) {}
 
     /**
-     * Get an existing program by ID (if updating).
+     * Single call to fetch the entire program by ID.
      */
-    public getProgramById(programId: string): Observable<EducationProgramDto> {
-        // Adjust to your actual endpoint for fetching a program
-        return this.http.get<EducationProgramDto>(this.apiBaseUrl +`/admin/education/program?id=${programId}`);
+    public getProgramById(id: string): Observable<EducationProgramDto> {
+        return this.http.get<EducationProgramDto>(this.apiBaseUrl+`/admin/education/program?id=${id}`);
     }
 
     /**
-     * The single call that sends the entire program in a single FormData
-     * for both create and update scenarios.
+     * Single call that handles newly created items in one shot.
      */
     public saveProgramInOneCall(formData: FormData): Observable<EducationProgramDto> {
         return this.http.post<EducationProgramDto>(
-            this.apiBaseUrl+
-            '/admin/education/program/save',
+            this.apiBaseUrl+'/admin/education/program/save',
+            formData
+        );
+    }
+
+    // ------------------------------------------------------------
+    // Separate endpoints for immediate updates
+    // ------------------------------------------------------------
+
+    public updateProgram(
+        programId: string,
+        data: {
+            ukName: string;
+            enName: string;
+            ukDesc: string;
+            enDesc: string;
+        },
+        finalTaskFile?: File
+    ): Observable<EducationProgramDto> {
+        const formData = new FormData();
+        // formData.append('existingProgramId', programId);
+        // Only patch the name / desc / final task as needed
+        formData.append('name.en', data.enName);
+        formData.append('name.uk', data.ukName);
+        formData.append('description.en', data.enDesc);
+        formData.append('description.uk', data.ukDesc);
+        if (finalTaskFile) {
+            formData.append('finalTask', finalTaskFile);
+        }
+        return this.http.post<EducationProgramDto>(
+            this.apiBaseUrl +
+            `/admin/education/program/${programId}/update`,
+            formData
+        );
+    }
+
+    public updateSection(
+        sectionId: string,
+        data: {
+            ukName: string;
+            enName: string;
+            ukDesc: string;
+            enDesc: string;
+        },
+        finalTaskFile?: File
+    ): Observable<ProgramSectionDto> {
+        const formData = new FormData();
+        // formData.append('existingSectionId', sectionId);
+        formData.append('name.en', data.enName);
+        formData.append('name.uk', data.ukName);
+        formData.append('description.en', data.enDesc);
+        formData.append('description.uk', data.ukDesc);
+        if (finalTaskFile) {
+            formData.append('finalTask', finalTaskFile);
+        }
+        return this.http.patch<ProgramSectionDto>(
+            this.apiBaseUrl +
+            `/admin/education/section/${sectionId}/update`,
+            formData
+        );
+    }
+
+    public updateModule(
+        moduleId: string,
+        data: {
+            ukName: string;
+            enName: string;
+            ukDesc: string;
+            enDesc: string;
+        },
+        finalTaskFile?: File
+    ): Observable<ProgramModuleDto> {
+        const formData = new FormData();
+        // formData.append('existingModuleId', moduleId);
+        formData.append('name.en', data.enName);
+        formData.append('name.uk', data.ukName);
+        formData.append('description.en', data.enDesc);
+        formData.append('description.uk', data.ukDesc);
+        if (finalTaskFile) {
+            formData.append('finalTask', finalTaskFile);
+        }
+        return this.http.post<ProgramModuleDto>(
+            this.apiBaseUrl +
+            `/admin/education/module/${moduleId}/update`,
+            formData
+        );
+    }
+
+    public updateTopic(
+        topicId: string,
+        data: {
+            ukName: string;
+            enName: string;
+            ukDesc: string;
+            enDesc: string;
+        },
+        taskFile?: File
+    ): Observable<ProgramTopicDto> {
+        const formData = new FormData();
+        // formData.append('existingTopicId', topicId);
+        formData.append('name.en', data.enName);
+        formData.append('name.uk', data.ukName);
+        formData.append('description.en', data.enDesc);
+        formData.append('description.uk', data.ukDesc);
+        if (taskFile) {
+            formData.append('task', taskFile);
+        }
+        return this.http.post<ProgramTopicDto>(
+            this.apiBaseUrl +
+            `/admin/education/topic/${topicId}/update`,
             formData
         );
     }

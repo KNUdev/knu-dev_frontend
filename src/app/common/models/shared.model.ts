@@ -11,8 +11,8 @@ export interface EducationProgramDto {
     expertise: string; // or you can create an enum for Expertise
     isPublished: boolean;
     version: number;
-    finalTaskUrl: string;
     sections: ProgramSectionDto[];
+    finalTaskFile: File;
 }
 
 export interface ProgramSectionDto {
