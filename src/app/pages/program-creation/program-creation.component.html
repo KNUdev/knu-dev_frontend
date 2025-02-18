@@ -1,0 +1,149 @@
+<div class="program">
+
+    <!-- If the dialog is open -->
+    @if (dialogConfig()?.isOpen) {
+        <upload-dialog
+            [mode]="dialogConfig()?.mode!"
+            [entityType]="dialogConfig()?.entityType!"
+            [entityData]="dialogConfig()?.entityData"
+            [parentId]="dialogConfig()?.parentId"
+            (close)="onDialogClose($event!)"
+        ></upload-dialog>
+    }
+
+    <!-- Program Summary -->
+    <section class="program__summary">
+        <div>
+            <h1 class="summary__title">Люта жоска навчальна програма</h1>
+            <h2 class="summary__meta-items">
+                <span class="meta__item">24 секції</span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item">12 модулів</span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item">22 теми</span>
+            </h2>
+        </div>
+        <div class="summary__control">
+            <img
+                alt="Edit Program Summary"
+                class="control__icon"
+                loading="lazy"
+                src="assets/icon/system/edit.svg"
+            >
+            <hr class="vertical-line">
+            <img
+                alt="Delete Program"
+                class="control__icon"
+                loading="lazy"
+                src="assets/icon/system/trash.svg"
+            >
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Program Details -->
+    <section class="program__details">
+
+        <!-- Sections Column -->
+        <article class="details__section">
+            <div class="section__title-container">
+                <h2 class="section__title-text">Секції</h2>
+                <p class="section__title-amount">24</p>
+            </div>
+            <button
+                class="section__create-section-btn"
+                (click)="onAddSection()"
+            >
+                Створити секцію
+            </button>
+            <ul class="section__items">
+                @for (section of programSignal()?.sections || []; track $index) {
+                    <li
+                        (click)="onSelectSection(section)"
+                        [class.selected]="section === selectedSection"
+                    >
+                        <learning-unit
+                            [name]="section.name.en!"
+                            (editClicked)="onEditSection(section)"
+                            (deleteClicked)="onDeleteSection(section)"
+                        ></learning-unit>
+                    </li>
+                }
+            </ul>
+        </article>
+
+        <hr class="vertical-line">
+
+        <!-- Modules Column -->
+        <article class="details__section">
+            <div class="section__title-container">
+                <h2 class="section__title-text">Модулі</h2>
+                <p class="section__title-amount">12</p>
+            </div>
+
+            @if (selectedSection) {
+                <button
+                    class="section__create-section-btn"
+                    (click)="onAddModule(selectedSection)"
+                >
+                    Створити секцію
+                </button>
+
+                <ul class="section__items">
+                    @for (module of selectedSection.modules || []; track $index) {
+                        <li
+                            (click)="onSelectModule(module)"
+                            [class.selected]="module === selectedModule"
+                        >
+                            <learning-unit
+                                [name]="module.name.en!"
+                                (editClicked)="onEditModule(module)"
+                                (deleteClicked)="onDeleteModule(module)"
+                            ></learning-unit>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+
+        <hr class="vertical-line"/>
+
+        <!-- Topics Column -->
+        <article class="details__section">
+            <div class="section__title-container">
+                <h2 class="section__title-text">Теми</h2>
+                <p class="section__title-amount">12</p>
+            </div>
+
+            @if (selectedModule) {
+                <button
+                    class="section__create-section-btn"
+                    (click)="onAddTopic(selectedModule)"
+                >
+                    Створити секцію
+                </button>
+
+                <ul class="section__items">
+                    @for (topic of selectedModule.topics || []; track $index) {
+                        <li>
+                            <learning-unit
+                                [name]="topic.name.en!"
+                                (editClicked)="onEditTopic(topic)"
+                                (deleteClicked)="onDeleteTopic(topic)"
+                            ></learning-unit>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Save Program -->
+    <section>
+        <button (click)="onSaveProgram()">Save Program</button>
+    </section>
+
+</div>

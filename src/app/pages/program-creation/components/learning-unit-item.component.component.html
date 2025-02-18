@@ -1,0 +1,24 @@
+<div class="item">
+    <div class="item__info">
+        <span class="name">1. </span>
+        <div class="divider"></div>
+        <span class="name">{{ name }}</span>
+    </div>
+    <div class="item__control">
+        <img
+            src="assets/icon/system/edit.svg"
+            alt="Edit Program Summary"
+            loading="lazy"
+            class="control__icon"
+            (click)="onEditClick()"
+        >
+        <div class="divider"></div>
+        <img
+            src="assets/icon/system/trash.svg"
+            alt="Delete Program"
+            loading="lazy"
+            class="control__icon"
+            (click)="onDeleteClick()"
+        >
+    </div>
+</div>

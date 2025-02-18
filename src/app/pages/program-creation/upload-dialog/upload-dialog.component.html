@@ -1,0 +1,119 @@
+<div aria-hidden="true" class="upload-dialog__backdrop"></div>
+
+<div class="upload-dialog__wrapper">
+    <form [formGroup]="dialogForm()" (ngSubmit)="onSubmit()">
+        <div class="upload-dialog">
+
+            <!-- Ukrainian name -->
+<!--            <app-label-input-->
+<!--                [controlName]="'nameUk'"-->
+<!--                [label]="-->
+<!--          entityType === 'topic'-->
+<!--            ? 'Назва теми українською*'-->
+<!--            : entityType === 'module'-->
+<!--            ? 'Назва модуля українською*'-->
+<!--            : entityType === 'program'-->
+<!--            ? 'Назва програми українською*'-->
+<!--            : 'Назва секції українською*'-->
+<!--        "-->
+<!--            ></app-label-input>-->
+            <app-label-input
+                [controlName]="'nameUk'"
+                [label]="'Тестоав лейбочка укр'"
+            ></app-label-input>
+
+
+            <!-- English name -->
+<!--            <app-label-input-->
+<!--                [controlName]="'nameEn'"-->
+<!--                [label]="-->
+<!--          entityType === 'topic'-->
+<!--            ? 'Назва теми англійською*'-->
+<!--            : entityType === 'module'-->
+<!--            ? 'Назва модуля англійською*'-->
+<!--            : entityType === 'program'-->
+<!--            ? 'Назва програми англійською*'-->
+<!--            : 'Назва секції англійською*'-->
+<!--        "-->
+<!--            ></app-label-input>-->
+            <app-label-input
+                [controlName]="'nameEn'"
+                [label]="'Тестова лейбочка'"
+            ></app-label-input>
+
+
+            <!-- Ukrainian description -->
+            <app-label-input
+                [controlName]="'descriptionUk'"
+                [label]="'Опис українською'"
+            ></app-label-input>
+
+            <!-- English description -->
+            <app-label-input
+                [controlName]="'descriptionEn'"
+                [label]="'Опис англійською'"
+            ></app-label-input>
+
+            <!-- If it's a topic, optionally show difficulty -->
+            <!-- If you added a difficulty control in code:
+            <app-label-input
+              *ngIf="entityType==='topic'"
+              [controlName]="'difficulty'"
+              [label]="'Рівень складності'"
+            ></app-label-input>
+            -->
+
+            <div class="profile__divider">
+                <h3 class="profile__divider-title">Або</h3>
+            </div>
+            <border-button
+                [borderColor]="'yellow'"
+                [text]="'Створити тест'"
+                [fullWidth]="true"
+            ></border-button>
+
+            <div class="upload-dialog__file-input-label-wrapper">
+                <p class="upload-dialog__file-input-label">Фінальне завдання</p>
+                @if (isFileSelected) {
+                    <p class="hyperlink" (click)="removeFile()">Видалити файл</p>
+                }
+            </div>
+
+            @if (!isFileSelected) {
+                <div class="upload-dialog__file-input" (click)="triggerFileDialog()">
+                    <div class="file-input__placeholder">
+                        <img src="assets/icon/button/file.svg" alt="File" loading="lazy" />
+                        <p class="placeholder__text">Завантажте pdf файл</p>
+                    </div>
+                </div>
+            } @else {
+                <div class="upload-dialog__file-selected">
+                    <div class="file-selected__left">
+                        <img
+                            src="assets/icon/button/file.svg"
+                            alt="File"
+                            loading="lazy"
+                            class="icon"
+                        />
+                        <p class="text">{{ selectedFile()?.name }}</p>
+                    </div>
+                    <mat-icon [svgIcon]="'fileUploaded'" class="file-selected__right"></mat-icon>
+                </div>
+            }
+
+            <button class="upload-dialog__submit-btn" type="submit">
+                {{ mode === 'create' ? 'Створити' : 'Оновити' }}
+            </button>
+
+        </div>
+
+        <!-- Hidden file input -->
+        <input
+            #fileInput
+            type="file"
+            hidden
+            accept="application/pdf"
+            (change)="onFileSelected($event)"
+        />
+    </form>
+</div>
