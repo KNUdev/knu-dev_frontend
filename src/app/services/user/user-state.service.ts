@@ -1,6 +1,11 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AccountProfile } from './user.model';
+import {
+    AccountProfile,
+    TECHNICAL_ROLE_COLORS,
+    TECHNICAL_ROLES,
+    TechnicalRole,
+} from './user.model';
 
 export interface UserState {
     id: string;
@@ -55,5 +60,27 @@ export class UserStateService {
 
     get userProfile(): AccountProfile | null {
         return this.state().profile;
+    }
+
+    readonly getTechnicalRole = computed(() => {
+        const roles = this.currentUser.roles;
+        return (
+            roles.find((role) =>
+                TECHNICAL_ROLES.includes(role as TechnicalRole)
+            ) || TechnicalRole.NONE
+        );
+    });
+
+    readonly getAdministrativeRole = computed(() => {
+        const roles = this.currentUser.roles;
+        return (
+            roles.find(
+                (role) => !TECHNICAL_ROLES.includes(role as TechnicalRole)
+            ) || ''
+        );
+    });
+
+    getTechnicalRoleColor(role: string): string {
+        return TECHNICAL_ROLE_COLORS[role as TechnicalRole] || '#ffffff';
     }
 }

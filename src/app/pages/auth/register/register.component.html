@@ -14,18 +14,21 @@
                     <div class="fullName">
                         <app-label-input
                             controlName="firstName"
+                            [translationPrefix]="'register'"
                             [label]="'register.firstName.label' | translate"
                             [errors]="VALIDATION_KEYS.firstName"
                         ></app-label-input>
 
                         <app-label-input
                             controlName="lastName"
+                            [translationPrefix]="'register'"
                             [label]="'register.lastName.label' | translate"
                             [errors]="VALIDATION_KEYS.lastName"
                         ></app-label-input>
 
                         <app-label-input
                             controlName="middleName"
+                            [translationPrefix]="'register'"
                             [label]="'register.middleName.label' | translate"
                             [errors]="VALIDATION_KEYS.middleName"
                         ></app-label-input>
@@ -33,6 +36,7 @@
                     <div class="email">
                         <app-label-input
                             controlName="email"
+                            [translationPrefix]="'register'"
                             [label]="'register.email.label' | translate"
                             [errors]="VALIDATION_KEYS.email"
                             type="email"
@@ -54,6 +58,7 @@
                     <div class="password">
                         <app-label-input
                             controlName="password"
+                            [translationPrefix]="'register'"
                             [label]="'register.password.label' | translate"
                             [errors]="VALIDATION_KEYS.password"
                             type="password"
@@ -62,6 +67,7 @@
 
                         <app-label-input
                             controlName="confirmPassword"
+                            [translationPrefix]="'register'"
                             [label]="
                                 'register.confirmPassword.label' | translate
                             "

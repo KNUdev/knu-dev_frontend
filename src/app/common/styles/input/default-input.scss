@@ -38,6 +38,10 @@
     }
 }
 
+.default-input.password {
+    padding-right: 3.5rem;
+}
+
 app-label-input {
     width: 100%;
 }
@@ -61,11 +65,13 @@ app-label-input {
 
     mat-icon {
         margin: auto 0;
+        display: flex;
     }
 
     svg {
         height: 1.25rem;
         width: 1.25rem;
+        margin: auto;
     }
 
     svg path {

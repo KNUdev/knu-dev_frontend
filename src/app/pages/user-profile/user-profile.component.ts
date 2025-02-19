@@ -21,7 +21,7 @@ import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
 import { I18nService } from '../../services/languages/i18n.service';
 import { ProjectService } from '../../services/project.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
-import { UserStateService } from '../../services/user/user-state.module';
+import { UserStateService } from '../../services/user/user-state.service';
 import {
     AccountProfile,
     Education,

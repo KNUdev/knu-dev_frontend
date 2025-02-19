@@ -13,6 +13,7 @@
                     <div class="email">
                         <app-label-input
                             controlName="email"
+                            [translationPrefix]="'login'"
                             [label]="'login.email.label' | translate"
                             [errors]="VALIDATION_KEYS.email"
                             type="email"
@@ -25,6 +26,7 @@
                     <div class="password">
                         <app-label-input
                             controlName="password"
+                            [translationPrefix]="'login'"
                             [label]="'login.password.label' | translate"
                             [errors]="VALIDATION_KEYS.password"
                             type="password"

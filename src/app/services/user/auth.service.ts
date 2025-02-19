@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { UserStateService } from './user-state.module';
+import { UserStateService } from './user-state.service';
 
 interface AuthResponse {
     accessToken: string;

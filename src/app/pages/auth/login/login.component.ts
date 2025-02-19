@@ -86,6 +86,8 @@ export class LoginComponent {
         private readonly router: Router,
         private readonly authService: AuthService
     ) {
+        this.formErrorService.clearErrors();
+        this.showValidationErrors.set(false);
         this.registerIcons();
         this.initForm();
         this.initTranslations();

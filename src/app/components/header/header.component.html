@@ -133,7 +133,27 @@
                         />
                     </div>
                     <div class="roles">
-                        <span class="technicalRoles">{{ user().roles }}</span>
+                        <div>
+                            <span
+                                class="technical-role"
+                                [style.color]="
+                                    getTechnicalRoleColor(
+                                        getUserTechnicalRole()
+                                    )
+                                "
+                            >
+                                {{ getUserTechnicalRole() }}
+                            </span>
+                            @if(getUserAdministrativeRole()) {
+                            <span class="separator"> | </span>
+                            <span
+                                class="administrative-role"
+                                style="color: #edd342"
+                            >
+                                {{ getUserAdministrativeRole() }}
+                            </span>
+                            }
+                        </div>
                     </div>
                 </div>
                 }

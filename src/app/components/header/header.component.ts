@@ -31,7 +31,7 @@ import { NoFillButtonComponent } from '../../common/components/button/no-fill/no
 import { I18nService } from '../../services/languages/i18n.service';
 import { AccountProfileService } from '../../services/user/account-profile.service';
 import { AuthService } from '../../services/user/auth.service';
-import { UserStateService } from '../../services/user/user-state.module';
+import { UserStateService } from '../../services/user/user-state.service';
 import { Avatar_dropdown } from './components/dropdown/avatar/avatar.component';
 import { MenuNav_dropdown } from './components/dropdown/menunav/menunav.component';
 
@@ -61,6 +61,7 @@ interface Menu {
     encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnDestroy {
+    technicalRoles = ['INTERN', 'DEVELOPER', 'PREMASTER', 'MASTER', 'TECHLEAD'];
     private readonly userState: UserStateService = inject(UserStateService);
 
     readonly user = computed(() => this.userState.currentUser);
@@ -97,6 +98,23 @@ export class HeaderComponent implements OnDestroy {
         SHOW: 110,
         HIDE: 40,
     } as const;
+
+    readonly technicalRole = computed(() => this.userState.getTechnicalRole());
+    readonly administrativeRole = computed(() =>
+        this.userState.getAdministrativeRole()
+    );
+
+    getUserTechnicalRole(): string {
+        return this.technicalRole();
+    }
+
+    getUserAdministrativeRole(): string {
+        return this.administrativeRole();
+    }
+
+    getTechnicalRoleColor(role: string): string {
+        return this.userState.getTechnicalRoleColor(role);
+    }
 
     constructor() {
         this.initializeUserProfile();

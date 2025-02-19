@@ -63,7 +63,7 @@
         }
 
         .email {
-            padding: 2.19rem 0;
+            padding-bottom: 2.19rem;
         }
 
         .forget-password {
@@ -190,9 +190,11 @@
 
         mat-icon {
             margin: auto 0;
+            display: flex;
         }
 
         svg {
+            margin: auto;
             height: 1.25rem;
             width: 1.25rem;
         }
@@ -208,12 +210,8 @@
 }
 
 @media (max-width: 820px) {
-    .fullName {
-        flex-direction: column;
-    }
-
     .email {
-        padding: 1.8rem 0 !important;
+        padding-bottom: 1.8rem !important;
     }
 }
 
@@ -225,7 +223,7 @@
 }
 
 @media (max-width: 550px) {
-    .register {
+    .login {
         form {
             padding: 3.125rem 0.9375rem;
         }

@@ -29,7 +29,6 @@ import { LabelInput } from '../../../common/components/input/label-input/label-i
 import { DepartmentService } from '../../../services/department.service';
 import { FormErrorService } from '../../../services/error.service';
 import { I18nService } from '../../../services/languages/i18n.service';
-import { AuthService } from '../../../services/user/auth.service';
 import {
     SelectOption,
     WriteDropDowns,
@@ -107,9 +106,11 @@ export class RegisterComponent {
         private readonly http: HttpClient,
         private readonly departmentService: DepartmentService,
         readonly formErrorService: FormErrorService,
-        private readonly router: Router,
-        private readonly authService: AuthService
+        private readonly router: Router
     ) {
+        this.formErrorService.clearErrors();
+        this.showValidationErrors.set(false);
+
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
