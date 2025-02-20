@@ -65,6 +65,10 @@ button {
     li {
         padding: 0;
     }
+
+    @include mobile {
+        left: 0;
+    }
 }
 
 .menu-item {

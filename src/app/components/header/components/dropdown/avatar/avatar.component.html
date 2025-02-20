@@ -10,41 +10,41 @@
     </button>
 
     @if (isOpen()) {
-    <ul id="dropdown-menu" class="dropdown-menu" role="menu">
-        <li>
-            <a
-                class="menu__nav menu-item"
-                role="menuitem"
-                [routerLink]="['/profile', userId]"
-                aria-label="userProfile"
-            >
-                <mat-icon aria-hidden="true" svgIcon="user"></mat-icon>
-                {{ "header.avatarDropDown.profile" | translate }}
-            </a>
+        <ul id="dropdown-menu" class="dropdown-menu" role="menu">
+            <li>
+                <a
+                    class="menu__nav menu-item"
+                    role="menuitem"
+                    [routerLink]="['/profile', userId]"
+                    aria-label="userProfile"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="user"></mat-icon>
+                    {{ "header.avatarDropDown.profile" | translate }}
+                </a>
 
-            <hr class="menu-divider" aria-hidden="true" />
+                <hr class="menu-divider" aria-hidden="true" />
 
-            <a
-                class="menu__nav menu-item"
-                role="menuitem"
-                [routerLink]="['/settings']"
-            >
-                <mat-icon aria-hidden="true" svgIcon="settings"></mat-icon>
-                {{ "header.avatarDropDown.settings" | translate }}</a
-            >
+                <a
+                    class="menu__nav menu-item"
+                    role="menuitem"
+                    [routerLink]="['/settings']"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="settings"></mat-icon>
+                    {{ "header.avatarDropDown.settings" | translate }}</a
+                >
 
-            <hr class="menu-divider" aria-hidden="true" />
+                <hr class="menu-divider" aria-hidden="true" />
 
-            <a
-                class="menu__nav menu-item"
-                role="menuitem"
-                (click)="logout()"
-                style="color: #e5383a"
-            >
-                <mat-icon aria-hidden="true" svgIcon="log_out"></mat-icon>
-                {{ "header.avatarDropDown.logout" | translate }}</a
-            >
-        </li>
-    </ul>
+                <a
+                    class="menu__nav menu-item logout"
+                    role="menuitem"
+                    (click)="logout()"
+                    style="color: #e5383a"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="log_out"></mat-icon>
+                    {{ "header.avatarDropDown.logout" | translate }}</a
+                >
+            </li>
+        </ul>
     }
 </nav>

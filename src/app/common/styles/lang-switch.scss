@@ -49,7 +49,7 @@
     box-sizing: border-box;
     z-index: 1000;
 
-    @include mobile-horizontal {
+    @include tablet {
         left: 0;
     }
 }

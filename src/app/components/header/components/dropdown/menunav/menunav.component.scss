@@ -65,20 +65,16 @@ button {
     }
 }
 
-@include mobile-horizontal {
+@include mobile {
     .dropdown-menu {
         position: relative;
         background: none;
         width: fit-content;
-        margin: 0 auto;
+        padding: 0;
         left: 0;
 
         li {
             display: flex;
-
-            a {
-                margin: 0 auto;
-            }
         }
     }
 }
