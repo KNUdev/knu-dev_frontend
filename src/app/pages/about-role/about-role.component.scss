@@ -45,21 +45,22 @@
 .header-text__title-second-part {
     display: inline-block;
     border-right: 0.0624rem solid var(--cursor-color);
-    animation: blinking 1s steps(1, end) infinite,
-    typing 4s steps(40, end);
+    animation:
+        blinking 1s steps(1, end) infinite,
+        typing 4s steps(40, end);
     overflow: hidden;
     white-space: nowrap;
 }
 
 @keyframes blinking {
     0% {
-        border-color: transparent
+        border-color: transparent;
     }
     50% {
         border-color: var(--cursor-color);
     }
     100% {
-        border-color: transparent
+        border-color: transparent;
     }
 }
 
@@ -106,75 +107,36 @@
 
 .roles-wrapper__intern {
     grid-area: A;
-    border: #4264ED solid 0.0624rem;
+    border: #4264ed solid 0.0624rem;
     padding: 0.9rem;
-}
-
-.roles-wrapper__intern:hover {
-    background: #4264ED;
-    cursor: pointer;
-    padding: 0.9rem;
-    box-shadow: 0 0 0.3125rem #4264ED;
 }
 
 .roles-wrapper__developer {
     grid-area: B;
-    border: #E5383A solid 0.0624rem;
+    border: #e5383a solid 0.0624rem;
     padding: 0.9rem;
-}
-
-.roles-wrapper__developer:hover {
-    background: #E5383A;
-    cursor: pointer;
-    padding: 0.9rem;
-    box-shadow: 0 0 0.3125rem #E5383A;
 }
 
 .roles-wrapper__premaster {
     grid-area: C;
-    border: #3FCB49 solid 0.0624rem;
+    border: #3fcb49 solid 0.0624rem;
     padding: 0.9rem;
-}
-
-.roles-wrapper__premaster:hover {
-    background: #3FCB49;
-    cursor: pointer;
-    padding: 0.9rem;
-    box-shadow: 0 0 0.3125rem #3FCB49;
 }
 
 .roles-wrapper__bottom-roles-block {
     grid-area: D;
-}
-
-.roles-wrapper__bottom-roles-block {
     display: flex;
     gap: 1.56rem;
 }
 
 .bottom-roles-block__master {
-    border: #9542ED solid 0.0624rem;
+    border: #9542ed solid 0.0624rem;
     width: 50%;
     padding: 0.9rem;
 }
-
-.bottom-roles-block__master:hover {
-    background: #9542ED;
-    cursor: pointer;
-    padding: 0.9rem;
-    box-shadow: 0 0 0.3125rem #9542ED;
-}
-
 .bottom-roles-block__techlead {
-    border: #EDD342 solid 0.0624rem;
+    border: #edd342 solid 0.0624rem;
     width: 50%;
-}
-
-.bottom-roles-block__techlead:hover {
-    background: #EDD342;
-    color: black;
-    cursor: pointer;
-    box-shadow: 0 0 0.3125rem #EDD342;
 }
 
 .roles-wrapper__role {
@@ -304,7 +266,7 @@
 }
 
 .header__subtitle {
-    color: #D1D1D1;
+    color: #d1d1d1;
     font-family: Unbounded;
     font-size: 0.9rem;
     font-style: normal;
@@ -327,7 +289,7 @@
 }
 
 .data__duties {
-    border: 0.125rem solid #4264ED;
+    border: 0.125rem solid #4264ed;
     border-radius: 0.3125rem;
     margin-top: 3.125rem;
     margin-bottom: 3.125rem;
@@ -336,7 +298,7 @@
 }
 
 .data__advantages {
-    border: 0.125rem solid #4264ED;
+    border: 0.125rem solid #4264ed;
     border-radius: 0.3125rem;
     padding: 1.56rem;
     width: 100%;
@@ -431,8 +393,8 @@
         gap: 1.5625rem;
         grid-auto-rows: minmax(2rem, 4rem);
         grid-template-areas:
-          "A B C"
-          "D D D";
+            "A B C"
+            "D D D";
         justify-content: center;
     }
 
@@ -441,7 +403,6 @@
         height: 12.5rem;
         left: unset;
     }
-
 }
 
 @include mobile {
@@ -505,8 +466,87 @@
         flex-direction: column;
         justify-content: start;
         grid-template-areas:
-              "A"
-              "B";
+            "A"
+            "B";
+    }
+}
+.roles-wrapper {
+    &__intern {
+        --highlight-color: #4264ed;
+        border: var(--highlight-color) solid 0.0624rem;
+        animation: highlightFade 5s infinite;
     }
 
+    &__developer {
+        --highlight-color: #e5383a;
+        border: var(--highlight-color) solid 0.0624rem;
+        animation: highlightFade 5s infinite;
+        animation-delay: 1s;
+    }
+
+    &__premaster {
+        --highlight-color: #3fcb49;
+        border: var(--highlight-color) solid 0.0624rem;
+        animation: highlightFade 5s infinite;
+        animation-delay: 2s;
+    }
+
+    &__bottom-roles-block {
+        .bottom-roles-block__master {
+            --highlight-color: #9542ed;
+            border: var(--highlight-color) solid 0.0624rem;
+            animation: highlightFade 5s infinite;
+            animation-delay: 3s;
+        }
+
+        .bottom-roles-block__techlead {
+            --highlight-color: #edd342;
+            border: var(--highlight-color) solid 0.0624rem;
+            animation: highlightFade 5s infinite;
+            animation-delay: 4s;
+        }
+    }
+
+    &__intern,
+    &__developer,
+    &__premaster,
+    &__bottom-roles-block .bottom-roles-block__master,
+    &__bottom-roles-block .bottom-roles-block__techlead {
+        background: none;
+        box-shadow: none;
+        padding: 0.9rem;
+    }
+}
+
+@keyframes highlightFade {
+    0% {
+        background: none;
+        box-shadow: none;
+    }
+    5% {
+        background: var(--highlight-color);
+        box-shadow: 0 0 0.3125rem var(--highlight-color);
+    }
+    15% {
+        background: var(--highlight-color);
+        box-shadow: 0 0 0.3125rem var(--highlight-color);
+    }
+    20% {
+        background: none;
+        box-shadow: none;
+    }
+    20.1%,
+    100% {
+        background: none;
+        box-shadow: none;
+    }
+}
+
+.roles-wrapper__intern:hover,
+.roles-wrapper__developer:hover,
+.roles-wrapper__premaster:hover,
+.bottom-roles-block__master:hover,
+.bottom-roles-block__techlead:hover {
+    cursor: default;
+    padding: 0.9rem;
 }
