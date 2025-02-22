@@ -1,7 +1,44 @@
 {
     "header": {
+        "loginButton": "Login/Register",
+        "avatarDropDown": {
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Logout"
+        },
         "menu": {
             "noAuth": [
+                {
+                    "name": "Home",
+                    "link": "/"
+                },
+                {
+                    "name": "Campus",
+                    "link": "/campus"
+                },
+                {
+                    "name": "Pre-campus",
+                    "link": "/pre-campus"
+                },
+                {
+                    "name": "Developers",
+                    "link": "/developers"
+                },
+                {
+                    "name": "Training form",
+                    "dropdown": [
+                        {
+                            "name": "Online",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "Offline",
+                            "link": "/offline"
+                        }
+                    ]
+                }
+            ],
+            "INTERN": [
                 {
                     "name": "Home",
                     "link": "/"

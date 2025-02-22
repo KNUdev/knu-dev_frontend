@@ -1,9 +1,14 @@
-import {computed, Injectable, signal} from '@angular/core';
-import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, startWith} from 'rxjs/operators';
-import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
-import {HttpClient} from '@angular/common/http';
-import {AVAILABLE_LANGUAGES, LANG_TO_LOCALE, LANGUAGE_KEY, LanguageCode} from "../../i18n.constants";
+import { HttpClient } from '@angular/common/http';
+import { computed, Injectable, signal } from '@angular/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
+import {
+    AVAILABLE_LANGUAGES,
+    LANG_TO_LOCALE,
+    LANGUAGE_KEY,
+    LanguageCode,
+} from './i18n.constants';
 
 interface LanguageOption {
     code: LanguageCode;
@@ -13,34 +18,41 @@ interface LanguageOption {
     imgFullPath: string;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class I18nService {
     public currentLang = signal<LanguageCode>('uk');
     public supportedLanguages = computed<LanguageOption[]>(() => {
         return AVAILABLE_LANGUAGES.map((code) => ({
             code,
             active: this.currentLang() === code,
-            name: code === 'uk' ? 'Українська' : code === 'en' ? 'English' : code,
+            name:
+                code === 'uk' ? 'Українська' : code === 'en' ? 'English' : code,
             imgMiniPath: `assets/icon/language/${code}Round.svg`,
             imgFullPath: `assets/icon/language/${code}Square.svg`,
         }));
     });
     private currentLocaleSubject = new BehaviorSubject<string>(
-        LANG_TO_LOCALE[(localStorage.getItem(LANGUAGE_KEY) as LanguageCode) || 'uk'] || 'uk-UA'
+        LANG_TO_LOCALE[
+            (localStorage.getItem(LANGUAGE_KEY) as LanguageCode) || 'uk'
+        ] || 'uk-UA'
     );
     public currentLocale$ = this.currentLocaleSubject.asObservable();
 
     constructor(private translate: TranslateService, private http: HttpClient) {
-        const savedLanguage = (localStorage.getItem(LANGUAGE_KEY) as LanguageCode) || 'uk';
+        const savedLanguage =
+            (localStorage.getItem(LANGUAGE_KEY) as LanguageCode) || 'uk';
         const browserLang = navigator.language.split('-')[0] as LanguageCode;
-        const defaultLang = AVAILABLE_LANGUAGES.includes(browserLang) ? browserLang : savedLanguage;
+        const defaultLang = AVAILABLE_LANGUAGES.includes(browserLang)
+            ? browserLang
+            : savedLanguage;
 
         this.currentLang.set(defaultLang);
         this.translate.setDefaultLang(defaultLang);
         this.translate.use(defaultLang);
 
         this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-            const newLocale = LANG_TO_LOCALE[event.lang as LanguageCode] || 'en-UK';
+            const newLocale =
+                LANG_TO_LOCALE[event.lang as LanguageCode] || 'en-UK';
             this.currentLocaleSubject.next(newLocale);
         });
     }
@@ -55,7 +67,10 @@ export class I18nService {
         localStorage.setItem(LANGUAGE_KEY, languageCode);
     }
 
-    public loadComponentTranslations(component: string, lang: string): Observable<any> {
+    public loadComponentTranslations(
+        component: string,
+        lang: string
+    ): Observable<any> {
         const paths = [
             `app/${component}/i18n/${lang}.json`,
             `app/common/i18n/${lang}.json`,
@@ -66,7 +81,11 @@ export class I18nService {
                 map((translations) => {
                     if (translations) {
                         // Merge new translations with existing ones.
-                        return this.translate.setTranslation(lang, translations, true);
+                        return this.translate.setTranslation(
+                            lang,
+                            translations,
+                            true
+                        );
                     }
                     return {};
                 }),
@@ -80,13 +99,20 @@ export class I18nService {
         return forkJoin(requests);
     }
 
-    public getCurrentLanguage(): Observable<{ flagRound: string; flagSquare: string; name: string }> {
+    public getCurrentLanguage(): Observable<{
+        flagRound: string;
+        flagSquare: string;
+        name: string;
+    }> {
         return this.translate.onLangChange.pipe(
-            startWith({lang: this.translate.currentLang}),
+            startWith({ lang: this.translate.currentLang }),
             map(() => ({
                 flagRound: `assets/icon/language/${this.translate.currentLang}Round.svg`,
                 flagSquare: `assets/icon/language/${this.translate.currentLang}Square.svg`,
-                name: this.translate.currentLang === 'uk' ? 'Українська' : 'English',
+                name:
+                    this.translate.currentLang === 'uk'
+                        ? 'Українська'
+                        : 'English',
             }))
         );
     }
@@ -94,7 +120,7 @@ export class I18nService {
     public currentLang$(): Observable<LanguageCode> {
         return this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang }),
-            map(evt => evt.lang as LanguageCode)
+            map((evt) => evt.lang as LanguageCode)
         );
     }
 }

@@ -1,0 +1,49 @@
+<nav [class.active]="isOpen()" class="dropdown-container">
+    <button
+        (click)="toggleDropdown()"
+        [attr.aria-expanded]="isOpen()"
+        [class.active]="isOpen()"
+        aria-controls="dropdown-menu"
+        aria-haspopup="true"
+    >
+        <img [src]="avatar" alt="User avatar" />
+    </button>
+
+    @if (isOpen()) {
+        <ul id="dropdown-menu" class="dropdown-menu" role="menu">
+            <li>
+                <a
+                    class="menu__nav menu-item"
+                    role="menuitem"
+                    [routerLink]="['/profile', userId]"
+                    aria-label="userProfile"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="user"></mat-icon>
+                    {{ "header.avatarDropDown.profile" | translate }}
+                </a>
+
+                <hr class="menu-divider" aria-hidden="true" />
+
+                <a
+                    class="menu__nav menu-item"
+                    role="menuitem"
+                    [routerLink]="['/settings']"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="settings"></mat-icon>
+                    {{ "header.avatarDropDown.settings" | translate }}</a
+                >
+
+                <hr class="menu-divider" aria-hidden="true" />
+
+                <a
+                    class="menu__nav menu-item logout"
+                    role="menuitem"
+                    (click)="logout()"
+                >
+                    <mat-icon aria-hidden="true" svgIcon="log_out"></mat-icon>
+                    {{ "header.avatarDropDown.logout" | translate }}</a
+                >
+            </li>
+        </ul>
+    }
+</nav>

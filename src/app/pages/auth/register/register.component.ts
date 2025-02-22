@@ -1,29 +1,49 @@
-import {CommonModule} from '@angular/common';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Component, HostListener, inject, signal} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-import {RouterModule} from '@angular/router';
-import {LangChangeEvent, TranslateModule, TranslateService,} from '@ngx-translate/core';
-import {BehaviorSubject, catchError, map, Observable, of, startWith, switchMap,} from 'rxjs';
-import {environment} from '../../../../environments/environment.development';
-import {LabelInput} from '../../../common/components/input/label-input/label-input';
-import {DepartmentService} from '../../../services/department.services';
-import {FormErrorService} from '../../../services/error.services';
-import {I18nService} from '../../../services/languages/i18n.service';
-import {SelectOption, WriteDropDowns,} from './components/dropdown/write-dropdowns';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import {
-    Course,
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router, RouterModule } from '@angular/router';
+import {
+    LangChangeEvent,
+    TranslateModule,
+    TranslateService,
+} from '@ngx-translate/core';
+import {
+    BehaviorSubject,
+    catchError,
+    map,
+    Observable,
+    of,
+    startWith,
+    switchMap,
+} from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { LabelInput } from '../../../common/components/input/label-input/label-input';
+import { DepartmentService } from '../../../services/department.service';
+import { FormErrorService } from '../../../services/error.service';
+import { I18nService } from '../../../services/languages/i18n.service';
+import {
+    SelectOption,
+    WriteDropDowns,
+} from './components/dropdown/write-dropdowns';
+import {
     Department,
     ERROR_KEY_TO_CONTROL,
-    Expertises,
+    Expertise,
     VALIDATION_KEYS,
     ValidationErrors,
+    YearOfStudy,
 } from './register.model';
 
-const COURSE_TRANSLATIONS = 'course' as const;
-const EXPERTISES_TRANSLATIONS = 'expertises' as const;
+const YEAR_OF_STUDY_TRANSLATIONS = 'yearOfStudy' as const;
+const EXPERTISE_TRANSLATIONS = 'expertise' as const;
 
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
@@ -31,6 +51,11 @@ const REGISTER_CONSTANTS = {
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
+
+export interface AuthResponse {
+    accessToken: string;
+    refreshToken: string;
+}
 
 @Component({
     selector: 'app-register',
@@ -55,8 +80,8 @@ export class RegisterComponent {
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
-    courses: SelectOption[] = [];
-    expertises: SelectOption[] = [];
+    yearOfStudy: SelectOption[] = [];
+    expertise: SelectOption[] = [];
     departmentLoadError = signal<boolean>(false);
     specialtyLoadError = signal<boolean>(false);
     selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
@@ -80,8 +105,12 @@ export class RegisterComponent {
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
         private readonly departmentService: DepartmentService,
-        private readonly formErrorService: FormErrorService
+        readonly formErrorService: FormErrorService,
+        private readonly router: Router
     ) {
+        this.formErrorService.clearErrors();
+        this.showValidationErrors.set(false);
+
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -139,28 +168,28 @@ export class RegisterComponent {
             switchMap((departmentId) =>
                 departmentId
                     ? this.departmentService.getSpecialties(departmentId).pipe(
-                        map((specialties) => {
-                            this.specialtyLoadError.set(false);
-                            return specialties.map((specialty) => ({
-                                id: specialty.codeName,
-                                codeName: specialty.codeName,
-                                name: {
-                                    en: specialty.name.en,
-                                    uk: specialty.name.uk,
-                                },
-                            }));
-                        }),
-                        catchError(() => {
-                            this.specialtyLoadError.set(true);
-                            return of([]);
-                        })
-                    )
+                          map((specialties) => {
+                              this.specialtyLoadError.set(false);
+                              return specialties.map((specialty) => ({
+                                  id: specialty.codeName,
+                                  codeName: specialty.codeName,
+                                  name: {
+                                      en: specialty.name.en,
+                                      uk: specialty.name.uk,
+                                  },
+                              }));
+                          }),
+                          catchError(() => {
+                              this.specialtyLoadError.set(true);
+                              return of([]);
+                          })
+                      )
                     : of([])
             )
         );
 
         const langChange$ = this.translate.onLangChange.pipe(
-            startWith({lang: this.translate.currentLang} as LangChangeEvent)
+            startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
 
         const loadTranslations$ = langChange$.pipe(
@@ -172,27 +201,27 @@ export class RegisterComponent {
             )
         );
 
-        const courseTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get(COURSE_TRANSLATIONS)),
-            map((translations: Course[]) => translations)
+        const yearOfStudyTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(YEAR_OF_STUDY_TRANSLATIONS)),
+            map((translations: YearOfStudy[]) => translations)
         );
 
-        courseTranslations$.subscribe((coursesData) => {
-            this.courses = coursesData.map((course) => ({
-                id: course.id,
-                displayedName: course.displayedName,
+        yearOfStudyTranslations$.subscribe((yearOfStudyData) => {
+            this.yearOfStudy = yearOfStudyData.map((yearOfStudy) => ({
+                id: yearOfStudy.id,
+                displayedName: yearOfStudy.displayedName,
             }));
         });
 
-        const expertisesTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get(EXPERTISES_TRANSLATIONS)),
-            map((translations: Expertises[]) => translations)
+        const expertiseTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(EXPERTISE_TRANSLATIONS)),
+            map((translations: Expertise[]) => translations)
         );
 
-        expertisesTranslations$.subscribe((expertisesData) => {
-            this.expertises = expertisesData.map((expertises) => ({
-                id: expertises.id,
-                displayedName: expertises.displayedName,
+        expertiseTranslations$.subscribe((expertiseData) => {
+            this.expertise = expertiseData.map((expertise) => ({
+                id: expertise.id,
+                displayedName: expertise.displayedName,
             }));
         });
     }
@@ -227,8 +256,8 @@ export class RegisterComponent {
         const confirmPassword = form.get('confirmPassword');
 
         if (password?.value !== confirmPassword?.value) {
-            confirmPassword?.setErrors({passwordMismatch: true});
-            return {passwordMismatch: true};
+            confirmPassword?.setErrors({ passwordMismatch: true });
+            return { passwordMismatch: true };
         }
 
         confirmPassword?.setErrors(null);
@@ -275,7 +304,7 @@ export class RegisterComponent {
 
         this.personalInfoForm()
             .get('email')
-            ?.setValue(value, {emitEvent: false});
+            ?.setValue(value, { emitEvent: false });
 
         if (inputElement.type !== 'email') {
             setTimeout(() => {
@@ -317,7 +346,7 @@ export class RegisterComponent {
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
-            const {confirmPassword, ...personalInfo} =
+            const { confirmPassword, ...personalInfo } =
                 this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
@@ -329,27 +358,29 @@ export class RegisterComponent {
                 'specialtyCodename',
                 academicInfo.specialtyCodename
             );
-            formData.append('course', academicInfo.course);
+            formData.append('yearOfStudy', academicInfo.yearOfStudy);
             formData.append('expertise', academicInfo.expertise);
 
-            this.http.post(environment.apiRegisterUrl, formData).subscribe({
-                next: (response) => {
-                    console.log('Registration successful', response);
-                },
-                error: (error: HttpErrorResponse) => {
-                    if (error.status === 400 && error.error) {
-                        this.handleValidationErrors(error.error);
-                    }
-                    if (error.status === 200 && error.error) {
-                        this.currentRegistrationPhase.set(1);
-                        this.backendErrors.set({
-                            email: ['This email is already registered'],
-                        });
-                    } else {
-                        console.error(error);
-                    }
-                },
-            });
+            this.http
+                .post<AuthResponse>(environment.apiRegisterUrl, formData)
+                .subscribe({
+                    next: (response) => {
+                        this.router.navigate(['/auth/login']);
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        if (error.status === 400 && error.error) {
+                            this.handleValidationErrors(error.error);
+                        }
+                        if (error.status === 200 && error.error) {
+                            this.currentRegistrationPhase.set(1);
+                            this.backendErrors.set({
+                                email: ['This email is already registered'],
+                            });
+                        } else {
+                            console.error(error);
+                        }
+                    },
+                });
         }
     }
 
@@ -392,7 +423,7 @@ export class RegisterComponent {
                 ],
                 confirmPassword: ['', Validators.required],
             },
-            {validators: [this.passwordMatchValidator], updateOn: 'change'}
+            { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
     }
 
@@ -400,7 +431,7 @@ export class RegisterComponent {
         return this.fb.group({
             departmentId: ['', Validators.required],
             specialtyCodename: ['', Validators.required],
-            course: ['', Validators.required],
+            yearOfStudy: ['', Validators.required],
             expertise: ['', Validators.required],
         });
     }
@@ -431,5 +462,4 @@ export class RegisterComponent {
             this.currentRegistrationPhase.set(1);
         }
     }
-
 }

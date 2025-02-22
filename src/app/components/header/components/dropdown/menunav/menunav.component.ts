@@ -9,8 +9,9 @@ import {
 } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 interface MenuItem {
     name: string;
@@ -55,7 +56,12 @@ export class MenuNav_dropdown {
         this.isOpen.set(false);
     }
 
-    constructor() {
+    constructor(private router: Router) {
+        this.router.events
+            .pipe(filter((event) => event instanceof NavigationEnd))
+            .subscribe(() => {
+                this.isOpen.set(false);
+            });
         this.matIconRegistry.addSvgIcon(
             'arrowDown',
             this.domSanitizer.bypassSecurityTrustResourceUrl(

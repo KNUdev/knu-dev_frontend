@@ -1,0 +1,34 @@
+{
+    "login": {
+        "title": "Login to your account",
+        "goHomeLink": "Go to home page",
+        "goBackLink": "Go back to previous page",
+        "mustSelectDepartment": "Firstly you must select a department",
+        "forgetPassword": {
+            "label": "Forget password?",
+            "link": "Recover"
+        },
+        "continue": "Login",
+        "login": "login",
+        "dontHaveAccount": {
+            "label": "Don't have an account?",
+            "link": "Create"
+        },
+        "password": {
+            "label": "Password*",
+            "errors": {
+                "required": "Password cannot be blank",
+                "minlength": "Password must be between 8 and 64 characters",
+                "maxlength": "Password must be between 8 and 64 characters",
+                "pattern": "Password must contain at least one letter and one digit"
+            }
+        },
+        "email": {
+            "label": "Email*",
+            "errors": {
+                "required": "Email cannot be blank",
+                "invalidDomain": "Email must be in the @knu.ua domain"
+            }
+        }
+    }
+}
