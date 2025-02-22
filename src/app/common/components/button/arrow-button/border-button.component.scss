@@ -1,6 +1,6 @@
 @use "../../../../common/styles/variables" as *;
 
-button {
+a {
     @include flex-center(row);
     width: 21.875rem;
     height: 3.438rem;

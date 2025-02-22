@@ -1,63 +1,104 @@
+import {Expertise} from '../../pages/user-profile/user-profile.model';
+import {buildApplication} from '@angular-devkit/build-angular';
+
+/**
+ * Common interface that can hold a finalTaskUrl for
+ * programs/sections/modules (or potentially `taskUrl` for topics).
+ * We'll keep it optional.
+ */
+export interface LearningUnit {
+    finalTaskUrl?: string;
+    finalTaskFilename?: string;
+}
+
+/**
+ * Multi-language fields: both en/uk optional, plus string index signature if needed.
+ */
 export interface MultiLanguageField {
     [key: string]: string | undefined;
     en?: string;
     uk?: string;
 }
 
-export interface EducationProgramDto {
+/**
+ * Program:
+ * - extends LearningUnit for finalTaskUrl
+ * - finalTaskFile is optional for new or updated programs
+ */
+export interface EducationProgramDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
-    expertise: string; // or you can create an enum for Expertise
+    expertise: Expertise;
     isPublished: boolean;
-    version: number;
     sections: ProgramSectionDto[];
-    finalTaskFile: File;
+
+    /**
+     * Locally used to store a new or updated file, optional.
+     */
+    finalTaskFile?: File;
 }
 
-export interface ProgramSectionDto {
+/**
+ * Section:
+ * - extends LearningUnit for finalTaskUrl
+ * - finalTaskFile optional for new or updated file
+ */
+export interface ProgramSectionDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
     modules: ProgramModuleDto[];
-    finalTaskFile?: File; // <--- locally used for the UI
+    finalTaskFile?: File; // UI usage
 }
 
-export interface ProgramModuleDto {
+export interface ProgramModuleDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
-    finalTaskUrl: string;
     topics: ProgramTopicDto[];
-    finalTaskFile?: File;    // <--- for local usage only
+    finalTaskFile?: File;
 }
 
-export interface ProgramTopicDto {
+export interface ProgramTopicDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
     learningResources: string[];
-    taskUrl: string;
-    taskFile?: File;         // <--- for local usage only
+    difficulty: number;
+    finalTaskFile?: File;
+    testId: string;
 }
 
+export interface ProgramSummary {
+    id: string;
+    name: MultiLanguageField;
+    totalSections: number;
+    totalModules: number;
+    totalTopics: number;
+    expertise: Expertise;
+    totalActiveSessions: number;
+    isPublished: boolean;
+    createdAt: Date;
+    lastUpdatedAt: Date;
+}
 
+/** Sprints, etc. remain unchanged (no finalTaskFile) */
 export interface SprintDto {
     sprintId: string;
     orderIndex: number;
-    sprintType: string; // e.g., "TOPIC", "MODULE_FINAL", "SECTION_FINAL", "PROGRAM_FINAL"
+    sprintType: string;
     durationDays: number;
-    title: string;       // e.g., topic name or "Module Final: [Module Name]"
-    description: string; // optional short info
+    title: string;
+    description: string;
     sprintStatus: 'FUTURE' | 'ACTIVE' | 'COMPLETED';
-    // When in an active session, extra details are available:
     detailedInfo?: DetailedSprintInfoDto;
 }
 
 export interface DetailedSprintInfoDto {
     submissionHistory: SprintAttemptDto[];
     sprintScore?: number;
-    sprintPassingDate?: string; // ISO date string
+    sprintPassingDate?: string;
     taskUrl?: string;
     learningResources?: string[];
     testMetadata?: TestMetadataDto;
@@ -66,7 +107,7 @@ export interface DetailedSprintInfoDto {
 export interface SprintAttemptDto {
     attemptId: string;
     attemptNumber: number;
-    submittedAt: string; // ISO date string
+    submittedAt: string;
     submissionFile: string;
     mentorFeedback?: string;
     score?: number;
@@ -77,15 +118,14 @@ export interface TestMetadataDto {
     testId: string;
     testName: string;
     totalQuestions: number;
-    // add additional fields as needed
 }
 
 export interface SessionFullDto {
     sessionId: string;
     program: EducationProgramDto;
-    sessionStartDate: string; // ISO date string
-    sessionEndDate: string;   // ISO date string
-    status: string;           // e.g., "CREATED", "ONGOING", "COMPLETED"
+    sessionStartDate: string;
+    sessionEndDate: string;
+    status: string;
     sprints: SprintDto[];
 }
 
@@ -108,7 +148,6 @@ export interface ModuleSprintPlanDto {
     moduleFinalSprint: SprintDto;
 }
 
-
 export interface CreateSessionRequestDto {
     programId: string;
     mentorIds: string[];
@@ -122,13 +161,13 @@ export interface SprintAdjustmentDto {
 }
 
 export interface TaskSubmissionRequestDto {
-    submissionFile: string; // or a file object, if using FormData
+    submissionFile: string;
 }
 
 export interface SprintSubmissionDto {
     submissionId: string;
     participantId: string;
-    lastSubmissionTime: string; // ISO date string
+    lastSubmissionTime: string;
     attempts: SprintAttemptDto[];
 }
 
@@ -138,4 +177,7 @@ export interface ReviewRequestDto {
     requestResend: boolean;
 }
 
-
+export type ShortTest = {
+    id: string;
+    enName: string;
+}

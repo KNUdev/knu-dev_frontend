@@ -1,22 +1,21 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable } from 'rxjs';
+import {Component, OnInit, signal} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
 
 import {
     EducationProgramDto,
-    ProgramSectionDto,
     ProgramModuleDto,
+    ProgramSectionDto,
     ProgramTopicDto
 } from '../../common/models/shared.model';
 
-import { ProgramService } from '../../services/program.service';
-import { LearningUnitItem } from './components/learning-unit-item.component.component';
-import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
+import {ProgramService} from '../../services/program.service';
+import {LearningUnitItem} from './components/learning-unit-item.component.component';
+import {UploadDialogComponent} from './upload-dialog/upload-dialog.component';
+import {BorderButtonComponent} from '../../common/components/button/arrow-button/border-button.component';
+import {MultiLangFieldPipe} from '../../common/pipes/multi-lang-field.pipe';
 
-/**
- * For opening our dialog with a certain mode/entity
- */
+
 interface DialogConfig {
     isOpen: boolean;
     mode: 'create' | 'edit';
@@ -31,7 +30,9 @@ interface DialogConfig {
     styleUrls: ['./program-creation.component.scss'],
     imports: [
         LearningUnitItem,
-        UploadDialogComponent
+        UploadDialogComponent,
+        BorderButtonComponent,
+        MultiLangFieldPipe
     ]
 })
 export class ProgramCreationComponent implements OnInit {
@@ -51,7 +52,25 @@ export class ProgramCreationComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private programService: ProgramService
-    ) {}
+    ) {
+    }
+
+    get totalSectionsCount() {
+        return this.programSignal()?.sections.length;
+    }
+
+    get totalModulesCount() {
+        return this.programSignal()?.sections
+            .flatMap(s => s.modules)
+            .length;
+    }
+
+    get totalTopicsCount() {
+        return this.programSignal()?.sections
+            .flatMap(s => s.modules)
+            .flatMap(m => m.topics)
+            .length;
+    }
 
     ngOnInit(): void {
         this.programId = this.route.snapshot.paramMap.get('programId')!;
@@ -65,9 +84,6 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
-    // -----------------------------------------------------------------
-    // Selecting items for highlight
-    // -----------------------------------------------------------------
 
     public onSelectSection(section: ProgramSectionDto): void {
         this.selectedSection = section;
@@ -77,10 +93,6 @@ export class ProgramCreationComponent implements OnInit {
     public onSelectModule(module: ProgramModuleDto): void {
         this.selectedModule = module;
     }
-
-    // -----------------------------------------------------------------
-    // Program Edit (immediate update)
-    // -----------------------------------------------------------------
 
     /**
      * Called when user clicks the "Edit Program Summary" icon at the top.
@@ -98,16 +110,12 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
-    // -----------------------------------------------------------------
-    // CREATE - local add (Section, Module, Topic)
-    // -----------------------------------------------------------------
-
     public onAddSection(): void {
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'section',
-            parentId: this.programSignal()?.id // if you want a parent ID
+            parentId: this.programSignal()?.id
         });
     }
 
@@ -130,7 +138,7 @@ export class ProgramCreationComponent implements OnInit {
     }
 
     // -----------------------------------------------------------------
-    // EDIT - immediate update (Section, Module, Topic)
+    // DELETE - local removal
     // -----------------------------------------------------------------
 
     public onEditSection(section: ProgramSectionDto): void {
@@ -140,6 +148,7 @@ export class ProgramCreationComponent implements OnInit {
             entityType: 'section',
             entityData: section
         });
+        console.log(section)
     }
 
     public onEditModule(module: ProgramModuleDto): void {
@@ -161,15 +170,19 @@ export class ProgramCreationComponent implements OnInit {
     }
 
     // -----------------------------------------------------------------
-    // DELETE - local removal
+    // Dialog close
     // -----------------------------------------------------------------
 
     public onDeleteSection(section: ProgramSectionDto): void {
         const program = this.programSignal();
         if (!program) return;
         program.sections = program.sections.filter(s => s !== section);
-        this.programSignal.set({ ...program });
+        this.programSignal.set({...program});
     }
+
+    // -----------------------------------------------------------------
+    // Save entire Program
+    // (If you want a single final call for newly created items, etc.)
 
     public onDeleteModule(module: ProgramModuleDto): void {
         if (!this.selectedSection) return;
@@ -178,16 +191,17 @@ export class ProgramCreationComponent implements OnInit {
         this.programSignal.update(p => p);
     }
 
+    // -----------------------------------------------------------------
+    // Construct the single call for newly created items
+    // Only pass 'existing' IDs (no other fields) if an item already exists
+    // If it's new (id is empty or ""), pass name, description, finalTask, etc.
+
     public onDeleteTopic(topic: ProgramTopicDto): void {
         if (!this.selectedModule) return;
         this.selectedModule.topics =
             this.selectedModule.topics.filter(t => t !== topic);
         this.programSignal.update(p => p);
     }
-
-    // -----------------------------------------------------------------
-    // Dialog close
-    // -----------------------------------------------------------------
 
     /**
      * The dialog can either create a new item (locally) or perform an immediate update.
@@ -202,9 +216,12 @@ export class ProgramCreationComponent implements OnInit {
         // 1) If user created a new section
         if (result.createdSection) {
             const program = this.programSignal();
-            if (!program) { this.dialogConfig.set(null); return; }
+            if (!program) {
+                this.dialogConfig.set(null);
+                return;
+            }
             program.sections.push(result.createdSection);
-            this.programSignal.set({ ...program });
+            this.programSignal.set({...program});
         }
 
         // 2) If user created a new module
@@ -228,11 +245,14 @@ export class ProgramCreationComponent implements OnInit {
         if (result.updatedSection) {
             // Find that section in local data and replace
             const program = this.programSignal();
-            if (!program) { this.dialogConfig.set(null); return; }
+            if (!program) {
+                this.dialogConfig.set(null);
+                return;
+            }
             const idx = program.sections.findIndex(s => s.id === result.updatedSection.id);
             if (idx >= 0) {
                 program.sections[idx] = result.updatedSection;
-                this.programSignal.set({ ...program });
+                this.programSignal.set({...program});
             }
         }
         if (result.updatedModule) {
@@ -262,15 +282,13 @@ export class ProgramCreationComponent implements OnInit {
     }
 
     // -----------------------------------------------------------------
-    // Save entire Program
-    // (If you want a single final call for newly created items, etc.)
-    // -----------------------------------------------------------------
     public onSaveProgram(): void {
         const program = this.programSignal();
         if (!program) return;
 
         // If you still do a big single call for newly created items (no existing ID):
         const formData = this.mapProgramToFormData(program);
+        console.log(formData)
 
         this.programService.saveProgramInOneCall(formData)
             .subscribe(updatedProgram => {
@@ -278,10 +296,6 @@ export class ProgramCreationComponent implements OnInit {
             });
     }
 
-    // -----------------------------------------------------------------
-    // Construct the single call for newly created items
-    // Only pass 'existing' IDs (no other fields) if an item already exists
-    // If it's new (id is empty or ""), pass name, description, finalTask, etc.
     // -----------------------------------------------------------------
     private mapProgramToFormData(program: EducationProgramDto): FormData {
         const formData = new FormData();
@@ -292,7 +306,6 @@ export class ProgramCreationComponent implements OnInit {
             // Only existingProgramId
             formData.append('existingProgramId', program.id);
         } else {
-            // It's new, pass name, desc, finalTask, etc.
             if (program.name.en) formData.append('name.en', program.name.en);
             if (program.name.uk) formData.append('name.uk', program.name.uk);
             if (program.description.en) {
@@ -313,7 +326,6 @@ export class ProgramCreationComponent implements OnInit {
             if (isSecExisting) {
                 formData.append(`sections[${sIndex}].existingSectionId`, section.id);
             } else {
-                // new
                 if (section.name.en) {
                     formData.append(`sections[${sIndex}].name.en`, section.name.en);
                 }
@@ -352,6 +364,7 @@ export class ProgramCreationComponent implements OnInit {
                     if (module.description.uk) {
                         formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
                     }
+                    console.log(mIndex)
                     formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(mIndex + 1));
                     if (module.finalTaskFile) {
                         formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
@@ -368,7 +381,6 @@ export class ProgramCreationComponent implements OnInit {
                             topic.id
                         );
                     } else {
-                        // new
                         if (topic.name.en) {
                             formData.append(
                                 `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`,
@@ -393,14 +405,25 @@ export class ProgramCreationComponent implements OnInit {
                                 topic.description.uk
                             );
                         }
+                        if(topic.testId) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`,
+                                topic.testId
+                            )
+                        }
                         formData.append(
                             `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
                             String(tIndex + 1)
                         );
-                        if (topic.taskFile) {
+                        formData.append(
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`,
+                            String(topic.difficulty)
+                        );
+                        console.log(topic)
+                        if (topic.finalTaskFile) {
                             formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].task`,
-                                topic.taskFile
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`,
+                                topic.finalTaskFile
                             );
                         }
                     }
@@ -410,4 +433,6 @@ export class ProgramCreationComponent implements OnInit {
 
         return formData;
     }
+
+    protected readonly toolbar = toolbar;
 }

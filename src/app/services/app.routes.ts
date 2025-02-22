@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 import {ErrorStateGuard} from '../pages/error/404/404.guard';
 import {ProgramCreationComponent} from '../pages/program-creation/program-creation.component';
+import {ProgramComponent} from '../pages/program/program.component';
 
 export const routes: Routes = [
     {
@@ -50,6 +51,10 @@ export const routes: Routes = [
             import('../pages/origins-and-founders/origins-and-founders.component').then(
                 (m) => m.OriginsAndFoundersComponent
             ),
+    },
+    {
+        path: 'program/create',
+        component: ProgramComponent
     },
     {
         path: 'program/:programId/manage',

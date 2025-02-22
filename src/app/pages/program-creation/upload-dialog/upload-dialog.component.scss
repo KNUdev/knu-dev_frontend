@@ -1,5 +1,7 @@
 @use "../../../common/styles/variables" as *;
 @use "../../../common/styles/hyperlink" as hyperlink;
+@use "../../../common/styles/button/main-button/fill-button" as fill-button;
+
 
 .upload-dialog__backdrop {
     position: fixed;
@@ -18,11 +20,11 @@
 }
 
 .upload-dialog {
-    max-height: 85vh;
+    //max-height: 100vh;
     height: fit-content;
-    overflow-y: scroll;
+    //overflow-y: scroll;
 
-    overflow-x: auto;
+    //overflow-x: ;
     width: 600px;
     border-radius: 5px;
     border: 1px solid var(--border-nat-900, #343434);
@@ -31,6 +33,13 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
 }
 
 .upload-dialog__input {
@@ -128,11 +137,13 @@
     letter-spacing: 0.7px;
 }
 
+
+
 .upload-dialog__file-input {
     width: 550px;
     height: 200px;
     border-radius: 5px;
-    border: 2px dashed var(--border-nat-900, #343434);
+    border: 2px dashed #343434;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,6 +170,45 @@
     &:hover {
         border-color: $accent-yellow;
         cursor: pointer;
+    }
+}
+.upload-dialog__topic-difficulty-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+
+    .topic-difficulty-container__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        border: 1px solid #343434;
+        background: #101010;
+        color: var(--text-nat-200, #D1D1D1);
+        text-align: center;
+        /* desktop and tablet/h text/h5 */
+        font-family: Unbounded, sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 25px; /* 178.571% */
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+
+        &:hover {
+            border-color: $accent-yellow;
+            color: $accent-yellow;
+            cursor: pointer;
+        }
+
+       &.selected {
+            border-color: $accent-yellow;
+            color: $accent-yellow;
+        }
     }
 }
 
@@ -194,15 +244,14 @@
         align-items: center;
         gap: 15px;
 
-        .icon {
+        .left__icon {
             width: 45px;
             height: 45px;
         }
 
-        .text {
+        .left__text {
             color: var(--text-nat-0, #FFF);
             text-align: center;
-            /* desktop and tablet/body/body 1 */
             font-family: "Fixel Text", sans-serif;
             font-size: 15px;
             font-style: normal;

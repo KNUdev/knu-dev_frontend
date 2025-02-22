@@ -50,6 +50,7 @@ export class LabelInput {
     @Input() preventClipboard: boolean = false;
     @Input() isEmail: boolean = false;
     @Input() domainSuffix: string = '@knu.ua';
+    @Input() required: boolean = false;
     private i18nService = inject(I18nService);
     private translate = inject(TranslateService);
 

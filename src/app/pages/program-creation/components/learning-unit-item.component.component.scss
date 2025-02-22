@@ -1,3 +1,7 @@
+.selected {
+    border-color: #EDD342 !important;
+}
+
 .item {
     border-radius: 5px;
     border: 1px solid #343434;
@@ -13,6 +17,7 @@
         display: flex;
         gap: 15px;
         align-items: center;
+        height: 100%;
 
         .control__divider {
             width: 2px;
@@ -35,7 +40,7 @@
 .item__info {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .name {
@@ -51,6 +56,8 @@
 }
 
 .divider {
-   height: 30px;
-    border-left: 1px solid #D1D1D1;
+    height: 50%;
+   //height: 30px;
+    border-radius: 5px;
+    border-left: 1px solid #343434;
 }

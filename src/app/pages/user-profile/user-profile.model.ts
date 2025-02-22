@@ -10,9 +10,10 @@ export enum AccountTechnicalRole {
 }
 
 export enum Expertise {
-    BACKEND,
-    FRONTEND,
-    FULLSTACK
+    BACKEND="BACKEND",
+    FRONTEND="FRONTEND",
+    FULLSTACK="FULLSTACK",
+    UI_UX_DESIGNER="UI_UX_DESIGNER"
 }
 
 export type AccountProfile = {

@@ -1,0 +1,60 @@
+<div class="container">
+    <p class="id">{{ program.id }}</p>
+    <h2 class="title">{{ program.name | multiLangField }}</h2>
+    <ul class="meta">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                Експертиза:
+                <span class="item__text-value">{{ program.expertise }}</span>
+            </p>
+            <p class="item__text-prefix">
+                Статус:
+                <span [class.published]="program.isPublished"
+                      [class.unpublished]="!program.isPublished"
+                      class="item__text-value"
+                >{{ program.isPublished ? 'Опублікована' : 'Неопублікована' }}</span>
+            </p>
+        </li>
+        <hr class="meta__divider">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                Дата створення:
+                <span class="item__text-value">
+                    {{ program.createdAt | date:'short':'UTC':locale }}
+                </span>
+            </p>
+            <p class="item__text-prefix">
+                Дата останнього оновлення:
+                <span class="item__text-value">
+                    {{ program.lastUpdatedAt | date:'short':'UTC':locale }}
+                </span>
+            </p>
+        </li>
+        <hr class="meta__divider">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                Кількість секцій:
+                <span class="item__text-value">{{ program.totalSections }}</span>
+            </p>
+            <p class="item__text-prefix">
+                Кількість модулей:
+                <span class="item__text-value">{{ program.totalModules }}</span>
+            </p>
+            <p class="item__text-prefix">
+                Кількість тем:
+                <span class="item__text-value">{{ program.totalTopics }}</span>
+            </p>
+            <p class="item__text-prefix">
+                Кількість активних навчальних сесій:
+                <span class="item__text-value">{{ program.totalActiveSessions }}</span>
+            </p>
+        </li>
+    </ul>
+    <border-button
+        [borderColor]="'yellow'"
+        [fullWidth]="true"
+        [text]="'Керувати'"
+        [href]="manageProgramLink"
+    />
+
+</div>

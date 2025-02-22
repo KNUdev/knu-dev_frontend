@@ -1,63 +1,92 @@
 <div aria-hidden="true" class="upload-dialog__backdrop"></div>
 
 <div class="upload-dialog__wrapper">
-    <form [formGroup]="dialogForm()" (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" [formGroup]="dialogForm()">
         <div class="upload-dialog">
-            <button (click)="onCloseClick()" aria-label="Close dialog" class="upload-dialog__close-desktop" type="button">
-                <mat-icon svgIcon="closeDialog" class="close-desktop__icon"></mat-icon>
+
+            <!-- Close Button -->
+            <button
+                (click)="onCloseClick()"
+                aria-label="Close dialog"
+                class="upload-dialog__close-desktop"
+                type="button"
+            >
+                <mat-icon [svgIcon]="'closeDialog'" class="close-desktop__icon"></mat-icon>
             </button>
 
-            <!-- Ukrainian Name -->
-            <app-label-input
-                [controlName]="'nameUk'"
-                [label]="
-          entityType === 'topic' ? 'Назва теми українською*'
-          : entityType === 'module' ? 'Назва модуля українською*'
-          : entityType === 'program' ? 'Назва програми українською*'
-          : 'Назва секції українською*'
-        "
-            ></app-label-input>
+            <!-- Row 1: Ukrainian / English Names -->
+            <div class="input-group">
+                <app-label-input
+                    [controlName]="'nameUk'"
+                    [label]="
+                      entityType === 'topic' ? 'Назва теми українською*'
+                      : entityType === 'module' ? 'Назва модуля українською*'
+                      : entityType === 'program' ? 'Назва програми українською*'
+                      : 'Назва секції українською*'
+                    "
+                    [required]="true"
+                ></app-label-input>
 
-            <!-- English Name -->
-            <app-label-input
-                [controlName]="'nameEn'"
-                [label]="
-          entityType === 'topic' ? 'Назва теми англійською*'
-          : entityType === 'module' ? 'Назва модуля англійською*'
-          : entityType === 'program' ? 'Назва програми англійською*'
-          : 'Назва секції англійською*'
-        "
-            ></app-label-input>
-
-            <!-- Ukrainian Description -->
-            <app-label-input
-                [controlName]="'descriptionUk'"
-                [label]="'Опис українською'"
-            ></app-label-input>
-
-            <!-- English Description -->
-            <app-label-input
-                [controlName]="'descriptionEn'"
-                [label]="'Опис англійською'"
-            ></app-label-input>
-
-            <div class="profile__divider">
-                <h3 class="profile__divider-title">Або</h3>
+                <app-label-input
+                    [controlName]="'nameEn'"
+                    [label]="
+                      entityType === 'topic' ? 'Назва теми англійською*'
+                      : entityType === 'module' ? 'Назва модуля англійською*'
+                      : entityType === 'program' ? 'Назва програми англійською*'
+                      : 'Назва секції англійською*'
+                    "
+                    [required]="true"
+                ></app-label-input>
             </div>
-            <border-button
-                [borderColor]="'yellow'"
-                [text]="'Створити тест'"
-                [fullWidth]="true"
-            ></border-button>
 
+            <!-- Row 2: Ukrainian / English Descriptions -->
+            <div class="input-group">
+                <app-label-input
+                    [controlName]="'descriptionUk'"
+                    [label]="'Опис українською'"
+                    [required]="true"
+                ></app-label-input>
+
+                <app-label-input
+                    [controlName]="'descriptionEn'"
+                    [label]="'Опис англійською'"
+                    [required]="true"
+                ></app-label-input>
+            </div>
+
+            @if(entityType === 'program') {
+                <register-write-dropdowns [options]="expertiseOptions" formControlName="expertise"/>
+            }
+
+            <!-- If it's a Topic, show a test dropdown & "Create Test" button -->
+            @if (entityType === 'topic') {
+                <register-write-dropdowns
+                    [options]="testSelectOptions()"
+                    formControlName="testId"
+                    [defaultSelectedId]="test"
+                />
+
+                <div class="profile__divider">
+                    <h3 class="profile__divider-title">Або</h3>
+                </div>
+                <border-button
+                    [borderColor]="'yellow'"
+                    [fullWidth]="true"
+                    [text]="'Створити тест'"
+                />
+            }
+
+            <!-- File Input Section -->
             <div class="upload-dialog__file-input-label-wrapper">
-                <p class="upload-dialog__file-input-label">Фінальне завдання / Task</p>
-                @if (isFileSelected) {
+                <p class="upload-dialog__file-input-label">
+                    Фінальне завдання / Task
+                </p>
+                @if (isAnyFilePresent) {
                     <p class="hyperlink" (click)="removeFile()">Видалити файл</p>
                 }
             </div>
 
-            @if (!isFileSelected) {
+            @if (!isAnyFilePresent) {
                 <div class="upload-dialog__file-input" (click)="triggerFileDialog()">
                     <div class="file-input__placeholder">
                         <img src="assets/icon/button/file.svg" alt="File" loading="lazy" />
@@ -71,15 +100,39 @@
                             src="assets/icon/button/file.svg"
                             alt="File"
                             loading="lazy"
-                            class="icon"
+                            class="left__icon"
                         />
-                        <p class="text">{{ selectedFile()?.name }}</p>
+                        <a
+                            [href]="entityData?.finalTaskUrl || '#'"
+                            target="_blank"
+                            class="left__text"
+                        >
+                            {{ currentFileName }}
+                        </a>
                     </div>
                     <mat-icon [svgIcon]="'fileUploaded'" class="file-selected__right"></mat-icon>
                 </div>
             }
 
-            <button class="upload-dialog__submit-btn" type="submit">
+            <!-- If it's a Topic, show difficulty -->
+            @if (entityType === 'topic') {
+                <h3 class="upload-dialog__file-input-label">Складність теми</h3>
+
+                <ol class="upload-dialog__topic-difficulty-container">
+                    @for (difficulty of range(10); track difficulty) {
+                        <li
+                            class="topic-difficulty-container__item"
+                            [class.selected]="dialogForm().get('difficulty')?.value === difficulty"
+                            (click)="onSelectDifficulty(difficulty)"
+                        >
+                            {{ difficulty }}
+                        </li>
+                    }
+                </ol>
+            }
+
+            <!-- Submit Button -->
+            <button class="fill-button fill-yellow" type="submit">
                 {{ mode === 'create' ? 'Створити' : 'Оновити' }}
             </button>
         </div>
@@ -87,10 +140,10 @@
         <!-- Hidden file input -->
         <input
             #fileInput
-            type="file"
-            hidden
-            accept="application/pdf"
             (change)="onFileSelected($event)"
+            accept="application/pdf"
+            hidden
+            type="file"
         />
     </form>
 </div>

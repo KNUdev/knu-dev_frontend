@@ -1,0 +1,43 @@
+<main class="main">
+
+    <section class="create-program">
+        <header class="create-program__header">
+            <div class="co">
+                <mat-icon [svgIcon]="'secondLeft'" class="header__icon_third"></mat-icon>
+                <mat-icon [svgIcon]="'firstLeft'" class="header__icon_second"></mat-icon>
+                <mat-icon [svgIcon]="'center'" class="header__icon_center"></mat-icon>
+                <mat-icon [svgIcon]="'firstRight'" class="header__icon_second"></mat-icon>
+                <mat-icon [svgIcon]="'secondRight'" class="header__icon_third"></mat-icon>
+            </div>
+        </header>
+        <hr class="divider">
+
+        <button class="fill-button fill-yellow" (click)="onCreateProgramClick()">
+            Створення програми
+        </button>
+
+        <p class="hint">
+            Створіть програму для того, щоб почати працювати з деревом
+        </p>
+    </section>
+
+    <section class="programs">
+        <h1 class="programs__title">Створені програми</h1>
+        <ul class="programs__items">
+            @for (program of (programs$ | async); track program.id) {
+                <li class="items__item">
+                    <program-list-item [program]="program"></program-list-item>
+                </li>
+            }
+        </ul>
+    </section>
+
+    @if (dialogIsOpen) {
+        <upload-dialog
+            [mode]="'create'"
+            [entityType]="'program'"
+            (close)="onDialogClose($event)"
+        ></upload-dialog>
+    }
+
+</main>

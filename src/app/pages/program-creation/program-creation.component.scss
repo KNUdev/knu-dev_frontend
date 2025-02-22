@@ -1,8 +1,15 @@
+@use "../../common/styles/variables" as *;
+@use "../../common/styles/button/main-button/fill-button" as fill-button;
+
 .program {
     padding: 80px 88px;
 }
 
 .section-divider {
+    height: 1px;
+    color: #343434;
+    background-color: #343434;
+    border: none;
     margin: 50px 0;
 }
 
@@ -20,7 +27,7 @@
     .summary__title {
         text-transform: uppercase;
         color: #FFF;
-        text-align: center;
+        text-align: left;
         font-family: Unbounded, sans-serif;
         font-size: 18px;
         font-style: normal;
@@ -55,14 +62,18 @@
 
     .summary__control {
         display: flex;
-        gap: 15px;
+        gap: 10px;
         align-items: center;
-        height: 30%;
+        //height: 100%;
+        max-height: 25px;
+        overflow: hidden;
 
         .control__icon {
             cursor: pointer;
             width: 25px;
             height: 25px;
+            //width: fit-content;
+            //height: fit-content;
         }
 
         .control__divider {
@@ -89,9 +100,13 @@
 }
 
 .vertical-line {
-    //width: 0.1px;
+    writing-mode: vertical-lr;
     height: 100%;
+    width: 1px;
+    color: #343434;
     background-color: #343434;
+    border: none;
+    //position: absolute;
 }
 
 .program__details {
@@ -103,9 +118,22 @@
     gap: 50px;
     align-self: stretch;
 
-
     .details__section {
+        overflow-y: scroll ;
+        //padding-right: 6.24rem;
+        scrollbar-width: thin;
+        //display: flex;
+        //align-items: baseline;
+        //justify-content: start;
+        max-height: 610px;
+        //box-sizing: border-box;
+        scroll-margin-block-start: 5rem;
+
+        box-sizing: border-box;
         height: 610px;
+        width: 515px;
+        max-width: 515px;
+
         .section__title-container {
             margin-bottom: 35px;
             display: flex;
@@ -145,7 +173,7 @@
             padding: 15px;
             border-radius: 5px;
             border: 2px dashed #343434;
-            width: 350px;
+            width: 100%;
             background: none;
             color: var(--text-nat-200, #D1D1D1);
             text-align: center;
@@ -171,6 +199,8 @@
     .section__items {
         margin-top: 25px;
         margin-bottom: 20px;
+        //max-height;
+
     }
 }
 
@@ -194,3 +224,21 @@
     }
 }
 
+.program__save {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    gap: 50px;
+    border-radius: 5px;
+    border: 1px solid var(--border-nat-900, #343434);
+    height: 130px;
+
+    .save__button {
+        height: auto;
+        width: 100%;
+    }
+
+
+    //@include flex-center()
+}
