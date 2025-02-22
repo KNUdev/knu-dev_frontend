@@ -23,7 +23,6 @@
             </h2>
         </div>
         <div class="summary__control">
-            <!-- We add (click)="onEditProgram()" so we open the dialog in edit mode for the program -->
             <img
                 alt="Edit Program Summary"
                 class="control__icon"
@@ -37,6 +36,7 @@
                 class="control__icon"
                 loading="lazy"
                 src="assets/icon/system/trash.svg"
+                (click)="onDeleteProgram()"
             >
         </div>
     </section>

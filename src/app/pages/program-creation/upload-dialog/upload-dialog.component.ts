@@ -51,31 +51,16 @@ export class UploadDialogComponent implements OnInit {
         createdTopic?: ProgramTopicDto;
     } | null>();
 
-    /**
-     * The main reactive form. Holds name, description, and difficulty if it's a topic.
-     */
     public dialogForm = signal<FormGroup>(new FormGroup({}));
-
-    /**
-     * If the user selects a new PDF file, we store it here for creation or update calls.
-     */
     public selectedFile = signal<File | undefined>(undefined);
-
-    /**
-     * Tracks whether we *logically* have a file, either from backend (existing URL) or newly selected.
-     */
     public isFileSelectedd = signal<boolean>(false);
-
-    /**
-     * If you load tests from a backend to populate <register-write-dropdowns>.
-     */
     public testSelectOptions = signal<SelectOption[]>([]);
 
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-    get test() {
-        if(this.entityType === 'topic') {
-            return (this.entityData as ProgramTopicDto).testId;
+    get topicTestId(): string {
+        if (this.entityType === 'topic' && this.entityData) {
+            return (this.entityData as ProgramTopicDto).testId || '';
         }
         return '';
     }
@@ -86,11 +71,7 @@ export class UploadDialogComponent implements OnInit {
     private programService = inject(ProgramService);
     private testService = inject(TestService);
 
-    /**
-     * Lifecycle: Build the form, load tests, register icons, pre-populate if editing.
-     */
     ngOnInit(): void {
-        // Register your custom icons if needed
         this.matIconRegistry.addSvgIcon(
             'fileUploaded',
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/done.svg')
@@ -100,8 +81,6 @@ export class UploadDialogComponent implements OnInit {
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/close.svg')
         );
 
-        // Build default form: name, description are always required.
-        // Difficulty is included (for topics).
         const group = this.fb.group({
             nameUk: ['', Validators.required],
             nameEn: ['', Validators.required],
@@ -113,12 +92,10 @@ export class UploadDialogComponent implements OnInit {
         });
         this.dialogForm.set(group);
 
-        // If we are editing an existing item, patch data
         if (this.mode === 'edit' && this.entityData) {
             this.patchForm(this.entityData);
         }
 
-        // If you have a test service that loads tests for the <register-write-dropdowns>
         this.testService.getAllShort()
             .pipe(
                 map(tests => tests.map(test => ({
@@ -132,9 +109,6 @@ export class UploadDialogComponent implements OnInit {
             .subscribe(options => this.testSelectOptions.set(options));
     }
 
-    /**
-     * Returns the actual FormGroup object for convenience.
-     */
     public get form() {
         return this.dialogForm();
     }
@@ -153,16 +127,10 @@ export class UploadDialogComponent implements OnInit {
         this.dialogForm().patchValue({ difficulty: value });
     }
 
-    /**
-     * Tells us if there's any file present (either newly selectedFile or an existing file name).
-     */
     get isAnyFilePresent(): boolean {
         return !!this.selectedFile() || !!this.existingFilename;
     }
 
-    /**
-     * The displayed file name or the newly selected file name.
-     */
     get currentFileName(): string {
         const file = this.selectedFile();
         if (file) {
@@ -176,17 +144,10 @@ export class UploadDialogComponent implements OnInit {
         return this.entityData.finalTaskFilename;
     }
 
-    /**
-     * Utility function: returns an array of [1..count].
-     * Used to generate the difficulty items in the template.
-     */
     public range(count: number): number[] {
         return Array.from({ length: count }, (_, i) => i + 1);
     }
 
-    /**
-     * Called when a user picks a file from their system.
-     */
     public onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
@@ -195,17 +156,10 @@ export class UploadDialogComponent implements OnInit {
         }
     }
 
-    /**
-     * Remove file references:
-     * 1) Clears newly selected file
-     * 2) Clears finalTaskUrl or taskUrl from the entityData so the UI doesn't show an existing file
-     */
     public removeFile(): void {
-        // Clear the new file
         this.selectedFile.set(undefined);
         this.isFileSelectedd.set(false);
 
-        // Clear the existing finalTaskUrl or taskUrl in the local entity
         if (this.entityData) {
             if (this.entityType === 'topic') {
                 (this.entityData as ProgramTopicDto).finalTaskUrl = undefined;
@@ -215,23 +169,14 @@ export class UploadDialogComponent implements OnInit {
         }
     }
 
-    /**
-     * Programmatically trigger the hidden file input for PDF upload.
-     */
     public triggerFileDialog(): void {
         this.fileInput.nativeElement.click();
     }
 
-    /**
-     * Called if user closes the dialog (clicking X).
-     */
     public onCloseClick(): void {
         this.close.emit(null);
     }
 
-    /**
-     * On form submit, either create or update, depending on `mode`.
-     */
     public onSubmit(): void {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
@@ -273,10 +218,6 @@ export class UploadDialogComponent implements OnInit {
         }
     }
 
-    /**
-     * Handle creating a new item (section/module/topic/program).
-     * Changed to IMMEDIATELY create a program using `saveProgramInOneCall`.
-     */
     private handleCreate(): void {
         const formVals = this.form.value;
 
@@ -336,7 +277,6 @@ export class UploadDialogComponent implements OnInit {
             this.close.emit({ createdModule: newModule });
         }
         else if (this.entityType === 'program') {
-            // 1) Build minimal program object
             const newProgram: EducationProgramDto = {
                 id: '',
                 name: {
@@ -351,11 +291,9 @@ export class UploadDialogComponent implements OnInit {
                 finalTaskUrl: '',
                 expertise: formVals.expertise as Expertise,
                 sections: [],
-                // If there's a PDF file chosen
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
 
-            // 2) Convert to FormData
             const formData = new FormData();
             formData.append('name.en', newProgram.name.en ?? '');
             formData.append('name.uk', newProgram.name.uk ?? '');

@@ -5,9 +5,10 @@ import {
     EducationProgramDto,
     ProgramSectionDto,
     ProgramModuleDto,
-    ProgramTopicDto, ProgramSummary
+    ProgramTopicDto,
+    ProgramSummary
 } from '../common/models/shared.model';
-import {environment} from '../../environments/environment.development';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
     providedIn: 'root'
@@ -18,26 +19,21 @@ export class ProgramService {
     constructor(private http: HttpClient) {}
 
     public getAll(): Observable<ProgramSummary[]> {
-        return this.http.get<ProgramSummary[]>(this.apiBaseUrl+`/admin/education/programs`);
+        return this.http.get<ProgramSummary[]>(this.apiBaseUrl + `/admin/education/programs`);
     }
 
     public getProgramById(id: string): Observable<EducationProgramDto> {
-        return this.http.get<EducationProgramDto>(this.apiBaseUrl+`/admin/education/program?id=${id}`);
-    }
-
-    /**
-     * Single call that handles newly created items in one shot.
-     */
-    public saveProgramInOneCall(formData: FormData): Observable<EducationProgramDto> {
-        return this.http.post<EducationProgramDto>(
-            this.apiBaseUrl+'/admin/education/program/save',
-            formData
+        return this.http.get<EducationProgramDto>(
+            this.apiBaseUrl + `/admin/education/program?id=${id}`
         );
     }
 
-    // ------------------------------------------------------------
-    // Separate endpoints for immediate updates
-    // ------------------------------------------------------------
+    public saveProgramInOneCall(formData: FormData): Observable<EducationProgramDto> {
+        return this.http.post<EducationProgramDto>(
+            this.apiBaseUrl + '/admin/education/program/save',
+            formData
+        );
+    }
 
     public updateProgram(
         programId: string,
@@ -51,8 +47,6 @@ export class ProgramService {
         finalTaskFile?: File
     ): Observable<EducationProgramDto> {
         const formData = new FormData();
-        // formData.append('existingProgramId', programId);
-        // Only patch the name / desc / final task as needed
         formData.append('name.en', data.enName);
         formData.append('name.uk', data.ukName);
         formData.append('description.en', data.enDesc);
@@ -61,9 +55,8 @@ export class ProgramService {
         if (finalTaskFile) {
             formData.append('finalTask', finalTaskFile);
         }
-        return this.http.post<EducationProgramDto>(
-            this.apiBaseUrl +
-            `/admin/education/program/${programId}/update`,
+        return this.http.patch<EducationProgramDto>(
+            this.apiBaseUrl + `/admin/education/program/${programId}/update`,
             formData
         );
     }
@@ -79,7 +72,6 @@ export class ProgramService {
         finalTaskFile?: File
     ): Observable<ProgramSectionDto> {
         const formData = new FormData();
-        // formData.append('existingSectionId', sectionId);
         formData.append('name.en', data.enName);
         formData.append('name.uk', data.ukName);
         formData.append('description.en', data.enDesc);
@@ -88,8 +80,7 @@ export class ProgramService {
             formData.append('finalTask', finalTaskFile);
         }
         return this.http.patch<ProgramSectionDto>(
-            this.apiBaseUrl +
-            `/admin/education/section/${sectionId}/update`,
+            this.apiBaseUrl + `/admin/education/section/${sectionId}/update`,
             formData
         );
     }
@@ -105,7 +96,6 @@ export class ProgramService {
         finalTaskFile?: File
     ): Observable<ProgramModuleDto> {
         const formData = new FormData();
-        // formData.append('existingModuleId', moduleId);
         formData.append('name.en', data.enName);
         formData.append('name.uk', data.ukName);
         formData.append('description.en', data.enDesc);
@@ -114,8 +104,7 @@ export class ProgramService {
             formData.append('finalTask', finalTaskFile);
         }
         return this.http.post<ProgramModuleDto>(
-            this.apiBaseUrl +
-            `/admin/education/module/${moduleId}/update`,
+            this.apiBaseUrl + `/admin/education/module/${moduleId}/update`,
             formData
         );
     }
@@ -133,20 +122,72 @@ export class ProgramService {
         taskFile?: File
     ): Observable<ProgramTopicDto> {
         const formData = new FormData();
-        // formData.append('existingTopicId', topicId);
         formData.append('name.en', data.enName);
         formData.append('name.uk', data.ukName);
         formData.append('description.en', data.enDesc);
-        formData.append('description.uk', data.ukDesc);
+        formData.append('description.uk', data.enDesc);
         formData.append('difficulty', data.difficulty.toString());
         formData.append('testId', data.testId);
         if (taskFile) {
             formData.append('task', taskFile);
         }
         return this.http.patch<ProgramTopicDto>(
-            this.apiBaseUrl +
-            `/admin/education/topic/${topicId}/update`,
+            this.apiBaseUrl + `/admin/education/topic/${topicId}/update`,
             formData
+        );
+    }
+
+    // ------------------------------------------------------------------------------
+    // NEW DELETE METHODS
+    // ------------------------------------------------------------------------------
+
+    /**
+     * Deletes the program row and all ProgramSectionMapping bridging for that program,
+     * but does NOT delete underlying sections, modules, or topics.
+     */
+    public deleteProgramById(programId: string): Observable<void> {
+        return this.http.delete<void>(
+            `${this.apiBaseUrl}/admin/education/mapping/program/${programId}/delete`
+        );
+    }
+
+    /**
+     * Removes bridging between a program and a section
+     * but does not delete the section entity itself.
+     */
+    public removeProgramSectionMapping(
+        programId: string,
+        sectionId: string
+    ): Observable<void> {
+        return this.http.delete<void>(
+            `${this.apiBaseUrl}/admin/education/mapping/program/${programId}/section/${sectionId}/delete`
+        );
+    }
+
+    /**
+     * Removes bridging between a section and a module in the context of a program.
+     */
+    public removeSectionModuleMapping(
+        programId: string,
+        sectionId: string,
+        moduleId: string
+    ): Observable<void> {
+        return this.http.delete<void>(
+            `${this.apiBaseUrl}/admin/education/mapping/program/${programId}/section/${sectionId}/module/${moduleId}/delete`
+        );
+    }
+
+    /**
+     * Removes bridging between a module and a topic for a specific program->section->module path.
+     */
+    public removeModuleTopicMapping(
+        programId: string,
+        sectionId: string,
+        moduleId: string,
+        topicId: string
+    ): Observable<void> {
+        return this.http.delete<void>(
+            `${this.apiBaseUrl}/admin/education/mapping/program/${programId}/section/${sectionId}/module/${moduleId}/topic/${topicId}/delete`
         );
     }
 }
