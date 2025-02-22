@@ -64,10 +64,10 @@
         "specialties": {
             "label": "Спеціальність*"
         },
-        "courses": {
+        "yearOfStudy": {
             "label": "Курс*"
         },
-        "expertises": {
+        "expertise": {
             "label": "Технічний напрямок*"
         }
     }

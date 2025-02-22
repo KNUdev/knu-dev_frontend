@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
-    selector: 'join-organization',
+    selector: 'app-join-organization',
     imports: [CommonModule, MatIconModule, TranslateModule],
     templateUrl: './join-organization.component.html',
     styleUrl: './join-organization.component.scss',

@@ -19,12 +19,12 @@ export interface ValidationErrors {
     [key: string]: string[];
 }
 
-export interface Course {
+export interface YearOfStudy {
     id: string;
     displayedName: string;
 }
 
-export interface Expertises {
+export interface Expertise {
     id: string;
     displayedName: string;
 }
@@ -37,7 +37,7 @@ export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
     passwordErrors: 'password',
     departmentIdErrors: 'departmentId',
     specialtyCodenameErrors: 'specialtyCodename',
-    courseErrors: 'course',
+    yearOfStudyErrors: 'yearOfStudy',
     expertiseErrors: 'expertise',
 };
 

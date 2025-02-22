@@ -1,0 +1,92 @@
+@use "../../../../common/styles/variables" as *;
+
+.item-card {
+    padding: 1.563rem;
+    border-radius: 5px;
+    border: 1px solid #343434;
+    text-align: left;
+    text-wrap: wrap;
+
+    &__image {
+        width: 100%;
+        height: 12.5rem;
+        object-fit: cover;
+        display: block;
+        margin-bottom: 1.875rem;
+    }
+
+    &__title {
+        color: #fff;
+        font-family: Unbounded, sans-serif;
+        font-size: 1.125em;
+        font-weight: 500;
+        letter-spacing: 0.056rem;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    &__description {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        text-wrap: wrap;
+        margin: 0.938rem 0 1.563rem;
+        color: #d1d1d1;
+        font-size: 0.938em;
+        font-weight: 400;
+        line-height: 1.625rem;
+        letter-spacing: 0.019rem;
+    }
+
+    &__details {
+        margin-bottom: 1.563rem;
+
+        &-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.938rem;
+            color: #d1d1d1;
+            font-size: 0.938em;
+            font-weight: 400;
+            line-height: 1.625rem;
+            letter-spacing: 0.019rem;
+        }
+
+    }
+
+    &__button {
+        @include flex-center(row);
+        width: 21.875rem;
+        height: 3.438rem;
+        padding: 1.125rem 1.25rem;
+        border-radius: 5px;
+        border: 1px solid #edd342;
+        background: none;
+        color: #d1d1d1;
+        text-transform: uppercase;
+        font-family: Unbounded, sans-serif;
+        font-size: 1em;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
+        transition: background-color 0.3s ease;
+
+        mat-icon {
+            margin-left: 0.3125rem;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: #3c371a;
+        }
+
+        @include mobile-horizontal {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+.profile__education-item-divider {
+    border: 0;
+    border-top: 0.0625rem solid #343434;
+    margin: 0.5rem 0;
+}

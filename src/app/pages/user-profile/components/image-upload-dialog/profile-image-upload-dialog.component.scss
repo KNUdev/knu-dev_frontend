@@ -1,0 +1,236 @@
+@use "../../../../common/styles/variables" as *;
+
+.upload-dialog__error {
+    color: #E5383A;
+    font-size: 1rem;
+    margin-top: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.015rem;
+}
+
+.upload-dialog__backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1001;
+}
+
+.upload-dialog__wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1002;
+}
+
+.upload-dialog__outer-close {
+    display: none;
+}
+
+
+.upload-dialog {
+    position: relative;
+    padding: 2.813rem;
+    width: 100%;
+    max-width: 45rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    border: 1px solid #343434;
+    background: $bg-dark;
+    border-radius: 5px;
+    z-index: 1005;
+
+}
+
+.upload-dialog__header {
+    min-height: 0;
+}
+
+.upload-dialog__close-desktop {
+    position: absolute;
+    top: 0;
+    right: -5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #343434;
+    background-color: #101010;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 0;
+
+    .close-desktop__icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        color: $text-light;
+    }
+
+    &:hover {
+        border-color: $accent-yellow;
+
+        .close-desktop__icon {
+            color: $accent-yellow !important;
+        }
+    }
+}
+
+.upload-dialog__content {
+    width: 100%;
+    @include flex-center(column);
+    gap: 0;
+}
+
+.default-avatar-container {
+    background-color: #d9d9d9;
+    border-radius: 50%;
+    $avatar-size: 17.5rem;
+    width: $avatar-size;
+    height: $avatar-size;
+    padding: 2rem;
+    @include flex-center(column);
+}
+
+.default-avatar-container__icon {
+    width: 10rem;
+    height: 10rem;
+}
+
+.upload-dialog__preview {
+    @include flex-center(column, wrap);
+    overflow: hidden;
+
+    mat-icon,
+    img {
+        padding: 0.938rem;
+        border-radius: 12.25rem;
+        $avatar-size: 17.5rem;
+        width: $avatar-size;
+        height: $avatar-size;
+        object-fit: cover;
+    }
+}
+
+.upload-dialog__divider {
+    margin: 2.813em 0;
+    background-color: #343434;
+    color: #343434;
+    height: 1px;
+    width: 100%;
+    border: none;
+}
+
+.upload-dialog__file-label {
+    width: 100%;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0.75px;
+    display: inline-block;
+    padding: 0.625rem;
+    background: none;
+    color: $text-white;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid var(--border-nat-400, $border-gray);
+
+    &:hover {
+        border-color: $accent-yellow;
+        color: $accent-yellow;
+    }
+}
+
+.upload-dialog__file-label--file-selected {
+    margin-top: 1rem;
+}
+
+.upload-dialog__remove-avatar {
+    background: none;
+    margin-top: 1.563rem;
+    color: $accent-yellow;
+    border: 1px solid $bg-dark;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    padding: 0.625rem;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        border-color: $accent-yellow;
+    }
+}
+
+@include mobile {
+    .upload-dialog {
+        width: 100%;
+        height: auto;
+        padding: 1.5rem;
+    }
+
+    .upload-dialog__outer-close {
+        @include flex-center();
+        position: absolute;
+        top: -3rem;
+        left: 0;
+        width: 100%;
+        height: 2.188rem;
+        border-radius: 5px;
+        border: 1px solid #343434;
+        background: #101010;
+
+        &:hover {
+            border-color: $accent-yellow;;
+
+            .close__icon {
+                color: $accent-yellow;
+            }
+        }
+    }
+
+    .upload-dialog__close {
+        background: none;
+        border: none;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .close__icon {
+            width: 1.2rem;
+            height: 1.2rem;
+            color: $text-white;
+        }
+
+        &:hover {
+            .close__icon {
+                color: $accent-yellow;
+            }
+        }
+    }
+
+    .upload-dialog__close-desktop {
+        display: none;
+    }
+
+    .upload-dialog__file-label {
+        white-space: normal;
+        width: 100%;
+    }
+
+    .upload-dialog__preview {
+        mat-icon,
+        img {
+            $size: 12.5rem;
+            width: $size;
+            height: $size;
+        }
+    }
+}

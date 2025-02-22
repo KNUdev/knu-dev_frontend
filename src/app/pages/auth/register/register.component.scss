@@ -61,7 +61,7 @@
             justify-content: space-between;
             gap: 1.88rem;
             input {
-                padding: 0rem 1rem;
+                padding: 0 1rem;
             }
         }
         .password {
@@ -78,7 +78,7 @@
             display: flex;
             gap: 0.62rem;
             margin-top: 1rem;
-            font-family: "" Fixel Text ", sans-serif;";
+            font-family: "Finel Text", sans-serif;
             font-size: 0.875rem;
             font-style: normal;
             font-weight: 400;
@@ -101,7 +101,7 @@
             font-size: 0.875rem;
             font-style: normal;
             font-weight: 400;
-            line-height: 1.25rem; /* 142.857% */
+            line-height: 1.25rem;
             letter-spacing: 0.0175rem;
         }
 
@@ -198,11 +198,13 @@
 
         mat-icon {
             margin: auto 0;
+            display: flex;
         }
 
         svg {
             height: 1.25rem;
             width: 1.25rem;
+            margin: auto;
         }
 
         .mat-icon {

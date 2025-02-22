@@ -1,7 +1,13 @@
 {
     "header": {
+        "loginButton": "Login/Register",
+        "avatarDropDown": {
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Logout"
+        },
         "menu": {
-            "items": [
+            "noAuth": [
                 {
                     "name": "Home",
                     "link": "/"
@@ -17,6 +23,106 @@
                 {
                     "name": "Developers",
                     "link": "/developers"
+                },
+                {
+                    "name": "Training form",
+                    "dropdown": [
+                        {
+                            "name": "Online",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "Offline",
+                            "link": "/offline"
+                        }
+                    ]
+                }
+            ],
+            "INTERN": [
+                {
+                    "name": "Home",
+                    "link": "/"
+                },
+                {
+                    "name": "Campus",
+                    "link": "/campus"
+                },
+                {
+                    "name": "Pre-campus",
+                    "link": "/pre-campus"
+                },
+                {
+                    "name": "Developers",
+                    "link": "/developers"
+                },
+                {
+                    "name": "Training form",
+                    "dropdown": [
+                        {
+                            "name": "Online",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "Offline",
+                            "link": "/offline"
+                        }
+                    ]
+                }
+            ],
+            "TEST": [
+                {
+                    "name": "test1",
+                    "link": "/"
+                },
+                {
+                    "name": "test2",
+                    "link": "/campus"
+                },
+                {
+                    "name": "test3",
+                    "link": "/pre-campus"
+                },
+                {
+                    "name": "test4",
+                    "link": "/developers"
+                },
+                {
+                    "name": "test5",
+                    "dropdown": [
+                        {
+                            "name": "test51",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "test52",
+                            "link": "/offline"
+                        },
+                        {
+                            "name": "test53",
+                            "link": "/offline"
+                        },
+                        {
+                            "name": "test54",
+                            "link": "/offline"
+                        }
+                    ]
+                },
+                {
+                    "name": "test6",
+                    "dropdown": [
+                        {
+                            "name": "test61",
+                            "link": "/online"
+                        },
+                        {
+                            "name": "test62",
+                            "link": "/offline"
+                        },
+                        {
+                            "name": "test63",
+                            "link": "/offline"
+                        }
+                    ]
                 }
             ]
         }

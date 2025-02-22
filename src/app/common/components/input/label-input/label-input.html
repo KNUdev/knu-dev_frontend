@@ -5,6 +5,7 @@
             [placeholder]="label"
             class="default-input"
             [class.default-input__error]="showErrors && formGroup.get(controlName)?.errors"
+            [class.password]="type === 'password'"
             [type]="type === 'password' ? (isPasswordVisible ? 'text' : 'password') : type"
             (copy)="preventClipboardAction($event)"
             (cut)="preventClipboardAction($event)"
@@ -34,8 +35,8 @@
     <div class="error">
         <mat-icon svgIcon="error"></mat-icon>
         <span
-            >{{ 'register.' + controlName + '.errors.' + errorKey | translate
-            }}</span
+            >{{ translationPrefix + '.' + controlName + '.errors.' + errorKey |
+            translate }}</span
         >
     </div>
     } } } @if (backendErrors && backendErrors[controlName]) { @for(error of

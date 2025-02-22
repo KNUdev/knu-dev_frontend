@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingScreenComponent } from './components/loading/loading.component';
-import { LoadingService } from './services/loading.services';
+import { LoadingService } from './services/loading.service';
 
 @Component({
     selector: 'app-root',

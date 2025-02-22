@@ -1,0 +1,8 @@
+<a
+    [routerLink]="disabled ? null : route"
+    class="nofill-button"
+    [class.disabled]="disabled"
+>
+    <span class="button-text">{{ text }}</span>
+    @if(icon){<mat-icon [svgIcon]="icon"> </mat-icon>}
+</a>

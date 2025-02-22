@@ -14,12 +14,11 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { I18nService } from '../../../../services/languages/i18n.service';
-import { FormErrorService } from './../../../../services/error.services';
+import { TranslateModule } from '@ngx-translate/core';
+import { FormErrorService } from './../../../../services/error.service';
 
 @Component({
-    selector: 'label-input',
+    selector: 'app-label-input',
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -42,6 +41,7 @@ export class LabelInput {
         error: 'assets/icon/system/errorQuadrilateral.svg',
     } as const;
 
+    @Input() translationPrefix: string = '';
     @Input() controlName: string = '';
     @Input() placeholder: string = '';
     @Input() label: string = '';
@@ -50,8 +50,6 @@ export class LabelInput {
     @Input() preventClipboard: boolean = false;
     @Input() isEmail: boolean = false;
     @Input() domainSuffix: string = '@knu.ua';
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
 
     @Output() emailInput = new EventEmitter<Event>();
     @Output() emailBlur = new EventEmitter<void>();

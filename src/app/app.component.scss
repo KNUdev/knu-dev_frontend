@@ -8,7 +8,14 @@
 @use "./common/styles/fonts.scss";
 
 * {
-    transition: all 0.3s ease-out;
+    transition: all 0.2s ease-out;
+}
+
+mat-icon,
+svg,
+g,
+path {
+    transition: none;
 }
 
 .form-group {
@@ -59,8 +66,28 @@
     }
 }
 
+@keyframes scaling {
+    from {
+        transform: scale(1.2);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .visible {
     transform-style: preserve-3d;
     backface-visibility: hidden;
     will-change: transform;
+}
+
+.reveal-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1px;
+    &:not(:last-child) {
+        margin: -1px;
+    }
 }

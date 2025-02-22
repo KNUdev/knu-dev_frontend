@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -26,25 +26,24 @@ import {
 } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
-import { DepartmentService } from '../../../services/department.services';
-import { FormErrorService } from '../../../services/error.services';
+import { DepartmentService } from '../../../services/department.service';
+import { FormErrorService } from '../../../services/error.service';
 import { I18nService } from '../../../services/languages/i18n.service';
-import { LanguageSwitcherService } from '../../../services/languages/language-switcher.service';
 import {
     SelectOption,
     WriteDropDowns,
 } from './components/dropdown/write-dropdowns';
 import {
-    Course,
     Department,
     ERROR_KEY_TO_CONTROL,
-    Expertises,
+    Expertise,
     VALIDATION_KEYS,
     ValidationErrors,
+    YearOfStudy,
 } from './register.model';
 
-const COURSE_TRANSLATIONS = 'course' as const;
-const EXPERTISES_TRANSLATIONS = 'expertises' as const;
+const YEAR_OF_STUDY_TRANSLATIONS = 'yearOfStudy' as const;
+const EXPERTISE_TRANSLATIONS = 'expertise' as const;
 
 const REGISTER_CONSTANTS = {
     PASSWORD_MIN_LENGTH: 8,
@@ -52,6 +51,12 @@ const REGISTER_CONSTANTS = {
     EMAIL_DOMAIN: '@knu.ua',
     NAME_PATTERN: "^[A-Za-z'-]+$",
 } as const;
+
+export interface AuthResponse {
+    accessToken: string;
+    refreshToken: string;
+}
+
 @Component({
     selector: 'app-register',
     imports: [
@@ -67,12 +72,6 @@ const REGISTER_CONSTANTS = {
     styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
-    protected languageSwitcher = LanguageSwitcherService(this.translate);
-    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
     isOpenLang = signal<boolean>(false);
     currentRegistrationPhase = signal(1);
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
@@ -81,50 +80,48 @@ export class RegisterComponent {
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
-    courses: SelectOption[] = [];
-    expertises: SelectOption[] = [];
+    yearOfStudy: SelectOption[] = [];
+    expertise: SelectOption[] = [];
     departmentLoadError = signal<boolean>(false);
     specialtyLoadError = signal<boolean>(false);
     selectedDepartmentId$ = new BehaviorSubject<string | null>(null);
     isPasswordVisible = signal(false);
     isConfirmPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
-
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
         arrowDown: 'assets/icon/system/arrowDown.svg',
         errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
         errorTriangle: 'assets/icon/system/errorTriangle.svg',
     } as const;
-
-    @HostListener('document:click', ['$event'])
-    onDocumentClick(event: MouseEvent) {
-        const target = event.target as HTMLElement;
-        if (!target.closest('.language-selector')) {
-            this.isOpenLang.set(false);
-        }
-    }
-
-    toggleDropdownLang() {
-        this.isOpenLang.update((value) => !value);
-    }
-
-    selectLanguage(code: string) {
-        this.languageSwitcher.switchLang(code as any);
-        this.isOpenLang.set(false);
-    }
+    protected readonly VALIDATION_KEYS = VALIDATION_KEYS;
+    protected i18nService = inject(I18nService);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private translate = inject(TranslateService);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
 
     constructor(
         private readonly fb: FormBuilder,
         private readonly http: HttpClient,
         private readonly departmentService: DepartmentService,
-        private readonly formErrorService: FormErrorService
+        readonly formErrorService: FormErrorService,
+        private readonly router: Router
     ) {
+        this.formErrorService.clearErrors();
+        this.showValidationErrors.set(false);
+
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.arrowLeft
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
             )
         );
 
@@ -151,7 +148,7 @@ export class RegisterComponent {
 
         this.departments$ = this.departmentService.getDepartments().pipe(
             catchError((error) => {
-                console.error('Failed to load departments:', error);
+                console.error(error);
                 this.departmentLoadError.set(true);
                 return of([]);
             })
@@ -204,81 +201,54 @@ export class RegisterComponent {
             )
         );
 
-        const courseTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get(COURSE_TRANSLATIONS)),
-            map((translations: Course[]) => translations)
+        const yearOfStudyTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(YEAR_OF_STUDY_TRANSLATIONS)),
+            map((translations: YearOfStudy[]) => translations)
         );
 
-        courseTranslations$.subscribe((coursesData) => {
-            this.courses = coursesData.map((course) => ({
-                id: course.id,
-                displayedName: course.displayedName,
+        yearOfStudyTranslations$.subscribe((yearOfStudyData) => {
+            this.yearOfStudy = yearOfStudyData.map((yearOfStudy) => ({
+                id: yearOfStudy.id,
+                displayedName: yearOfStudy.displayedName,
             }));
         });
 
-        const expertisesTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get(EXPERTISES_TRANSLATIONS)),
-            map((translations: Expertises[]) => translations)
+        const expertiseTranslations$ = loadTranslations$.pipe(
+            switchMap(() => this.translate.get(EXPERTISE_TRANSLATIONS)),
+            map((translations: Expertise[]) => translations)
         );
 
-        expertisesTranslations$.subscribe((expertisesData) => {
-            this.expertises = expertisesData.map((expertises) => ({
-                id: expertises.id,
-                displayedName: expertises.displayedName,
+        expertiseTranslations$.subscribe((expertiseData) => {
+            this.expertise = expertiseData.map((expertise) => ({
+                id: expertise.id,
+                displayedName: expertise.displayedName,
             }));
         });
     }
 
-    private initPersonalInfoForm(): FormGroup {
-        return this.fb.group(
-            {
-                firstName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                lastName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                middleName: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
-                    ],
-                ],
-                email: ['', [Validators.required]],
-                password: [
-                    '',
-                    [
-                        Validators.required,
-                        Validators.minLength(
-                            REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
-                        ),
-                        Validators.maxLength(
-                            REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
-                        ),
-                    ],
-                ],
-                confirmPassword: ['', Validators.required],
-            },
-            { validators: [this.passwordMatchValidator], updateOn: 'change' }
-        );
+    get supportedLanguages() {
+        return this.i18nService.supportedLanguages;
     }
 
-    private initAcademicInfoForm(): FormGroup {
-        return this.fb.group({
-            departmentId: ['', Validators.required],
-            specialtyCodename: ['', Validators.required],
-            course: ['', Validators.required],
-            expertise: ['', Validators.required],
-        });
+    get currentLang() {
+        return this.i18nService.getCurrentLanguage();
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.language-selector')) {
+            this.isOpenLang.set(false);
+        }
+    }
+
+    toggleDropdownLang() {
+        this.isOpenLang.update((value) => !value);
+    }
+
+    selectLanguage(code: string) {
+        this.i18nService.switchLang(code as any);
+        this.isOpenLang.set(false);
     }
 
     passwordMatchValidator(form: FormGroup) {
@@ -388,28 +358,82 @@ export class RegisterComponent {
                 'specialtyCodename',
                 academicInfo.specialtyCodename
             );
-            formData.append('course', academicInfo.course);
+            formData.append('yearOfStudy', academicInfo.yearOfStudy);
             formData.append('expertise', academicInfo.expertise);
 
-            this.http.post(environment.apiRegisterUrl, formData).subscribe({
-                next: (response) => {
-                    console.log('Registration successful', response);
-                },
-                error: (error: HttpErrorResponse) => {
-                    if (error.status === 400 && error.error) {
-                        this.handleValidationErrors(error.error);
-                    }
-                    if (error.status === 200 && error.error) {
-                        this.currentRegistrationPhase.set(1);
-                        this.backendErrors.set({
-                            email: ['This email is already registered'],
-                        });
-                    } else {
-                        console.error('Registration failed', error);
-                    }
-                },
-            });
+            this.http
+                .post<AuthResponse>(environment.apiRegisterUrl, formData)
+                .subscribe({
+                    next: (response) => {
+                        this.router.navigate(['/auth/login']);
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        if (error.status === 400 && error.error) {
+                            this.handleValidationErrors(error.error);
+                        }
+                        if (error.status === 200 && error.error) {
+                            this.currentRegistrationPhase.set(1);
+                            this.backendErrors.set({
+                                email: ['This email is already registered'],
+                            });
+                        } else {
+                            console.error(error);
+                        }
+                    },
+                });
         }
+    }
+
+    private initPersonalInfoForm(): FormGroup {
+        return this.fb.group(
+            {
+                firstName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                lastName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                middleName: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.pattern(REGISTER_CONSTANTS.NAME_PATTERN),
+                    ],
+                ],
+                email: ['', [Validators.required]],
+                password: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.minLength(
+                            REGISTER_CONSTANTS.PASSWORD_MIN_LENGTH
+                        ),
+                        Validators.maxLength(
+                            REGISTER_CONSTANTS.PASSWORD_MAX_LENGTH
+                        ),
+                    ],
+                ],
+                confirmPassword: ['', Validators.required],
+            },
+            { validators: [this.passwordMatchValidator], updateOn: 'change' }
+        );
+    }
+
+    private initAcademicInfoForm(): FormGroup {
+        return this.fb.group({
+            departmentId: ['', Validators.required],
+            specialtyCodename: ['', Validators.required],
+            yearOfStudy: ['', Validators.required],
+            expertise: ['', Validators.required],
+        });
     }
 
     private handleValidationErrors(errors: any) {

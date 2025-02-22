@@ -2,36 +2,41 @@
     <div class="register__container">
         @if (currentRegistrationPhase() === 1) {
         <div class="form-container">
-            <a [routerLink]="['/']" class="hyperlink homePageLink"
-                ><mat-icon svgIcon="arrowLeft"></mat-icon
-                ><span> {{ "register.goHomeLink" | translate }}</span></a
-            >
-
+            <a [routerLink]="['/']" class="hyperlink homePageLink">
+                <mat-icon svgIcon="arrowLeft"></mat-icon>
+                <span>
+                    {{ "register.goHomeLink" | translate }}
+                </span>
+            </a>
             <form [formGroup]="personalInfoForm()" (ngSubmit)="goToNextStep()">
                 <h2>{{ "register.title" | translate }}</h2>
                 <div class="forms">
                     <div class="fullName">
-                        <label-input
+                        <app-label-input
                             controlName="firstName"
+                            [translationPrefix]="'register'"
                             [label]="'register.firstName.label' | translate"
                             [errors]="VALIDATION_KEYS.firstName"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="lastName"
+                            [translationPrefix]="'register'"
                             [label]="'register.lastName.label' | translate"
                             [errors]="VALIDATION_KEYS.lastName"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="middleName"
+                            [translationPrefix]="'register'"
                             [label]="'register.middleName.label' | translate"
                             [errors]="VALIDATION_KEYS.middleName"
-                        ></label-input>
+                        ></app-label-input>
                     </div>
                     <div class="email">
-                        <label-input
+                        <app-label-input
                             controlName="email"
+                            [translationPrefix]="'register'"
                             [label]="'register.email.label' | translate"
                             [errors]="VALIDATION_KEYS.email"
                             type="email"
@@ -39,7 +44,7 @@
                             domainSuffix="@knu.ua"
                             (emailInput)="onEmailInput($event)"
                             (emailBlur)="formatEmailOnBlur()"
-                        ></label-input>
+                        ></app-label-input>
 
                         <div class="email-create">
                             <p>{{ "register.KNUEmail.label" | translate }}</p>
@@ -51,23 +56,25 @@
                         </div>
                     </div>
                     <div class="password">
-                        <label-input
+                        <app-label-input
                             controlName="password"
+                            [translationPrefix]="'register'"
                             [label]="'register.password.label' | translate"
                             [errors]="VALIDATION_KEYS.password"
                             type="password"
                             [preventClipboard]="true"
-                        ></label-input>
+                        ></app-label-input>
 
-                        <label-input
+                        <app-label-input
                             controlName="confirmPassword"
+                            [translationPrefix]="'register'"
                             [label]="
                                 'register.confirmPassword.label' | translate
                             "
                             [errors]="VALIDATION_KEYS.confirmPassword"
                             type="password"
                             [preventClipboard]="true"
-                        ></label-input>
+                        ></app-label-input>
                     </div>
                 </div>
                 <button type="submit" class="fill-button fill-red">
@@ -76,9 +83,9 @@
 
                 <div class="login">
                     <p>{{ "register.haveAccount.label" | translate }}</p>
-                    <a [routerLink]="['/auth/login']" class="hyperlink">{{
-                        "register.haveAccount.link" | translate
-                    }}</a>
+                    <a [routerLink]="['/auth/login']" class="hyperlink">
+                        {{ "register.haveAccount.link" | translate }}
+                    </a>
                 </div>
             </form>
         </div>
@@ -92,7 +99,7 @@
             <div class="inputs">
                 <div class="firstRow">
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]="departmentLoadError()"
                             [options]="departments"
                             [placeholder]="
@@ -105,26 +112,28 @@
                             [errorMessage]="
                                 'errors.departmentLoadError' | translate
                             "
-                        ></write-dropdowns>
-                        @if ( showValidationErrors() &&
+                        ></register-write-dropdowns>
+                        @if (showValidationErrors() &&
                         academicInfoForm().get("departmentId")?.errors?.[
-                        "required" ] ) {
+                        "required"]) {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >You must select a department
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            You must select a department
                         </div>
-                        } @if (backendErrors()["departmentId"]) { @for ( error
-                        of backendErrors()["departmentId"]; track $index ) {
+                        } @if (formErrorService.backendErrors()["departmentId"])
+                        { @for (error of
+                        formErrorService.backendErrors()["departmentId"]; track
+                        $index) {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >{{ error }}
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            {{ error }}
                         </div>
                         } }
                     </div>
 
                     <div class="form-group">
                         @if (!academicInfoForm().get("departmentId")?.value) {
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
                                 'register.specialties.label' | translate
@@ -132,18 +141,15 @@
                             valueField="codeName"
                             formControlName="specialtyCodename"
                             class="disabled"
-                        ></write-dropdowns>
-
+                        ></register-write-dropdowns>
                         <p class="warning">
                             <mat-icon svgIcon="errorTriangle"></mat-icon>
-                            <span
-                                >{{
-                                    "register.mustSelectDepartment" | translate
-                                }}
-                            </span>
+                            <span>{{
+                                "register.mustSelectDepartment" | translate
+                            }}</span>
                         </p>
                         } @else {
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]="specialtyLoadError()"
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
@@ -155,77 +161,85 @@
                             [errorMessage]="
                                 'errors.specialtyLoadError' | translate
                             "
-                        ></write-dropdowns>
-                        @if ( showValidationErrors() &&
-                        academicInfoForm().get("specialtyCodename")?.errors?.[
-                        "required" ] ) {
+                        ></register-write-dropdowns>
+                        @if (showValidationErrors() &&
+                        academicInfoForm().get("specialtyCodename")?.errors?.["required"])
+                        {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >You must select a specialty
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            You must select a specialty
                         </div>
-                        } @if (backendErrors()["specialtyCodename"]) { @for (
-                        error of backendErrors()["specialtyCodename"]; track
-                        $index ) {
+                        } @if
+                        (formErrorService.backendErrors()["specialtyCodename"])
+                        { @for (error of
+                        formErrorService.backendErrors()["specialtyCodename"];
+                        track $index) {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >{{ error }}
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            {{ error }}
                         </div>
                         } } }
                     </div>
                 </div>
                 <div class="secondRow">
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("course")?.errors?.[
-                        "required" ] || backendErrors()["course"])'
-                            [options]="courses"
-                            [placeholder]="'register.courses.label' | translate"
+                        academicInfoForm().get("yearOfStudy")?.errors?.["required" ]
+                        || formErrorService.backendErrors()["yearOfStudy"])'
+                            [options]="yearOfStudy"
+                            [placeholder]="
+                                'register.yearOfStudy.label' | translate
+                            "
                             valueField="id"
                             displayField="displayedName"
-                            formControlName="course"
-                        ></write-dropdowns>
-                        @if ( showValidationErrors() &&
-                        academicInfoForm().get("course")?.errors?.["required"] )
+                            formControlName="yearOfStudy"
+                        ></register-write-dropdowns>
+                        @if (showValidationErrors() &&
+                        academicInfoForm().get("yearOfStudy")?.errors?.["required"])
                         {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >You must select a course
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            You must select a yearOfStudy
                         </div>
-                        } @if (backendErrors()["course"]) { @for ( error of
-                        backendErrors()["course"]; track $index ) {
+                        } @if (formErrorService.backendErrors()["yearOfStudy"])
+                        { @for (error of
+                        formErrorService.backendErrors()["yearOfStudy"]; track
+                        $index) {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >{{ error }}
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            {{ error }}
                         </div>
                         } }
                     </div>
 
                     <div class="form-group">
-                        <write-dropdowns
+                        <register-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
-                        academicInfoForm().get("expertise")?.errors?.[
-                        "required" ] || backendErrors()["expertise"])'
-                            [options]="expertises"
+                                academicInfoForm().get("expertise")?.errors?.[ "required" ]
+                                || formErrorService.backendErrors()["expertise"])'
+                            [options]="expertise"
                             [placeholder]="
-                                'register.expertises.label' | translate
+                                'register.expertise.label' | translate
                             "
                             valueField="id"
                             displayField="displayedName"
                             formControlName="expertise"
-                        ></write-dropdowns>
-                        @if ( showValidationErrors() &&
-                        academicInfoForm().get("expertise")?.errors?.[
-                        "required" ] ) {
+                        ></register-write-dropdowns>
+                        @if (showValidationErrors() &&
+                        academicInfoForm().get("expertise")?.errors?.["required"])
+                        {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >You must select a expertise
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            You must select a expertise
                         </div>
-                        } @if (backendErrors()["expertise"]) { @for ( error of
-                        backendErrors()["expertise"]; track $index ) {
+                        } @if (formErrorService.backendErrors()["expertise"]) {
+                        @for (error of
+                        formErrorService.backendErrors()["expertise"]; track
+                        $index) {
                         <div class="error">
-                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon
-                            >{{ error }}
+                            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                            {{ error }}
                         </div>
                         } }
                     </div>
@@ -244,19 +258,19 @@
         }
         <div class="language-selector-container">
             <div
-                class="language-selector"
                 [class.open]="isOpenLang()"
-                role="region"
                 aria-label="Language selection"
+                class="language-selector"
+                role="region"
             >
                 <button
-                    class="selector-button"
                     (click)="toggleDropdownLang()"
-                    aria-label="Select language"
                     [attr.aria-expanded]="isOpenLang()"
                     aria-controls="language-dropdown"
+                    aria-label="Select language"
+                    class="selector-button"
                 >
-                    @if(currentLanguage$ | async; as lang){
+                    @if (currentLanguage$ | async; as lang) {
                     <div>
                         <img
                             [src]="lang.flagSquare"
@@ -265,20 +279,19 @@
                         />
                         <span>{{ lang.name }}</span>
                     </div>
-                    <img
-                        [src]="iconPaths.arrowDown"
+                    <mat-icon
+                        svgIcon="arrowDown"
                         class="chevron"
                         [class.up]="isOpenLang()"
                         alt="arrowDown"
                         aria-hidden="true"
-                    />
+                    ></mat-icon>
                     }
                 </button>
                 @if (isOpenLang()) {
                 <div class="dropdown-menu">
-                    @for (lang of languageSwitcher.supportedLanguages(); track
-                    lang.code) { @if (lang.code !==
-                    languageSwitcher.currentLang()) {
+                    @for (lang of i18nService.supportedLanguages(); track
+                    lang.code) { @if (lang.code !== i18nService.currentLang()) {
                     <button
                         class="language-option"
                         (click)="selectLanguage(lang.code)"

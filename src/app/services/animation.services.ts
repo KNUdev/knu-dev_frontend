@@ -6,7 +6,7 @@ import {
     effect,
     inject,
 } from '@angular/core';
-import { LoadingService } from './loading.services';
+import { LoadingService } from './loading.service';
 
 @Injectable({
     providedIn: 'root',
@@ -86,7 +86,7 @@ export class AnimationService {
                         entry.target.classList.add('visible');
                         observer.unobserve(entry.target);
                     } catch (error) {
-                        console.error('Animation setup failed:', error);
+                        console.error(error);
                     }
                 });
             },

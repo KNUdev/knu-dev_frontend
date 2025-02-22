@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {AboutRoleComponent} from '../pages/about-role/about-role.component';
+import { ErrorStateGuard } from '../pages/error/404/404.guard';
 
 export const routes: Routes = [
     {
@@ -8,7 +8,7 @@ export const routes: Routes = [
             import('../pages/home/home.component').then((m) => m.HomeComponent),
     },
     {
-        path: 'login',
+        path: 'auth/login',
         loadComponent: () =>
             import('../pages/auth/login/login.component').then(
                 (m) => m.LoginComponent
@@ -22,7 +22,39 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'profile/:userId',
+        loadComponent: () =>
+            import('../pages/user-profile/user-profile.component').then(
+                (m) => m.UserProfileComponent
+            ),
+    },
+    {
+        path: 'error/404',
+        loadComponent: () =>
+            import('../pages/error/404/404.component').then(
+                (m) => m.NotFoundPage
+            ),
+        canActivate: [ErrorStateGuard],
+    },
+    {
+        path: 'error/500',
+        loadComponent: () =>
+            import('../pages/error/500/500.component').then(
+                (m) => m.InternalErrorPage
+            ),
+    },
+    {
+        path: 'origins-and-founders',
+        loadComponent: () =>
+            import(
+                '../pages/origins-and-founders/origins-and-founders.component'
+            ).then((m) => m.OriginsAndFoundersComponent),
+    },
+    {
         path: 'about-role',
-        component: AboutRoleComponent
-    }
+        loadComponent: () =>
+            import('../pages/about-role/about-role.component').then(
+                (m) => m.AboutRoleComponent
+            ),
+    },
 ];

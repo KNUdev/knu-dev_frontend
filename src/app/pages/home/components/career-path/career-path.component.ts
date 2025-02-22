@@ -5,7 +5,7 @@ import { RoleList } from '../../../../common/components/role-list/role-list.comp
 import { AnimationService } from '../../../../services/animation.services';
 
 @Component({
-    selector: 'career-path',
+    selector: 'home-career-path',
     templateUrl: './career-path.component.html',
     styleUrl: './career-path.component.scss',
     imports: [CommonModule, TranslateModule, RoleList],

@@ -10,7 +10,7 @@ import { AnimationService } from '../../../services/animation.services';
 import { CircularProgressComponent } from './circular-progress/circular-progress.component';
 
 @Component({
-    selector: 'option-card',
+    selector: 'app-option-card',
     imports: [CommonModule, CircularProgressComponent],
     templateUrl: './option-card.component.html',
     styleUrl: './option-card.component.scss',

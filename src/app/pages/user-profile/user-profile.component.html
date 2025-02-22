@@ -1,0 +1,264 @@
+<div class="profile">
+    @if (showUploadDialog()) {
+    <profile-image-upload-dialog
+        [currentImageUrl]="currentAvatarUrl()"
+        [errorMessage]="uploadErrorMessage()"
+        (fileSubmitted)="onAvatarFileSubmitted($event)"
+        (fileRemoved)="removeAvatar()"
+        (close)="closeUploadDialog()"
+    >
+    </profile-image-upload-dialog>
+    }
+
+    <main class="profile__main">
+        <section class="profile__header">
+            <div
+                (click)="triggerBannerUpdate()"
+                [class.profile-banner__absent]="!currentBannerUrl()"
+                class="profile__banner"
+            >
+                @if (!currentBannerUrl()) {
+                <div class="profile__banner_is-absent-text-container">
+                    <mat-icon
+                        aria-hidden="true"
+                        class="profile__banner-icon"
+                        svgIcon="addBanner"
+                    ></mat-icon>
+                    <p class="profile__banner-title">
+                        {{
+                            "accountProfile.button.banner.uploadNew.title"
+                                | translate
+                        }}
+                    </p>
+                    <p class="profile__banner-subtitle">
+                        {{
+                            "accountProfile.button.banner.uploadNew.subtitle"
+                                | translate
+                        }}
+                    </p>
+                </div>
+                } @else {
+                <div class="profile__banner-container">
+                    <img [src]="currentBannerUrl()" alt="" class="img-banner" />
+                    <div class="profile__banner-overlay">
+                        <mat-icon
+                            aria-hidden="true"
+                            class="profile__banner-icon profile__change-banner-icon"
+                            svgIcon="changeAvatar"
+                        ></mat-icon>
+                        <p
+                            class="profile__change-banner-text"
+                            (click)="openUploadDialog()"
+                        >
+                            {{
+                                "accountProfile.button.banner.change"
+                                    | translate
+                            }}
+                        </p>
+                        <button
+                            type="button"
+                            (click)="removeBanner($event)"
+                            class="hyperlink profile__change-banner-btn"
+                        >
+                            {{
+                                "accountProfile.button.banner.delete"
+                                    | translate
+                            }}
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="profile__avatar-container">
+                @if (currentAvatarUrl()) {
+                <img
+                    [src]="currentAvatarUrl()"
+                    alt="Avatar Image"
+                    class="profile__avatar"
+                />
+                } @else {
+                <div class="profile__avatar">
+                    <mat-icon
+                        svgIcon="defaultAvatar"
+                        class="profile__avatar-icon"
+                    ></mat-icon>
+                </div>
+                }
+                <div
+                    [class.avatar-absent--hover]="!currentAvatarUrl()"
+                    [class.avatar-present--hover]="currentAvatarUrl()"
+                    (click)="openUploadDialog()"
+                    class="profile__avatar-overlay"
+                >
+                    <mat-icon
+                        aria-hidden="true"
+                        class="profile__avatar-overlay-icon"
+                        svgIcon="changeAvatar"
+                    ></mat-icon>
+                </div>
+            </div>
+            <div class="profile__info">
+                <div class="profile__info-text">
+                    <h1 class="profile__info-name">
+                        {{ accountProfile()?.fullName }}
+                    </h1>
+                    <p class="profile__info-email">
+                        {{ accountProfile()?.email }}
+                    </p>
+                </div>
+                <div class="profile__info-corner">
+                    <p>
+                        {{ "accountProfile.registeredAt" | translate }}
+                        {{
+                            accountProfile()?.registeredAt!
+                                | date : "fullDate" : "UTC" : locale
+                        }}
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section aria-label="Profile Details" class="profile-meta">
+            <div class="profile-meta-role">
+                <div class="profile-meta-role-info">
+                    <h2 class="profile-meta-role-title">
+                        {{ "accountProfile.role" | translate }}
+                    </h2>
+                    <p class="profile-meta-role-subtitle">
+                        {{ accountProfile()?.technicalRole }}
+                    </p>
+                </div>
+                <app-border-button
+                    [text]="'accountProfile.button.rolePromotion' | translate"
+                    borderColor="yellow"
+                    class="profile-meta-role-button"
+                >
+                </app-border-button>
+            </div>
+            <div class="profile-meta-group">
+                <div class="profile-meta-item">
+                    <div class="profile-meta-item-info">
+                        <h2 class="profile-meta-item-title">
+                            {{ "accountProfile.faculty" | translate }}
+                        </h2>
+                        <p class="profile-meta-item-subtitle">
+                            {{
+                                accountProfile()?.department?.name
+                                    | multiLangField
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="profile-meta-item">
+                    <div class="profile-meta-item-info">
+                        <h2 class="profile-meta-item-title">
+                            {{ "accountProfile.specialty" | translate }}
+                        </h2>
+                        <p class="profile-meta-item-subtitle">
+                            {{
+                                accountProfile()?.specialty?.codeName +
+                                    " - " +
+                                    (accountProfile()?.specialty?.name
+                                        | multiLangField)
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="profile-meta-item">
+                    <div class="profile-meta-item-info">
+                        <h2 class="profile-meta-item-title">
+                            {{ "accountProfile.expertise" | translate }}
+                        </h2>
+                        <p class="profile-meta-item-subtitle">
+                            {{ accountProfile()?.expertise }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="supportHeading" class="profile__support">
+            <h2 class="support__heading" id="supportHeading">
+                {{ "accountProfile.support.description" | translate }}
+            </h2>
+            <a class="hyperlink" href="/">
+                {{ "accountProfile.support.support" | translate }}
+            </a>
+        </section>
+        <section aria-label="Projects in which I participated">
+            <header class="profile__divider">
+                <h3 class="profile__divider-title">
+                    {{ "accountProfile.projects.title" | translate }}
+                </h3>
+            </header>
+            <ul class="profile__activity-block">
+                @if (projectsExist) { @for (project of accountProjects(); track
+                $index) {
+                <profile-item-card
+                    [banner]="project.banner"
+                    [title]="project.name"
+                    [description]="project.description"
+                    [buttonText]="'accountProfile.button.learnMore' | translate"
+                    buttonAriaLabel="`Learn more about ` {{ project.name.en }}"
+                    buttonColor="yellow"
+                >
+                </profile-item-card>
+                } } @else {
+                <profile-fallback-card
+                    fallbackIconName="projectsNotFound"
+                    [fallbackText]="
+                        'accountProfile.projects.notFoundFallbackText'
+                            | translate
+                    "
+                >
+                </profile-fallback-card>
+                }
+            </ul>
+            @if (showLoadMore()) {
+            <button
+                aria-label="Load more projects"
+                class="profile__more-projects"
+                type="button"
+                (click)="loadAllProjects()"
+            >
+                {{ "accountProfile.projects.moreProjects" | translate }}
+            </button>
+            }
+        </section>
+        <section aria-label="Education Programs">
+            <header class="profile__divider profile__divider--red">
+                <h3 class="profile__divider-title">
+                    {{ "accountProfile.educationPrograms.title" | translate }}
+                </h3>
+            </header>
+            <ul class="profile__activity-block">
+                @if (programsExist) { @for (program of
+                accountProfile()?.completedEducationPrograms; track $index) {
+                <profile-item-card
+                    [banner]="program.banner"
+                    [title]="program.name"
+                    [details]="generateEducationLabels(program)"
+                    [buttonText]="'accountProfile.button.learnMore' | translate"
+                    buttonAriaLabel="`Learn more about `{{ program.name.en }}"
+                    buttonColor="red"
+                >
+                </profile-item-card>
+                } } @else {
+                <profile-fallback-card
+                    fallbackIconName="programsNotFound"
+                    [fallbackText]="
+                        'accountProfile.educationPrograms.notFoundFallbackText'
+                            | translate
+                    "
+                >
+                </profile-fallback-card>
+                }
+            </ul>
+        </section>
+        <input
+            #bannerInput
+            (change)="onBannerFileSelected($event)"
+            accept="image/*"
+            hidden
+            type="file"
+        />
+    </main>
+</div>

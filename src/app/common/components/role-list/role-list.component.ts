@@ -13,7 +13,7 @@ import { ArrowNext } from '../../../../assets/icon/system/arrowNext';
 import { AnimationService } from '../../../services/animation.services';
 
 @Component({
-    selector: 'role-list',
+    selector: 'app-role-list',
     imports: [CommonModule, MatIconModule, TranslateModule],
     templateUrl: './role-list.component.html',
     styleUrl: './role-list.component.scss',
@@ -24,7 +24,7 @@ export class RoleList {
         developer: '#e5383a',
         premaster: '#3fcb49',
         master: '#9542ed',
-        teamlead: '#edd342',
+        techlead: '#edd342',
     } as const;
 
     private domSanitizer = inject(DomSanitizer);
@@ -57,9 +57,9 @@ export class RoleList {
                 this.roleColors.master,
             ],
             [
-                'master-teamlead',
+                'master-techlead',
                 this.roleColors.master,
-                this.roleColors.teamlead,
+                this.roleColors.techlead,
             ],
         ];
 

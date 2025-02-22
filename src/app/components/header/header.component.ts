@@ -1,77 +1,219 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
+import {
+    Component,
+    computed,
+    HostListener,
+    inject,
+    OnDestroy,
+    QueryList,
+    signal,
+    ViewChildren,
+    ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
-import { map, Observable, startWith, switchMap } from 'rxjs';
+import {
+    map,
+    Observable,
+    startWith,
+    Subject,
+    switchMap,
+    takeUntil,
+} from 'rxjs';
+import { NoFillButtonComponent } from '../../common/components/button/no-fill/nofill-button.component';
 import { I18nService } from '../../services/languages/i18n.service';
-import { LanguageSwitcherService } from '../../services/languages/language-switcher.service';
+import { AccountProfileService } from '../../services/user/account-profile.service';
+import { AuthService } from '../../services/user/auth.service';
+import { UserStateService } from '../../services/user/user-state.service';
+import { Avatar_dropdown } from './components/dropdown/avatar/avatar.component';
+import { MenuNav_dropdown } from './components/dropdown/menunav/menunav.component';
 
-const MENU_TRANSLATIONS = 'header.menu.items' as const;
-
-type Menu = {
+interface Menu {
     name: string;
-    link: string;
-};
+    link?: string;
+    dropdown?: {
+        name: string;
+        link: string;
+    }[];
+}
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
-    imports: [FormsModule, CommonModule, TranslateModule, RouterModule],
+    imports: [
+        FormsModule,
+        CommonModule,
+        TranslateModule,
+        RouterModule,
+        MenuNav_dropdown,
+        MatIconModule,
+        NoFillButtonComponent,
+        Avatar_dropdown,
+    ],
+    encapsulation: ViewEncapsulation.None,
 })
-export class HeaderComponent {
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
-    private router = inject(Router);
-    protected languageSwitcher = LanguageSwitcherService(this.translate);
-    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+export class HeaderComponent implements OnDestroy {
+    technicalRoles = ['INTERN', 'DEVELOPER', 'PREMASTER', 'MASTER', 'TECHLEAD'];
+    private readonly userState: UserStateService = inject(UserStateService);
+
+    readonly user = computed(() => this.userState.currentUser);
+    readonly isAuthenticated = computed(() => this.userState.isAuthenticated);
+    readonly userProfile = computed(() => this.userState.userProfile);
+
     isOpenLang = signal<boolean>(false);
     isScrolled = signal<boolean>(false);
     isMobile = signal<boolean>(window.innerWidth < 1440);
     isMenuOpen = signal<boolean>(false);
-    readonly logoFullPath = 'assets/logo/KNUDEVLogoFull.svg';
-    readonly logoMiniPath = 'assets/logo/KNUDEVLogoMini.svg';
-    readonly arrowDownPath = 'assets/icon/system/arrowDown.svg';
-    readonly defaultAvatarPath = 'assets/icon/defaultAvatar.svg';
-    readonly menuIconPath = 'assets/icon/system/menu.svg';
-    readonly closeIconPath = 'assets/icon/system/close.svg';
+    readonly iconPaths = {
+        logoFullPath: 'assets/logo/KNUDEVLogoFull.svg',
+        logoMiniPath: 'assets/logo/KNUDEVLogoMini.svg',
+        arrowDown: 'assets/icon/system/arrowDown.svg',
+        defaultAvatarPath: 'assets/icon/defaultAvatar.svg',
+        menuIconPath: 'assets/icon/system/menu.svg',
+        closeIconPath: 'assets/icon/system/close.svg',
+        key: 'assets/icon/system/key.svg',
+    } as const;
+    menu$!: Observable<Menu[]>;
+    public i18nService = inject(I18nService);
+    protected currentLanguage$ = this.i18nService.getCurrentLanguage();
+    private translate = inject(TranslateService);
+    private router = inject(Router);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
+    private authService = inject(AuthService);
+    private readonly userService = inject(AccountProfileService);
+    private destroy$ = new Subject<void>();
+    currentAvatarUrl = signal<string>('');
 
-    menu$: Observable<Menu[]>;
+    private readonly BREAKPOINT = 1440;
+    private readonly SCROLL_THRESHOLDS = {
+        SHOW: 110,
+        HIDE: 40,
+    } as const;
 
-    @HostListener('window:scroll', [])
+    readonly technicalRole = computed(() => this.userState.getTechnicalRole());
+    readonly administrativeRole = computed(() =>
+        this.userState.getAdministrativeRole()
+    );
+
+    getUserTechnicalRole(): string {
+        return this.technicalRole();
+    }
+
+    getUserAdministrativeRole(): string {
+        return this.administrativeRole();
+    }
+
+    getTechnicalRoleColor(role: string): string {
+        return this.userState.getTechnicalRoleColor(role);
+    }
+
+    constructor() {
+        this.initializeUserProfile();
+        this.initializeMenuTranslations();
+        this.registerIcons();
+        this.setupNavigationHandler();
+    }
+
+    private setupNavigationHandler(): void {
+        this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.closeAllMenus();
+            }
+        });
+    }
+
+    private closeAllMenus(): void {
+        this.isOpenLang.set(false);
+        this.isMenuOpen.set(false);
+        if (this.menuNavDropdowns) {
+            this.menuNavDropdowns.forEach((dropdown) =>
+                dropdown.isOpen.set(false)
+            );
+        }
+        if (this.avatarDropdowns) {
+            this.avatarDropdowns.forEach((dropdown) =>
+                dropdown.isOpen.set(false)
+            );
+        }
+    }
+
+    @ViewChildren(MenuNav_dropdown)
+    menuNavDropdowns?: QueryList<MenuNav_dropdown>;
+    @ViewChildren(Avatar_dropdown) avatarDropdowns?: QueryList<Avatar_dropdown>;
+
+    private initializeUserProfile(): void {
+        if (this.isAuthenticated()) {
+            const userId = this.user().id;
+            if (userId) {
+                this.userService
+                    .getById(userId)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: (profile) => {
+                            this.userState.updateState({ profile });
+                        },
+                        error: (error) => {
+                            console.error('Error fetching profile:', error);
+                        },
+                    });
+            }
+        }
+    }
+
+    @HostListener('window:scroll')
     onWindowScroll() {
         const scrollPosition =
             window.scrollY || document.documentElement.scrollTop;
-        const currentState = this.isScrolled();
+        const shouldBeScrolled =
+            (!this.isScrolled() &&
+                scrollPosition > this.SCROLL_THRESHOLDS.SHOW) ||
+            (this.isScrolled() && scrollPosition < this.SCROLL_THRESHOLDS.HIDE);
 
-        if (!currentState && scrollPosition > 110) {
-            this.isScrolled.set(true);
-        } else if (currentState && scrollPosition < 40) {
-            this.isScrolled.set(false);
+        if (shouldBeScrolled) {
+            this.isScrolled.update((current) => !current);
         }
+    }
+
+    @HostListener('window:resize')
+    onResize() {
+        const isMobile = window.innerWidth < this.BREAKPOINT;
+        this.isMobile.set(isMobile);
+        if (!isMobile) this.isMenuOpen.set(false);
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
-        if (!target.closest('.language-selector')) {
+
+        if (!target.closest('.language-selector, .dropdown-menu')) {
             this.isOpenLang.set(false);
+        }
+
+        if (this.isMobile()) {
+            if (!target.closest('.header')) {
+                this.isMenuOpen.set(false);
+            }
         }
     }
 
-    @HostListener('window:resize', ['$event'])
-    onResize() {
-        this.isMobile.set(window.innerWidth < 1440);
-        if (!this.isMobile()) {
-            this.isMenuOpen.set(false);
+    toggleMenu(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation();
         }
-    }
-    toggleMenu() {
         this.isMenuOpen.update((value) => !value);
     }
 
@@ -80,7 +222,7 @@ export class HeaderComponent {
     }
 
     selectLanguage(code: string) {
-        this.languageSwitcher.switchLang(code as any);
+        this.i18nService.switchLang(code as any);
         this.isOpenLang.set(false);
     }
 
@@ -88,7 +230,29 @@ export class HeaderComponent {
         return this.router.url.includes('auth');
     }
 
-    constructor() {
+    isHomePage(): boolean {
+        return this.router.url === '/';
+    }
+
+    private getUserRoles(): string[] {
+        return this.authService.getUserInfo().roles;
+    }
+
+    getLogo(): string {
+        if (this.isAuthPage()) {
+            return this.iconPaths.logoFullPath;
+        }
+
+        if (this.isHomePage()) {
+            return this.isScrolled()
+                ? this.iconPaths.logoMiniPath
+                : this.iconPaths.logoFullPath;
+        }
+
+        return this.iconPaths.logoMiniPath;
+    }
+
+    private initializeMenuTranslations() {
         const langChange$ = this.translate.onLangChange.pipe(
             startWith({ lang: this.translate.currentLang } as LangChangeEvent)
         );
@@ -103,11 +267,43 @@ export class HeaderComponent {
         );
 
         const menuTranslations$ = loadTranslations$.pipe(
-            switchMap(() => this.translate.get([MENU_TRANSLATIONS]))
+            switchMap(() =>
+                this.translate.get(['header.menu.' + this.getUserRoles()[0]])
+            )
         );
 
         this.menu$ = menuTranslations$.pipe(
-            map((translations) => translations[MENU_TRANSLATIONS] || [])
+            map(
+                (translations) =>
+                    translations['header.menu.' + this.getUserRoles()[0]] || []
+            )
+        );
+    }
+
+    private registerIcons() {
+        this.matIconRegistry.addSvgIcon(
+            'arrowDown',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.arrowDown
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'closeMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.closeIconPath
+            )
+        );
+        this.matIconRegistry.addSvgIcon(
+            'openMenu',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.menuIconPath
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'key',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.iconPaths.key)
         );
     }
 }
