@@ -11,6 +11,13 @@
     transition: all 0.2s ease-out;
 }
 
+mat-icon,
+svg,
+g,
+path {
+    transition: none;
+}
+
 .form-group {
     width: 100%;
 }
