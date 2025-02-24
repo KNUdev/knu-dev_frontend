@@ -1,24 +1,39 @@
 <div class="container">
-    <section class="header">
+    <section class="header-about-role">
         <div class="header-text">
-            <h1 class="header-text__title-first-part">{{ "about-role.title__first-part" | translate }}
-                <span class="header-text__title-second-part">{{ "about-role.title__second-part" | translate }}</span>
+            <h1 class="header-text__title-first-part">
+                {{ "about-role.title__first-part" | translate }}
+                <span
+                    #animatedElement
+                    class="header-text__title-second-part"
+                    appLetterByLetter="about-role.title__second-part"
+                ></span>
             </h1>
-            <p class="header-text__description">{{ "about-role.page-description" | translate }}</p>
+            <p class="header-text__description">
+                {{ "about-role.page-description" | translate }}
+            </p>
             <div class="header__shadow"></div>
         </div>
         <div class="roles-wrapper">
             <a class="roles-wrapper__role roles-wrapper__intern">INTERN</a>
-            <a class="roles-wrapper__role roles-wrapper__developer">DEVELOPER</a>
-            <a class="roles-wrapper__role roles-wrapper__premaster">PRE-MASTER</a>
+            <a class="roles-wrapper__role roles-wrapper__developer"
+                >DEVELOPER</a
+            >
+            <a class="roles-wrapper__role roles-wrapper__premaster"
+                >PRE-MASTER</a
+            >
 
             <div class="roles-wrapper__bottom-roles-block">
-                <a class="roles-wrapper__role bottom-roles-block__master">MASTER</a>
-                <a class="roles-wrapper__role bottom-roles-block__techlead">TECHLEAD</a>
+                <a class="roles-wrapper__role bottom-roles-block__master"
+                    >MASTER</a
+                >
+                <a class="roles-wrapper__role bottom-roles-block__techlead"
+                    >TECHLEAD</a
+                >
             </div>
         </div>
     </section>
-    <hr class="blocks-separator"/>
+    <hr class="blocks-separator" />
     <section class="info-card">
         <div class="info-card__prew-role-switcher">
             <span class="switch-text prev-role-text">It`s start role</span>
@@ -26,27 +41,45 @@
         </div>
         <div class="info-card__intern">
             <header class="intern__header">
-                <span class="header__title">INTERN</span>
+                <span class="header__title">{{ roleFromUrl }}</span>
                 <span class="header__subtitle">PRE-CAMPUS</span>
             </header>
-            <p class="intern__role-description">{{ "about-role.intern.intern-role-description" | translate }}</p>
+            <p class="intern__role-description">
+                {{ "about-role.intern.intern-role-description" | translate }}
+            </p>
             <section class="intern__data">
                 <div class="data__duties">
-                    <h2 class="duties__title">{{ "about-role.intern.about-work" | translate }}</h2>
+                    <h2 class="duties__title">
+                        {{ "about-role.intern.about-work" | translate }}
+                    </h2>
                     <p class="duties__duty-type">
-                        <span>1.</span> {{ "about-role.intern.first-work" | translate }}</p>
+                        <span>1.</span>
+                        {{ "about-role.intern.first-work" | translate }}
+                    </p>
                     <p class="duties__duty-type">
-                        <span>2.</span> {{ "about-role.intern.second-work" | translate }}</p>
+                        <span>2.</span>
+                        {{ "about-role.intern.second-work" | translate }}
+                    </p>
                     <p class="duties__duty-type">
-                        <span>3.</span> {{ "about-role.intern.third-work" | translate }}</p>
+                        <span>3.</span>
+                        {{ "about-role.intern.third-work" | translate }}
+                    </p>
                     <p class="duties__duty-type">
-                        <span>4.</span> {{ "about-role.intern.fourth-work" | translate }}</p>
+                        <span>4.</span>
+                        {{ "about-role.intern.fourth-work" | translate }}
+                    </p>
                     <p class="duties__duty-type">
-                        <span>5.</span> {{ "about-role.intern.fifth-work" | translate }}</p>
+                        <span>5.</span>
+                        {{ "about-role.intern.fifth-work" | translate }}
+                    </p>
                 </div>
                 <div class="data__advantages">
-                    <h2 class="advantages__title">{{ "about-role.intern.about-advantages" | translate }}</h2>
-                    <p class="advantages__description">{{ "about-role.intern.advantages-text" | translate }}</p>
+                    <h2 class="advantages__title">
+                        {{ "about-role.intern.about-advantages" | translate }}
+                    </h2>
+                    <p class="advantages__description">
+                        {{ "about-role.intern.advantages-text" | translate }}
+                    </p>
                 </div>
             </section>
         </div>
@@ -55,9 +88,11 @@
             <span class="switch-text">developer</span>
         </div>
     </section>
-    <hr class="blocks-separator">
+    <hr class="blocks-separator" />
     <section class="roles-hierarchy">
-        <span class="roles-hierarchy__title">{{ "about-role.all-roles" | translate }}</span>
-        <role-list/>
+        <span class="roles-hierarchy__title">{{
+            "about-role.all-roles" | translate
+        }}</span>
+        <app-role-list />
     </section>
 </div>

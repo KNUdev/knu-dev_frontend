@@ -16,7 +16,7 @@
     padding-bottom: 5.5vw;
 }
 
-.header {
+.header-about-role {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -43,33 +43,26 @@
 }
 
 .header-text__title-second-part {
-    display: inline-block;
-    border-right: 0.0624rem solid var(--cursor-color);
-    animation:
-        blinking 1s steps(1, end) infinite,
-        typing 4s steps(40, end);
+    display: inline-flex;
     overflow: hidden;
     white-space: nowrap;
 }
 
-@keyframes blinking {
+@keyframes typeIn {
     0% {
-        border-color: transparent;
-    }
-    50% {
-        border-color: var(--cursor-color);
+        opacity: 0;
     }
     100% {
-        border-color: transparent;
+        opacity: 1;
     }
 }
 
-@keyframes typing {
+@keyframes typeOut {
     0% {
-        width: 0;
+        opacity: 1;
     }
     100% {
-        width: 100%;
+        opacity: 0;
     }
 }
 
@@ -372,7 +365,7 @@
 }
 
 @include tablet {
-    .header {
+    .header-about-role {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -406,7 +399,7 @@
 }
 
 @include mobile {
-    .header {
+    .header-about-role {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -472,36 +465,36 @@
 }
 .roles-wrapper {
     &__intern {
-        --highlight-color: #4264ed;
-        border: var(--highlight-color) solid 0.0624rem;
+        --highlight-color: #3147a2;
+        border: #4264ed solid 0.0624rem;
         animation: highlightFade 5s infinite;
     }
 
     &__developer {
-        --highlight-color: #e5383a;
-        border: var(--highlight-color) solid 0.0624rem;
+        --highlight-color: #b82f31;
+        border: #e5383a solid 0.0624rem;
         animation: highlightFade 5s infinite;
         animation-delay: 1s;
     }
 
     &__premaster {
-        --highlight-color: #3fcb49;
-        border: var(--highlight-color) solid 0.0624rem;
+        --highlight-color: #36692f;
+        border: #3fcb49 solid 0.0624rem;
         animation: highlightFade 5s infinite;
         animation-delay: 2s;
     }
 
     &__bottom-roles-block {
         .bottom-roles-block__master {
-            --highlight-color: #9542ed;
-            border: var(--highlight-color) solid 0.0624rem;
+            --highlight-color: #592a8b;
+            border: #9542ed solid 0.0624rem;
             animation: highlightFade 5s infinite;
             animation-delay: 3s;
         }
 
         .bottom-roles-block__techlead {
-            --highlight-color: #edd342;
-            border: var(--highlight-color) solid 0.0624rem;
+            --highlight-color: #dec63c;
+            border: #edd342 solid 0.0624rem;
             animation: highlightFade 5s infinite;
             animation-delay: 4s;
         }
@@ -525,11 +518,13 @@
     }
     5% {
         background: var(--highlight-color);
-        box-shadow: 0 0 0.3125rem var(--highlight-color);
+        border-color: var(--highlight-color);
+        box-shadow: 0px 0px 15px 0px var(--highlight-color);
     }
     15% {
         background: var(--highlight-color);
-        box-shadow: 0 0 0.3125rem var(--highlight-color);
+        border-color: var(--highlight-color);
+        box-shadow: 0px 0px 15px 0px var(--highlight-color);
     }
     20% {
         background: none;
