@@ -111,6 +111,30 @@
             "displayedName": "Ui/Ux дизайнер"
         }
     ],
+    "career-path": {
+        "title": "Можливості кар'єрного росту",
+        "instruction-text": "Натисніть на будь яку з ролей, аби дізнатися більше про неї",
+        "role-card-1": {
+            "title": "Intert",
+            "description": "Жескій маніпулятор, тру сігма, красава."
+        },
+        "role-card-2": {
+            "title": "developer",
+            "description": "Робить дохуя умного, але насправді тупий."
+        },
+        "role-card-3": {
+            "title": "pre-master",
+            "description": "Робить дохуя умного, але насправді тупий."
+        },
+        "role-card-4": {
+            "title": "master-developer",
+            "description": "Робить дохуя умного, але насправді тупий."
+        },
+        "role-card-5": {
+            "title": "techlead",
+            "description": "Робить дохуя умного, але насправді тупий."
+        }
+    },
     "errors": {
         "departmentLoadError": "Помилка завантаження факультетів. Будь ласка, спробуйте пізніше.",
         "specialtyLoadError": "Помилка завантаження спеціальностей. Будь ласка, спробуйте пізніше."

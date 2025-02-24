@@ -67,30 +67,6 @@
             }
         }
     },
-    "career-path": {
-        "title": "Career Growth Opportunities",
-        "instruction-text": "Click on any of the roles to learn more about it",
-        "role-card-1": {
-            "title": "Intern",
-            "description": "A tough manipulator, true sigma, a beauty."
-        },
-        "role-card-2": {
-            "title": "Developer",
-            "description": "Does a lot of smart things, but is actually dumb."
-        },
-        "role-card-3": {
-            "title": "Pre-master",
-            "description": "Does a lot of smart things, but is actually dumb."
-        },
-        "role-card-4": {
-            "title": "Master Developer",
-            "description": "Does a lot of smart things, but is actually dumb."
-        },
-        "role-card-5": {
-            "title": "Team Lead",
-            "description": "Does a lot of smart things, but is actually dumb."
-        }
-    },
     "pre-campus": {
         "info-badge": "Information about",
         "title": "Pre-Campus",

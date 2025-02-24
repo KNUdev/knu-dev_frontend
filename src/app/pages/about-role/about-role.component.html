@@ -35,57 +35,68 @@
     </section>
     <hr class="blocks-separator" />
     <section class="info-card">
-        <div class="info-card__prew-role-switcher">
-            <span class="switch-text prev-role-text">It`s start role</span>
+        <div class="info-card__prew-role-switcher" (click)="onPrevRole()">
+            <span class="switch-text prev-role-text">{{
+                previousRoleLabel
+            }}</span>
             <mat-icon class="arrow" svgIcon="arrowLeft"></mat-icon>
         </div>
         <div class="info-card__intern">
             <header class="intern__header">
-                <span class="header__title">{{ roleFromUrl }}</span>
+                <span class="header__title">{{ role }}</span>
                 <span class="header__subtitle">PRE-CAMPUS</span>
             </header>
             <p class="intern__role-description">
-                {{ "about-role.intern.intern-role-description" | translate }}
+                {{
+                    "about-role." + role + ".intern-role-description"
+                        | translate
+                }}
             </p>
             <section class="intern__data">
                 <div class="data__duties">
                     <h2 class="duties__title">
-                        {{ "about-role.intern.about-work" | translate }}
+                        {{ "about-role." + role + ".about-work" | translate }}
                     </h2>
                     <p class="duties__duty-type">
                         <span>1.</span>
-                        {{ "about-role.intern.first-work" | translate }}
+                        {{ "about-role." + role + ".first-work" | translate }}
                     </p>
                     <p class="duties__duty-type">
                         <span>2.</span>
-                        {{ "about-role.intern.second-work" | translate }}
+                        {{ "about-role." + role + ".second-work" | translate }}
                     </p>
                     <p class="duties__duty-type">
                         <span>3.</span>
-                        {{ "about-role.intern.third-work" | translate }}
+                        {{ "about-role." + role + ".third-work" | translate }}
                     </p>
                     <p class="duties__duty-type">
                         <span>4.</span>
-                        {{ "about-role.intern.fourth-work" | translate }}
+                        {{ "about-role." + role + ".fourth-work" | translate }}
                     </p>
                     <p class="duties__duty-type">
                         <span>5.</span>
-                        {{ "about-role.intern.fifth-work" | translate }}
+                        {{ "about-role." + role + ".fifth-work" | translate }}
                     </p>
                 </div>
                 <div class="data__advantages">
                     <h2 class="advantages__title">
-                        {{ "about-role.intern.about-advantages" | translate }}
+                        {{
+                            "about-role." + role + ".about-advantages"
+                                | translate
+                        }}
                     </h2>
                     <p class="advantages__description">
-                        {{ "about-role.intern.advantages-text" | translate }}
+                        {{
+                            "about-role." + role + ".advantages-text"
+                                | translate
+                        }}
                     </p>
                 </div>
             </section>
         </div>
-        <div class="info-card__next-role-switcher">
+        <div class="info-card__next-role-switcher" (click)="onNextRole()">
             <mat-icon class="arrow" svgIcon="arrowRight"></mat-icon>
-            <span class="switch-text">developer</span>
+            <span class="switch-text">{{ nextRoleLabel }}</span>
         </div>
     </section>
     <hr class="blocks-separator" />

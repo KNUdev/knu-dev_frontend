@@ -11,10 +11,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArrowNext } from '../../../../assets/icon/system/arrowNext';
 import { AnimationService } from '../../../services/animation.services';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-role-list',
-    imports: [CommonModule, MatIconModule, TranslateModule],
+    imports: [CommonModule, MatIconModule, TranslateModule, RouterModule],
     templateUrl: './role-list.component.html',
     styleUrl: './role-list.component.scss',
 })

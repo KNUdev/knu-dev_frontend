@@ -40,12 +40,16 @@ export class AboutRoleComponent implements OnInit, AfterViewInit {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-    public roleFromUrl!: string;
+    public role!: string;
 
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
         arrowRight: 'assets/icon/system/arrowRight.svg',
     } as const;
+
+    private get availableRoles(): string[] {
+        return Object.values(TechnicalRole).filter((role) => role !== 'NONE');
+    }
 
     constructor(
         private animationService: AnimationService,
@@ -71,22 +75,55 @@ export class AboutRoleComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.route.queryParams.subscribe((params) => {
-            const roleFromUrl = params['role'];
-
-            if (
-                roleFromUrl &&
-                Object.values(TechnicalRole).includes(roleFromUrl)
-            ) {
-                this.roleFromUrl = roleFromUrl; // assign the value here
+            const roleParam = params['role'];
+            if (roleParam && this.availableRoles.includes(roleParam)) {
+                this.role = roleParam;
             } else {
-                // set default value and navigate if needed
                 this.router.navigate(['/about-role'], {
-                    queryParams: { role: 'INTERN' },
+                    queryParams: { role: TechnicalRole.INTERN },
                 });
-                this.roleFromUrl = 'INTERN';
+                this.role = TechnicalRole.INTERN;
             }
         });
     }
+
+    public onPrevRole(): void {
+        const roles = this.availableRoles;
+        const currentIndex = roles.indexOf(this.role);
+        if (currentIndex > 0) {
+            const newRole = roles[currentIndex - 1];
+            this.router.navigate(['/about-role'], {
+                queryParams: { role: newRole },
+            });
+        }
+    }
+
+    public onNextRole(): void {
+        const roles = this.availableRoles;
+        const currentIndex = roles.indexOf(this.role);
+        if (currentIndex < roles.length - 1) {
+            const newRole = roles[currentIndex + 1];
+            this.router.navigate(['/about-role'], {
+                queryParams: { role: newRole },
+            });
+        }
+    }
+
+public get previousRoleLabel(): string {
+    const roles = this.availableRoles;
+    const index = roles.indexOf(this.role);
+    return index > 0 
+        ? roles[index - 1] 
+        : this.translate.instant('about-role.first-role');
+}
+
+public get nextRoleLabel(): string {
+    const roles = this.availableRoles;
+    const index = roles.indexOf(this.role);
+    return index < roles.length - 1 
+        ? roles[index + 1] 
+        : this.translate.instant('about-role.last-role');
+}
 
     private registerIcons(): void {
         this.matIconRegistry.addSvgIcon(
