@@ -41,18 +41,18 @@
             }}</span>
             <mat-icon class="arrow" svgIcon="arrowLeft"></mat-icon>
         </div>
-        <div class="info-card__intern">
-            <header class="intern__header">
+        <div class="info-card__container">
+            <header class="container__header">
                 <span class="header__title">{{ role }}</span>
                 <span class="header__subtitle">PRE-CAMPUS</span>
             </header>
-            <p class="intern__role-description">
+            <p class="container__role-description">
                 {{
-                    "about-role." + role + ".intern-role-description"
+                    "about-role." + role + ".container-role-description"
                         | translate
                 }}
             </p>
-            <section class="intern__data">
+            <section class="container__data">
                 <div class="data__duties">
                     <h2 class="duties__title">
                         {{ "about-role." + role + ".about-work" | translate }}
