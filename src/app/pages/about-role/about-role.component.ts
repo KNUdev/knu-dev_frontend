@@ -139,31 +139,14 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         if (currentIndex !== -1 && newIndex !== -1) {
             this.pendingRole = roleParam;
             this.swipeDirection = newIndex > currentIndex ? 'left' : 'right';
+            this.isAnimating = true;
 
             document.querySelector('.info-card')?.classList.add('isAnimating');
-
-            const containerWrapper = document.querySelector(
-                '.info-card-container-wrapper'
-            );
-            const activeContainer = document.querySelector(
-                '.info-card__container.active'
-            );
-            const inactiveContainer = document.querySelector(
-                '.info-card__container:not(.active)'
-            );
-            if (activeContainer) {
-                (activeContainer as HTMLElement).style.top = '0px';
-            }
-            if (inactiveContainer) {
-                (inactiveContainer as HTMLElement).style.top = '0px';
-            }
-
-            this.isAnimating = true;
 
             this.clearTimeout(this.animationTimeout);
             this.animationTimeout = window.setTimeout(() => {
                 this.completeRoleTransition();
-            }, 1000);
+            }, 800);
         } else {
             this.role = roleParam;
             this.updateAdjacentRoles();
@@ -174,46 +157,21 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.pendingRole) return;
 
         this.updateUrlSilently();
-
         this.role = this.pendingRole;
         this.updateAdjacentRoles();
 
-        window.requestAnimationFrame(() => {
-            this.resetStateTimeout = window.setTimeout(() => {
-                this.activeContainer =
-                    this.activeContainer === 'primary'
-                        ? 'secondary'
-                        : 'primary';
+        this.activeContainer =
+            this.activeContainer === 'primary' ? 'secondary' : 'primary';
+        this.isAnimating = false;
+        this.pendingRole = null;
+        this.swipeDirection = null;
 
-                this.isAnimating = false;
-                this.pendingRole = null;
-                this.swipeDirection = null;
+        document.querySelector('.info-card')?.classList.remove('isAnimating');
 
-                document
-                    .querySelector('.info-card')
-                    ?.classList.remove('isAnimating');
-                window.requestAnimationFrame(() => {
-                    const containerWrapper = document.querySelector(
-                        '.info-card-container-wrapper'
-                    );
-                    if (containerWrapper) {
-                        (containerWrapper as HTMLElement).style.minHeight = '';
-                    }
-
-                    const containers = document.querySelectorAll(
-                        '.info-card__container'
-                    );
-                    containers.forEach((container) => {
-                        (container as HTMLElement).style.top = '';
-                    });
-
-                    this.clearTimeout(this.urlUpdateTimeout);
-                    this.urlUpdateTimeout = window.setTimeout(() => {
-                        this.urlUpdateInProgress = false;
-                    }, 100);
-                });
-            }, 100);
-        });
+        this.clearTimeout(this.urlUpdateTimeout);
+        this.urlUpdateTimeout = window.setTimeout(() => {
+            this.urlUpdateInProgress = false;
+        }, 100);
     }
 
     private navigateToDefaultRole(): void {
@@ -285,7 +243,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
             this.completeRoleTransition();
-        }, 1000);
+        }, 800);
     }
 
     public onNextRole(): void {
@@ -300,7 +258,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
             this.completeRoleTransition();
-        }, 1000);
+        }, 800);
     }
 
     public get previousRoleLabel(): string {

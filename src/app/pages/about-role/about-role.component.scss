@@ -590,24 +590,22 @@
 }
 
 .info-card__container.slide-out-left {
-    animation: slideOutToLeft 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation: slideOutToLeft 0.4s ease forwards;
     z-index: 2;
 }
 
 .info-card__container.slide-out-right {
-    animation: slideOutToRight 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation: slideOutToRight 0.4s ease forwards;
     z-index: 2;
 }
 
 .info-card__container.slide-in-from-left {
-    animation: slideInFromLeft 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) 0.25s
-        forwards;
+    animation: slideInFromLeft 0.8s ease forwards;
     z-index: 3;
 }
 
 .info-card__container.slide-in-from-right {
-    animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) 0.25s
-        forwards;
+    animation: slideInFromRight 0.8s ease forwards;
     z-index: 3;
 }
 
