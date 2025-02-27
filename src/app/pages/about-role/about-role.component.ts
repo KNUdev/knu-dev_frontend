@@ -72,6 +72,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router
     ) {
+        this.loadTranslations();
+        this.registerIcons();
+        this.setupNavigationListener();
+    }
+
+    private loadTranslations(): void {
         this.translate.onLangChange
             .pipe(
                 startWith({
@@ -85,53 +91,14 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
                 )
             )
             .subscribe();
+    }
 
-        this.registerIcons();
-
+    private setupNavigationListener(): void {
         this.navigationSub = this.router.events
             .pipe(filter((event) => event instanceof NavigationEnd))
             .subscribe(() => {
                 this.urlUpdateInProgress = false;
             });
-    }
-
-    private completeRoleTransition(): void {
-        if (!this.pendingRole) return;
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-        }
-        if (this.resetStateTimeout) {
-            clearTimeout(this.resetStateTimeout);
-        }
-        if (this.urlUpdateTimeout) {
-            clearTimeout(this.urlUpdateTimeout);
-        }
-
-        this.urlUpdateInProgress = true;
-        const url = this.router
-            .createUrlTree(['/about-role'], {
-                queryParams: { role: this.pendingRole },
-            })
-            .toString();
-        window.history.replaceState({}, '', url);
-
-        this.role = this.pendingRole!;
-        this.updateAdjacentRoles();
-
-        this.animationTimeout = window.setTimeout(() => {
-            this.activeContainer =
-                this.activeContainer === 'primary' ? 'secondary' : 'primary';
-
-            this.resetStateTimeout = window.setTimeout(() => {
-                this.isAnimating = false;
-                this.pendingRole = null;
-                this.swipeDirection = null;
-
-                this.urlUpdateTimeout = window.setTimeout(() => {
-                    this.urlUpdateInProgress = false;
-                }, 50);
-            }, 50);
-        }, 500);
     }
 
     ngOnInit(): void {
@@ -147,73 +114,152 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             if (roleParam && this.availableRoles.includes(roleParam)) {
-                if (this.isInitialLoad) {
-                    this.role = roleParam;
-                    this.updateAdjacentRoles();
-                } else {
-                    const currentIndex = this.availableRoles.indexOf(
-                        this.role || ''
-                    );
-                    const newIndex = this.availableRoles.indexOf(roleParam);
-
-                    if (currentIndex !== -1 && newIndex !== -1) {
-                        this.pendingRole = roleParam;
-                        this.swipeDirection =
-                            newIndex > currentIndex ? 'left' : 'right';
-                        this.isAnimating = true;
-
-                        if (this.animationTimeout) {
-                            clearTimeout(this.animationTimeout);
-                        }
-                        this.animationTimeout = window.setTimeout(() => {
-                            this.completeRoleTransition();
-                        }, 500);
-                    } else {
-                        this.role = roleParam;
-                        this.updateAdjacentRoles();
-                    }
-                }
+                this.handleValidRoleParam(roleParam);
             } else {
-                this.urlUpdateInProgress = true;
-                const url = this.router
-                    .createUrlTree(['/about-role'], {
-                        queryParams: { role: TechnicalRole.INTERN },
-                    })
-                    .toString();
-
-                window.history.replaceState({}, '', url);
-                this.role = TechnicalRole.INTERN;
-                this.updateAdjacentRoles();
-
-                if (this.urlUpdateTimeout) {
-                    clearTimeout(this.urlUpdateTimeout);
-                }
-                this.urlUpdateTimeout = window.setTimeout(() => {
-                    this.urlUpdateInProgress = false;
-                }, 100);
+                this.navigateToDefaultRole();
             }
 
             this.isInitialLoad = false;
         });
     }
 
-    ngOnDestroy(): void {
-        if (this.routeSub) {
-            this.routeSub.unsubscribe();
+    private handleValidRoleParam(roleParam: string): void {
+        if (this.isInitialLoad) {
+            this.role = roleParam;
+            this.updateAdjacentRoles();
+        } else {
+            this.animateRoleTransition(roleParam);
         }
-        if (this.navigationSub) {
-            this.navigationSub.unsubscribe();
-        }
+    }
 
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
+    private animateRoleTransition(roleParam: string): void {
+        const currentIndex = this.availableRoles.indexOf(this.role || '');
+        const newIndex = this.availableRoles.indexOf(roleParam);
+
+        if (currentIndex !== -1 && newIndex !== -1) {
+            this.pendingRole = roleParam;
+            this.swipeDirection = newIndex > currentIndex ? 'left' : 'right';
+
+            document.querySelector('.info-card')?.classList.add('isAnimating');
+
+            const containerWrapper = document.querySelector(
+                '.info-card-container-wrapper'
+            );
+            const activeContainer = document.querySelector(
+                '.info-card__container.active'
+            );
+            const inactiveContainer = document.querySelector(
+                '.info-card__container:not(.active)'
+            );
+            if (activeContainer) {
+                (activeContainer as HTMLElement).style.top = '0px';
+            }
+            if (inactiveContainer) {
+                (inactiveContainer as HTMLElement).style.top = '0px';
+            }
+
+            this.isAnimating = true;
+
+            this.clearTimeout(this.animationTimeout);
+            this.animationTimeout = window.setTimeout(() => {
+                this.completeRoleTransition();
+            }, 1000);
+        } else {
+            this.role = roleParam;
+            this.updateAdjacentRoles();
         }
-        if (this.resetStateTimeout) {
-            clearTimeout(this.resetStateTimeout);
+    }
+
+    private completeRoleTransition(): void {
+        if (!this.pendingRole) return;
+
+        this.updateUrlSilently();
+
+        this.role = this.pendingRole;
+        this.updateAdjacentRoles();
+
+        window.requestAnimationFrame(() => {
+            this.resetStateTimeout = window.setTimeout(() => {
+                this.activeContainer =
+                    this.activeContainer === 'primary'
+                        ? 'secondary'
+                        : 'primary';
+
+                this.isAnimating = false;
+                this.pendingRole = null;
+                this.swipeDirection = null;
+
+                document
+                    .querySelector('.info-card')
+                    ?.classList.remove('isAnimating');
+                window.requestAnimationFrame(() => {
+                    const containerWrapper = document.querySelector(
+                        '.info-card-container-wrapper'
+                    );
+                    if (containerWrapper) {
+                        (containerWrapper as HTMLElement).style.minHeight = '';
+                    }
+
+                    const containers = document.querySelectorAll(
+                        '.info-card__container'
+                    );
+                    containers.forEach((container) => {
+                        (container as HTMLElement).style.top = '';
+                    });
+
+                    this.clearTimeout(this.urlUpdateTimeout);
+                    this.urlUpdateTimeout = window.setTimeout(() => {
+                        this.urlUpdateInProgress = false;
+                    }, 100);
+                });
+            }, 100);
+        });
+    }
+
+    private navigateToDefaultRole(): void {
+        this.urlUpdateInProgress = true;
+        const url = this.router
+            .createUrlTree(['/about-role'], {
+                queryParams: { role: TechnicalRole.INTERN },
+            })
+            .toString();
+
+        window.history.replaceState({}, '', url);
+        this.role = TechnicalRole.INTERN;
+        this.updateAdjacentRoles();
+
+        this.clearTimeout(this.urlUpdateTimeout);
+        this.urlUpdateTimeout = window.setTimeout(() => {
+            this.urlUpdateInProgress = false;
+        }, 100);
+    }
+
+    private clearTimeout(timeoutId?: number): void {
+        if (timeoutId) {
+            window.clearTimeout(timeoutId);
         }
-        if (this.urlUpdateTimeout) {
-            clearTimeout(this.urlUpdateTimeout);
-        }
+    }
+
+    private clearAllTimeouts(): void {
+        this.clearTimeout(this.animationTimeout);
+        this.clearTimeout(this.resetStateTimeout);
+        this.clearTimeout(this.urlUpdateTimeout);
+    }
+
+    private updateUrlSilently(): void {
+        this.urlUpdateInProgress = true;
+        const url = this.router
+            .createUrlTree(['/about-role'], {
+                queryParams: { role: this.pendingRole },
+            })
+            .toString();
+        window.history.replaceState({}, '', url);
+    }
+
+    ngOnDestroy(): void {
+        this.routeSub?.unsubscribe();
+        this.navigationSub?.unsubscribe();
+        this.clearAllTimeouts();
     }
 
     private updateAdjacentRoles(): void {
@@ -234,12 +280,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'right';
         this.isAnimating = true;
 
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-        }
+        document.querySelector('.info-card')?.classList.add('isAnimating');
+
+        this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
             this.completeRoleTransition();
-        }, 500);
+        }, 1000);
     }
 
     public onNextRole(): void {
@@ -249,12 +295,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'left';
         this.isAnimating = true;
 
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-        }
+        document.querySelector('.info-card')?.classList.add('isAnimating');
+
+        this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
             this.completeRoleTransition();
-        }, 500);
+        }, 1000);
     }
 
     public get previousRoleLabel(): string {
