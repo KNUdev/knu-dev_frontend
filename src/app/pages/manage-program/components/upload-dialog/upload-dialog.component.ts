@@ -1,18 +1,46 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild, forwardRef } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    inject,
+    Input,
+    OnInit,
+    Output,
+    signal,
+    ViewChild,
+    forwardRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    Validators,
+    NG_VALUE_ACCESSOR
+} from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
+import {LangChangeEvent, TranslateModule, TranslateService} from '@ngx-translate/core';
 
-import { BorderButtonComponent } from '../../../common/components/button/arrow-button/border-button.component';
-import { LabelInput } from '../../../common/components/input/label-input/label-input';
-import { EducationProgramDto, ProgramModuleDto, ProgramSectionDto, ProgramTopicDto } from '../../../common/models/shared.model';
-import { ProgramService } from '../../../services/program.service';
-import { SelectOption, WriteDropDowns } from '../../auth/register/components/dropdown/write-dropdowns';
-import { TestService } from '../../../services/test.service';
+import { BorderButtonComponent } from '../../../../common/components/button/arrow-button/border-button.component';
+import { LabelInput } from '../../../../common/components/input/label-input/label-input';
+import {
+    EducationProgramDto,
+    ProgramModuleDto,
+    ProgramSectionDto,
+    ProgramTopicDto
+} from '../../../../common/models/shared.model';
+import { ProgramService } from '../../../../services/program.service';
+import {
+    SelectOption,
+    WriteDropDowns
+} from '../../../auth/register/components/dropdown/write-dropdowns';
+import { TestService } from '../../../../services/test.service';
 import { map } from 'rxjs/operators';
-import { Expertise } from '../../user-profile/user-profile.model';
+import { Expertise } from '../../../user-profile/user-profile.model';
+import {BackdropWindowComponent} from '../../../../common/components/backdrop-window/backdrop-window.component';
+import {startWith, switchMap} from 'rxjs';
+import {I18nService} from '../../../../services/languages/i18n.service';
 
 @Component({
     selector: 'upload-dialog',
@@ -26,7 +54,8 @@ import { Expertise } from '../../user-profile/user-profile.model';
         TranslateModule,
         LabelInput,
         BorderButtonComponent,
-        WriteDropDowns
+        WriteDropDowns,
+        BackdropWindowComponent
     ],
     providers: [
         {
@@ -42,10 +71,6 @@ export class UploadDialogComponent implements OnInit {
     @Input() entityType: 'program' | 'section' | 'module' | 'topic' = 'section';
     @Input() parentId?: string;
     @Input() entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
-
-    /**
-     * NEW: Default order index passed from parent.
-     */
     @Input() defaultOrderIndex?: number;
 
     @Output() close = new EventEmitter<{
@@ -60,23 +85,29 @@ export class UploadDialogComponent implements OnInit {
 
     public dialogForm = signal<FormGroup>(new FormGroup({}));
     public selectedFile = signal<File | undefined>(undefined);
-    public isFileSelectedd = signal<boolean>(false);
+    public isFileSelected = signal<boolean>(false);
     public testSelectOptions = signal<SelectOption[]>([]);
+    public errorIsPresent = signal<boolean>(false);
+    public errorText = signal<string>('');
 
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-
-    get topicTestId(): string {
-        if (this.entityType === 'topic' && this.entityData) {
-            return (this.entityData as ProgramTopicDto).testId || '';
-        }
-        return '';
-    }
 
     private fb = inject(FormBuilder);
     private matIconRegistry = inject(MatIconRegistry);
     private domSanitizer = inject(DomSanitizer);
     private programService = inject(ProgramService);
     private testService = inject(TestService);
+
+    constructor(private translate:TranslateService, private i18nService:I18nService) {
+        this.translate.onLangChange
+            .pipe(
+                startWith({lang: this.translate.currentLang} as LangChangeEvent),
+                switchMap(event => this.i18nService.loadComponentTranslations(
+                    'pages/manage-program/components/upload-dialog', event.lang
+                ))
+            )
+            .subscribe();
+    }
 
     ngOnInit(): void {
         this.matIconRegistry.addSvgIcon(
@@ -113,11 +144,31 @@ export class UploadDialogComponent implements OnInit {
                     }
                 } as SelectOption)))
             )
-            .subscribe(options => this.testSelectOptions.set(options));
+            .subscribe({
+                next: options => this.testSelectOptions.set(options),
+                error: err => this.handleApiError(err) // show any error in the same dialog
+            });
+    }
+
+    private handleApiError(err: any): void {
+        const messageFromServer =
+            err?.error?.message ||
+            err?.message ||
+            this.translate.instant("dialog.error.unknownError");
+
+        this.errorText.set(messageFromServer);
+        this.errorIsPresent.set(true);
     }
 
     public get form(): FormGroup {
         return this.dialogForm();
+    }
+
+    get topicTestId(): string {
+        if (this.entityType === 'topic' && this.entityData) {
+            return (this.entityData as ProgramTopicDto).testId || '';
+        }
+        return '';
     }
 
     get expertiseOptions(): SelectOption[] {
@@ -159,13 +210,13 @@ export class UploadDialogComponent implements OnInit {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             this.selectedFile.set(input.files[0]);
-            this.isFileSelectedd.set(true);
+            this.isFileSelected.set(true);
         }
     }
 
     public removeFile(): void {
         this.selectedFile.set(undefined);
-        this.isFileSelectedd.set(false);
+        this.isFileSelected.set(false);
         if (this.entityData) {
             if (this.entityType === 'topic') {
                 (this.entityData as ProgramTopicDto).finalTaskUrl = undefined;
@@ -184,15 +235,27 @@ export class UploadDialogComponent implements OnInit {
     }
 
     public onSubmit(): void {
-        if (this.form.invalid) {
-            this.form.markAllAsTouched();
+        this.form.markAllAsTouched();
+
+        if (this.form.invalid || !this.isAnyFilePresent) {
+            this.errorText.set(
+                this.translate.instant("dialog.error.fieldsRequired")
+            );
+            this.errorIsPresent.set(true);
             return;
         }
+
+        this.errorIsPresent.set(false);
+
         if (this.mode === 'create') {
             this.handleCreate();
         } else {
             this.handleUpdate();
         }
+    }
+
+    public onErrorClose(): void {
+        this.errorIsPresent.set(false);
     }
 
     private patchForm(entity: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto): void {
@@ -239,7 +302,8 @@ export class UploadDialogComponent implements OnInit {
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdTopic: newTopic });
-        } else if (this.entityType === 'section') {
+        }
+        else if (this.entityType === 'section') {
             const newSection: ProgramSectionDto = {
                 id: '',
                 name: {
@@ -255,7 +319,8 @@ export class UploadDialogComponent implements OnInit {
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdSection: newSection });
-        } else if (this.entityType === 'module') {
+        }
+        else if (this.entityType === 'module') {
             const newModule: ProgramModuleDto = {
                 id: '',
                 name: {
@@ -272,7 +337,8 @@ export class UploadDialogComponent implements OnInit {
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdModule: newModule });
-        } else if (this.entityType === 'program') {
+        }
+        else if (this.entityType === 'program') {
             const newProgram: EducationProgramDto = {
                 id: '',
                 name: {
@@ -283,11 +349,12 @@ export class UploadDialogComponent implements OnInit {
                     en: formVals.descriptionEn,
                     uk: formVals.descriptionUk
                 },
-                isPublished: false,
+                published: false,
                 finalTaskUrl: '',
                 expertise: formVals.expertise as Expertise,
                 sections: [],
-                // For program-level, orderIndex is not used
+                createdDate: '',
+                lastModifiedDate: '',
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
 
@@ -302,10 +369,16 @@ export class UploadDialogComponent implements OnInit {
             }
 
             this.programService.saveProgramInOneCall(formData)
-                .subscribe(createdProgram => {
-                    this.close.emit({ updatedProgram: createdProgram });
+                .subscribe({
+                    next: createdProgram => {
+                        this.close.emit({ updatedProgram: createdProgram });
+                    },
+                    error: err => {
+                        this.handleApiError(err);
+                    }
                 });
-        } else {
+        }
+        else {
             this.close.emit(null);
         }
     }
@@ -331,10 +404,16 @@ export class UploadDialogComponent implements OnInit {
                     testId: formVals.testId
                 },
                 file
-            ).subscribe(updatedTopic => {
-                this.close.emit({ updatedTopic });
+            ).subscribe({
+                next: updatedTopic => {
+                    this.close.emit({ updatedTopic });
+                },
+                error: err => {
+                    this.handleApiError(err);
+                }
             });
-        } else if (this.entityType === 'section') {
+        }
+        else if (this.entityType === 'section') {
             const sec = this.entityData as ProgramSectionDto;
             this.programService.updateSection(
                 sec.id,
@@ -345,10 +424,16 @@ export class UploadDialogComponent implements OnInit {
                     enDesc: formVals.descriptionEn
                 },
                 file
-            ).subscribe(updatedSection => {
-                this.close.emit({ updatedSection });
+            ).subscribe({
+                next: updatedSection => {
+                    this.close.emit({ updatedSection });
+                },
+                error: err => {
+                    this.handleApiError(err);
+                }
             });
-        } else if (this.entityType === 'module') {
+        }
+        else if (this.entityType === 'module') {
             const mod = this.entityData as ProgramModuleDto;
             this.programService.updateModule(
                 mod.id,
@@ -359,10 +444,16 @@ export class UploadDialogComponent implements OnInit {
                     enDesc: formVals.descriptionEn
                 },
                 file
-            ).subscribe(updatedModule => {
-                this.close.emit({ updatedModule });
+            ).subscribe({
+                next: updatedModule => {
+                    this.close.emit({ updatedModule });
+                },
+                error: err => {
+                    this.handleApiError(err);
+                }
             });
-        } else if (this.entityType === 'program') {
+        }
+        else if (this.entityType === 'program') {
             const prog = this.entityData as EducationProgramDto;
             this.programService.updateProgram(
                 prog.id,
@@ -374,10 +465,16 @@ export class UploadDialogComponent implements OnInit {
                     expertise: formVals.expertise as Expertise
                 },
                 file
-            ).subscribe(updatedProgram => {
-                this.close.emit({ updatedProgram });
+            ).subscribe({
+                next: updatedProgram => {
+                    this.close.emit({ updatedProgram });
+                },
+                error: err => {
+                    this.handleApiError(err);
+                }
             });
-        } else {
+        }
+        else {
             this.close.emit(null);
         }
     }

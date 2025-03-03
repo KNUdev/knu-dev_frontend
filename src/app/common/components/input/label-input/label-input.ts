@@ -1,22 +1,10 @@
-import { CommonModule } from '@angular/common';
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    Output,
-    signal,
-} from '@angular/core';
-import {
-    ControlContainer,
-    FormGroupDirective,
-    ReactiveFormsModule,
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { I18nService } from '../../../../services/languages/i18n.service';
-import { FormErrorService } from '../../../../services/error.services';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, inject, Input, Output, signal,} from '@angular/core';
+import {ControlContainer, FormGroupDirective, ReactiveFormsModule,} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {TranslateModule} from '@ngx-translate/core';
+import {FormErrorService} from '../../../../services/error.services';
 
 @Component({
     selector: 'app-label-input',
@@ -34,6 +22,7 @@ import { FormErrorService } from '../../../../services/error.services';
     ],
     templateUrl: './label-input.html',
     styleUrl: './label-input.scss',
+    standalone: true
 })
 export class LabelInput {
     readonly iconPaths = {
@@ -51,8 +40,6 @@ export class LabelInput {
     @Input() isEmail: boolean = false;
     @Input() domainSuffix: string = '@knu.ua';
     @Input() required: boolean = false;
-    private i18nService = inject(I18nService);
-    private translate = inject(TranslateService);
 
     @Output() emailInput = new EventEmitter<Event>();
     @Output() emailBlur = new EventEmitter<void>();
@@ -60,7 +47,7 @@ export class LabelInput {
     isPasswordVisible = false;
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-    private _showErrors = signal(false);
+    private clipboardEvents = ['copy', 'cut', 'paste'];
 
     constructor(
         private formGroupDirective: FormGroupDirective,
@@ -77,14 +64,22 @@ export class LabelInput {
         });
     }
 
+    private _showErrors = signal(false);
+
+    get showErrors() {
+        return this._showErrors();
+    }
+
     get formGroup() {
         return this.formGroupDirective.form;
     }
 
-    private clipboardEvents = ['copy', 'cut', 'paste'];
-
     get getClipboardEvents() {
         return this.clipboardEvents;
+    }
+
+    get backendErrors() {
+        return this.formErrorService.backendErrors();
     }
 
     togglePasswordVisibility(): void {
@@ -108,13 +103,5 @@ export class LabelInput {
     showDomainSuffix(): boolean {
         const value = this.formGroup.get(this.controlName)?.value;
         return this.isEmail && (!value || !value.includes('@'));
-    }
-
-    get showErrors() {
-        return this._showErrors();
-    }
-
-    get backendErrors() {
-        return this.formErrorService.backendErrors();
     }
 }

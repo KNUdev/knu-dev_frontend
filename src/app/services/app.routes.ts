@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {ErrorStateGuard} from '../pages/error/404/404.guard';
-import {ProgramCreationComponent} from '../pages/program-creation/program-creation.component';
+import {ManageProgramComponent} from '../pages/manage-program/manage-program.component';
 import {ProgramComponent} from '../pages/program/program.component';
 
 export const routes: Routes = [
@@ -58,6 +58,6 @@ export const routes: Routes = [
     },
     {
         path: 'program/:programId/manage',
-        component: ProgramCreationComponent
+        component: ManageProgramComponent
     }
 ];

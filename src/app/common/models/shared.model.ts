@@ -1,55 +1,35 @@
 import {Expertise} from '../../pages/user-profile/user-profile.model';
-import {buildApplication} from '@angular-devkit/build-angular';
 
-/**
- * Common interface that can hold a finalTaskUrl for
- * programs/sections/modules (or potentially `taskUrl` for topics).
- * We'll keep it optional.
- */
 export interface LearningUnit {
     finalTaskUrl?: string;
     finalTaskFilename?: string;
 }
 
-/**
- * Multi-language fields: both en/uk optional, plus string index signature if needed.
- */
 export interface MultiLanguageField {
-    [key: string]: string | undefined;
     en?: string;
     uk?: string;
+
+    [key: string]: string | undefined;
 }
 
-/**
- * Program:
- * - extends LearningUnit for finalTaskUrl
- * - finalTaskFile is optional for new or updated programs
- */
 export interface EducationProgramDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
     expertise: Expertise;
-    isPublished: boolean;
+    published: boolean;
     sections: ProgramSectionDto[];
-
-    /**
-     * Locally used to store a new or updated file, optional.
-     */
     finalTaskFile?: File;
+    createdDate: string;
+    lastModifiedDate: string;
 }
 
-/**
- * Section:
- * - extends LearningUnit for finalTaskUrl
- * - finalTaskFile optional for new or updated file
- */
 export interface ProgramSectionDto extends LearningUnit {
     id: string;
     name: MultiLanguageField;
     description: MultiLanguageField;
     modules: ProgramModuleDto[];
-    finalTaskFile?: File; // UI usage
+    finalTaskFile?: File;
     orderIndex: number;
 }
 
@@ -86,7 +66,6 @@ export interface ProgramSummary {
     lastUpdatedAt: Date;
 }
 
-/** Sprints, etc. remain unchanged (no finalTaskFile) */
 export interface SprintDto {
     sprintId: string;
     orderIndex: number;

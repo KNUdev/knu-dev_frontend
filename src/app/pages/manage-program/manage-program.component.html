@@ -1,0 +1,200 @@
+<main class="program">
+    @if (dialogConfig()?.isOpen) {
+        <upload-dialog
+                [mode]="dialogConfig()?.mode!"
+                [entityType]="dialogConfig()?.entityType!"
+                [entityData]="dialogConfig()?.entityData"
+                [parentId]="dialogConfig()?.parentId"
+                [defaultOrderIndex]="dialogConfig()?.defaultOrderIndex"
+                (close)="onDialogClose($event!)"
+        ></upload-dialog>
+    }
+
+    <section class="program__summary">
+        <div>
+            <h1 class="summary__title">{{ programSignal()?.name | multiLangField }}</h1>
+            <h2 class="summary__meta-items">
+                <span class="meta__item">
+                    {{ totalSectionsCount }} {{'program.sections' | translate}}
+                </span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item">
+                    {{ totalModulesCount }} {{'program.modules' | translate}}
+                </span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item">
+                    {{ totalTopicsCount }} {{'program.topics' | translate}}
+                </span>
+                <span class="meta__item">
+                    <hr class="vertical-line">
+                </span>
+                <span class="meta__item item_red" [class.item_green]="programSignal()?.published">
+                    {{programSignal()?.published ?
+                            ('program.isPublished' | translate) : ('program.isNotPublished' | translate)
+                    }}
+                </span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item item_darker">
+                    {{'program.createdAt' | translate}}
+                    <span class="meta__item">
+                        {{ programSignal()?.createdDate | date:'short':'UTC':locale }}
+                    </span>
+                </span>
+                <span class="meta__item">&bull;</span>
+                <span class="meta__item item_darker">
+                    {{'program.lastUpdatedAt' | translate}}
+                     <span class="meta__item">
+                        {{ programSignal()?.lastModifiedDate | date:'short':'UTC':locale }}
+                    </span>
+                </span>
+            </h2>
+        </div>
+        <div class="summary__control">
+            <img alt="Edit Program Summary"
+                 class="control__icon"
+                 loading="lazy"
+                 src="assets/icon/system/edit.svg"
+                 (click)="onEditProgram()"
+            >
+            <hr class="vertical-line">
+            <img alt="Delete Program"
+                 class="control__icon"
+                 loading="lazy"
+                 src="assets/icon/system/trash.svg"
+                 (click)="onDeleteProgram()"
+            >
+        </div>
+    </section>
+
+    @if(isChangesPresent()) {
+        <section class="content-changed">
+            <mat-icon [svgIcon]="'flag'" class="content-changed__icon"/>
+            <h2>{{'program.titles.changesPresent' | translate}}</h2>
+        </section>
+    }
+    <hr class="section-divider">
+    <section class="program__details">
+        <article class="details__section">
+            <div class="scroll-wrapper">
+                <div class="section__title-container">
+                    <h2 class="section__title-text">{{'program.title.section' | translate}}</h2>
+                    <p class="section__title-amount">{{ totalSectionsCount }}</p>
+                </div>
+                <button class="section__create-section-btn" (click)="onAddSection()">
+                    {{'program.buttons.createSection' | translate}}
+                </button>
+                <div cdkDropList (cdkDropListDropped)="dropSection($event)">
+                    <ul class="section__items">
+                        @for (section of programSignal()?.sections || []; track $index) {
+                            <li cdkDrag (click)="onSelectSection(section)" [class.selected]="section === selectedSection">
+                                <learning-unit
+                                    [name]="section.name"
+                                    (editClicked)="onEditSection(section)"
+                                    (deleteClicked)="onDeleteSection(section)"
+                                    [orderIndex]="$index"
+                                    [isSelected]="section === selectedSection"
+                                />
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </article>
+        <hr class="vertical-line">
+        <article class="details__section">
+            <div class="section__title-container">
+                <h2 class="section__title-text">{{'program.title.module' | translate}}</h2>
+                <p class="section__title-amount">
+                    @if(selectedSection && selectedSection.modules) {
+                        {{ selectedSection.modules.length }}
+                    } @else {
+                        0
+                    }
+                </p>
+            </div>
+            @if(selectedSection) {
+                <button class="section__create-section-btn" (click)="onAddModule(selectedSection)" type="button">
+                    {{'program.buttons.createModule' | translate}}
+                </button>
+                <div cdkDropList (cdkDropListDropped)="dropModule($event)">
+                    <ul class="section__items">
+                        @for (module of selectedSection?.modules || []; track $index) {
+                            <li cdkDrag (click)="onSelectModule(module)" [class.selected]="module === selectedModule">
+                                <learning-unit
+                                        [name]="module.name"
+                                        (editClicked)="onEditModule(module)"
+                                        (deleteClicked)="onDeleteModule(module)"
+                                        [orderIndex]="$index"
+                                        [isSelected]="module === selectedModule"
+                                />
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if(cannotCreateModule) {
+                <div class="no-learning-unit">
+                    <mat-icon [svgIcon]="'sweat'" class="no-learning-unit__icon"/>
+                    <p class="no-learning-unit__text">{{'program.fallback.module' | translate}}</p>
+                </div>
+            }
+        </article>
+
+        <hr class="vertical-line"/>
+        <article class="details__section" >
+            <div class="section__title-container">
+                <h2 class="section__title-text">{{'program.title.topic' | translate}}</h2>
+                <p class="section__title-amount">
+                    @if(selectedModule && selectedModule.topics) {
+                        {{ selectedModule.topics.length }}
+                    } @else {
+                        0
+                    }
+                </p>
+            </div>
+            @if(selectedModule) {
+                <button class="section__create-section-btn" (click)="onAddTopic(selectedModule)">
+                    {{'program.buttons.createTopic' | translate}}
+                </button>
+                <div cdkDropList (cdkDropListDropped)="dropTopic($event)">
+                    <ul class="section__items">
+                        @for (topic of selectedModule?.topics || []; track $index) {
+                            <li cdkDrag>
+                                <learning-unit
+                                        [name]="topic.name"
+                                        (editClicked)="onEditTopic(topic)"
+                                        (deleteClicked)="onDeleteTopic(topic)"
+                                        [orderIndex]="$index"
+                                        [isSelected]="false"
+                                />
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if(cannotCreateTopic) {
+                <div class="no-learning-unit">
+                    <mat-icon [svgIcon]="'sweat'" class="no-learning-unit__icon"/>
+                    <p class="no-learning-unit__text">{{'program.fallback.topic' | translate}}</p>
+                </div>
+            }
+        </article>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="program__save">
+        <border-button class="save__button"
+                       [borderColor]="'yellow'"
+                       [fullWidth]="true"
+                       [text]="('program.buttons.save' | translate)"
+                       [iconPresent]="false"
+                       (click)="onSaveProgram()"
+        />
+        @if(!programSignal()?.published) {
+            <button class="save__button fill-button fill-yellow" (click)="onPublishProgram()" type="button">
+                {{'program.buttons.publish' | translate}}
+            </button>
+        }
+    </section>
+</main>

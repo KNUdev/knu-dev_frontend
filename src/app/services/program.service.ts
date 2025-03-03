@@ -35,6 +35,13 @@ export class ProgramService {
         );
     }
 
+    public publishProgram(programId: string): Observable<EducationProgramDto> {
+        return this.http.patch<EducationProgramDto>(
+            `${this.apiBaseUrl}/admin/education/program/${programId}/publish`,
+            {}
+        );
+    }
+
     public updateProgram(
         programId: string,
         data: {

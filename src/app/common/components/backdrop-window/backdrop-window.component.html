@@ -1,1 +1,13 @@
+<div aria-hidden="true" class="upload-dialog__backdrop"></div>
 
+<div class="upload-dialog__wrapper">
+    <button
+        (click)="onClose()"
+        aria-label="Close dialog"
+        class="upload-dialog__close-desktop"
+        type="button"
+    >
+        <mat-icon [svgIcon]="'closeDialog'" class="close-desktop__icon"></mat-icon>
+    </button>
+    <ng-content />
+</div>

@@ -43,20 +43,27 @@
         align-items: center;
 
         .meta__item {
+            max-height: 20px;
             color: #FFF;
             text-align: center;
             font-family: "Fixel Text", sans-serif;
             font-size: 14px;
             font-style: normal;
             font-weight: 400;
-            line-height: 20px; /* 142.857% */
+            line-height: 20px;
             letter-spacing: 0.28px;
         }
 
-        .item {
-            //font-size: 50px;
-            //width: 5px;
-            //height: 5px;
+        .item_red {
+            color: #642A2A;
+        }
+
+        .item_green {
+            color: #51C841;
+        }
+
+        .item_darker {
+            color: #D1D1D1;
         }
     }
 
@@ -89,6 +96,31 @@
 
 }
 
+.content-changed {
+    margin-top: 25px;
+    width: 100%;
+    padding: 15px;
+    @include flex-center();
+    color: #D1D1D1;
+    font-family: "Fixel Text", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    border-radius: 5px;
+    border: 1px solid var(--border-yellow-400, #CDB945);
+    background: var(--bg-nat-975, #141414);
+    justify-content: flex-start;
+    gap: 15px;
+
+    .content-changed__icon {
+        color: $accent-yellow;
+        width: 20px;
+        height: 20px;
+    }
+
+}
+
 
 .details__divider {
     width: 2px;
@@ -109,6 +141,33 @@
     //position: absolute;
 }
 
+.scroll-wrapper {
+    max-height: 610px;
+    overflow-y: auto;
+    padding-top: 10px;   // so scrollbar doesn't start at very top
+    padding-bottom: 10px;
+
+    // Then apply your scrollbar styles here
+    scrollbar-width: thin;
+    scrollbar-color: #343434 #141414;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #141414;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #343434;
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #EDD342;
+    }
+}
+
+
+
 .program__details {
     height: 610px;
     width: 100%;
@@ -118,21 +177,43 @@
     gap: 50px;
     align-self: stretch;
 
+
+
     .details__section {
-        overflow-y: scroll ;
-        //padding-right: 6.24rem;
-        scrollbar-width: thin;
-        //display: flex;
-        //align-items: baseline;
-        //justify-content: start;
+        overflow-y:  auto;
         max-height: 610px;
-        //box-sizing: border-box;
-        scroll-margin-block-start: 5rem;
+
+        scrollbar-width: thin;
+        scrollbar-color: #343434 #141414;
+
+        &::-webkit-scrollbar {
+            position: absolute;
+            bottom: 0;
+            width: 8px;
+
+            &::before {
+                content: '';
+                margin: 10px;
+                display: block;
+            }
+        }
+        &::-webkit-scrollbar-track {
+            background: #141414;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: #343434;
+            border-radius: 4px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: #EDD342;
+        }
+
 
         box-sizing: border-box;
         height: 610px;
         width: 515px;
         max-width: 515px;
+
 
         .section__title-container {
             margin-bottom: 35px;
@@ -170,6 +251,7 @@
         }
 
         .section__create-section-btn {
+            height: 4.688rem;
             padding: 15px;
             border-radius: 5px;
             border: 2px dashed #343434;
@@ -177,7 +259,6 @@
             background: none;
             color: var(--text-nat-200, #D1D1D1);
             text-align: center;
-            /* desktop and tablet/body/body 1 */
             font-family: "Fixel Text", sans-serif;
             font-size: 15px;
             font-style: normal;
@@ -190,9 +271,6 @@
             &:hover {
                 border-color: #EDD342;
             }
-
-
-
         }
     }
 
@@ -241,4 +319,24 @@
 
 
     //@include flex-center()
+}
+
+.no-learning-unit {
+    @include flex-center(column);
+    .no-learning-unit__icon {
+        width: 2.188rem;
+        height: 2.188rem;
+    }
+
+    .no-learning-unit__text {
+        margin-top: 0.938rem;
+        color: var(--text-nat-400, #888);
+        text-align: center;
+        font-family: "Fixel Text", sans-serif;
+        font-size: 0.938rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 26px;
+        letter-spacing: 0.3px;
+    }
 }

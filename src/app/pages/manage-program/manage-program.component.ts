@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
+import {Observable, startWith, switchMap} from 'rxjs';
 
 import {
     EducationProgramDto,
@@ -11,53 +11,71 @@ import {
 } from '../../common/models/shared.model';
 
 import { ProgramService } from '../../services/program.service';
-import { LearningUnitItem } from './components/learning-unit-item.component.component';
-import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
+import { LearningUnitItem } from './components/learning-unit/learning-unit-item.component';
+import { UploadDialogComponent } from './components/upload-dialog/upload-dialog.component';
 import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
+import {DatePipe} from '@angular/common';
+import {I18nService} from '../../services/languages/i18n.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmDialogComponent, ConfirmDialogData} from './components/confirm-dialog/confirm-dialog.component';
+import {MatIcon, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 interface DialogConfig {
     isOpen: boolean;
     mode: 'create' | 'edit';
     entityType: 'program' | 'section' | 'module' | 'topic';
     entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
-    parentId?: string; // used for create
+    parentId?: string;
     defaultOrderIndex?:number;
 }
 
 @Component({
     selector: 'app-program-creation',
-    templateUrl: './program-creation.component.html',
-    styleUrls: ['./program-creation.component.scss'],
+    templateUrl: './manage-program.component.html',
+    styleUrls: ['./manage-program.component.scss'],
     imports: [
         LearningUnitItem,
         UploadDialogComponent,
         BorderButtonComponent,
         MultiLangFieldPipe,
         CdkDropList,
-        CdkDrag
+        CdkDrag,
+        DatePipe,
+        MatIcon,
+        TranslatePipe
     ],
     standalone: true
 })
-export class ProgramCreationComponent implements OnInit {
-
-    /** Holds the entire program loaded from backend. */
+export class ManageProgramComponent implements OnInit {
     public programSignal = signal<EducationProgramDto | null>(null);
-
-    /** Controls when the dialog is open and what entity is being created/edited. */
     public dialogConfig = signal<DialogConfig | null>(null);
-
-    /** Currently selected section / module */
+    public isChangesPresent = signal<boolean>(false);
     public selectedSection: ProgramSectionDto | null = null;
     public selectedModule: ProgramModuleDto | null = null;
-
+    public locale: string;
     private programId!: string;
 
     constructor(
         private route: ActivatedRoute,
         private programService: ProgramService,
-        private router: Router
-    ) {}
+        private router: Router,
+        private i18nService: I18nService,
+        private dialog: MatDialog,
+        private matIconRegistry:MatIconRegistry,
+        private domSanitizer:DomSanitizer,
+        private translate: TranslateService
+    ) {
+        this.locale = this.i18nService.currentLocale;
+        this.translate.onLangChange
+            .pipe(
+                startWith({lang: this.translate.currentLang} as LangChangeEvent),
+                switchMap(event => this.i18nService.loadComponentTranslations('pages/manage-program', event.lang))
+            )
+            .subscribe();
+    }
 
     get totalSectionsCount() {
         return this.programSignal()?.sections.length || 0;
@@ -76,6 +94,17 @@ export class ProgramCreationComponent implements OnInit {
             .length || 0;
     }
 
+    get cannotCreateModule() {
+        if(this.programSignal()) {
+            return !(this.programSignal()!.sections!.length > 0);
+        }
+        return false;
+    }
+
+    get cannotCreateTopic() {
+        return !this.selectedModule;
+    }
+
     ngOnInit(): void {
         this.programId = this.route.snapshot.paramMap.get('programId')!;
         const programObs: Observable<EducationProgramDto> =
@@ -85,18 +114,30 @@ export class ProgramCreationComponent implements OnInit {
             console.log(program);
             this.programSignal.set(program);
         });
+
+        this.i18nService.currentLocale$.subscribe(locale => {
+            this.locale = locale;
+        });
+
+        this.matIconRegistry.addSvgIcon(
+            'flag',
+            this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/flag.svg')
+        );
+        this.matIconRegistry.addSvgIcon(
+            'sweat',
+            this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/sweat.svg')
+        );
     }
 
-    // Selection handlers
     public onSelectSection(section: ProgramSectionDto): void {
         this.selectedSection = section;
         this.selectedModule = null;
     }
+
     public onSelectModule(module: ProgramModuleDto): void {
         this.selectedModule = module;
     }
 
-    // Editing
     public onEditProgram(): void {
         const program = this.programSignal();
         if (!program) return;
@@ -107,6 +148,7 @@ export class ProgramCreationComponent implements OnInit {
             entityData: program
         });
     }
+
     public onEditSection(section: ProgramSectionDto): void {
         this.dialogConfig.set({
             isOpen: true,
@@ -115,6 +157,7 @@ export class ProgramCreationComponent implements OnInit {
             entityData: section
         });
     }
+
     public onEditModule(module: ProgramModuleDto): void {
         this.dialogConfig.set({
             isOpen: true,
@@ -123,6 +166,7 @@ export class ProgramCreationComponent implements OnInit {
             entityData: module
         });
     }
+
     public onEditTopic(topic: ProgramTopicDto): void {
         this.dialogConfig.set({
             isOpen: true,
@@ -132,7 +176,6 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
-    // Creating new items
     public onAddSection(): void {
         const program = this.programSignal();
         const defaultOrderIndex = program ? program.sections.length + 1 : 1;
@@ -143,7 +186,9 @@ export class ProgramCreationComponent implements OnInit {
             parentId: this.programSignal()?.id,
             defaultOrderIndex: defaultOrderIndex
         });
+        this.isChangesPresent.set(true);
     }
+
     public onAddModule(section: ProgramSectionDto): void {
         const defaultOrderIndex = section.modules ? section.modules.length + 1 : 1;
         this.dialogConfig.set({
@@ -153,7 +198,9 @@ export class ProgramCreationComponent implements OnInit {
             parentId: section.id,
             defaultOrderIndex: defaultOrderIndex
         });
+        this.isChangesPresent.set(true);
     }
+
     public onAddTopic(module: ProgramModuleDto): void {
         const defaultOrderIndex = module.topics ? module.topics.length + 1 : 1;
         this.dialogConfig.set({
@@ -163,100 +210,133 @@ export class ProgramCreationComponent implements OnInit {
             parentId: module.id,
             defaultOrderIndex: defaultOrderIndex
         });
+        this.isChangesPresent.set(true);
     }
 
-    // Deletion methods (call API and update local state)
+    private openConfirmDialog(data: ConfirmDialogData): Observable<boolean> {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: data
+        });
+        return dialogRef.afterClosed();
+    }
+
     public onDeleteProgram(): void {
-        if (!this.programId) return;
-        this.programService.deleteProgramById(this.programId)
-            .subscribe(() => {
-                this.programSignal.set(null);
-                // Optionally navigate away
-            });
-    }
-    public onDeleteSection(section: ProgramSectionDto): void {
-        if (!this.programId) return;
-        this.programService.removeProgramSectionMapping(this.programId, section.id)
-            .subscribe(() => {
-                const program = this.programSignal();
-                if (!program) return;
-                program.sections = program.sections.filter(s => s.id !== section.id);
-                this.programSignal.set({ ...program });
-                if (this.selectedSection === section) {
-                    this.selectedSection = null;
-                    this.selectedModule = null;
-                }
-            });
-    }
-    public onDeleteModule(module: ProgramModuleDto): void {
-        const program = this.programSignal();
-        if (!program || !this.selectedSection) return;
-        this.programService.removeSectionModuleMapping(
-            this.programId,
-            this.selectedSection.id,
-            module.id
-        ).subscribe(() => {
-            this.selectedSection!.modules =
-                this.selectedSection!.modules.filter(m => m.id !== module.id);
-            this.programSignal.update(p => p);
-            if (this.selectedModule === module) {
-                this.selectedModule = null;
+        this.openConfirmDialog({
+            message: this.translate.instant('program.alert.program')
+        }).subscribe(result => {
+            if (result) {
+                if (!this.programId) return;
+                this.programService.deleteProgramById(this.programId)
+                    .subscribe(() => {
+                        this.programSignal.set(null);
+                        this.router.navigateByUrl('/program/create');
+                    });
             }
         });
     }
-    public onDeleteTopic(topic: ProgramTopicDto): void {
-        const program = this.programSignal();
-        if (!program || !this.selectedSection || !this.selectedModule) return;
-        this.programService.removeModuleTopicMapping(
-            this.programId,
-            this.selectedSection.id,
-            this.selectedModule.id,
-            topic.id
-        ).subscribe(() => {
-            this.selectedModule!.topics =
-                this.selectedModule!.topics.filter(t => t.id !== topic.id);
-            this.programSignal.update(p => p);
+
+    public onDeleteSection(section: ProgramSectionDto): void {
+        this.openConfirmDialog({
+            message: this.translate.instant('program.alert.section')
+        }).subscribe(result => {
+            if (result) {
+                if (!this.programId) return;
+                this.programService.removeProgramSectionMapping(this.programId, section.id)
+                    .subscribe(() => {
+                        const program = this.programSignal();
+                        if (!program) return;
+                        program.sections = program.sections.filter(s => s.id !== section.id);
+                        this.programSignal.set({ ...program });
+                        if (this.selectedSection === section) {
+                            this.selectedSection = null;
+                            this.selectedModule = null;
+                        }
+                    });
+            }
         });
     }
 
-    // --------------------------
-    // Drag-drop Reordering Methods
-    // --------------------------
+    public onDeleteModule(module: ProgramModuleDto): void {
+        this.openConfirmDialog({
+            message: this.translate.instant('program.alert.module')
+        }).subscribe(result => {
+            if (result) {
+                const program = this.programSignal();
+                if (!program || !this.selectedSection) return;
+                this.programService.removeSectionModuleMapping(
+                    this.programId,
+                    this.selectedSection.id,
+                    module.id
+                ).subscribe(() => {
+                    this.selectedSection!.modules =
+                        this.selectedSection!.modules.filter(m => m.id !== module.id);
+                    this.programSignal.update(p => p);
+                    if (this.selectedModule === module) {
+                        this.selectedModule = null;
+                    }
+                });
+            }
+        });
+    }
+
+    public onDeleteTopic(topic: ProgramTopicDto): void {
+        this.openConfirmDialog({
+            message: this.translate.instant('program.alert.topic')
+        }).subscribe(result => {
+            if (result) {
+                const program = this.programSignal();
+                if (!program || !this.selectedSection || !this.selectedModule) return;
+                this.programService.removeModuleTopicMapping(
+                    this.programId,
+                    this.selectedSection.id,
+                    this.selectedModule.id,
+                    topic.id
+                ).subscribe(() => {
+                    this.selectedModule!.topics =
+                        this.selectedModule!.topics.filter(t => t.id !== topic.id);
+                    this.programSignal.update(p => p);
+                });
+            }
+        });
+    }
 
     public dropSection(event: CdkDragDrop<ProgramSectionDto[]>): void {
         const program = this.programSignal();
         if (!program) return;
         moveItemInArray(program.sections, event.previousIndex, event.currentIndex);
-        // Update orderIndex for each section
         program.sections.forEach((section, index) => {
             section.orderIndex = index + 1;
         });
         this.programSignal.set({ ...program });
+        if(this.totalSectionsCount > 1) {
+            this.isChangesPresent.set(true);
+        }
     }
 
     public dropModule(event: CdkDragDrop<ProgramModuleDto[]>): void {
         if (!this.selectedSection) return;
         moveItemInArray(this.selectedSection.modules, event.previousIndex, event.currentIndex);
-        // Update orderIndex for each module in the section
         this.selectedSection.modules.forEach((module, index) => {
             module.orderIndex = index + 1;
         });
         this.programSignal.update(p => p);
+        if(this.totalModulesCount > 1) {
+            this.isChangesPresent.set(true);
+        }
     }
 
     public dropTopic(event: CdkDragDrop<ProgramTopicDto[]>): void {
         if (!this.selectedModule) return;
         moveItemInArray(this.selectedModule.topics, event.previousIndex, event.currentIndex);
-        // Update orderIndex for each topic in the module
         this.selectedModule.topics.forEach((topic, index) => {
             topic.orderIndex = index + 1;
         });
         this.programSignal.update(p => p);
+        if(this.totalTopicsCount > 1) {
+            this.isChangesPresent.set(true);
+        }
     }
 
-    // --------------------------
-    // Dialog Close Handler
-    // --------------------------
     public onDialogClose(result: any): void {
         if (!result) {
             this.dialogConfig.set(null);
@@ -317,11 +397,20 @@ export class ProgramCreationComponent implements OnInit {
         const program = this.programSignal();
         if (!program) return;
         const formData = this.mapProgramToFormData(program);
-        console.log(formData);
         this.programService.saveProgramInOneCall(formData)
             .subscribe(updatedProgram => {
                 this.programSignal.set(updatedProgram);
             });
+    }
+
+    public onPublishProgram():void {
+        const program = this.programSignal();
+        if (!program) return;
+
+        this.programService.publishProgram(program.id)
+            .subscribe(newProgram => {
+                this.programSignal.set(newProgram);
+            })
     }
 
     private mapProgramToFormData(program: EducationProgramDto): FormData {
@@ -338,7 +427,6 @@ export class ProgramCreationComponent implements OnInit {
             if (program.finalTaskFile) formData.append('finalTask', program.finalTaskFile);
         }
 
-        // Process sections
         const sections = program.sections || [];
         sections.forEach((section, sIndex) => {
             const isSecExisting = !!section.id && section.id.trim() !== '';
@@ -351,10 +439,8 @@ export class ProgramCreationComponent implements OnInit {
                 if (section.description.uk) formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
                 if (section.finalTaskFile) formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
             }
-            // ALWAYS send the current orderIndex (new or existing)
             formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
 
-            // Process modules for each section
             const modules = section.modules || [];
             modules.forEach((module, mIndex) => {
                 const isModExisting = !!module.id && module.id.trim() !== '';
@@ -367,10 +453,8 @@ export class ProgramCreationComponent implements OnInit {
                     if (module.description.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
                     if (module.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
                 }
-                // ALWAYS send the module orderIndex
                 formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
 
-                // Process topics for each module
                 const topics = module.topics || [];
                 topics.forEach((topic, tIndex) => {
                     const isTopicExisting = !!topic.id && topic.id.trim() !== '';
@@ -384,7 +468,6 @@ export class ProgramCreationComponent implements OnInit {
                         if (topic.testId) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`, topic.testId);
                         if (topic.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`, topic.finalTaskFile);
                     }
-                    // ALWAYS send topic orderIndex and difficulty
                     formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`, String(topic.orderIndex));
                     formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`, String(topic.difficulty));
                 });
