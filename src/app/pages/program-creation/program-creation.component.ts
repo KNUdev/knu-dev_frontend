@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 
 import {
@@ -21,6 +22,7 @@ interface DialogConfig {
     entityType: 'program' | 'section' | 'module' | 'topic';
     entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
     parentId?: string; // used for create
+    defaultOrderIndex?:number;
 }
 
 @Component({
@@ -31,8 +33,11 @@ interface DialogConfig {
         LearningUnitItem,
         UploadDialogComponent,
         BorderButtonComponent,
-        MultiLangFieldPipe
-    ]
+        MultiLangFieldPipe,
+        CdkDropList,
+        CdkDrag
+    ],
+    standalone: true
 })
 export class ProgramCreationComponent implements OnInit {
 
@@ -50,7 +55,8 @@ export class ProgramCreationComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private programService: ProgramService
+        private programService: ProgramService,
+        private router: Router
     ) {}
 
     get totalSectionsCount() {
@@ -81,6 +87,7 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
+    // Selection handlers
     public onSelectSection(section: ProgramSectionDto): void {
         this.selectedSection = section;
         this.selectedModule = null;
@@ -89,10 +96,10 @@ export class ProgramCreationComponent implements OnInit {
         this.selectedModule = module;
     }
 
+    // Editing
     public onEditProgram(): void {
         const program = this.programSignal();
         if (!program) return;
-
         this.dialogConfig.set({
             isOpen: true,
             mode: 'edit',
@@ -125,77 +132,70 @@ export class ProgramCreationComponent implements OnInit {
         });
     }
 
+    // Creating new items
     public onAddSection(): void {
+        const program = this.programSignal();
+        const defaultOrderIndex = program ? program.sections.length + 1 : 1;
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'section',
-            parentId: this.programSignal()?.id
+            parentId: this.programSignal()?.id,
+            defaultOrderIndex: defaultOrderIndex
         });
     }
     public onAddModule(section: ProgramSectionDto): void {
+        const defaultOrderIndex = section.modules ? section.modules.length + 1 : 1;
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'module',
-            parentId: section.id
+            parentId: section.id,
+            defaultOrderIndex: defaultOrderIndex
         });
     }
     public onAddTopic(module: ProgramModuleDto): void {
+        const defaultOrderIndex = module.topics ? module.topics.length + 1 : 1;
         this.dialogConfig.set({
             isOpen: true,
             mode: 'create',
             entityType: 'topic',
-            parentId: module.id
+            parentId: module.id,
+            defaultOrderIndex: defaultOrderIndex
         });
     }
 
-    // -----------------------------------------------------------------
-    // Deleting - calls the new API endpoints
-    // -----------------------------------------------------------------
-
-    /** FULL Program */
+    // Deletion methods (call API and update local state)
     public onDeleteProgram(): void {
         if (!this.programId) return;
-        // Confirm if needed
         this.programService.deleteProgramById(this.programId)
             .subscribe(() => {
-                // Perhaps navigate away, or set local to null
                 this.programSignal.set(null);
-                // e.g. maybe navigate to /programs
+                // Optionally navigate away
             });
     }
-
-    /** Single Section bridging */
     public onDeleteSection(section: ProgramSectionDto): void {
         if (!this.programId) return;
-
         this.programService.removeProgramSectionMapping(this.programId, section.id)
             .subscribe(() => {
-                // Locally remove the section from our array
                 const program = this.programSignal();
                 if (!program) return;
                 program.sections = program.sections.filter(s => s.id !== section.id);
                 this.programSignal.set({ ...program });
-                // If the section was selected, clear it
                 if (this.selectedSection === section) {
                     this.selectedSection = null;
                     this.selectedModule = null;
                 }
             });
     }
-
-    /** Single Module bridging */
     public onDeleteModule(module: ProgramModuleDto): void {
         const program = this.programSignal();
         if (!program || !this.selectedSection) return;
-
         this.programService.removeSectionModuleMapping(
             this.programId,
             this.selectedSection.id,
             module.id
         ).subscribe(() => {
-            // locally remove
             this.selectedSection!.modules =
                 this.selectedSection!.modules.filter(m => m.id !== module.id);
             this.programSignal.update(p => p);
@@ -204,35 +204,65 @@ export class ProgramCreationComponent implements OnInit {
             }
         });
     }
-
-    /** Single Topic bridging */
     public onDeleteTopic(topic: ProgramTopicDto): void {
         const program = this.programSignal();
         if (!program || !this.selectedSection || !this.selectedModule) return;
-
         this.programService.removeModuleTopicMapping(
             this.programId,
             this.selectedSection.id,
             this.selectedModule.id,
             topic.id
         ).subscribe(() => {
-            // locally remove
             this.selectedModule!.topics =
                 this.selectedModule!.topics.filter(t => t.id !== topic.id);
             this.programSignal.update(p => p);
         });
     }
 
-    // -----------------------------------------------------------------
-    // Closing Dialog
-    // -----------------------------------------------------------------
+    // --------------------------
+    // Drag-drop Reordering Methods
+    // --------------------------
+
+    public dropSection(event: CdkDragDrop<ProgramSectionDto[]>): void {
+        const program = this.programSignal();
+        if (!program) return;
+        moveItemInArray(program.sections, event.previousIndex, event.currentIndex);
+        // Update orderIndex for each section
+        program.sections.forEach((section, index) => {
+            section.orderIndex = index + 1;
+        });
+        this.programSignal.set({ ...program });
+    }
+
+    public dropModule(event: CdkDragDrop<ProgramModuleDto[]>): void {
+        if (!this.selectedSection) return;
+        moveItemInArray(this.selectedSection.modules, event.previousIndex, event.currentIndex);
+        // Update orderIndex for each module in the section
+        this.selectedSection.modules.forEach((module, index) => {
+            module.orderIndex = index + 1;
+        });
+        this.programSignal.update(p => p);
+    }
+
+    public dropTopic(event: CdkDragDrop<ProgramTopicDto[]>): void {
+        if (!this.selectedModule) return;
+        moveItemInArray(this.selectedModule.topics, event.previousIndex, event.currentIndex);
+        // Update orderIndex for each topic in the module
+        this.selectedModule.topics.forEach((topic, index) => {
+            topic.orderIndex = index + 1;
+        });
+        this.programSignal.update(p => p);
+    }
+
+    // --------------------------
+    // Dialog Close Handler
+    // --------------------------
     public onDialogClose(result: any): void {
         if (!result) {
             this.dialogConfig.set(null);
             return;
         }
 
-        // 1) If user created a new section
         if (result.createdSection) {
             const program = this.programSignal();
             if (!program) {
@@ -242,19 +272,14 @@ export class ProgramCreationComponent implements OnInit {
             program.sections.push(result.createdSection);
             this.programSignal.set({ ...program });
         }
-
-        // 2) If user created a new module
         if (result.createdModule && this.selectedSection) {
             this.selectedSection.modules.push(result.createdModule);
             this.programSignal.update(p => p);
         }
-
-        // 3) If user created a new topic
         if (result.createdTopic && this.selectedModule) {
             this.selectedModule.topics.push(result.createdTopic);
             this.programSignal.update(p => p);
         }
-
         if (result.updatedProgram) {
             this.programSignal.set(result.updatedProgram);
         }
@@ -271,16 +296,14 @@ export class ProgramCreationComponent implements OnInit {
             }
         }
         if (result.updatedModule && this.selectedSection) {
-            const idx = this.selectedSection.modules
-                .findIndex(m => m.id === result.updatedModule.id);
+            const idx = this.selectedSection.modules.findIndex(m => m.id === result.updatedModule.id);
             if (idx >= 0) {
                 this.selectedSection.modules[idx] = result.updatedModule;
                 this.programSignal.update(p => p);
             }
         }
         if (result.updatedTopic && this.selectedModule) {
-            const idx = this.selectedModule.topics
-                .findIndex(t => t.id === result.updatedTopic.id);
+            const idx = this.selectedModule.topics.findIndex(t => t.id === result.updatedTopic.id);
             if (idx >= 0) {
                 this.selectedModule.topics[idx] = result.updatedTopic;
                 this.programSignal.update(p => p);
@@ -293,10 +316,8 @@ export class ProgramCreationComponent implements OnInit {
     public onSaveProgram(): void {
         const program = this.programSignal();
         if (!program) return;
-
         const formData = this.mapProgramToFormData(program);
         console.log(formData);
-
         this.programService.saveProgramInOneCall(formData)
             .subscribe(updatedProgram => {
                 this.programSignal.set(updatedProgram);
@@ -312,126 +333,65 @@ export class ProgramCreationComponent implements OnInit {
         } else {
             if (program.name.en) formData.append('name.en', program.name.en);
             if (program.name.uk) formData.append('name.uk', program.name.uk);
-            if (program.description.en) {
-                formData.append('description.en', program.description.en);
-            }
-            if (program.description.uk) {
-                formData.append('description.uk', program.description.uk);
-            }
-            if (program.finalTaskFile) {
-                formData.append('finalTask', program.finalTaskFile);
-            }
+            if (program.description.en) formData.append('description.en', program.description.en);
+            if (program.description.uk) formData.append('description.uk', program.description.uk);
+            if (program.finalTaskFile) formData.append('finalTask', program.finalTaskFile);
         }
 
-        // sections
+        // Process sections
         const sections = program.sections || [];
         sections.forEach((section, sIndex) => {
             const isSecExisting = !!section.id && section.id.trim() !== '';
             if (isSecExisting) {
                 formData.append(`sections[${sIndex}].existingSectionId`, section.id);
             } else {
-                if (section.name.en) {
-                    formData.append(`sections[${sIndex}].name.en`, section.name.en);
-                }
-                if (section.name.uk) {
-                    formData.append(`sections[${sIndex}].name.uk`, section.name.uk);
-                }
-                if (section.description.en) {
-                    formData.append(`sections[${sIndex}].description.en`, section.description.en);
-                }
-                if (section.description.uk) {
-                    formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
-                }
-                formData.append(`sections[${sIndex}].orderIndex`, String(sIndex + 1));
-                if (section.finalTaskFile) {
-                    formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
-                }
+                if (section.name.en) formData.append(`sections[${sIndex}].name.en`, section.name.en);
+                if (section.name.uk) formData.append(`sections[${sIndex}].name.uk`, section.name.uk);
+                if (section.description.en) formData.append(`sections[${sIndex}].description.en`, section.description.en);
+                if (section.description.uk) formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
+                if (section.finalTaskFile) formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
             }
+            // ALWAYS send the current orderIndex (new or existing)
+            formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
 
-            // modules
+            // Process modules for each section
             const modules = section.modules || [];
             modules.forEach((module, mIndex) => {
                 const isModExisting = !!module.id && module.id.trim() !== '';
                 if (isModExisting) {
                     formData.append(`sections[${sIndex}].modules[${mIndex}].existingModuleId`, module.id);
                 } else {
-                    if (module.name.en) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.en`, module.name.en);
-                    }
-                    if (module.name.uk) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.uk`, module.name.uk);
-                    }
-                    if (module.description.en) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.en`, module.description.en);
-                    }
-                    if (module.description.uk) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
-                    }
-                    formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(mIndex + 1));
-                    if (module.finalTaskFile) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
-                    }
+                    if (module.name.en) formData.append(`sections[${sIndex}].modules[${mIndex}].name.en`, module.name.en);
+                    if (module.name.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].name.uk`, module.name.uk);
+                    if (module.description.en) formData.append(`sections[${sIndex}].modules[${mIndex}].description.en`, module.description.en);
+                    if (module.description.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
+                    if (module.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
                 }
+                // ALWAYS send the module orderIndex
+                formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
 
-                // topics
+                // Process topics for each module
                 const topics = module.topics || [];
                 topics.forEach((topic, tIndex) => {
                     const isTopicExisting = !!topic.id && topic.id.trim() !== '';
                     if (isTopicExisting) {
-                        formData.append(
-                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].existingTopicId`,
-                            topic.id
-                        );
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].existingTopicId`, topic.id);
                     } else {
-                        if (topic.name.en) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`,
-                                topic.name.en
-                            );
-                        }
-                        if (topic.name.uk) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.uk`,
-                                topic.name.uk
-                            );
-                        }
-                        if (topic.description.en) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.en`,
-                                topic.description.en
-                            );
-                        }
-                        if (topic.description.uk) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.uk`,
-                                topic.description.uk
-                            );
-                        }
-                        if (topic.testId) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`,
-                                topic.testId
-                            );
-                        }
-                        formData.append(
-                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
-                            String(tIndex + 1)
-                        );
-                        formData.append(
-                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`,
-                            String(topic.difficulty)
-                        );
-                        if (topic.finalTaskFile) {
-                            formData.append(
-                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`,
-                                topic.finalTaskFile
-                            );
-                        }
+                        if (topic.name.en) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`, topic.name.en);
+                        if (topic.name.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.uk`, topic.name.uk);
+                        if (topic.description.en) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.en`, topic.description.en);
+                        if (topic.description.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.uk`, topic.description.uk);
+                        if (topic.testId) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`, topic.testId);
+                        if (topic.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`, topic.finalTaskFile);
                     }
+                    // ALWAYS send topic orderIndex and difficulty
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`, String(topic.orderIndex));
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`, String(topic.difficulty));
                 });
             });
         });
 
         return formData;
     }
+
 }

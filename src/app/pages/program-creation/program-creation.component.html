@@ -1,13 +1,13 @@
-<div class="program">
-
+<main class="program">
     <!-- If the dialog is open -->
     @if (dialogConfig()?.isOpen) {
         <upload-dialog
-            [mode]="dialogConfig()?.mode!"
-            [entityType]="dialogConfig()?.entityType!"
-            [entityData]="dialogConfig()?.entityData"
-            [parentId]="dialogConfig()?.parentId"
-            (close)="onDialogClose($event!)"
+                [mode]="dialogConfig()?.mode!"
+                [entityType]="dialogConfig()?.entityType!"
+                [entityData]="dialogConfig()?.entityData"
+                [parentId]="dialogConfig()?.parentId"
+                [defaultOrderIndex]="dialogConfig()?.defaultOrderIndex"
+                (close)="onDialogClose($event!)"
         ></upload-dialog>
     }
 
@@ -15,137 +15,112 @@
         <div>
             <h1 class="summary__title">{{ programSignal()?.name | multiLangField }}</h1>
             <h2 class="summary__meta-items">
-                <span class="meta__item">{{totalSectionsCount}} секції</span>
+                <span class="meta__item">{{ totalSectionsCount }} секції</span>
                 <span class="meta__item">&bull;</span>
-                <span class="meta__item">{{totalModulesCount}} модулів</span>
+                <span class="meta__item">{{ totalModulesCount }} модулів</span>
                 <span class="meta__item">&bull;</span>
-                <span class="meta__item">{{totalTopicsCount}} теми</span>
+                <span class="meta__item">{{ totalTopicsCount }} теми</span>
             </h2>
         </div>
         <div class="summary__control">
-            <img
-                alt="Edit Program Summary"
-                class="control__icon"
-                loading="lazy"
-                src="assets/icon/system/edit.svg"
-                (click)="onEditProgram()"
-            >
+            <img alt="Edit Program Summary" class="control__icon" loading="lazy" src="assets/icon/system/edit.svg" (click)="onEditProgram()">
             <hr class="vertical-line">
-            <img
-                alt="Delete Program"
-                class="control__icon"
-                loading="lazy"
-                src="assets/icon/system/trash.svg"
-                (click)="onDeleteProgram()"
-            >
+            <img alt="Delete Program" class="control__icon" loading="lazy" src="assets/icon/system/trash.svg" (click)="onDeleteProgram()">
         </div>
     </section>
 
     <hr class="section-divider">
 
     <section class="program__details">
+        <!-- Sections Column -->
         <article class="details__section">
             <div class="section__title-container">
                 <h2 class="section__title-text">Секції</h2>
                 <p class="section__title-amount">{{ totalSectionsCount }}</p>
             </div>
-            <button
-                class="section__create-section-btn"
-                (click)="onAddSection()"
-            >
-                Створити секцію
-            </button>
-            <ul class="section__items">
-                @for (section of programSignal()?.sections || []; track $index) {
-                    <li
-                        (click)="onSelectSection(section)"
-                        [class.selected]="section === selectedSection"
-                    >
-                        <learning-unit
-                            [name]="section.name"
-                            (editClicked)="onEditSection(section)"
-                            (deleteClicked)="onDeleteSection(section)"
-                            [orderIndex]="$index"
-                            [isSelected]="section === selectedSection"
-                        />
-                    </li>
-                }
-            </ul>
+            <button class="section__create-section-btn" (click)="onAddSection()">Створити секцію</button>
+            <div cdkDropList (cdkDropListDropped)="dropSection($event)">
+                <ul class="section__items">
+                    @for (section of programSignal()?.sections || []; track $index) {
+                        <li cdkDrag (click)="onSelectSection(section)" [class.selected]="section === selectedSection">
+                            <learning-unit
+                                    [name]="section.name"
+                                    (editClicked)="onEditSection(section)"
+                                    (deleteClicked)="onDeleteSection(section)"
+                                    [orderIndex]="$index"
+                                    [isSelected]="section === selectedSection"
+                            />
+                        </li>
+                    }
+                </ul>
+            </div>
         </article>
+
         <hr class="vertical-line">
 
-
+        <!-- Modules Column -->
         <article class="details__section">
             <div class="section__title-container">
                 <h2 class="section__title-text">Модулі</h2>
                 <p class="section__title-amount">
                     @if(selectedSection && selectedSection.modules) {
-                        {{selectedSection.modules.length}}
+                        {{ selectedSection.modules.length }}
                     } @else {
                         0
                     }
                 </p>
             </div>
-            @if (selectedSection) {
-                <button
-                    class="section__create-section-btn"
-                    (click)="onAddModule(selectedSection)"
-                >
-                    Створити модуль
-                </button>
-
-                <ul class="section__items">
-                    @for (module of selectedSection.modules || []; track $index) {
-                        <li
-                            (click)="onSelectModule(module)"
-                            [class.selected]="module === selectedModule"
-                        >
-                            <learning-unit
-                                [name]="module.name"
-                                (editClicked)="onEditModule(module)"
-                                (deleteClicked)="onDeleteModule(module)"
-                                [orderIndex]="$index"
-                                [isSelected]="module === selectedModule"
-                             />
-                        </li>
-                    }
-                </ul>
+            @if(selectedSection) {
+                <button class="section__create-section-btn" (click)="onAddModule(selectedSection)">Створити модуль</button>
+                <div cdkDropList (cdkDropListDropped)="dropModule($event)">
+                    <ul class="section__items">
+                        @for (module of selectedSection?.modules || []; track $index) {
+                            <li cdkDrag (click)="onSelectModule(module)" [class.selected]="module === selectedModule">
+                                <learning-unit
+                                        [name]="module.name"
+                                        (editClicked)="onEditModule(module)"
+                                        (deleteClicked)="onDeleteModule(module)"
+                                        [orderIndex]="$index"
+                                        [isSelected]="module === selectedModule"
+                                />
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
         </article>
+
         <hr class="vertical-line"/>
-        <article class="details__section">
+
+        <!-- Topics Column -->
+        <article class="details__section" >
             <div class="section__title-container">
                 <h2 class="section__title-text">Теми</h2>
                 <p class="section__title-amount">
                     @if(selectedModule && selectedModule.topics) {
-                        {{selectedModule.topics.length}}
+                        {{ selectedModule.topics.length }}
                     } @else {
                         0
                     }
                 </p>
             </div>
-
-            @if (selectedModule) {
-                <button
-                    class="section__create-section-btn"
-                    (click)="onAddTopic(selectedModule)"
-                >
-                    Створити тему
-                </button>
-
-                <ul class="section__items">
-                    @for (topic of selectedModule.topics || []; track $index) {
-                        <li>
-                            <learning-unit
-                                [name]="topic.name"
-                                (editClicked)="onEditTopic(topic)"
-                                (deleteClicked)="onDeleteTopic(topic)"
-                                [orderIndex]="$index"
-                                [isSelected]="false"
-                            />
-                        </li>
-                    }
-                </ul>
+            @if(selectedModule) {
+                <button class="section__create-section-btn" (click)="onAddTopic(selectedModule)">Створити тему</button>
+                <div cdkDropList (cdkDropListDropped)="dropTopic($event)">
+                    <ul class="section__items">
+                        @for (topic of selectedModule?.topics || []; track $index) {
+                            <li cdkDrag>
+                                <learning-unit
+                                        [name]="topic.name"
+                                        (editClicked)="onEditTopic(topic)"
+                                        (deleteClicked)="onDeleteTopic(topic)"
+                                        [orderIndex]="$index"
+                                        [isSelected]="false"
+                                />
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
         </article>
     </section>
@@ -153,14 +128,7 @@
     <hr class="section-divider">
 
     <section class="program__save">
-        <border-button
-            class="save__button"
-            [borderColor]="'yellow'"
-            [fullWidth]="true"
-            [text]="'Save Program'"
-            [iconPresent]="false"
-        ></border-button>
+        <border-button class="save__button" [borderColor]="'yellow'" [fullWidth]="true" [text]="'Save Program'" [iconPresent]="false"></border-button>
         <button (click)="onSaveProgram()" class="save__button fill-button fill-yellow">Save And Publish</button>
     </section>
-
-</div>
+</main>

@@ -50,6 +50,7 @@ export interface ProgramSectionDto extends LearningUnit {
     description: MultiLanguageField;
     modules: ProgramModuleDto[];
     finalTaskFile?: File; // UI usage
+    orderIndex: number;
 }
 
 export interface ProgramModuleDto extends LearningUnit {
@@ -58,6 +59,7 @@ export interface ProgramModuleDto extends LearningUnit {
     description: MultiLanguageField;
     topics: ProgramTopicDto[];
     finalTaskFile?: File;
+    orderIndex: number;
 }
 
 export interface ProgramTopicDto extends LearningUnit {
@@ -68,6 +70,7 @@ export interface ProgramTopicDto extends LearningUnit {
     difficulty: number;
     finalTaskFile?: File;
     testId: string;
+    orderIndex: number;
 }
 
 export interface ProgramSummary {

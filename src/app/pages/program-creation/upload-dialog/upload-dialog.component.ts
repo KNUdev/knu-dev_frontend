@@ -1,23 +1,18 @@
-import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-import {TranslateModule} from '@ngx-translate/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild, forwardRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
 
-import {BorderButtonComponent} from '../../../common/components/button/arrow-button/border-button.component';
-import {LabelInput} from '../../../common/components/input/label-input/label-input';
-import {
-    EducationProgramDto,
-    ProgramModuleDto,
-    ProgramSectionDto,
-    ProgramTopicDto
-} from '../../../common/models/shared.model';
-import {ProgramService} from '../../../services/program.service';
-import {SelectOption, WriteDropDowns} from '../../auth/register/components/dropdown/write-dropdowns';
-import {TestService} from '../../../services/test.service';
-import {map} from 'rxjs/operators';
-import {Expertise} from '../../user-profile/user-profile.model';
+import { BorderButtonComponent } from '../../../common/components/button/arrow-button/border-button.component';
+import { LabelInput } from '../../../common/components/input/label-input/label-input';
+import { EducationProgramDto, ProgramModuleDto, ProgramSectionDto, ProgramTopicDto } from '../../../common/models/shared.model';
+import { ProgramService } from '../../../services/program.service';
+import { SelectOption, WriteDropDowns } from '../../auth/register/components/dropdown/write-dropdowns';
+import { TestService } from '../../../services/test.service';
+import { map } from 'rxjs/operators';
+import { Expertise } from '../../user-profile/user-profile.model';
 
 @Component({
     selector: 'upload-dialog',
@@ -32,6 +27,13 @@ import {Expertise} from '../../user-profile/user-profile.model';
         LabelInput,
         BorderButtonComponent,
         WriteDropDowns
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => UploadDialogComponent),
+            multi: true
+        }
     ]
 })
 export class UploadDialogComponent implements OnInit {
@@ -40,6 +42,11 @@ export class UploadDialogComponent implements OnInit {
     @Input() entityType: 'program' | 'section' | 'module' | 'topic' = 'section';
     @Input() parentId?: string;
     @Input() entityData?: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto;
+
+    /**
+     * NEW: Default order index passed from parent.
+     */
+    @Input() defaultOrderIndex?: number;
 
     @Output() close = new EventEmitter<{
         updatedProgram?: EducationProgramDto;
@@ -109,13 +116,13 @@ export class UploadDialogComponent implements OnInit {
             .subscribe(options => this.testSelectOptions.set(options));
     }
 
-    public get form() {
+    public get form(): FormGroup {
         return this.dialogForm();
     }
 
-    get expertiseOptions():SelectOption[] {
+    get expertiseOptions(): SelectOption[] {
         return Object.values(Expertise).map(value => ({
-            id: value.toString(),
+            id: value,
             name: {
                 en: value.toString(),
                 uk: value.toString(),
@@ -159,7 +166,6 @@ export class UploadDialogComponent implements OnInit {
     public removeFile(): void {
         this.selectedFile.set(undefined);
         this.isFileSelectedd.set(false);
-
         if (this.entityData) {
             if (this.entityType === 'topic') {
                 (this.entityData as ProgramTopicDto).finalTaskUrl = undefined;
@@ -182,7 +188,6 @@ export class UploadDialogComponent implements OnInit {
             this.form.markAllAsTouched();
             return;
         }
-
         if (this.mode === 'create') {
             this.handleCreate();
         } else {
@@ -192,23 +197,17 @@ export class UploadDialogComponent implements OnInit {
 
     private patchForm(entity: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto): void {
         if (!entity) return;
-
         this.form.patchValue({
             nameUk: entity.name.uk ?? '',
             nameEn: entity.name.en ?? '',
             descriptionUk: entity.description.uk ?? '',
             descriptionEn: entity.description.en ?? ''
         });
-
         if (this.entityType === 'topic' && 'difficulty' in entity) {
-            this.form.patchValue({
-                difficulty: (entity as any).difficulty ?? 5
-            });
+            this.form.patchValue({ difficulty: (entity as any).difficulty ?? 5 });
         }
         if (this.entityType === 'topic' && 'testId' in entity) {
-            this.form.patchValue({
-                testId: (entity as any).testId ?? ''
-            });
+            this.form.patchValue({ testId: (entity as any).testId ?? '' });
         }
         if (this.entityType === 'program') {
             const p = entity as EducationProgramDto;
@@ -234,15 +233,13 @@ export class UploadDialogComponent implements OnInit {
                 },
                 learningResources: [],
                 finalTaskUrl: '',
-                // store difficulty from form
                 difficulty: formVals.difficulty,
                 testId: formVals.testId,
-                // attach file if present
+                orderIndex: this.defaultOrderIndex || 1,
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdTopic: newTopic });
-        }
-        else if (this.entityType === 'section') {
+        } else if (this.entityType === 'section') {
             const newSection: ProgramSectionDto = {
                 id: '',
                 name: {
@@ -254,12 +251,11 @@ export class UploadDialogComponent implements OnInit {
                     uk: formVals.descriptionUk
                 },
                 modules: [],
-                // file if present
+                orderIndex: this.defaultOrderIndex || 1,
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdSection: newSection });
-        }
-        else if (this.entityType === 'module') {
+        } else if (this.entityType === 'module') {
             const newModule: ProgramModuleDto = {
                 id: '',
                 name: {
@@ -272,11 +268,11 @@ export class UploadDialogComponent implements OnInit {
                 },
                 finalTaskUrl: '',
                 topics: [],
+                orderIndex: this.defaultOrderIndex || 1,
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdModule: newModule });
-        }
-        else if (this.entityType === 'program') {
+        } else if (this.entityType === 'program') {
             const newProgram: EducationProgramDto = {
                 id: '',
                 name: {
@@ -291,6 +287,7 @@ export class UploadDialogComponent implements OnInit {
                 finalTaskUrl: '',
                 expertise: formVals.expertise as Expertise,
                 sections: [],
+                // For program-level, orderIndex is not used
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
 
@@ -304,30 +301,20 @@ export class UploadDialogComponent implements OnInit {
                 formData.append('finalTask', newProgram.finalTaskFile);
             }
 
-            // 3) IMMEDIATELY call the single-endpoint method
             this.programService.saveProgramInOneCall(formData)
                 .subscribe(createdProgram => {
-                    // 4) Emit the newly created program back to parent
                     this.close.emit({ updatedProgram: createdProgram });
                 });
-
-            // (Old code was: this.close.emit({ updatedProgram: newProgram });
-            // We comment that out to avoid sending unsaved data.)
-        }
-        else {
+        } else {
             this.close.emit(null);
         }
     }
 
-    /**
-     * Handle updating an existing item (section/module/topic/program).
-     */
     private handleUpdate(): void {
         if (!this.entityData) {
             this.close.emit(null);
             return;
         }
-
         const formVals = this.form.value;
         const file = this.selectedFile();
 
@@ -347,8 +334,7 @@ export class UploadDialogComponent implements OnInit {
             ).subscribe(updatedTopic => {
                 this.close.emit({ updatedTopic });
             });
-        }
-        else if (this.entityType === 'section') {
+        } else if (this.entityType === 'section') {
             const sec = this.entityData as ProgramSectionDto;
             this.programService.updateSection(
                 sec.id,
@@ -362,8 +348,7 @@ export class UploadDialogComponent implements OnInit {
             ).subscribe(updatedSection => {
                 this.close.emit({ updatedSection });
             });
-        }
-        else if (this.entityType === 'module') {
+        } else if (this.entityType === 'module') {
             const mod = this.entityData as ProgramModuleDto;
             this.programService.updateModule(
                 mod.id,
@@ -377,8 +362,7 @@ export class UploadDialogComponent implements OnInit {
             ).subscribe(updatedModule => {
                 this.close.emit({ updatedModule });
             });
-        }
-        else if (this.entityType === 'program') {
+        } else if (this.entityType === 'program') {
             const prog = this.entityData as EducationProgramDto;
             this.programService.updateProgram(
                 prog.id,
@@ -393,8 +377,7 @@ export class UploadDialogComponent implements OnInit {
             ).subscribe(updatedProgram => {
                 this.close.emit({ updatedProgram });
             });
-        }
-        else {
+        } else {
             this.close.emit(null);
         }
     }
