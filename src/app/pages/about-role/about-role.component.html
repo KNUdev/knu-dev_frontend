@@ -45,7 +45,12 @@
             <mat-icon class="arrow" svgIcon="arrowLeft"></mat-icon>
         </div>
 
-        <div class="info-card-container-wrapper">
+        <div
+            (touchstart)="onTouchStart($event)"
+            (touchmove)="onTouchMove($event)"
+            (touchend)="onTouchEnd()"
+            class="info-card-container-wrapper"
+        >
             <div
                 class="info-card__container"
                 [class.active]="activeContainer === 'primary'"
@@ -76,8 +81,8 @@
                         activeContainer === "primary" && !pendingRole
                             ? role
                             : activeContainer !== "primary" && pendingRole
-                            ? pendingRole
-                            : role
+                              ? pendingRole
+                              : role
                     }}</span>
                     <span class="header__subtitle">PRE-CAMPUS</span>
                 </header>
@@ -176,8 +181,8 @@
                         activeContainer === "secondary" && !pendingRole
                             ? role
                             : activeContainer !== "secondary" && pendingRole
-                            ? pendingRole
-                            : role
+                              ? pendingRole
+                              : role
                     }}</span>
                     <span class="header__subtitle">PRE-CAMPUS</span>
                 </header>

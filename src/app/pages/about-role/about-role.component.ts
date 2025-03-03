@@ -70,7 +70,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private animationService: AnimationService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
     ) {
         this.loadTranslations();
         this.registerIcons();
@@ -86,9 +86,9 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
                         'pages/about-role',
-                        event.lang
-                    )
-                )
+                        event.lang,
+                    ),
+                ),
             )
             .subscribe();
     }
@@ -166,7 +166,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.pendingRole = null;
         this.swipeDirection = null;
 
-        document.querySelector('.info-card')?.classList.remove('isAnimating');
+        const infoCard = document.querySelector('.info-card');
+        if (window.innerWidth <= 768) {
+            infoCard?.classList.remove('isAnimating');
+        } else {
+            infoCard?.classList.remove('isAnimating-left', 'isAnimating-right');
+        }
 
         this.clearTimeout(this.urlUpdateTimeout);
         this.urlUpdateTimeout = window.setTimeout(() => {
@@ -231,6 +236,27 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
                 : undefined;
     }
 
+    private touchStartX = 0;
+    private touchEndX = 0;
+
+    onTouchStart(event: TouchEvent): void {
+        this.touchStartX = event.changedTouches[0].screenX;
+    }
+
+    onTouchMove(event: TouchEvent): void {
+        this.touchEndX = event.changedTouches[0].screenX;
+    }
+
+    onTouchEnd(): void {
+        if (this.touchStartX - this.touchEndX > 50) {
+            this.onNextRole();
+        }
+
+        if (this.touchEndX - this.touchStartX > 50) {
+            this.onPrevRole();
+        }
+    }
+
     public onPrevRole(): void {
         if (this.isAnimating || !this.prevRole) return;
 
@@ -238,7 +264,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'right';
         this.isAnimating = true;
 
-        document.querySelector('.info-card')?.classList.add('isAnimating');
+        const infoCard = document.querySelector('.info-card');
+        if (window.innerWidth <= 768) {
+            infoCard?.classList.add('isAnimating');
+        } else {
+            infoCard?.classList.add('isAnimating-right');
+        }
 
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
@@ -253,7 +284,12 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'left';
         this.isAnimating = true;
 
-        document.querySelector('.info-card')?.classList.add('isAnimating');
+        const infoCard = document.querySelector('.info-card');
+        if (window.innerWidth <= 768) {
+            infoCard?.classList.add('isAnimating');
+        } else {
+            infoCard?.classList.add('isAnimating-left');
+        }
 
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
@@ -281,14 +317,14 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowLeft
-            )
+                this.iconPaths.arrowLeft,
+            ),
         );
         this.matIconRegistry.addSvgIcon(
             'arrowRight',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowRight
-            )
+                this.iconPaths.arrowRight,
+            ),
         );
     }
 
