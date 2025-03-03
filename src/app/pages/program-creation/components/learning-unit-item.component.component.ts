@@ -8,6 +8,7 @@ import {MultiLangFieldPipe} from '../../../common/pipes/multi-lang-field.pipe';
     imports: [
         MultiLangFieldPipe
     ],
+    standalone: true,
     styleUrls: ['./learning-unit-item.component.component.scss']
 })
 export class LearningUnitItem implements OnInit {

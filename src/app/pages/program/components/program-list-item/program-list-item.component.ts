@@ -8,15 +8,16 @@ import {I18nService} from '../../../../services/languages/i18n.service';
 import {BorderButtonComponent} from '../../../../common/components/button/arrow-button/border-button.component';
 
 @Component({
-  selector: 'program-list-item',
+    selector: 'program-list-item',
     imports: [
         MultiLangFieldPipe,
         DatePipe,
         TranslatePipe,
         BorderButtonComponent
     ],
-  templateUrl: './program-list-item.component.html',
-  styleUrl: './program-list-item.component.scss'
+    templateUrl: './program-list-item.component.html',
+    standalone: true,
+    styleUrl: './program-list-item.component.scss'
 })
 export class ProgramListItemComponent {
     @Input({required: true}) program!: ProgramSummary;
