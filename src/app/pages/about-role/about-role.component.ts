@@ -166,12 +166,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.pendingRole = null;
         this.swipeDirection = null;
 
-        const infoCard = document.querySelector('.info-card');
-        if (window.innerWidth <= 768) {
-            infoCard?.classList.remove('isAnimating');
-        } else {
-            infoCard?.classList.remove('isAnimating-left', 'isAnimating-right');
-        }
+        document.querySelector('.info-card')?.classList.remove('isAnimating');
 
         this.clearTimeout(this.urlUpdateTimeout);
         this.urlUpdateTimeout = window.setTimeout(() => {
@@ -264,12 +259,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'right';
         this.isAnimating = true;
 
-        const infoCard = document.querySelector('.info-card');
-        if (window.innerWidth <= 768) {
-            infoCard?.classList.add('isAnimating');
-        } else {
-            infoCard?.classList.add('isAnimating-right');
-        }
+        document.querySelector('.info-card')?.classList.add('isAnimating');
 
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
@@ -284,12 +274,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.swipeDirection = 'left';
         this.isAnimating = true;
 
-        const infoCard = document.querySelector('.info-card');
-        if (window.innerWidth <= 768) {
-            infoCard?.classList.add('isAnimating');
-        } else {
-            infoCard?.classList.add('isAnimating-left');
-        }
+        document.querySelector('.info-card')?.classList.add('isAnimating');
 
         this.clearTimeout(this.animationTimeout);
         this.animationTimeout = window.setTimeout(() => {
