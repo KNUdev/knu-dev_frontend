@@ -16,7 +16,7 @@
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
                         "localize": true,
-                        "outputPath": "dist/knudev-frontend",
+                        "outputPath": "dist",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "polyfills": ["zone.js"],
