@@ -2,60 +2,60 @@
 @use "../../common/styles/button/main-button/fill-button" as fill-button;
 
 .program {
-    padding: 80px 88px;
+    padding: 5rem 5.5rem;
 }
 
 .section-divider {
-    height: 1px;
-    color: #343434;
-    background-color: #343434;
+    height: 0.0625rem;
+    color: $darker-gray;
+    background-color: $darker-gray;
     border: none;
-    margin: 50px 0;
+    margin: 3.125rem 0;
 }
 
 .program__summary {
-    padding: 25px;
-    border-radius: 5px;
-    border: 1px solid #343434;
+    padding: 1.563rem;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid $darker-gray;
     background: #141414;
     display: flex;
-    height: 150px;
+    height: 9.375rem;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
 
     .summary__title {
         text-transform: uppercase;
-        color: #FFF;
+        color: $text-white;
         text-align: left;
         font-family: Unbounded, sans-serif;
-        font-size: 18px;
+        font-size: 1.125rem;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
-        letter-spacing: 0.9px;
-        margin-bottom: 15px;
+        letter-spacing: 0.056rem;
+        margin-bottom: 0.938rem;
     }
 
     .summary__meta-items {
         display: flex;
-        gap: 15px;
+        gap: 0.938rem;
         align-items: center;
 
         .meta__item {
-            max-height: 20px;
-            color: #FFF;
+            max-height: 1.25rem;
+            color: $text-white;
             text-align: center;
             font-family: "Fixel Text", sans-serif;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-style: normal;
             font-weight: 400;
-            line-height: 20px;
-            letter-spacing: 0.28px;
+            line-height: 1.25rem;
+            letter-spacing: 0.0175rem;
         }
 
         .item_red {
-            color: #642A2A;
+            color: #E5383A;
         }
 
         .item_green {
@@ -63,67 +63,51 @@
         }
 
         .item_darker {
-            color: #D1D1D1;
+            color: $text-light;
         }
     }
 
     .summary__control {
         display: flex;
-        gap: 10px;
+        gap: 0.625rem;
         align-items: center;
-        //height: 100%;
-        max-height: 25px;
+        max-height: 1.5625rem;
         overflow: hidden;
 
         .control__icon {
             cursor: pointer;
-            width: 25px;
-            height: 25px;
-            //width: fit-content;
-            //height: fit-content;
-        }
-
-        .control__divider {
-            width: 2px;
-            border-color: red;
-            //border: none;
-            //height: au;
-            //background-color: red;
-            margin: 0 0;
-            transform: rotate(90deg);
+            width: 1.5625rem;
+            height: 1.5625rem;
         }
     }
-
 }
 
 .content-changed {
-    margin-top: 25px;
+    margin-top: 1.5625rem;
     width: 100%;
-    padding: 15px;
+    padding: 0.9375rem;
     @include flex-center();
-    color: #D1D1D1;
+    color: $text-light;
     font-family: "Fixel Text", sans-serif;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 20px;
-    border-radius: 5px;
-    border: 1px solid var(--border-yellow-400, #CDB945);
+    line-height: 1.25rem;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid var(--border-yellow-400, #CDB945);
     background: var(--bg-nat-975, #141414);
     justify-content: flex-start;
-    gap: 15px;
+    gap: 0.9375rem;
 
     .content-changed__icon {
         color: $accent-yellow;
-        width: 20px;
-        height: 20px;
+        width: 1.25rem;
+        height: 1.25rem;
     }
-
 }
 
-
 .details__divider {
-    width: 2px;
+    width: 0.125rem;
     border: none;
     height: 100%;
     background-color: red;
@@ -134,137 +118,105 @@
 .vertical-line {
     writing-mode: vertical-lr;
     height: 100%;
-    width: 1px;
-    color: #343434;
-    background-color: #343434;
+    width: 0.0625rem;
+    color: $darker-gray;
+    background-color: $darker-gray;
     border: none;
-    //position: absolute;
 }
-
-.scroll-wrapper {
-    max-height: 610px;
-    overflow-y: auto;
-    padding-top: 10px;   // so scrollbar doesn't start at very top
-    padding-bottom: 10px;
-
-    // Then apply your scrollbar styles here
-    scrollbar-width: thin;
-    scrollbar-color: #343434 #141414;
-
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-        background: #141414;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: #343434;
-        border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #EDD342;
-    }
-}
-
-
 
 .program__details {
-    height: 610px;
+    height: 38.125rem;
     width: 100%;
     flex: 1 1 0;
     display: flex;
     align-items: flex-start;
-    gap: 50px;
+    gap: 3.125rem;
     align-self: stretch;
 
-
-
     .details__section {
-        overflow-y:  auto;
-        max-height: 610px;
+        overflow-y: auto;
+        max-height: 38.125rem;
 
         scrollbar-width: thin;
-        scrollbar-color: #343434 #141414;
+        scrollbar-color: $darker-gray $bg-dark;
 
         &::-webkit-scrollbar {
             position: absolute;
             bottom: 0;
-            width: 8px;
+            width: 0.5rem;
 
             &::before {
                 content: '';
-                margin: 10px;
+                margin: 0.625rem;
                 display: block;
             }
         }
+
         &::-webkit-scrollbar-track {
-            background: #141414;
+            background: $bg-dark;
         }
+
         &::-webkit-scrollbar-thumb {
-            background-color: #343434;
-            border-radius: 4px;
+            background-color: $darker-gray;
+            border-radius: 0.25rem;
         }
+
         &::-webkit-scrollbar-thumb:hover {
             background-color: #EDD342;
         }
 
-
         box-sizing: border-box;
-        height: 610px;
-        width: 515px;
-        max-width: 515px;
-
+        height: 38.125rem;
+        width: 32.1875rem;
+        max-width: 32.1875rem;
 
         .section__title-container {
-            margin-bottom: 35px;
+            margin-bottom: 2.1875rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             align-self: stretch;
 
             .section__title-text {
-                color: #FFF;
+                color: $text-white;
                 text-align: center;
-                /* desktop and tablet/h text/h4 */
                 font-family: Unbounded, sans-serif;
-                font-size: 16px;
+                font-size: 1rem;
                 font-style: normal;
                 font-weight: 500;
-                line-height: 25px; /* 156.25% */
-                letter-spacing: 0.8px;
+                line-height: 1.5625rem;
+                letter-spacing: 0.05rem;
                 text-transform: uppercase;
             }
 
             .section__title-amount {
-                color: #A0A0A0;
+                color: $darker-white;
                 text-align: center;
-                /* desktop and tablet/h text/h5 */
                 font-family: Unbounded, sans-serif;
-                font-size: 14px;
+                font-size: 0.875rem;
                 font-style: normal;
                 font-weight: 500;
-                line-height: 25px; /* 178.571% */
-                letter-spacing: 0.7px;
+                line-height: 1.5625rem;
+                letter-spacing: 0.04375rem;
                 text-transform: uppercase;
             }
-
         }
 
         .section__create-section-btn {
             height: 4.688rem;
-            padding: 15px;
-            border-radius: 5px;
-            border: 2px dashed #343434;
+            padding: 0.9375rem;
+            border-radius: 0.3125rem;
+            border: 0.125rem dashed $darker-gray;
             width: 100%;
             background: none;
-            color: var(--text-nat-200, #D1D1D1);
+            color: $text-light;
             text-align: center;
             font-family: "Fixel Text", sans-serif;
-            font-size: 15px;
+            font-size: 0.9375rem;
             font-style: normal;
             font-weight: 400;
-            line-height: 26px; /* 173.333% */
-            letter-spacing: 0.3px;
+            line-height: 1.625rem;
+            letter-spacing: 0.01875rem;
             transition: all 0.5s ease;
             cursor: pointer;
 
@@ -275,10 +227,8 @@
     }
 
     .section__items {
-        margin-top: 25px;
-        margin-bottom: 20px;
-        //max-height;
-
+        margin-top: 1.5625rem;
+        margin-bottom: 1.25rem;
     }
 }
 
@@ -287,18 +237,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 0.9375rem;
 
     p {
         color: #888;
         text-align: center;
-        /* desktop and tablet/body/body 1 */
         font-family: "Fixel Text", sans-serif;
-        font-size: 15px;
+        font-size: 0.9375rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 26px; /* 173.333% */
-        letter-spacing: 0.3px;
+        line-height: 1.625rem;
+        letter-spacing: 0.01875rem;
     }
 }
 
@@ -306,19 +255,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 25px;
-    gap: 50px;
-    border-radius: 5px;
-    border: 1px solid var(--border-nat-900, #343434);
-    height: 130px;
+    padding: 0.9375rem 1.5625rem;
+    gap: 3.125rem;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid $darker-gray;
+    height: 8.125rem;
 
     .save__button {
         height: auto;
         width: 100%;
     }
-
-
-    //@include flex-center()
 }
 
 .no-learning-unit {
@@ -330,13 +276,13 @@
 
     .no-learning-unit__text {
         margin-top: 0.938rem;
-        color: var(--text-nat-400, #888);
+        color: #888;
         text-align: center;
         font-family: "Fixel Text", sans-serif;
         font-size: 0.938rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 26px;
-        letter-spacing: 0.3px;
+        line-height: 1.625rem;
+        letter-spacing: 0.01875rem;
     }
 }

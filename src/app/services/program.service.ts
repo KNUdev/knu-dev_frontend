@@ -125,33 +125,37 @@ export class ProgramService {
             enDesc: string;
             difficulty: number;
             testId: string;
+            learningResources: string[];
         },
         taskFile?: File
     ): Observable<ProgramTopicDto> {
         const formData = new FormData();
+
         formData.append('name.en', data.enName);
         formData.append('name.uk', data.ukName);
         formData.append('description.en', data.enDesc);
-        formData.append('description.uk', data.enDesc);
+        formData.append('description.uk', data.ukDesc);
         formData.append('difficulty', data.difficulty.toString());
         formData.append('testId', data.testId);
+
+        data.learningResources.forEach((lr, index) => {
+            formData.append(`learningResources[${index}]`, lr);
+        });
+
+        // If you prefer JSON in one field:
+        // formData.append('learningResources', JSON.stringify(data.learningResources));
+
         if (taskFile) {
             formData.append('task', taskFile);
         }
+
         return this.http.patch<ProgramTopicDto>(
             this.apiBaseUrl + `/admin/education/topic/${topicId}/update`,
             formData
         );
     }
 
-    // ------------------------------------------------------------------------------
-    // NEW DELETE METHODS
-    // ------------------------------------------------------------------------------
 
-    /**
-     * Deletes the program row and all ProgramSectionMapping bridging for that program,
-     * but does NOT delete underlying sections, modules, or topics.
-     */
     public deleteProgramById(programId: string): Observable<void> {
         return this.http.delete<void>(
             `${this.apiBaseUrl}/admin/education/mapping/program/${programId}/delete`

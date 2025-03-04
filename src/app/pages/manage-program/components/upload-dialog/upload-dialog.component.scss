@@ -2,87 +2,105 @@
 @use "../../../../common/styles/hyperlink" as hyperlink;
 @use "../../../../common/styles/button/main-button/fill-button" as fill-button;
 
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 0.25rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
 
 .upload-dialog {
-    height: fit-content;
-    width: 600px;
-    border-radius: 5px;
-    border: 1px solid var(--border-nat-900, #343434);
+    max-height: 53.125rem;
+    overflow-y: auto;
+    max-width: 37.5rem;
+    overflow-x: hidden;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid $darker-gray;
     background: #131313;
-    padding: 25px;
+    padding: 1.5625rem;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.25rem;
+
+    &::-webkit-scrollbar-track {
+        background: #141414;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $darker-gray;
+        border-radius: 0.25rem;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #EDD342;
+    }
 }
 
 .input-group {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 30px;
+    gap: 1.875rem;
 }
 
 .upload-dialog__input {
     outline: none;
     display: block;
     width: 100%;
-    height: 55px;
-    border: 1px solid #6D6D6D;
+    height: 3.4375rem;
+    border: 0.0625rem solid #6D6D6D;
     background: none;
-    color: #D1D1D1;
-    border-radius: 5px;
+    color: $text-white;
+    border-radius: 0.3125rem;
     text-align: center;
-    /* desktop and tablet/other/input_text */
     font-family: "Fixel Text", sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
 }
 
-
 .profile__divider {
     position: relative;
-    border-top: 0.063rem solid #343434;
+    border-top: 0.063rem solid $darker-gray;
 
     &-title {
         position: absolute;
-        //top: -0.9375rem;
-        top: -10px;
+        top: -0.625rem;
         left: 50%;
         transform: translateX(-50%);
         background-color: #131313;
-        padding: 0 25px;
-        color: #A0A0A0;
+        padding: 0 1.5625rem;
+        color: $darker-white;
         text-align: center;
         text-transform: uppercase;
-
-        /* desktop and tablet/other/description regular */
         font-family: "Fixel Text", sans-serif;
-        font-size: 14px;
+        font-size: 0.875rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 20px; /* 142.857% */
+        line-height: 1.25rem;
         letter-spacing: 0.28px;
     }
 }
 
 .upload-dialog__btn {
     width: 100% !important;
-    //text-decoration: none;
-    //border-radius: 5px;
-    //border: 1px solid $accent-yellow;
-    //height: 55px;
-    //padding: 20px 18px;
-    //color: var(--text-nat-200, #D1D1D1);
-    //text-align: center;
-    ///* desktop and tablet/button/button */
-    //font-family: "Fixel Text", sans-serif;
-    //font-size: 15px;
-    //font-style: normal;
-    //font-weight: 500;
-    //line-height: normal;
-    //letter-spacing: 0.75px;
 }
 
 .upload-dialog__file-input-label-wrapper {
@@ -92,14 +110,13 @@
 }
 
 .upload-dialog__file-input-label {
-    margin-top: 15px;
-    color: #FFF;
-    /* desktop and tablet/body/body 1 */
+    margin-top: 0.9375rem;
+    color: $text-white;
     font-family: "Fixel Text", sans-serif;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 26px; /* 173.333% */
+    line-height: 1.625rem;
     letter-spacing: 0.3px;
     text-align: left;
 }
@@ -107,42 +124,38 @@
 .upload-dialog__remove-file {
     color: var(--text-yellow-350, #EDD342);
     text-align: center;
-
-    /* desktop and tablet/other/hyperlink */
     font-family: "Fixel Text", sans-serif;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.7px;
 }
 
-
-
 .upload-dialog__file-input {
-    width: 550px;
-    height: 200px;
-    border-radius: 5px;
-    border: 2px dashed #343434;
+    width: 34.375rem;
+    min-height: 12.5rem;
+    border-radius: 0.3125rem;
+    border: 0.125rem dashed $darker-gray;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .file-input__placeholder {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        gap: 25px;
+        gap: 1.5625rem;
 
         .placeholder__text {
-            color: #A0A0A0;
+            color: $darker-white;
             text-align: center;
-            /* desktop and tablet/other/description regular */
             font-family: "Fixel Text", sans-serif;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-style: normal;
             font-weight: 400;
-            line-height: 20px; /* 142.857% */
+            line-height: 1.25rem;
             letter-spacing: 0.28px;
         }
     }
@@ -159,24 +172,22 @@
     justify-content: space-between;
     width: 100%;
 
-
     .topic-difficulty-container__item {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 35px;
-        height: 35px;
-        border-radius: 5px;
-        border: 1px solid #343434;
+        width: 2.1875rem;
+        height: 2.1875rem;
+        border-radius: 0.3125rem;
+        border: 0.0625rem solid $darker-gray;
         background: #101010;
-        color: var(--text-nat-200, #D1D1D1);
+        color: var(--text-nat-200, $text-white);
         text-align: center;
-        /* desktop and tablet/h text/h5 */
         font-family: Unbounded, sans-serif;
-        font-size: 14px;
+        font-size: 0.875rem;
         font-style: normal;
         font-weight: 500;
-        line-height: 25px; /* 178.571% */
+        line-height: 1.5625rem;
         letter-spacing: 0.7px;
         text-transform: uppercase;
 
@@ -186,24 +197,48 @@
             cursor: pointer;
         }
 
-       &.selected {
+        &.selected {
             border-color: $accent-yellow;
             color: $accent-yellow;
         }
     }
 }
 
+.upload-dialog__topic-resources {
+    @include flex-center(column);
+    gap: 1.25rem;
+
+    .topic-resources__item {
+        width: 100%;
+    }
+}
+
+.upload-dialog__topic-resources-btn {
+    height: 3.4375rem !important;
+    min-height: 3.4375rem;
+    flex-shrink: 0;
+    background: none;
+    color: var(--text-nat-200, $text-white);
+    text-align: center;
+    font-family: "Fixel Text", sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.625rem;
+    letter-spacing: 0.3px;
+    width: 100%;
+}
+
 .upload-dialog__submit-btn {
     width: 100%;
-    padding: 16px;
-    border-radius: 5px;
+    padding: 1rem;
+    border-radius: 0.3125rem;
     background: #EDD342;
     color: #101010;
     text-align: center;
-    /* desktop and tablet/button/button */
     font-family: "Fixel Text", sans-serif;
     border: none;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -212,50 +247,46 @@
 
 .upload-dialog__file-selected {
     width: 100%;
-    padding: 15px;
+    padding: 0.9375rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 5px;
-    border: 2px dashed var(--border-nat-900, #343434);
-
+    border-radius: 0.3125rem;
+    border: 0.125rem dashed var(--border-nat-900, $darker-gray);
     .file-selected__left {
         display: flex;
-        //justify-content: center;
         align-items: center;
-        gap: 15px;
+        gap: 0.9375rem;
 
         .left__icon {
-            width: 45px;
-            height: 45px;
+            width: 2.8125rem;
+            height: 2.8125rem;
         }
 
         .left__text {
-            color: var(--text-nat-0, #FFF);
+            color: var(--text-nat-0, $text-white);
             text-align: center;
             font-family: "Fixel Text", sans-serif;
-            font-size: 15px;
+            font-size: 0.9375rem;
             font-style: normal;
             font-weight: 400;
-            line-height: 26px; /* 173.333% */
+            line-height: 1.625rem;
             letter-spacing: 0.3px;
         }
     }
 
     .file-selected__right {
-        width: 25px;
-        height:25px;
+        width: 1.5625rem;
+        height: 1.5625rem;
         color: $accent-yellow;
     }
 }
-
-
 
 .upload-dialog__error {
     margin-top: 2.813rem;
     position: relative;
     padding: 1.563rem;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     background-color: #642A2A;
     max-width: 100%;
     width: 100%;
@@ -264,47 +295,43 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        align-self: stretch;
     }
 
     .error__close-icon {
         cursor: pointer;
         display: flex;
-        width: 20px;
-        height: 20px;
+        width: 1.25rem;
+        height: 1.25rem;
         justify-content: center;
         align-items: center;
         color: $text-white;
     }
 
     .error__title {
-        color: #FFF;
+        color: $text-white;
         font-family: Unbounded, sans-serif;
-        font-size: 14px;
+        font-size: 0.875rem;
         font-style: normal;
         font-weight: 500;
-        line-height: 25px;
+        line-height: 1.5625rem;
         letter-spacing: 0.7px;
         text-transform: uppercase;
     }
 
     .error__divider {
-        background: #D1D1D1;
-        height: 1px;
-        margin: 15px 0;
+        background: $text-white;
+        height: 0.0625rem;
+        margin: 0.9375rem 0;
         border: none;
     }
 
     .error__text {
-        color: #FFF;
-
-        /* desktop and tablet/body/body 1 */
+        color: $text-white;
         font-family: "Fixel Text", sans-serif;
-        font-size: 15px;
+        font-size: 0.9375rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 26px; /* 173.333% */
+        line-height: 1.625rem;
         letter-spacing: 0.3px;
     }
-
 }

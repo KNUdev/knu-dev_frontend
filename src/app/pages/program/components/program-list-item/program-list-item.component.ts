@@ -1,8 +1,8 @@
-import {Component, inject, Input} from '@angular/core';
-import {EducationProgramDto, ProgramSummary} from '../../../../common/models/shared.model';
+import {Component, Input, OnInit} from '@angular/core';
+import {ProgramSummary} from '../../../../common/models/shared.model';
 import {MultiLangFieldPipe} from '../../../../common/pipes/multi-lang-field.pipe';
 import {DatePipe} from '@angular/common';
-import {LangChangeEvent, TranslatePipe} from '@ngx-translate/core';
+import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {startWith, switchMap} from 'rxjs';
 import {I18nService} from '../../../../services/languages/i18n.service';
 import {BorderButtonComponent} from '../../../../common/components/button/arrow-button/border-button.component';
@@ -19,17 +19,28 @@ import {BorderButtonComponent} from '../../../../common/components/button/arrow-
     standalone: true,
     styleUrl: './program-list-item.component.scss'
 })
-export class ProgramListItemComponent {
+export class ProgramListItemComponent implements OnInit {
     @Input({required: true}) program!: ProgramSummary;
     public locale: string;
-    private readonly i18nService = inject(I18nService);
 
-    get manageProgramLink():string {
+    constructor(
+        private translate: TranslateService,
+        private i18nService: I18nService,
+    ) {
+        this.locale = this.i18nService.currentLocale;
+    }
+
+    get manageProgramLink(): string {
         return `/program/${this.program.id}/manage`;
     }
 
-    constructor() {
-        this.locale = this.i18nService.currentLocale;
+    ngOnInit(): void {
+        this.translate.onLangChange
+            .pipe(
+                startWith({lang: this.translate.currentLang} as LangChangeEvent),
+                switchMap(event => this.i18nService.loadComponentTranslations('pages/program', event.lang))
+            )
+            .subscribe();
     }
 
 }

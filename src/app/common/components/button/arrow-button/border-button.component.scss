@@ -22,6 +22,14 @@ a {
         width: 100%;
     }
 
+    &.disabled {
+        border-radius: 5px !important;
+        border: 1px solid #343434 !important;
+        background: none !important;
+        cursor: not-allowed !important;
+        color: #454545 !important;
+    }
+
     &:hover {
         cursor: pointer;
         background-color: var(--arrow-button-hover-color);
@@ -40,4 +48,5 @@ a {
     @include tablet {
         width: 100%;
     }
+
 }

@@ -1,35 +1,39 @@
 {
-    "dialog" : {
+    "dialog": {
         "labels": {
             "name": {
-                "uk": "Name in Ukrainian",
-                "en": "Name in English"
+                "uk": "Назва українською",
+                "en": "Назва англійською"
             },
             "description": {
-                "uk": "Description in Ukrainian",
-                "en": "Description in English"
+                "uk": "Опис українською",
+                "en": "Опис англійською"
             },
-            "or": "OR",
-            "downloadFilePlaceholder": "Download .pdf file",
-            "removeFile": "Remove File",
-            "task": "Final Task",
+            "or": "АБО",
+            "downloadFilePlaceholder": "Завантажити файл .pdf",
+            "removeFile": "Видалити файл",
+            "task": "Фінальне завдання",
             "program": {
-                "expertise": "Expertise"
+                "expertise": "Експертиза"
             },
             "topic": {
-                "difficulty": "Topic Difficulty"
+                "difficulty": "Складність теми",
+                "learningResources": "Навчальні ресурси",
+                "resourceLabel": "Ресурс"
             }
         },
         "error": {
-            "title": "ERROR",
-            "unknownError": "Unknown Error",
-            "fieldsRequired": "Please fill all required inputs and upload a task file"
+            "title": "ПОМИЛКА",
+            "unknownError": "Невідома помилка",
+            "fieldsRequired": "Будь ласка, заповніть усі обов’язкові поля та завантажте файл завдання",
+            "noResources": "Немає ресурсів"
         },
         "buttons": {
-            "createTest": "Create a test",
-            "selectTest": "Select a test",
-            "create": "Create",
-            "update": "Update"
+            "createTest": "Створити тест",
+            "selectTest": "Вибрати тест",
+            "create": "Створити",
+            "update": "Оновити",
+            "addResource": "Додати ресурс"
         }
     }
 }

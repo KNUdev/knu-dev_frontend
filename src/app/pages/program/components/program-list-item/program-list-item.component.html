@@ -4,27 +4,29 @@
     <ul class="meta">
         <li class="meta__item">
             <p class="item__text-prefix">
-                Експертиза:
+                {{'createProgram.items.expertise' | translate}}:
                 <span class="item__text-value">{{ program.expertise }}</span>
             </p>
             <p class="item__text-prefix">
-                Статус:
+                {{'createProgram.items.status.title' | translate}}:
                 <span [class.published]="program.isPublished"
                       [class.unpublished]="!program.isPublished"
                       class="item__text-value"
-                >{{ program.isPublished ? 'Опублікована' : 'Неопублікована' }}</span>
+                >{{ program.isPublished ? ('createProgram.items.status.published' | translate)
+                    : ('createProgram.items.status.unPublished' | translate) }}
+                </span>
             </p>
         </li>
         <hr class="meta__divider">
         <li class="meta__item">
             <p class="item__text-prefix">
-                Дата створення:
+                {{'createProgram.items.createdDate' | translate}}:
                 <span class="item__text-value">
                     {{ program.createdAt | date:'short':'UTC':locale }}
                 </span>
             </p>
             <p class="item__text-prefix">
-                Дата останнього оновлення:
+                {{'createProgram.items.lastUpdateDate' | translate}}:
                 <span class="item__text-value">
                     {{ program.lastUpdatedAt | date:'short':'UTC':locale }}
                 </span>
@@ -33,27 +35,27 @@
         <hr class="meta__divider">
         <li class="meta__item">
             <p class="item__text-prefix">
-                Кількість секцій:
+                {{'createProgram.items.sectionsCount' | translate}}:
                 <span class="item__text-value">{{ program.totalSections }}</span>
             </p>
             <p class="item__text-prefix">
-                Кількість модулей:
+                {{'createProgram.items.modulesCount' | translate}}:
                 <span class="item__text-value">{{ program.totalModules }}</span>
             </p>
             <p class="item__text-prefix">
-                Кількість тем:
+                {{'createProgram.items.topicsCount' | translate}}:
                 <span class="item__text-value">{{ program.totalTopics }}</span>
             </p>
             <p class="item__text-prefix">
-                Кількість активних навчальних сесій:
+                {{'createProgram.items.activeSessionsCount' | translate}}:
                 <span class="item__text-value">{{ program.totalActiveSessions }}</span>
             </p>
         </li>
     </ul>
-    <border-button
+    <app-border-button
         [borderColor]="'yellow'"
         [fullWidth]="true"
-        [text]="'Керувати'"
+        [text]="('createProgram.items.controlBtnText' | translate)"
         [href]="manageProgramLink"
     />
 

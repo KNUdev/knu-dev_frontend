@@ -52,7 +52,7 @@ interface DialogConfig {
 export class ManageProgramComponent implements OnInit {
     public programSignal = signal<EducationProgramDto | null>(null);
     public dialogConfig = signal<DialogConfig | null>(null);
-    public isChangesPresent = signal<boolean>(false);
+    public areChangesPresent = signal<boolean>(false);
     public selectedSection: ProgramSectionDto | null = null;
     public selectedModule: ProgramModuleDto | null = null;
     public locale: string;
@@ -150,6 +150,8 @@ export class ManageProgramComponent implements OnInit {
     }
 
     public onEditSection(section: ProgramSectionDto): void {
+        console.log("SECTION")
+        console.log(section)
         this.dialogConfig.set({
             isOpen: true,
             mode: 'edit',
@@ -186,7 +188,7 @@ export class ManageProgramComponent implements OnInit {
             parentId: this.programSignal()?.id,
             defaultOrderIndex: defaultOrderIndex
         });
-        this.isChangesPresent.set(true);
+        this.areChangesPresent.set(true);
     }
 
     public onAddModule(section: ProgramSectionDto): void {
@@ -198,7 +200,7 @@ export class ManageProgramComponent implements OnInit {
             parentId: section.id,
             defaultOrderIndex: defaultOrderIndex
         });
-        this.isChangesPresent.set(true);
+        this.areChangesPresent.set(true);
     }
 
     public onAddTopic(module: ProgramModuleDto): void {
@@ -210,7 +212,7 @@ export class ManageProgramComponent implements OnInit {
             parentId: module.id,
             defaultOrderIndex: defaultOrderIndex
         });
-        this.isChangesPresent.set(true);
+        this.areChangesPresent.set(true);
     }
 
     private openConfirmDialog(data: ConfirmDialogData): Observable<boolean> {
@@ -309,7 +311,7 @@ export class ManageProgramComponent implements OnInit {
         });
         this.programSignal.set({ ...program });
         if(this.totalSectionsCount > 1) {
-            this.isChangesPresent.set(true);
+            this.areChangesPresent.set(true);
         }
     }
 
@@ -321,7 +323,7 @@ export class ManageProgramComponent implements OnInit {
         });
         this.programSignal.update(p => p);
         if(this.totalModulesCount > 1) {
-            this.isChangesPresent.set(true);
+            this.areChangesPresent.set(true);
         }
     }
 
@@ -333,7 +335,7 @@ export class ManageProgramComponent implements OnInit {
         });
         this.programSignal.update(p => p);
         if(this.totalTopicsCount > 1) {
-            this.isChangesPresent.set(true);
+            this.areChangesPresent.set(true);
         }
     }
 
@@ -433,11 +435,21 @@ export class ManageProgramComponent implements OnInit {
             if (isSecExisting) {
                 formData.append(`sections[${sIndex}].existingSectionId`, section.id);
             } else {
-                if (section.name.en) formData.append(`sections[${sIndex}].name.en`, section.name.en);
-                if (section.name.uk) formData.append(`sections[${sIndex}].name.uk`, section.name.uk);
-                if (section.description.en) formData.append(`sections[${sIndex}].description.en`, section.description.en);
-                if (section.description.uk) formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
-                if (section.finalTaskFile) formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
+                if (section.name.en) {
+                    formData.append(`sections[${sIndex}].name.en`, section.name.en);
+                }
+                if (section.name.uk) {
+                    formData.append(`sections[${sIndex}].name.uk`, section.name.uk);
+                }
+                if (section.description.en) {
+                    formData.append(`sections[${sIndex}].description.en`, section.description.en);
+                }
+                if (section.description.uk) {
+                    formData.append(`sections[${sIndex}].description.uk`, section.description.uk);
+                }
+                if (section.finalTaskFile) {
+                    formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
+                }
             }
             formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
 
@@ -447,11 +459,21 @@ export class ManageProgramComponent implements OnInit {
                 if (isModExisting) {
                     formData.append(`sections[${sIndex}].modules[${mIndex}].existingModuleId`, module.id);
                 } else {
-                    if (module.name.en) formData.append(`sections[${sIndex}].modules[${mIndex}].name.en`, module.name.en);
-                    if (module.name.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].name.uk`, module.name.uk);
-                    if (module.description.en) formData.append(`sections[${sIndex}].modules[${mIndex}].description.en`, module.description.en);
-                    if (module.description.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
-                    if (module.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
+                    if (module.name.en) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.en`, module.name.en);
+                    }
+                    if (module.name.uk) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].name.uk`, module.name.uk);
+                    }
+                    if (module.description.en) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.en`, module.description.en);
+                    }
+                    if (module.description.uk) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].description.uk`, module.description.uk);
+                    }
+                    if (module.finalTaskFile) {
+                        formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
+                    }
                 }
                 formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
 
@@ -459,17 +481,56 @@ export class ManageProgramComponent implements OnInit {
                 topics.forEach((topic, tIndex) => {
                     const isTopicExisting = !!topic.id && topic.id.trim() !== '';
                     if (isTopicExisting) {
-                        formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].existingTopicId`, topic.id);
+                        formData.append(
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].existingTopicId`,
+                            topic.id
+                        );
                     } else {
-                        if (topic.name.en) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`, topic.name.en);
-                        if (topic.name.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.uk`, topic.name.uk);
-                        if (topic.description.en) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.en`, topic.description.en);
-                        if (topic.description.uk) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.uk`, topic.description.uk);
-                        if (topic.testId) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`, topic.testId);
-                        if (topic.finalTaskFile) formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`, topic.finalTaskFile);
+                        if (topic.name.en) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.en`,
+                                topic.name.en
+                            );
+                        }
+                        if (topic.name.uk) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].name.uk`,
+                                topic.name.uk
+                            );
+                        }
+                        if (topic.description.en) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.en`,
+                                topic.description.en
+                            );
+                        }
+                        if (topic.description.uk) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].description.uk`,
+                                topic.description.uk
+                            );
+                        }
+                        if (topic.testId) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].testId`,
+                                topic.testId
+                            );
+                        }
+                        if (topic.finalTaskFile) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`,
+                                topic.finalTaskFile
+                            );
+                        }
                     }
-                    formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`, String(topic.orderIndex));
-                    formData.append(`sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`, String(topic.difficulty));
+                    formData.append(
+                        `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
+                        String(topic.orderIndex)
+                    );
+                    formData.append(
+                        `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`,
+                        String(topic.difficulty)
+                    );
                 });
             });
         });

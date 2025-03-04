@@ -2,7 +2,7 @@
     [routerLink]="href"
     [attr.type]="type"
     [attr.aria-label]="ariaLabel"
-    [ngClass]="{'profile__meta-button': true, 'profile__meta-button--full': fullWidth}"
+    [ngClass]="{'profile__meta-button': true, 'profile__meta-button--full': fullWidth, 'disabled': isDisabled}"
     [ngStyle]="{
     '--arrow-button-border-color': borderColorHex,
     '--arrow-button-hover-color': borderHoverColorHex

@@ -3,12 +3,14 @@ import {MatIcon, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ProgramService} from '../../services/program.service';
 import {ProgramSummary} from '../../common/models/shared.model';
-import {Observable} from 'rxjs';
+import {Observable, startWith, switchMap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ProgramListItemComponent} from './components/program-list-item/program-list-item.component';
 import {Router} from '@angular/router';
 import {UploadDialogComponent} from '../manage-program/components/upload-dialog/upload-dialog.component';
 import {BorderButtonComponent} from '../../common/components/button/arrow-button/border-button.component';
+import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {I18nService} from '../../services/languages/i18n.service';
 
 
 @Component({
@@ -19,7 +21,8 @@ import {BorderButtonComponent} from '../../common/components/button/arrow-button
         AsyncPipe,
         ProgramListItemComponent,
         UploadDialogComponent,
-        BorderButtonComponent
+        BorderButtonComponent,
+        TranslatePipe
     ],
     templateUrl: './program.component.html',
     styleUrls: ['./program.component.scss']
@@ -33,7 +36,9 @@ export class ProgramComponent implements OnInit {
         private matIconRegistry: MatIconRegistry,
         private domSanitizer: DomSanitizer,
         private programService: ProgramService,
-        private router: Router
+        private router: Router,
+        private translate: TranslateService,
+        private i18nService: I18nService,
     ) {
     }
 
@@ -60,6 +65,13 @@ export class ProgramComponent implements OnInit {
         );
 
         this.programs$ = this.programService.getAll();
+
+        this.translate.onLangChange
+            .pipe(
+                startWith({lang: this.translate.currentLang} as LangChangeEvent),
+                switchMap(event => this.i18nService.loadComponentTranslations('pages/program', event.lang))
+            )
+            .subscribe();
     }
 
     public onCreateProgramClick(): void {

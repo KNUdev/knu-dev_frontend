@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatIcon, MatIconRegistry} from '@angular/material/icon';
 import {NgClass, NgStyle} from '@angular/common';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -7,7 +7,7 @@ import {RouterLink} from '@angular/router';
 export type BorderColor = 'red' | 'yellow' | 'green' | 'purple';
 
 @Component({
-    selector: 'border-button',
+    selector: 'app-border-button',
     templateUrl: './border-button.component.html',
     imports: [
         MatIcon,
@@ -31,11 +31,13 @@ export class BorderButtonComponent {
     @Input() fullWidth: boolean = false;
     @Input() type: string = 'button';
     @Input() iconPresent: boolean = true;
+    @Input() isDisabled: boolean = false;
     private readonly arrowIconPath = 'assets/icon/system/arrowRightUp.svg' as const;
-    private matIconRegistry = inject(MatIconRegistry);
-    private domSanitizer = inject(DomSanitizer);
 
-    constructor() {
+    constructor(
+        private matIconRegistry: MatIconRegistry,
+        private domSanitizer: DomSanitizer
+    ) {
         this.matIconRegistry.addSvgIcon(
             'arrowRightUp',
             this.domSanitizer.bypassSecurityTrustResourceUrl(this.arrowIconPath)
@@ -60,4 +62,5 @@ export class BorderButtonComponent {
     get borderHoverColorHex(): string {
         return BorderButtonComponent.BORDER_COLOR_MAP[this.borderColor].hover;
     }
+
 }

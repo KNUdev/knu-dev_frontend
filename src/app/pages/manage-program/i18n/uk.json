@@ -1,36 +1,35 @@
 {
     "program": {
-        "isPublished": "Published",
-        "isNotPublished": "Unpublished",
-        "sections": "sections",
-        "modules": "modules",
-        "topics": "topics",
-        "createdAt": "Created at",
-        "lastUpdatedAt": "Last updated at",
+        "isPublished": "Опубліковано",
+        "isNotPublished": "Неопубліковано",
+        "sections": "Секції",
+        "modules": "Модулі",
+        "topics": "Теми",
+        "createdAt": "Створено",
+        "lastUpdatedAt": "Останнє оновлення",
         "buttons": {
-            "createSection": "Create Section",
-            "createModule": "Create Module",
-            "createTopic": "Create Topic",
-            "save": "Save",
-            "publish": "Publish",
-            "delete": "Delete"
+            "createSection": "Створити секцію",
+            "createModule": "Створити модуль",
+            "createTopic": "Створити тему",
+            "save": "Зберегти",
+            "publish": "Опублікувати",
+            "delete": "Видалити"
         },
         "fallback": {
-            "module": "Please create or select at least 1 section...",
-            "topic": "Please create or select at least 1 module..."
+            "module": "Будь ласка, створіть або виберіть хоча б одну секцію...",
+            "topic": "Будь ласка, створіть або виберіть хоча б один модуль..."
         },
         "title": {
-            "section": "Sections",
-            "module": "Modules",
-            "topic": "Topics",
-            "changesPresent": "There was some done changes"
+            "section": "Секції",
+            "module": "Модулі",
+            "topic": "Теми",
+            "changesPresent": "Внесено деякі зміни"
         },
-
         "alert": {
-            "program": "Are you sure that you want to delete program?",
-            "section": "Are you sure that you want to delete section?",
-            "module": "Are you sure that you want to delete module?",
-            "topic": "Are you sure that you want to delete topic?"
+            "program": "Ви впевнені, що хочете видалити програму?",
+            "section": "Ви впевнені, що хочете видалити секцію?",
+            "module": "Ви впевнені, що хочете видалити модуль?",
+            "topic": "Ви впевнені, що хочете видалити тему?"
         }
     }
 }

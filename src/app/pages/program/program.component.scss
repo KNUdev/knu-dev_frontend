@@ -22,7 +22,6 @@ a {
             align-items: center;
             justify-content: center;
             gap: 0.94rem;
-            //overflow-x: hidden;
             background: linear-gradient(90deg, rgba(20, 20, 20, 0.00) 0%, #141414 100%);
 
             .header__icon_center {
@@ -42,22 +41,6 @@ a {
                 height: 3.5rem;
                 color: #888888;
             }
-
-            .co {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                //width: 2.6875rem;
-                //height: 3.5rem;
-                background: linear-gradient(90deg, rgba(20, 20, 20, 0.00) 0%, #141414 100%);
-
-                //position: absolute;
-                //bottom: 2.90625rem;
-                //background-color: red;
-            }
-
-
         }
 
     }
@@ -102,9 +85,5 @@ a {
         align-items: center;
         justify-content: space-between;
         gap: 3.12rem;
-
-        .items__item {
-
-        }
     }
 }

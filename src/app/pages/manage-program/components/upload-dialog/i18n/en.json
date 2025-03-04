@@ -17,19 +17,23 @@
                 "expertise": "Expertise"
             },
             "topic": {
-                "difficulty": "Topic Difficulty"
+                "difficulty": "Topic Difficulty",
+                "learningResources": "Learning resources",
+                "resourceLabel": "Resource"
             }
         },
         "error": {
             "title": "ERROR",
             "unknownError": "Unknown Error",
-            "fieldsRequired": "Please fill all required inputs and upload a task file"
+            "fieldsRequired": "Please fill all required inputs and upload a task file",
+            "noResources": "No resources"
         },
         "buttons": {
             "createTest": "Create a test",
             "selectTest": "Select a test",
             "create": "Create",
-            "update": "Update"
+            "update": "Update",
+            "addResource": "Add resource"
         }
     }
 }

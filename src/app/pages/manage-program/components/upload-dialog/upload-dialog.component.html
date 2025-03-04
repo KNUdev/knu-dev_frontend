@@ -1,32 +1,32 @@
-<app-backdrop-window (close)="onCloseClick()">
+<app-backdrop-window (close)="onCloseClick()" class="w">
     <form (ngSubmit)="onSubmit()" [formGroup]="dialogForm()">
         <div class="upload-dialog">
             <div class="input-group">
                 <app-label-input
                     [controlName]="'nameUk'"
                     [label]="('dialog.labels.name.uk' | translate)"
-                    [required]="true"
-                ></app-label-input>
+                    [required]="true">
+                </app-label-input>
 
                 <app-label-input
                     [controlName]="'nameEn'"
                     [label]="('dialog.labels.name.en' | translate)"
-                    [required]="true"
-                ></app-label-input>
+                    [required]="true">
+                </app-label-input>
             </div>
 
             <div class="input-group">
                 <app-label-input
                     [controlName]="'descriptionUk'"
                     [label]="('dialog.labels.description.uk' | translate)"
-                    [required]="true"
-                ></app-label-input>
+                    [required]="true">
+                </app-label-input>
 
                 <app-label-input
                     [controlName]="'descriptionEn'"
                     [label]="('dialog.labels.description.en' | translate)"
-                    [required]="true"
-                ></app-label-input>
+                    [required]="true">
+                </app-label-input>
             </div>
 
             @if (entityType === 'program') {
@@ -34,7 +34,8 @@
                     [options]="expertiseOptions"
                     formControlName="expertise"
                     [required]="true"
-                />
+                    [placeholder]="('dialog.labels.program.expertise' | translate)">
+                </register-write-dropdowns>
             }
 
             @if (entityType === 'topic') {
@@ -42,29 +43,29 @@
                     [options]="testSelectOptions()"
                     formControlName="testId"
                     [defaultSelectedId]="topicTestId"
-                    [placeholder]="('dialog.buttons.selectTest' | translate)"
-                />
+                    [placeholder]="('dialog.buttons.selectTest' | translate)">
+                </register-write-dropdowns>
 
                 <div class="profile__divider">
                     <h3 class="profile__divider-title">
-                        {{'dialog.labels.or' | translate}}
+                        {{ 'dialog.labels.or' | translate }}
                     </h3>
                 </div>
-                <border-button
+                <app-border-button
                     [href]="'/admin/test/create'"
                     [borderColor]="'yellow'"
                     [fullWidth]="true"
-                    [text]="('dialog.buttons.createTest' | translate)"
-                />
+                    [text]="('dialog.buttons.createTest' | translate)">
+                </app-border-button>
             }
 
             <div class="upload-dialog__file-input-label-wrapper">
                 <p class="upload-dialog__file-input-label">
-                    {{'dialog.labels.task' | translate}}
+                    {{ 'dialog.labels.task' | translate }}
                 </p>
                 @if (isAnyFilePresent) {
                     <p class="hyperlink" (click)="removeFile()">
-                        {{'dialog.labels.removeFile' | translate}}
+                        {{ 'dialog.labels.removeFile' | translate }}
                     </p>
                 }
             </div>
@@ -74,24 +75,15 @@
                     <div class="file-input__placeholder">
                         <img src="../../../../../assets/icon/button/file.svg" alt="File" loading="lazy"/>
                         <p class="placeholder__text">
-                            {{'dialog.labels.downloadFilePlaceholder' | translate}}
+                            {{ 'dialog.labels.downloadFilePlaceholder' | translate }}
                         </p>
                     </div>
                 </div>
             } @else {
                 <div class="upload-dialog__file-selected">
                     <div class="file-selected__left">
-                        <img
-                            src="../../../../../assets/icon/button/file.svg"
-                            alt="File"
-                            loading="lazy"
-                            class="left__icon"
-                        />
-                        <a
-                            [href]="entityData?.finalTaskUrl || '#'"
-                            target="_blank"
-                            class="left__text"
-                        >
+                        <img src="../../../../../assets/icon/button/file.svg" alt="File" loading="lazy" class="left__icon"/>
+                        <a [href]="entityData?.finalTaskUrl || '#'" target="_blank" class="left__text">
                             {{ currentFileName }}
                         </a>
                     </div>
@@ -101,47 +93,66 @@
 
             @if (entityType === 'topic') {
                 <h3 class="upload-dialog__file-input-label">
-                    {{'dialog.labels.topic.difficulty' | translate}}
+                    {{ 'dialog.labels.topic.difficulty' | translate }}
                 </h3>
-
                 <ol class="upload-dialog__topic-difficulty-container">
                     @for (difficulty of range(10); track difficulty) {
-                        <li
-                            class="topic-difficulty-container__item"
+                        <li class="topic-difficulty-container__item"
                             [class.selected]="dialogForm().get('difficulty')?.value === difficulty"
-                            (click)="onSelectDifficulty(difficulty)"
-                        >
-                            {{ difficulty }}
+                            (click)="onSelectDifficulty(difficulty + 1)">
+                            {{ difficulty + 1}}
                         </li>
                     }
                 </ol>
             }
 
+            @if (entityType === 'topic') {
+                <h3 class="upload-dialog__file-input-label">
+                    {{ 'dialog.labels.topic.learningResources' | translate }}
+                </h3>
+                <ul class="upload-dialog__topic-resources">
+                    @if(topicLearningResources.length != 0) {
+                        @for(resource of topicLearningResources; track $index) {
+                            <li class="topic-resources__item">
+                                <ng-container>
+                                    <app-label-input
+                                        [controlName]="'learningResource' + $index"
+                                        [label]="('dialog.labels.topic.resourceLabel' | translate) + ' #' + ($index + 1)"
+                                        [placeholder]="resource">
+                                    </app-label-input>
+                                </ng-container>
+                            </li>
+                        }
+                    } @else {
+                        <li> {{'dialog.error.noResources' | translate }}</li>
+                    }
+                </ul>
+                <button class="upload-dialog__topic-resources-btn upload-dialog__file-input"
+                        (click)="addTopicLearningResource()"
+                        type="button">
+                    {{ 'dialog.buttons.addResource' | translate }}
+                </button>
+            }
+
             <button class="fill-button fill-yellow" type="submit">
-                {{ mode === 'create' ? ('dialog.buttons.create' | translate)
-                : ('dialog.buttons.update' | translate) }}
+                {{
+                    mode === 'create' ? ('dialog.buttons.create' | translate)
+                        : ('dialog.buttons.update' | translate)
+                }}
             </button>
         </div>
 
-        <input
-            #fileInput
-            (change)="onFileSelected($event)"
-            accept="application/pdf"
-            hidden
-            required
-            type="file"
-        />
+        <input #fileInput (change)="onFileSelected($event)" accept="application/pdf" hidden required type="file"/>
     </form>
 
     @if (errorIsPresent()) {
         <div class="upload-dialog__error">
             <div class="error__top-container">
-                <h1 class="error__title">{{'dialog.labels.error.title' | translate}}</h1>
+                <h1 class="error__title">{{ 'dialog.error.title' | translate }}</h1>
                 <mat-icon [svgIcon]="'closeDialog'" class="error__close-icon" (click)="onErrorClose()"></mat-icon>
             </div>
             <hr class="error__divider">
             <p class="error__text">{{ errorText() }}</p>
         </div>
     }
-
 </app-backdrop-window>
