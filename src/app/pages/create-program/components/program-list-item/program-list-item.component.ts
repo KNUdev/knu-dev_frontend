@@ -38,7 +38,8 @@ export class ProgramListItemComponent implements OnInit {
         this.translate.onLangChange
             .pipe(
                 startWith({lang: this.translate.currentLang} as LangChangeEvent),
-                switchMap(event => this.i18nService.loadComponentTranslations('pages/program', event.lang))
+                switchMap(event => this.i18nService
+                    .loadComponentTranslations('pages/create-program', event.lang))
             )
             .subscribe();
     }

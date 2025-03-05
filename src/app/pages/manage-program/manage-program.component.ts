@@ -127,6 +127,10 @@ export class ManageProgramComponent implements OnInit {
             'sweat',
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/sweat.svg')
         );
+        this.matIconRegistry.addSvgIcon(
+            'goBack',
+            this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/arrowLeft.svg')
+        );
     }
 
     public onSelectSection(section: ProgramSectionDto): void {
@@ -305,38 +309,49 @@ export class ManageProgramComponent implements OnInit {
     public dropSection(event: CdkDragDrop<ProgramSectionDto[]>): void {
         const program = this.programSignal();
         if (!program) return;
+        const oldOrder = program.sections.map(section => section.id);
         moveItemInArray(program.sections, event.previousIndex, event.currentIndex);
+        const newOrder = program.sections.map(section => section.id);
         program.sections.forEach((section, index) => {
             section.orderIndex = index + 1;
         });
         this.programSignal.set({ ...program });
-        if(this.totalSectionsCount > 1) {
+        if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
         }
     }
 
     public dropModule(event: CdkDragDrop<ProgramModuleDto[]>): void {
         if (!this.selectedSection) return;
+        const oldOrder = this.selectedSection.modules.map(module => module.id);
         moveItemInArray(this.selectedSection.modules, event.previousIndex, event.currentIndex);
+        const newOrder = this.selectedSection.modules.map(module => module.id);
         this.selectedSection.modules.forEach((module, index) => {
             module.orderIndex = index + 1;
         });
         this.programSignal.update(p => p);
-        if(this.totalModulesCount > 1) {
+        if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
         }
     }
 
     public dropTopic(event: CdkDragDrop<ProgramTopicDto[]>): void {
         if (!this.selectedModule) return;
+        const oldOrder = this.selectedModule.topics.map(topic => topic.id);
         moveItemInArray(this.selectedModule.topics, event.previousIndex, event.currentIndex);
+        const newOrder = this.selectedModule.topics.map(topic => topic.id);
         this.selectedModule.topics.forEach((topic, index) => {
             topic.orderIndex = index + 1;
         });
         this.programSignal.update(p => p);
-        if(this.totalTopicsCount > 1) {
+        if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
         }
+    }
+
+    private arraysEqual<T>(a: T[], b: T[]): boolean {
+        if (a.length !== b.length) return false;
+        return a.every((val, index) => val === b[index]);
     }
 
     public onDialogClose(result: any): void {
@@ -403,6 +418,7 @@ export class ManageProgramComponent implements OnInit {
             .subscribe(updatedProgram => {
                 this.programSignal.set(updatedProgram);
             });
+        this.areChangesPresent.set(false);
     }
 
     public onPublishProgram():void {
@@ -521,6 +537,14 @@ export class ManageProgramComponent implements OnInit {
                                 `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].finalTask`,
                                 topic.finalTaskFile
                             );
+                        }
+                        if(topic.learningResources) {
+                            topic.learningResources.forEach((lr, index) => {
+                                formData.append(
+                                    `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].learningResources[${index}]`,
+                                    lr
+                                );
+                            });
                         }
                     }
                     formData.append(

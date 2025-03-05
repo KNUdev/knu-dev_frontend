@@ -10,6 +10,10 @@
         ></program-upload-dialog>
     }
 
+    <a href="/program/create" class="hyperlink program__go-back">
+        <mat-icon [svgIcon]="'goBack'" class="content-changed__icon"/>
+        {{ 'program.buttons.goBack' | translate }}
+    </a>
     <section class="program__summary">
         <div>
             <h1 class="summary__title">{{ programSignal()?.name | multiLangField }}</h1>
@@ -88,6 +92,7 @@
                     <ul class="section__items">
                         @for (section of programSignal()?.sections || []; track $index) {
                             <li cdkDrag (click)="onSelectSection(section)"
+                                class="items__item"
                                 [class.selected]="section === selectedSection">
                                 <learning-unit
                                     [name]="section.name"

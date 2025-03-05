@@ -13,7 +13,8 @@
             "createTopic": "Create Topic",
             "save": "Save",
             "publish": "Publish",
-            "delete": "Delete"
+            "delete": "Delete",
+            "goBack": "Back to creation"
         },
         "fallback": {
             "module": "Please create or select at least 1 section...",

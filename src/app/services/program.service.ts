@@ -29,6 +29,7 @@ export class ProgramService {
     }
 
     public saveProgramInOneCall(formData: FormData): Observable<EducationProgramDto> {
+        console.log(formData);
         return this.http.post<EducationProgramDto>(
             this.apiBaseUrl + '/admin/education/program/save',
             formData
@@ -141,9 +142,6 @@ export class ProgramService {
         data.learningResources.forEach((lr, index) => {
             formData.append(`learningResources[${index}]`, lr);
         });
-
-        // If you prefer JSON in one field:
-        // formData.append('learningResources', JSON.stringify(data.learningResources));
 
         if (taskFile) {
             formData.append('task', taskFile);

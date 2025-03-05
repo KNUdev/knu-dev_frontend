@@ -12,9 +12,8 @@ import {BorderButtonComponent} from '../../common/components/button/arrow-button
 import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {I18nService} from '../../services/languages/i18n.service';
 
-
 @Component({
-    selector: 'app-program',
+    selector: 'app-create-program',
     standalone: true,
     imports: [
         MatIcon,
@@ -24,10 +23,10 @@ import {I18nService} from '../../services/languages/i18n.service';
         BorderButtonComponent,
         TranslatePipe
     ],
-    templateUrl: './program.component.html',
-    styleUrls: ['./program.component.scss']
+    templateUrl: './create-program.component.html',
+    styleUrls: ['./create-program.component.scss']
 })
-export class ProgramComponent implements OnInit {
+export class CreateProgramComponent implements OnInit {
     programs$!: Observable<ProgramSummary[]>;
 
     public dialogIsOpen = false;
@@ -69,7 +68,8 @@ export class ProgramComponent implements OnInit {
         this.translate.onLangChange
             .pipe(
                 startWith({lang: this.translate.currentLang} as LangChangeEvent),
-                switchMap(event => this.i18nService.loadComponentTranslations('pages/program', event.lang))
+                switchMap(event => this.i18nService
+                    .loadComponentTranslations('pages/create-program', event.lang))
             )
             .subscribe();
     }

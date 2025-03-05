@@ -1,7 +1,5 @@
 import {Routes} from '@angular/router';
 import {ErrorStateGuard} from '../pages/error/404/404.guard';
-import {ManageProgramComponent} from '../pages/manage-program/manage-program.component';
-import {ProgramComponent} from '../pages/program/program.component';
 
 export const routes: Routes = [
     {
@@ -54,10 +52,17 @@ export const routes: Routes = [
     },
     {
         path: 'program/create',
-        component: ProgramComponent
+        loadComponent: () =>
+            import('../pages/create-program/create-program.component').then(
+                (m) => m.CreateProgramComponent
+            ),
+
     },
     {
         path: 'program/:programId/manage',
-        component: ManageProgramComponent
+        loadComponent: () =>
+            import('../pages/manage-program/manage-program.component').then(
+                (m) => m.ManageProgramComponent
+            ),
     }
 ];

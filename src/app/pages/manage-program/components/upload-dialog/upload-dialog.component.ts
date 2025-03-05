@@ -305,16 +305,15 @@ export class UploadDialogComponent implements OnInit {
 
     private handleCreate(): void {
         const fv = this.form.value;
-        let learningResources: string[] = [];
+
         if (this.entityType === 'topic') {
+            let learningResources: string[] = [];
             Object.keys(fv).forEach(key => {
                 if (key.startsWith('learningResource')) {
                     learningResources.push(fv[key]);
                 }
             });
-        }
 
-        if (this.entityType === 'topic') {
             const newTopic: ProgramTopicDto = {
                 id: '',
                 name: {

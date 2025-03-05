@@ -99,7 +99,7 @@
                     @for (difficulty of range(10); track difficulty) {
                         <li class="topic-difficulty-container__item"
                             [class.selected]="dialogForm().get('difficulty')?.value === difficulty"
-                            (click)="onSelectDifficulty(difficulty + 1)">
+                            (click)="onSelectDifficulty(difficulty)">
                             {{ difficulty + 1}}
                         </li>
                     }
