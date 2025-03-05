@@ -1,0 +1,16 @@
+{
+    "filters": "Filters",
+    "recruitment-name": "Recruitment title",
+    "recruitment-card": {
+        "closed-recruitments-title": "Closed recruitments list",
+        "general-info": "General information",
+        "title": "Title",
+        "start-date": "Start date",
+        "end-date": "End date",
+        "type": "Type",
+        "people-max-amount": "The maximum number of people",
+        "statistic-title": "Statistic",
+        "joined-people-amount": "The number of people who joined",
+        "see-analytics-button": "See analytics"
+    }
+}

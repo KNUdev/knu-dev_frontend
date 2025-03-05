@@ -50,4 +50,18 @@ export const routes: Routes = [
                 '../pages/origins-and-founders/origins-and-founders.component'
             ).then((m) => m.OriginsAndFoundersComponent),
     },
+    {
+        path: 'active-recruitments-management',
+        loadComponent: () =>
+            import(
+                '../pages/active-recruitments-management/active-recruitments-management.component'
+            ).then((m) => m.ActiveRecruitmentsManagementComponent),
+    },
+    {
+        path: 'finished-recruitments',
+        loadComponent: () =>
+            import(
+                '../pages/finished-recruitments/finished-recruitments.component'
+            ).then((m) => m.FinishedRecruitmentsComponent),
+    },
 ];

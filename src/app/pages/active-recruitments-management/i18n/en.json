@@ -1,0 +1,24 @@
+{
+    "create-recruitment": {
+        "title": "Open one more recruitment",
+        "recruitment-name": "Recruitment title",
+        "recruitment-type": "Recruitment type",
+        "recruitment-max-number": "The maximum number of people to set",
+        "final-date": "Final date",
+        "open-recruitment": "Open recruitment"
+    },
+
+    "recruitment-card": {
+        "example": "An example of a set that will be created",
+        "open-recruitments-title": "Open recruitments",
+        "general-info": "General information",
+        "title": "Title",
+        "start-date": "Start date",
+        "end-date": "End date",
+        "type": "Type",
+        "people-max-amount": "The maximum number of people",
+        "statistic-title": "Statistic",
+        "joined-people-amount": "The number of people who joined",
+        "close-recruitment-button": "Close recruitment"
+    }
+}
