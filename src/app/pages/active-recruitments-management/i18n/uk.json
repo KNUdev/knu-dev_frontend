@@ -1,0 +1,24 @@
+{
+    "create-recruitment": {
+        "title": "Відкрити ще один набір",
+        "recruitment-name": "Назва набору",
+        "recruitment-type": "Тип набору",
+        "recruitment-max-number": "Максимальна кількість людей у наборі",
+        "final-date": "Фінальна дата",
+        "open-recruitment": "Відкрити набір"
+    },
+
+    "recruitment-card": {
+        "example": "Приклад набору, який буде створено",
+        "open-recruitments-title": "Відкриті набори",
+        "general-info": "Загальна інформація",
+        "title": "Назва",
+        "start-date": "Дата початку",
+        "end-date": "Дата закінчення",
+        "type": "Тип",
+        "people-max-amount": "Максимальна кількість людей",
+        "statistic-title": "Статистика",
+        "joined-people-amount": "Кількість людей, які приєднались",
+        "close-recruitment-button": "Закрити набір"
+    }
+}

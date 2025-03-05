@@ -1,0 +1,111 @@
+<div class="container">
+    <section class="recruitment-create-card">
+        <div class="card__creation-form">
+            <h2 class="creation-form__title">{{ "create-recruitment.title" | translate }}</h2>
+            <div class="creation-form__body">
+                <div class="body__input-fields">
+                    <input class="input input-fields__name" type="text" placeholder="Enter recruitment name">
+                    <!--                todo add recruitment type case list-->
+                    <input class="input input-fields__people-max-amount" type="text" placeholder="Enter people max amount">
+                    <input class="input input-fields__final-date" type="text" placeholder="Enter final date">
+                </div>
+                <a href="#" class="body__confirm-button"> {{ "create-recruitment.open-recruitment" | translate }} </a>
+            </div>
+        </div>
+        <div class="card__final-form-example">
+            <h2 class="final-form-example__title"> {{ "recruitment-card.example" | translate }} </h2>
+            <div class="final-form-example__body">
+                <div class="body__general-info">
+                    <h3 class="general-info__title"> {{ "recruitment-card.general-info" | translate }} </h3>
+                    <div class="general-info__body">
+                        <span class="body__param-name">{{ "recruitment-card.title" | translate }}: <span
+                            class="data">Title example</span></span>
+                        <div class="body__date">
+                            <span class="date__param-name">{{ "recruitment-card.start-date" | translate }}: <span
+                                class="data">10.10.2010</span></span>
+                            <span class="date__separation-line"> / </span>
+                            <span class="date__param-name"> {{ "recruitment-card.end-date" | translate }}: <span
+                                class="data">10.10.2025</span></span>
+                        </div>
+                        <span class="body__param-name">{{ "recruitment-card.type" | translate }}: <span
+                            class="data">Fullstack</span></span>
+                        <span class="body__param-name"> {{ "recruitment-card.people-max-amount" | translate }}: <span
+                                class="data">100</span></span>
+                    </div>
+                </div>
+                <span class="separation-line"></span>
+                <div class="body__statistic">
+                    <h3 class="statistic__title"> {{ "recruitment-card.statistic-title" | translate }}</h3>
+                    <span class="statistic__data"> {{ "recruitment-card.joined-people-amount" | translate }}: <span
+                        class="data">100</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="active-recruitments-card">
+        <h2 class="active-recruitments-card__title"> {{ "recruitment-card.open-recruitments-title" | translate }}</h2>
+        <div class="active-recruitments-card__body">
+            <div class="body__general-info">
+                <h3 class="general-info__title"> {{ "recruitment-card.general-info" | translate }} </h3>
+                <div class="general-info__body">
+                        <span class="body__param-name">{{ "recruitment-card.title" | translate }}: <span
+                            class="data">Title example</span></span>
+                    <div class="body__date">
+                            <span class="date__param-name">{{ "recruitment-card.start-date" | translate }}: <span
+                                class="data">10.10.2010</span></span>
+                        <span class="date__separation-line"> / </span>
+                        <span class="date__param-name"> {{ "recruitment-card.end-date" | translate }}: <span
+                            class="data">10.10.2025</span></span>
+                    </div>
+                    <span class="body__param-name">{{ "recruitment-card.type" | translate }}: <span
+                        class="data">Fullstack</span></span>
+                    <span class="body__param-name"> {{ "recruitment-card.people-max-amount" | translate }}: <span
+                        class="data">100</span></span>
+                </div>
+            </div>
+            <span class="separation-line"></span>
+            <div class="body__statistic">
+                <h3 class="statistic__title"> {{ "recruitment-card.statistic-title" | translate }}</h3>
+                <span class="statistic__data"> {{ "recruitment-card.joined-people-amount" | translate }}: <span
+                    class="data">100</span></span>
+            </div>
+            <span class="separation-line"></span>
+            <a href="#" class="body__close-recruitment">
+                <span
+                    class="close-recruitment__text"> {{ "recruitment-card.close-recruitment-button" | translate }} </span>
+                <mat-icon class="close-recruitment__button" svgIcon="close"></mat-icon>
+            </a>
+        </div>
+        <div class="active-recruitments-card__body">
+            <div class="body__general-info">
+                <h3 class="general-info__title"> {{ "recruitment-card.general-info" | translate }} </h3>
+                <div class="general-info__body">
+                        <span class="body__param-name">{{ "recruitment-card.title" | translate }}: <span
+                            class="data">Title example</span></span>
+                    <div class="body__date">
+                            <span class="date__param-name">{{ "recruitment-card.start-date" | translate }}: <span
+                                class="data">10.10.2010</span></span>
+                        <span class="date__separation-line"> / </span>
+                        <span class="date__param-name"> {{ "recruitment-card.end-date" | translate }}: <span
+                            class="data">10.10.2025</span></span>
+                    </div>
+                    <span class="body__param-name">{{ "recruitment-card.type" | translate }}: <span
+                        class="data">Fullstack</span></span>
+                    <span class="body__param-name"> {{ "recruitment-card.people-max-amount" | translate }}: <span
+                        class="data">100</span></span>
+                </div>
+            </div>
+            <span class="separation-line"></span>
+            <div class="body__statistic">
+                <h3 class="statistic__title"> {{ "recruitment-card.statistic-title" | translate }}</h3>
+                <span class="statistic__data"> {{ "recruitment-card.joined-people-amount" | translate }}: <span
+                    class="data">100</span></span>
+            </div>
+            <span class="separation-line"></span>
+            <a href="#" class="body__close-recruitment">
+                <span class="close-recruitment__text"> {{ "recruitment-card.close-recruitment-button" | translate }} </span>
+                <mat-icon class="close-recruitment__button" svgIcon="close"></mat-icon>
+            </a>
+        </div>
+    </section>
+</div>
