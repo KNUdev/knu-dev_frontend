@@ -70,7 +70,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private animationService: AnimationService,
         private route: ActivatedRoute,
-        private router: Router,
+        private router: Router
     ) {
         this.loadTranslations();
         this.registerIcons();
@@ -86,9 +86,9 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
                         'pages/about-role',
-                        event.lang,
-                    ),
-                ),
+                        event.lang
+                    )
+                )
             )
             .subscribe();
     }
@@ -121,6 +121,26 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.isInitialLoad = false;
         });
+        this.route.fragment.subscribe((fragment) => {
+            if (fragment) {
+                this.scrollToFragment(fragment);
+            }
+        });
+    }
+
+    private scrollToFragment(fragmentId: string): void {
+        // Use requestAnimationFrame to ensure the DOM is ready
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                const element = document.getElementById(fragmentId);
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                }
+            }, 300);
+        });
     }
 
     private handleValidRoleParam(roleParam: string): void {
@@ -140,6 +160,8 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
             this.pendingRole = roleParam;
             this.swipeDirection = newIndex > currentIndex ? 'left' : 'right';
             this.isAnimating = true;
+
+            this.scrollToFragment('info-card');
 
             document.querySelector('.info-card')?.classList.add('isAnimating');
 
@@ -302,14 +324,14 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.matIconRegistry.addSvgIcon(
             'arrowLeft',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowLeft,
-            ),
+                this.iconPaths.arrowLeft
+            )
         );
         this.matIconRegistry.addSvgIcon(
             'arrowRight',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowRight,
-            ),
+                this.iconPaths.arrowRight
+            )
         );
     }
 
