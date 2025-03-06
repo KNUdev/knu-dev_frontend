@@ -19,8 +19,10 @@
             "topic": {
                 "difficulty": "Topic Difficulty",
                 "learningResources": "Learning resources",
-                "resourceLabel": "Resource"
-            }
+                "resourceLabel": "Resource",
+                "existing": "Existing topic"
+            },
+            "existing": "Existing learning unit"
         },
         "error": {
             "title": "ERROR",

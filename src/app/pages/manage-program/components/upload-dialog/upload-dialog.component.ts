@@ -10,34 +10,29 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-    FormBuilder,
-    FormGroup,
-    NG_VALUE_ACCESSOR,
-    ReactiveFormsModule,
-    Validators,
-    FormControl
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {LangChangeEvent, TranslateModule, TranslateService} from '@ngx-translate/core';
 
-import { BorderButtonComponent } from '../../../../common/components/button/arrow-button/border-button.component';
-import { LabelInput } from '../../../../common/components/input/label-input/label-input';
+import {BorderButtonComponent} from '../../../../common/components/button/arrow-button/border-button.component';
+import {LabelInput} from '../../../../common/components/input/label-input/label-input';
 import {
     EducationProgramDto,
+    LearningUnit,
     ProgramModuleDto,
     ProgramSectionDto,
     ProgramTopicDto
 } from '../../../../common/models/shared.model';
-import { ProgramService } from '../../../../services/program.service';
-import { SelectOption, WriteDropDowns } from '../../../auth/register/components/dropdown/write-dropdowns';
-import { TestService } from '../../../../services/test.service';
-import { map, startWith, switchMap } from 'rxjs/operators';
-import { Expertise } from '../../../user-profile/user-profile.model';
-import { BackdropWindowComponent } from '../../../../common/components/backdrop-window/backdrop-window.component';
-import { I18nService } from '../../../../services/languages/i18n.service';
+import {ProgramService} from '../../../../services/program.service';
+import {SelectOption, WriteDropDowns} from '../../../auth/register/components/dropdown/write-dropdowns';
+import {TestService} from '../../../../services/test.service';
+import {map, startWith, switchMap, tap} from 'rxjs/operators';
+import {Expertise} from '../../../user-profile/user-profile.model';
+import {BackdropWindowComponent} from '../../../../common/components/backdrop-window/backdrop-window.component';
+import {I18nService} from '../../../../services/languages/i18n.service';
+import {EMPTY, Observable} from 'rxjs';
 
 @Component({
     selector: 'program-upload-dialog',
@@ -85,16 +80,16 @@ export class UploadDialogComponent implements OnInit {
     public testSelectOptions = signal<SelectOption[]>([]);
     public errorIsPresent = signal<boolean>(false);
     public errorText = signal<string>('');
+    public existingLearningUnitOptions = signal<SelectOption[]>([]);
+    private originalLearningUnits: LearningUnit[] = [];
 
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-
+    public topicLearningResources: string[] = [];
     private fb = inject(FormBuilder);
     private matIconRegistry = inject(MatIconRegistry);
     private domSanitizer = inject(DomSanitizer);
     private programService = inject(ProgramService);
     private testService = inject(TestService);
-
-    public topicLearningResources: string[] = [];
 
     constructor(
         private translate: TranslateService,
@@ -102,7 +97,7 @@ export class UploadDialogComponent implements OnInit {
     ) {
         this.translate.onLangChange
             .pipe(
-                startWith({ lang: this.translate.currentLang } as LangChangeEvent),
+                startWith({lang: this.translate.currentLang} as LangChangeEvent),
                 switchMap(event =>
                     this.i18nService.loadComponentTranslations(
                         'pages/manage-program/components/upload-dialog',
@@ -165,6 +160,7 @@ export class UploadDialogComponent implements OnInit {
         );
 
         const group = this.fb.group({
+            existingUnitId: [''],
             nameUk: ['', Validators.required],
             nameEn: ['', Validators.required],
             descriptionUk: ['', Validators.required],
@@ -179,28 +175,107 @@ export class UploadDialogComponent implements OnInit {
             this.patchForm(this.entityData);
         }
 
-        this.testService.getAllShort()
-            .pipe(
-                map(tests => tests.map(test => ({
-                    id: test.id,
-                    name: {
-                        en: test.enName,
-                        uk: test.enName
-                    }
-                } as SelectOption)))
-            )
-            .subscribe({
-                next: options => this.testSelectOptions.set(options),
+        if (this.entityType === 'topic') {
+            this.testService.getAllShort()
+                .pipe(
+                    map(tests => tests.map(test => ({
+                        id: test.id,
+                        name: {
+                            en: test.enName,
+                            uk: test.enName
+                        }
+                    } as SelectOption)))
+                )
+                .subscribe({
+                    next: options => this.testSelectOptions.set(options),
+                    error: err => this.handleApiError(err)
+                });
+        }
+
+        if(this.entityType !== 'program') {
+            this.getLearningUnitOptions().subscribe({
+                next: options => this.existingLearningUnitOptions.set(options),
                 error: err => this.handleApiError(err)
             });
+        }
+
+        group.controls.existingUnitId.valueChanges.subscribe(selectedId => {
+            if (selectedId) {
+                const selectedUnit = this.originalLearningUnits
+                    .find(unit => unit.id === selectedId);
+                if (selectedUnit) {
+                    const basePayload = {
+                        ...selectedUnit,
+                        ...(this.selectedFile() && { finalTaskFile: this.selectedFile() }),
+                        orderIndex: this.defaultOrderIndex || 1
+                    };
+
+                    // 3) Emit the correct property so it appears in programSignal
+                    if (this.entityType === 'section') {
+                        this.close.emit({
+                            createdSection: {
+                                ...basePayload,
+                                modules: []
+                            }
+                        });
+                    } else if (this.entityType === 'module') {
+                        this.close.emit({
+                            createdModule: {
+                                ...basePayload,
+                                topics: []
+                            }
+                        });
+                    } else if (this.entityType === 'topic') {
+                        const topicFromPayload = basePayload as ProgramTopicDto;
+
+                        this.close.emit({
+                            createdTopic: {
+                                ...topicFromPayload,
+                                learningResources: topicFromPayload.learningResources ?? [],
+                                difficulty: topicFromPayload.difficulty ?? 5,
+                                testId: topicFromPayload.testId ?? ''
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private getLearningUnitOptions(): Observable<SelectOption[]> {
+        const serviceCallMap: Record<string, () => Observable<LearningUnit[]>> = {
+            module: () => this.programService.getModules(),
+            section: () => this.programService.getSections(),
+            topic: () => this.programService.getTopics(),
+        };
+
+        const serviceCall = serviceCallMap[this.entityType]?.();
+        if (!serviceCall) {
+            return EMPTY;
+        }
+
+        return serviceCall.pipe(
+            tap((items: LearningUnit[]) => {
+                this.originalLearningUnits = items;
+            }),
+            map((items: LearningUnit[]) =>
+                items.map((item: LearningUnit) => ({
+                    id: item.id,
+                    name: {
+                        en: item.name.en,
+                        uk: item.name.uk
+                    }
+                } as SelectOption))
+            )
+        );
     }
 
     public onSelectDifficulty(value: number): void {
-        this.form.patchValue({ difficulty: value });
+        this.form.patchValue({difficulty: value});
     }
 
     public range(count: number): number[] {
-        return Array.from({ length: count }, (_, i) => i);
+        return Array.from({length: count}, (_, i) => i);
     }
 
     public onFileSelected(event: Event): void {
@@ -239,10 +314,6 @@ export class UploadDialogComponent implements OnInit {
         this.topicLearningResources.push('');
     }
 
-    private getLearningResourceCount(): number {
-        return Object.keys(this.form.controls).filter(key => key.startsWith('learningResource')).length;
-    }
-
     public onSubmit(): void {
         this.form.markAllAsTouched();
 
@@ -262,6 +333,10 @@ export class UploadDialogComponent implements OnInit {
 
     public onErrorClose(): void {
         this.errorIsPresent.set(false);
+    }
+
+    private getLearningResourceCount(): number {
+        return Object.keys(this.form.controls).filter(key => key.startsWith('learningResource')).length;
     }
 
     private handleApiError(err: any): void {
@@ -298,13 +373,60 @@ export class UploadDialogComponent implements OnInit {
         if (this.entityType === 'program') {
             const p = entity as EducationProgramDto;
             if (p.expertise) {
-                this.form.patchValue({ expertise: p.expertise });
+                this.form.patchValue({expertise: p.expertise});
             }
         }
     }
 
     private handleCreate(): void {
         const fv = this.form.value;
+        if (this.entityType !== 'program' && fv.existingUnitId) {
+            switch (this.entityType) {
+                case 'section':
+                    this.close.emit({
+                        createdSection: {
+                            id: fv.existingUnitId,
+                            name: { en: fv.nameEn, uk: fv.nameUk },
+                            description: { en: fv.descriptionEn, uk: fv.descriptionUk },
+                            modules: [],
+                            orderIndex: this.defaultOrderIndex || 1,
+                            ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
+                        }
+                    });
+                    break;
+                case 'module':
+                    this.close.emit({
+                        createdModule: {
+                            id: fv.existingUnitId,
+                            name: { en: fv.nameEn, uk: fv.nameUk },
+                            description: { en: fv.descriptionEn, uk: fv.descriptionUk },
+                            finalTaskUrl: '',
+                            topics: [],
+                            orderIndex: this.defaultOrderIndex || 1,
+                            ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
+                        }
+                    });
+                    break;
+                case 'topic':
+                    this.close.emit({
+                        createdTopic: {
+                            id: fv.existingUnitId, // using the selected unit ID
+                            name: { en: fv.nameEn, uk: fv.nameUk },
+                            description: { en: fv.descriptionEn, uk: fv.descriptionUk },
+                            learningResources: [], // or populate if needed
+                            finalTaskUrl: '',
+                            difficulty: fv.difficulty,
+                            testId: fv.testId,
+                            orderIndex: this.defaultOrderIndex || 1,
+                            ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
+                        }
+                    });
+                    break;
+                default:
+                    this.close.emit(null);
+            }
+            return;
+        }
 
         if (this.entityType === 'topic') {
             let learningResources: string[] = [];
@@ -316,14 +438,8 @@ export class UploadDialogComponent implements OnInit {
 
             const newTopic: ProgramTopicDto = {
                 id: '',
-                name: {
-                    en: fv.nameEn,
-                    uk: fv.nameUk
-                },
-                description: {
-                    en: fv.descriptionEn,
-                    uk: fv.descriptionUk
-                },
+                name: { en: fv.nameEn, uk: fv.nameUk },
+                description: { en: fv.descriptionEn, uk: fv.descriptionUk },
                 learningResources: learningResources,
                 finalTaskUrl: '',
                 difficulty: fv.difficulty,
@@ -332,53 +448,32 @@ export class UploadDialogComponent implements OnInit {
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdTopic: newTopic });
-        }
-        else if (this.entityType === 'section') {
+        } else if (this.entityType === 'section') {
             const newSection: ProgramSectionDto = {
                 id: '',
-                name: {
-                    en: fv.nameEn,
-                    uk: fv.nameUk
-                },
-                description: {
-                    en: fv.descriptionEn,
-                    uk: fv.descriptionUk
-                },
+                name: { en: fv.nameEn, uk: fv.nameUk },
+                description: { en: fv.descriptionEn, uk: fv.descriptionUk },
                 modules: [],
                 orderIndex: this.defaultOrderIndex || 1,
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdSection: newSection });
-        }
-        else if (this.entityType === 'module') {
+        } else if (this.entityType === 'module') {
             const newModule: ProgramModuleDto = {
                 id: '',
-                name: {
-                    en: fv.nameEn,
-                    uk: fv.nameUk
-                },
-                description: {
-                    en: fv.descriptionEn,
-                    uk: fv.descriptionUk
-                },
+                name: { en: fv.nameEn, uk: fv.nameUk },
+                description: { en: fv.descriptionEn, uk: fv.descriptionUk },
                 finalTaskUrl: '',
                 topics: [],
                 orderIndex: this.defaultOrderIndex || 1,
                 ...(this.selectedFile() && { finalTaskFile: this.selectedFile() })
             };
             this.close.emit({ createdModule: newModule });
-        }
-        else if (this.entityType === 'program') {
+        } else if (this.entityType === 'program') {
             const newProgram: EducationProgramDto = {
                 id: '',
-                name: {
-                    en: fv.nameEn,
-                    uk: fv.nameUk
-                },
-                description: {
-                    en: fv.descriptionEn,
-                    uk: fv.descriptionUk
-                },
+                name: { en: fv.nameEn, uk: fv.nameUk },
+                description: { en: fv.descriptionEn, uk: fv.descriptionUk },
                 published: false,
                 finalTaskUrl: '',
                 expertise: fv.expertise as Expertise,
@@ -400,12 +495,8 @@ export class UploadDialogComponent implements OnInit {
 
             this.programService.saveProgramInOneCall(formData)
                 .subscribe({
-                    next: createdProgram => {
-                        this.close.emit({ updatedProgram: createdProgram });
-                    },
-                    error: err => {
-                        this.handleApiError(err);
-                    }
+                    next: createdProgram => this.close.emit({ updatedProgram: createdProgram }),
+                    error: err => this.handleApiError(err)
                 });
         } else {
             this.close.emit(null);
@@ -420,37 +511,17 @@ export class UploadDialogComponent implements OnInit {
         const fv = this.form.value;
         const file = this.selectedFile();
 
-        if (this.entityType === 'topic') {
-            let learningResources: string[] = [];
-            Object.keys(fv).forEach(key => {
-                if (key.startsWith('learningResource')) {
-                    learningResources.push(fv[key]);
-                }
-            });
-            const top = this.entityData as ProgramTopicDto;
-            this.programService.updateTopic(
-                top.id,
-                {
-                    ukName: fv.nameUk,
-                    enName: fv.nameEn,
-                    ukDesc: fv.descriptionUk,
-                    enDesc: fv.descriptionEn,
-                    difficulty: fv.difficulty,
-                    testId: fv.testId,
-                    learningResources: learningResources
-                },
-                file
-            ).subscribe({
-                next: updatedTopic => {
-                    this.close.emit({ updatedTopic });
-                },
-                error: err => {
-                    this.handleApiError(err);
-                }
-            });
-        }
-        else if (this.entityType === 'section') {
+        if (this.entityType === 'section') {
             const sec = this.entityData as ProgramSectionDto;
+            if (!sec.id || sec.id.trim() === "") {
+                sec.name = { en: fv.nameEn, uk: fv.nameUk };
+                sec.description = { en: fv.descriptionEn, uk: fv.descriptionUk };
+                if (file) {
+                    sec.finalTaskFile = file;
+                }
+                this.close.emit({ updatedSection: sec });
+                return;
+            }
             this.programService.updateSection(
                 sec.id,
                 {
@@ -461,16 +532,20 @@ export class UploadDialogComponent implements OnInit {
                 },
                 file
             ).subscribe({
-                next: updatedSection => {
-                    this.close.emit({ updatedSection });
-                },
-                error: err => {
-                    this.handleApiError(err);
-                }
+                next: updatedSection => this.close.emit({ updatedSection }),
+                error: err => this.handleApiError(err)
             });
-        }
-        else if (this.entityType === 'module') {
+        } else if (this.entityType === 'module') {
             const mod = this.entityData as ProgramModuleDto;
+            if (!mod.id || mod.id.trim() === "") {
+                mod.name = { en: fv.nameEn, uk: fv.nameUk };
+                mod.description = { en: fv.descriptionEn, uk: fv.descriptionUk };
+                if (file) {
+                    mod.finalTaskFile = file;
+                }
+                this.close.emit({ updatedModule: mod });
+                return;
+            }
             this.programService.updateModule(
                 mod.id,
                 {
@@ -481,15 +556,44 @@ export class UploadDialogComponent implements OnInit {
                 },
                 file
             ).subscribe({
-                next: updatedModule => {
-                    this.close.emit({ updatedModule });
-                },
-                error: err => {
-                    this.handleApiError(err);
-                }
+                next: updatedModule => this.close.emit({ updatedModule }),
+                error: err => this.handleApiError(err)
             });
-        }
-        else if (this.entityType === 'program') {
+        } else if (this.entityType === 'topic') {
+            const top = this.entityData as ProgramTopicDto;
+            if (!top.id || top.id.trim() === "") {
+                top.name = { en: fv.nameEn, uk: fv.nameUk };
+                top.description = { en: fv.descriptionEn, uk: fv.descriptionUk };
+                top.difficulty = fv.difficulty;
+                top.testId = fv.testId;
+                top.learningResources = Object.keys(fv)
+                    .filter(key => key.startsWith('learningResource'))
+                    .map(key => fv[key]);
+                if (file) {
+                    top.finalTaskFile = file;
+                }
+                this.close.emit({ updatedTopic: top });
+                return;
+            }
+            this.programService.updateTopic(
+                top.id,
+                {
+                    ukName: fv.nameUk,
+                    enName: fv.nameEn,
+                    ukDesc: fv.descriptionUk,
+                    enDesc: fv.descriptionEn,
+                    difficulty: fv.difficulty,
+                    testId: fv.testId,
+                    learningResources: Object.keys(fv)
+                        .filter(key => key.startsWith('learningResource'))
+                        .map(key => fv[key])
+                },
+                file
+            ).subscribe({
+                next: updatedTopic => this.close.emit({ updatedTopic }),
+                error: err => this.handleApiError(err)
+            });
+        } else if (this.entityType === 'program') {
             const prog = this.entityData as EducationProgramDto;
             this.programService.updateProgram(
                 prog.id,
@@ -502,15 +606,12 @@ export class UploadDialogComponent implements OnInit {
                 },
                 file
             ).subscribe({
-                next: updatedProgram => {
-                    this.close.emit({ updatedProgram });
-                },
-                error: err => {
-                    this.handleApiError(err);
-                }
+                next: updatedProgram => this.close.emit({ updatedProgram }),
+                error: err => this.handleApiError(err)
             });
         } else {
             this.close.emit(null);
         }
     }
+
 }

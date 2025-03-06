@@ -11,6 +11,7 @@ import {BackdropWindowComponent} from '../../../../common/components/backdrop-wi
 
 export interface ConfirmDialogData {
     message: string;
+    buttonText: string;
 }
 
 @Component({

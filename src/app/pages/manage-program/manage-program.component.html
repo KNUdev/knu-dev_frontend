@@ -77,6 +77,12 @@
             <h2>{{ 'program.title.changesPresent' | translate }}</h2>
         </section>
     }
+    @if(isErrorPresent()) {
+        <section class="error-present">
+            <p>{{errorText()}}</p>
+            <mat-icon [svgIcon]="'clearErrors'" class="error-present__icon" (click)="onErrorsClear()"/>
+        </section>
+    }
     <hr class="section-divider">
     <section class="program__details">
         <article class="details__section">

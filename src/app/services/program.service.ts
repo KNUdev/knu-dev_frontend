@@ -22,6 +22,18 @@ export class ProgramService {
         return this.http.get<ProgramSummary[]>(this.apiBaseUrl + `/admin/education/programs`);
     }
 
+    public getSections(): Observable<ProgramSectionDto[]> {
+        return this.http.get<ProgramSectionDto[]>(this.apiBaseUrl + `/admin/education/sections`);
+    }
+
+    public getModules(): Observable<ProgramModuleDto[]> {
+        return this.http.get<ProgramModuleDto[]>(this.apiBaseUrl + `/admin/education/modules`);
+    }
+
+    public getTopics(): Observable<ProgramTopicDto[]> {
+        return this.http.get<ProgramTopicDto[]>(this.apiBaseUrl + `/admin/education/topics`);
+    }
+
     public getProgramById(id: string): Observable<EducationProgramDto> {
         return this.http.get<EducationProgramDto>(
             this.apiBaseUrl + `/admin/education/program?id=${id}`
@@ -160,10 +172,6 @@ export class ProgramService {
         );
     }
 
-    /**
-     * Removes bridging between a program and a section
-     * but does not delete the section entity itself.
-     */
     public removeProgramSectionMapping(
         programId: string,
         sectionId: string
@@ -173,9 +181,6 @@ export class ProgramService {
         );
     }
 
-    /**
-     * Removes bridging between a section and a module in the context of a program.
-     */
     public removeSectionModuleMapping(
         programId: string,
         sectionId: string,
@@ -186,9 +191,6 @@ export class ProgramService {
         );
     }
 
-    /**
-     * Removes bridging between a module and a topic for a specific program->section->module path.
-     */
     public removeModuleTopicMapping(
         programId: string,
         sectionId: string,

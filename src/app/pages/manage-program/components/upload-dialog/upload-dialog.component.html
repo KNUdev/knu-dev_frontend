@@ -1,6 +1,20 @@
 <app-backdrop-window (close)="onCloseClick()" class="w">
     <form (ngSubmit)="onSubmit()" [formGroup]="dialogForm()">
         <div class="upload-dialog">
+            @if(entityType !== 'program' && mode === "create") {
+                <register-write-dropdowns
+                    [options]="existingLearningUnitOptions()"
+                    formControlName="existingUnitId"
+                    [required]="false"
+                    [placeholder]="('dialog.labels.existing' | translate)"
+                />
+                <div class="profile__divider profile__divider_extended">
+                    <h3 class="profile__divider-title">
+                        {{ 'dialog.labels.or' | translate }}
+                    </h3>
+                </div>
+
+            }
             <div class="input-group">
                 <app-label-input
                     [controlName]="'nameUk'"

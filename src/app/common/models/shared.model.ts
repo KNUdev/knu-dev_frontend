@@ -3,6 +3,9 @@ import {Expertise} from '../../pages/user-profile/user-profile.model';
 export interface LearningUnit {
     finalTaskUrl?: string;
     finalTaskFilename?: string;
+    id: string;
+    name: MultiLanguageField;
+    description: MultiLanguageField;
 }
 
 export interface MultiLanguageField {
@@ -13,9 +16,6 @@ export interface MultiLanguageField {
 }
 
 export interface EducationProgramDto extends LearningUnit {
-    id: string;
-    name: MultiLanguageField;
-    description: MultiLanguageField;
     expertise: Expertise;
     published: boolean;
     sections: ProgramSectionDto[];
@@ -25,27 +25,18 @@ export interface EducationProgramDto extends LearningUnit {
 }
 
 export interface ProgramSectionDto extends LearningUnit {
-    id: string;
-    name: MultiLanguageField;
-    description: MultiLanguageField;
     modules: ProgramModuleDto[];
     finalTaskFile?: File;
     orderIndex: number;
 }
 
 export interface ProgramModuleDto extends LearningUnit {
-    id: string;
-    name: MultiLanguageField;
-    description: MultiLanguageField;
     topics: ProgramTopicDto[];
     finalTaskFile?: File;
     orderIndex: number;
 }
 
 export interface ProgramTopicDto extends LearningUnit {
-    id: string;
-    name: MultiLanguageField;
-    description: MultiLanguageField;
     learningResources: string[];
     difficulty: number;
     finalTaskFile?: File;

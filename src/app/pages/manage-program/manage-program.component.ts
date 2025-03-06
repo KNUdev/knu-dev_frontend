@@ -53,6 +53,11 @@ export class ManageProgramComponent implements OnInit {
     public programSignal = signal<EducationProgramDto | null>(null);
     public dialogConfig = signal<DialogConfig | null>(null);
     public areChangesPresent = signal<boolean>(false);
+    public isErrorPresent = signal<boolean>(false);
+    public errorText = signal<string>('');
+    private isSectionsOrdersChanged = signal<boolean>(false);
+    private isModulesOrdersChanged = signal<boolean>(false);
+    private isTopicsOrdersChanged = signal<boolean>(false);
     public selectedSection: ProgramSectionDto | null = null;
     public selectedModule: ProgramModuleDto | null = null;
     public locale: string;
@@ -130,6 +135,10 @@ export class ManageProgramComponent implements OnInit {
         this.matIconRegistry.addSvgIcon(
             'goBack',
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/arrowLeft.svg')
+        );
+        this.matIconRegistry.addSvgIcon(
+            'clearErrors',
+            this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/close.svg')
         );
     }
 
@@ -228,7 +237,8 @@ export class ManageProgramComponent implements OnInit {
 
     public onDeleteProgram(): void {
         this.openConfirmDialog({
-            message: this.translate.instant('program.alert.program')
+            message: this.translate.instant('program.alert.program'),
+            buttonText: this.translate.instant('program.buttons.delete')
         }).subscribe(result => {
             if (result) {
                 if (!this.programId) return;
@@ -243,7 +253,8 @@ export class ManageProgramComponent implements OnInit {
 
     public onDeleteSection(section: ProgramSectionDto): void {
         this.openConfirmDialog({
-            message: this.translate.instant('program.alert.section')
+            message: this.translate.instant('program.alert.section'),
+            buttonText: this.translate.instant('program.buttons.delete')
         }).subscribe(result => {
             if (result) {
                 if (!this.programId) return;
@@ -264,7 +275,8 @@ export class ManageProgramComponent implements OnInit {
 
     public onDeleteModule(module: ProgramModuleDto): void {
         this.openConfirmDialog({
-            message: this.translate.instant('program.alert.module')
+            message: this.translate.instant('program.alert.module'),
+            buttonText: this.translate.instant('program.buttons.delete')
         }).subscribe(result => {
             if (result) {
                 const program = this.programSignal();
@@ -287,7 +299,8 @@ export class ManageProgramComponent implements OnInit {
 
     public onDeleteTopic(topic: ProgramTopicDto): void {
         this.openConfirmDialog({
-            message: this.translate.instant('program.alert.topic')
+            message: this.translate.instant('program.alert.topic'),
+            buttonText: this.translate.instant('program.buttons.delete')
         }).subscribe(result => {
             if (result) {
                 const program = this.programSignal();
@@ -318,6 +331,7 @@ export class ManageProgramComponent implements OnInit {
         this.programSignal.set({ ...program });
         if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
+            this.isSectionsOrdersChanged.set(true);
         }
     }
 
@@ -332,6 +346,7 @@ export class ManageProgramComponent implements OnInit {
         this.programSignal.update(p => p);
         if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
+            this.isModulesOrdersChanged.set(true);
         }
     }
 
@@ -346,6 +361,7 @@ export class ManageProgramComponent implements OnInit {
         this.programSignal.update(p => p);
         if (!this.arraysEqual(oldOrder, newOrder)) {
             this.areChangesPresent.set(true);
+            this.isTopicsOrdersChanged.set(true);
         }
     }
 
@@ -415,10 +431,17 @@ export class ManageProgramComponent implements OnInit {
         if (!program) return;
         const formData = this.mapProgramToFormData(program);
         this.programService.saveProgramInOneCall(formData)
-            .subscribe(updatedProgram => {
-                this.programSignal.set(updatedProgram);
-            });
-        this.areChangesPresent.set(false);
+            .subscribe({
+                next: newProgram => {
+                    this.programSignal.set(newProgram);
+                    this.areChangesPresent.set(false);
+                },
+                error: err => {
+                    console.log(err)
+                    this.isErrorPresent.set(true);
+                    this.errorText.set(err?.error);
+                }
+            })
     }
 
     public onPublishProgram():void {
@@ -426,8 +449,14 @@ export class ManageProgramComponent implements OnInit {
         if (!program) return;
 
         this.programService.publishProgram(program.id)
-            .subscribe(newProgram => {
-                this.programSignal.set(newProgram);
+            .subscribe({
+                next: newProgram => {
+                    this.programSignal.set(newProgram);
+                },
+                error: err => {
+                    this.isErrorPresent.set(true);
+                    this.errorText.set(err?.error?.message || err?.message);
+                }
             })
     }
 
@@ -467,7 +496,9 @@ export class ManageProgramComponent implements OnInit {
                     formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
                 }
             }
-            formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
+            if(this.isSectionsOrdersChanged()) {
+                formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
+            }
 
             const modules = section.modules || [];
             modules.forEach((module, mIndex) => {
@@ -490,8 +521,11 @@ export class ManageProgramComponent implements OnInit {
                     if (module.finalTaskFile) {
                         formData.append(`sections[${sIndex}].modules[${mIndex}].finalTask`, module.finalTaskFile);
                     }
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
                 }
-                formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
+                if(this.isModulesOrdersChanged()) {
+                    formData.append(`sections[${sIndex}].modules[${mIndex}].orderIndex`, String(module.orderIndex));
+                }
 
                 const topics = module.topics || [];
                 topics.forEach((topic, tIndex) => {
@@ -546,20 +580,34 @@ export class ManageProgramComponent implements OnInit {
                                 );
                             });
                         }
+                        if(topic.difficulty) {
+                            formData.append(
+                                `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`,
+                                String(topic.difficulty)
+                            );
+                        }
+                        formData.append(
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
+                            String(topic.orderIndex)
+                        );
                     }
-                    formData.append(
-                        `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
-                        String(topic.orderIndex)
-                    );
-                    formData.append(
-                        `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].difficulty`,
-                        String(topic.difficulty)
-                    );
+                    if(this.isTopicsOrdersChanged()) {
+                        formData.append(
+                            `sections[${sIndex}].modules[${mIndex}].topics[${tIndex}].orderIndex`,
+                            String(topic.orderIndex)
+                        );
+                    }
+
                 });
             });
         });
 
         return formData;
+    }
+
+    public onErrorsClear() {
+        this.isErrorPresent.set(false);
+        this.errorText.set("");
     }
 
 }

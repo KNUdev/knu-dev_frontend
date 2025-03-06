@@ -19,8 +19,10 @@
             "topic": {
                 "difficulty": "Складність теми",
                 "learningResources": "Навчальні ресурси",
-                "resourceLabel": "Ресурс"
-            }
+                "resourceLabel": "Ресурс",
+                "existing": "Існуюча тема"
+            },
+            "existing": "Існуючий навчальний юніт"
         },
         "error": {
             "title": "ПОМИЛКА",

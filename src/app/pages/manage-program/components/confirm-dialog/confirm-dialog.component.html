@@ -1,6 +1,6 @@
 <app-backdrop-window (close)="onCancel()">
     <div class="window">
         <h1 class="window__title">{{data.message}}</h1>
-        <button class="window__button" (click)="onConfirm()">Видалити</button>
+        <button class="window__button" (click)="onConfirm()">{{data.buttonText}}</button>
     </div>
 </app-backdrop-window>
