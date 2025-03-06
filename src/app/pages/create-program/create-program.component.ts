@@ -8,7 +8,6 @@ import {AsyncPipe} from '@angular/common';
 import {ProgramListItemComponent} from './components/program-list-item/program-list-item.component';
 import {Router} from '@angular/router';
 import {UploadDialogComponent} from '../manage-program/components/upload-dialog/upload-dialog.component';
-import {BorderButtonComponent} from '../../common/components/button/arrow-button/border-button.component';
 import {LangChangeEvent, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {I18nService} from '../../services/languages/i18n.service';
 
@@ -20,7 +19,6 @@ import {I18nService} from '../../services/languages/i18n.service';
         AsyncPipe,
         ProgramListItemComponent,
         UploadDialogComponent,
-        BorderButtonComponent,
         TranslatePipe
     ],
     templateUrl: './create-program.component.html',

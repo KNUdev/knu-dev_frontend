@@ -1,28 +1,10 @@
-import { CommonModule } from '@angular/common';
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    Output,
-    signal,
-} from '@angular/core';
-import {
-    ControlContainer,
-    FormGroupDirective,
-    ReactiveFormsModule,
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
-import { FormErrorService } from './../../../../services/error.service';
 import {CommonModule} from '@angular/common';
-import {Component, EventEmitter, inject, Input, Output, signal,} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal,} from '@angular/core';
 import {ControlContainer, FormGroupDirective, ReactiveFormsModule,} from '@angular/forms';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {TranslateModule} from '@ngx-translate/core';
-import {FormErrorService} from '../../../../services/error.services';
+import {FormErrorService} from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-label-input',
@@ -64,13 +46,13 @@ export class LabelInput {
     @Output() emailBlur = new EventEmitter<void>();
 
     isPasswordVisible = false;
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
     private clipboardEvents = ['copy', 'cut', 'paste'];
 
     constructor(
         private formGroupDirective: FormGroupDirective,
-        private formErrorService: FormErrorService
+        private formErrorService: FormErrorService,
+        private domSanitizer: DomSanitizer,
+        private matIconRegistry: MatIconRegistry
     ) {
         this.matIconRegistry.addSvgIcon(
             'error',

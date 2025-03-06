@@ -1,4 +1,4 @@
-import {Expertise} from '../../pages/user-profile/user-profile.model';
+import {Expertise} from 'src/app/services/user/user.model';
 
 export interface LearningUnit {
     finalTaskUrl?: string;

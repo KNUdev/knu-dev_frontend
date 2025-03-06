@@ -131,7 +131,7 @@
                 </button>
                 <div cdkDropList (cdkDropListDropped)="dropModule($event)">
                     <ul class="section__items">
-                        @for (module of selectedSection?.modules || []; track $index) {
+                        @for (module of selectedSection.modules || []; track $index) {
                             <li cdkDrag (click)="onSelectModule(module)" [class.selected]="module === selectedModule">
                                 <learning-unit
                                     [name]="module.name"
@@ -171,7 +171,7 @@
                 </button>
                 <div cdkDropList (cdkDropListDropped)="dropTopic($event)">
                     <ul class="section__items">
-                        @for (topic of selectedModule?.topics || []; track $index) {
+                        @for (topic of selectedModule.topics || []; track $index) {
                             <li cdkDrag>
                                 <learning-unit
                                     [name]="topic.name"
