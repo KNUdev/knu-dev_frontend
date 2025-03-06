@@ -1,0 +1,31 @@
+{
+    "filters": {
+        "title": "Фільтри",
+        "initials-or-email-filter": "ПІБ/email користувача",
+        "registration-date": "Дата реєстрації",
+        "registration-end-date": "Дата до якої зараєстрова(ний)/на",
+        "knudev-unit": "Кампус/Прекампус",
+        "expertise": "Напрямок",
+        "faculty": "Факультет",
+        "specialty": "Спеціальність",
+        "study-year": "Курс",
+        "set-come": "Набір з якого прийш(ов)/ла",
+        "user-tech-role": "Технічна роль користувача"
+    },
+    "users": {
+        "title": "Список користувачів",
+        "general-info": "Загальна інформація",
+        "full-name": "ПІБ",
+        "email": "Email",
+        "tech-role": "Технічна роль",
+        "expertise": "Напрямок",
+        "registration-date": "Дата реєстрації",
+        "last-role-update": "Дата останнього оновлення ролі",
+        "learns": "Навчається",
+        "faculty": "Факултет",
+        "specialty": "Спеціальність",
+        "study-year": "Курс",
+        "change-button": "Змінити",
+        "look-on-details-button": "Переглянути деталі"
+    }
+}
