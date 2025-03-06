@@ -1,0 +1,31 @@
+{
+    "filters": {
+        "title": "Filters",
+        "initials-or-email-filter": "User` FML name/email",
+        "registration-date": "Registration date",
+        "registration-end-date": "Registration end date",
+        "knudev-unit": "Campus/Precampus",
+        "expertise": "Expertise",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "study-year": "Study year",
+        "set-come": "What set they come",
+        "user-tech-role": "User technical role"
+    },
+    "users": {
+        "title": "List of users",
+        "general-info": "General information",
+        "full-name": "FML name",
+        "email": "Email",
+        "tech-role": "Technical role",
+        "expertise": "Expertise",
+        "registration-date": "Registration date",
+        "last-role-update": "Last role update",
+        "learns": "Learns",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "study-year": "Study year",
+        "change-button": "Change",
+        "look-on-details-button": "See details"
+    }
+}
