@@ -198,11 +198,13 @@
 
         mat-icon {
             margin: auto 0;
+            display: flex;
         }
 
         svg {
             height: 1.25rem;
             width: 1.25rem;
+            margin: auto;
         }
 
         .mat-icon {

@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AccountProfile } from '../pages/user-profile/user-profile.model';
-import {environment} from '../../environments/environment.development';
+import { environment } from 'src/environments/environment';
+import { AccountProfile } from './user.model';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AccountProfileService {
     private readonly apiBaseUrl = environment.apiBaseUrl;
@@ -15,10 +15,9 @@ export class AccountProfileService {
 
     getById(accountId: string): Observable<AccountProfile> {
         const url = `${this.apiBaseUrl}/account/${accountId}`;
-        return this.http.get<AccountProfile>(url)
-            .pipe(
-                catchError(this.handleError)
-            );
+        return this.http
+            .get<AccountProfile>(url)
+            .pipe(catchError(this.handleError));
     }
 
     updateAvatar(accountId: string, newAvatar: File): Observable<string> {
@@ -26,26 +25,19 @@ export class AccountProfileService {
         const formData = new FormData();
         formData.append('newAvatar', newAvatar);
 
-        return this.http.patch(url, formData, { responseType: 'text' })
-            .pipe(
-                catchError(this.handleError)
-            );
+        return this.http
+            .patch(url, formData, { responseType: 'text' })
+            .pipe(catchError(this.handleError));
     }
 
     removeAvatar(accountId: string): Observable<void> {
         const url = `${this.apiBaseUrl}/account/${accountId}/avatar/remove`;
-        return this.http.delete<void>(url)
-            .pipe(
-                catchError(this.handleError)
-            );
+        return this.http.delete<void>(url).pipe(catchError(this.handleError));
     }
 
     removeBanner(accountId: string): Observable<void> {
         const url = `${this.apiBaseUrl}/account/${accountId}/banner/remove`;
-        return this.http.delete<void>(url)
-            .pipe(
-                catchError(this.handleError)
-            );
+        return this.http.delete<void>(url).pipe(catchError(this.handleError));
     }
 
     updateBanner(accountId: string, newBanner: File): Observable<string> {
@@ -53,10 +45,9 @@ export class AccountProfileService {
         const formData = new FormData();
         formData.append('newBanner', newBanner);
 
-        return this.http.patch(url, formData, { responseType: 'text' })
-            .pipe(
-                catchError(this.handleError)
-            );
+        return this.http
+            .patch(url, formData, { responseType: 'text' })
+            .pipe(catchError(this.handleError));
     }
 
     private handleError(error: HttpErrorResponse): Observable<never> {

@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingScreenComponent } from './components/loading/loading.component';
-import { LoadingService } from './services/loading.services';
+import { LoadingService } from './services/loading.service';
 
 @Component({
     selector: 'app-root',
@@ -25,10 +25,22 @@ export class AppComponent {
     }
 
     constructor(protected loadingService: LoadingService) {
+        window.addEventListener('load', this.hideLoadingScreen.bind(this));
+
+        const backupTimeout = setTimeout(() => {
+            this.hideLoadingScreen();
+        }, 3000);
+
         window.addEventListener('load', () => {
+            clearTimeout(backupTimeout);
+        });
+    }
+
+    private hideLoadingScreen(): void {
+        if (this.loadingService.isLoading()) {
             setTimeout(() => {
                 this.loadingService.hide();
-            }, 1000);
-        });
+            }, 500);
+        }
     }
 }

@@ -1,0 +1,67 @@
+.nofill-button {
+    display: flex;
+    background: transparent;
+    color: #d1d1d1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    position: relative;
+    padding: 0.625rem;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 0.3125rem;
+    border: 1px solid #6d6d6d;
+    text-decoration: none;
+
+    .button-text {
+        flex-grow: 1;
+        text-align: left;
+        font-family: "Fixel Text";
+        font-size: 0.9375rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.625rem; /* 173.333% */
+        letter-spacing: 0.04688rem;
+    }
+
+    mat-icon {
+        color: #d1d1d1;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover:not(:disabled) {
+        border: 1px solid #edd342;
+        color: #edd342;
+        mat-icon {
+            color: #edd342;
+        }
+    }
+
+    &:focus:not(:disabled) {
+        border: 2px solid #edd342;
+        color: #edd342;
+        mat-icon {
+            color: #edd342;
+        }
+    }
+
+    &:active:not(:disabled) {
+        border: 1px solid #cdb945;
+        color: #cdb945;
+        mat-icon {
+            color: #cdb945;
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        border: 1px solid #343434;
+        color: #454545;
+        mat-icon {
+            color: #454545;
+        }
+    }
+}

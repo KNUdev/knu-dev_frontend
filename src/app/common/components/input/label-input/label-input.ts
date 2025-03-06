@@ -1,3 +1,21 @@
+import { CommonModule } from '@angular/common';
+import {
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output,
+    signal,
+} from '@angular/core';
+import {
+    ControlContainer,
+    FormGroupDirective,
+    ReactiveFormsModule,
+} from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
+import { FormErrorService } from './../../../../services/error.service';
 import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, inject, Input, Output, signal,} from '@angular/core';
 import {ControlContainer, FormGroupDirective, ReactiveFormsModule,} from '@angular/forms';
@@ -31,6 +49,7 @@ export class LabelInput {
         error: 'assets/icon/system/errorQuadrilateral.svg',
     } as const;
 
+    @Input() translationPrefix: string = '';
     @Input() controlName: string = '';
     @Input() placeholder: string = '';
     @Input() label: string = '';

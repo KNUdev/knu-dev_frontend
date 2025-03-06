@@ -1,5 +1,5 @@
 <li class="item-card">
-    <img [alt]="title" [src]="banner" class="item-card__image"/>
+    <img [alt]="title" [src]="banner" class="item-card__image" />
     <h4 class="item-card__title">{{ title | multiLangField }}</h4>
     <p class="item-card__description">{{ description | multiLangField }}</p>
     @if (details && details.length) {
@@ -18,7 +18,8 @@
 
     @if (showButton) {
         <ng-container>
-            <app-border-button [borderColor]="buttonColor"
+            <app-border-button
+                [borderColor]="buttonColor"
                           [text]="buttonText"
                           [fullWidth]="true"
             />

@@ -6,7 +6,7 @@ import {
     effect,
     inject,
 } from '@angular/core';
-import { LoadingService } from './loading.services';
+import { LoadingService } from './loading.service';
 
 @Injectable({
     providedIn: 'root',

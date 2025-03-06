@@ -64,10 +64,10 @@
         "specialties": {
             "label": "Specialty*"
         },
-        "courses": {
+        "yearOfStudy": {
             "label": "Course*"
         },
-        "expertises": {
+        "expertise": {
             "label": "Expertise*"
         }
     }

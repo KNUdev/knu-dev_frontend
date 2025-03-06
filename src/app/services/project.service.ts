@@ -1,9 +1,9 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {catchError, Observable, throwError} from 'rxjs';
-import {Project} from '../pages/user-profile/user-profile.model';
-import {environment} from '../../environments/environment.development';
-import {map} from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { Project } from './user/user.model';
 
 @Injectable({
     providedIn: 'root',
@@ -11,17 +11,18 @@ import {map} from 'rxjs/operators';
 export class ProjectService {
     private apiBaseUrl = 'http://localhost:5001';
 
-    constructor(private readonly http: HttpClient) {
-    }
+    constructor(private readonly http: HttpClient) {}
 
     getAll(accountId: string): Observable<Project[]> {
-        return this.http.get<Project[]>(`${environment.apiGetAllProjectsByAccountId}/${accountId}/all`).pipe(
-            map(project => project),
-            catchError((error: HttpErrorResponse) => {
-                return throwError(() => error);
-            })
-        );
+        return this.http
+            .get<Project[]>(
+                `${environment.apiGetAllProjectsByAccountId}/${accountId}/all`
+            )
+            .pipe(
+                map((project) => project),
+                catchError((error: HttpErrorResponse) => {
+                    return throwError(() => error);
+                })
+            );
     }
-
-
 }
