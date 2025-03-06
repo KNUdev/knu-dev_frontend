@@ -251,8 +251,6 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
             currentIndex < roles.length - 1
                 ? roles[currentIndex + 1]
                 : undefined;
-
-        // No need to update side panel colors since we're not using role-specific styles
     }
 
     private touchStartX = 0;
@@ -267,7 +265,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onTouchEnd(): void {
-        const swipeThreshold = 30; // Even more responsive threshold
+        const swipeThreshold = 30;
 
         if (
             this.touchStartX - this.touchEndX > swipeThreshold &&

@@ -684,17 +684,16 @@
     width: 100%;
     min-height: 500px;
     margin-bottom: 4rem;
-    overflow: visible; // Changed from hidden to visible to show adjacent panels
+    overflow: visible;
     transform: translateZ(0);
     will-change: transform;
 }
 
-// Add new styles for the peeking side panels
 .side-panel {
     position: absolute;
     top: 0;
     height: 100%;
-    width: 10px; // Wider panel - now 10px as requested
+    width: 10px;
     z-index: 0;
     opacity: 0;
     visibility: hidden;
@@ -704,39 +703,36 @@
 }
 
 .side-panel-prev {
-    left: -5px; // Position so half is visible (5px)
+    left: -5px;
     border-right: none;
 }
 
 .side-panel-next {
-    right: -5px; // Position so half is visible (5px)
+    right: -5px;
     border-left: none;
 }
 
-// Show side panels only on mobile
 @media (max-width: 768px) {
     .info-card-container-wrapper {
         overflow: visible;
-        // Add padding to accommodate wider side panels
         padding: 0 5px;
     }
 
     .side-panel {
         opacity: 1;
         visibility: visible;
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.4); // Add shadow for depth effect
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
 
-    // Style active container to be above side panels
     .info-card__container.active {
         position: relative;
-        z-index: 10; // Higher z-index to appear over side panels
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); // Stronger shadow for main card
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .info-card__next-role-switcher,
     .info-card__prew-role-switcher {
-        display: none; // Hide arrow navigations on mobile
+        display: none;
     }
 
     .info-card {
@@ -744,69 +740,51 @@
     }
 }
 
-// Remove role-specific colors for side panels
-// .role-intern .side-panel,
-// .role-developer .side-panel,
-// etc. - all these are removed
-
 @include mobile {
-    // ...existing code...
-
     .info-card {
         margin-top: 2rem;
         padding-top: 2rem;
     }
 
-    // Make the side panels more visible on very small screens
     .side-panel {
-        width: 10px; // Maintain 10px width
+        width: 10px;
     }
 
     .side-panel-prev {
-        left: -5px; // Half visible (5px)
+        left: -5px;
     }
 
     .side-panel-next {
-        right: -5px; // Half visible (5px)
+        right: -5px;
     }
 
-    // Remove width adjustment for active container to make it full width
     .info-card__container.active {
         width: 100%;
         margin: 0;
     }
 }
 
-// ...existing code...
-
-// Add 3D-like appearance for card arrangement
 .info-card-container-wrapper {
     perspective: 1000px;
     position: relative;
 }
 
-// Enhance depth effect
 @media (max-width: 768px) {
     .info-card__container.active {
         transform: translateZ(0);
     }
 
-    // Create depth effect for side panels
     .side-panel {
-        transform: translateZ(-10px); // Push back in 3D space
+        transform: translateZ(-10px);
         background: rgba(24, 24, 24, 0.5);
         border-color: #3e3d3d;
     }
 
-    // Side panels should match main container styling
     .side-panel {
         background: rgba(24, 24, 24, 0.5);
         border-radius: 0.2rem;
     }
 }
-
-// ...existing code...
-
 .info-card__container {
     position: absolute;
     top: 0;
