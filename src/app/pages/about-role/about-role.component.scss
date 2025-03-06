@@ -67,7 +67,7 @@
 }
 
 .header-text__description {
-    max-width: 375rem;
+    max-width: 37.5rem;
     margin-top: 1.25rem;
     font-weight: initial;
     line-height: 1.6;
@@ -85,6 +85,68 @@
     border-radius: 50%;
     clip-path: polygon(-100% -100%, 200% -100%, 200% 50%, -100% 50%);
     background: rgba(56, 55, 55, 0.4);
+    border: none;
+
+    --highlight-color1: #3148a270;
+    --highlight-color2: #b82f3170;
+    --highlight-color3: #36692f70;
+    --highlight-color4: #592a8b70;
+    --highlight-color5: #dec63c70;
+
+    animation: headerColorCycle 5s infinite;
+}
+
+@keyframes headerColorCycle {
+    0%,
+    5%,
+    20%,
+    25%,
+    40%,
+    45%,
+    60%,
+    65%,
+    80%,
+    85% {
+        background: rgba(56, 55, 55, 0.4);
+    }
+
+    5%,
+    15% {
+        background: var(--highlight-color1);
+    }
+
+    25%,
+    35% {
+        background: var(--highlight-color2);
+    }
+
+    45%,
+    55% {
+    }
+
+    65%,
+    75% {
+        background: var(--highlight-color4);
+    }
+
+    85%,
+    95% {
+        background: var(--highlight-color5);
+    }
+}
+
+@include mobile-horizontal {
+    .header__shadow {
+        background: linear-gradient(
+            90deg,
+            rgba(237, 211, 66, 0.2) 0%,
+            rgba(66, 100, 237, 0.2) 17.5%,
+            rgba(149, 66, 237, 0.2) 41.5%,
+            rgba(63, 203, 73, 0.2) 62.5%,
+            rgba(229, 56, 58, 0.2) 100%
+        );
+        animation: none;
+    }
 }
 
 .roles-wrapper {
@@ -209,6 +271,14 @@
     gap: 1.5rem;
 }
 
+.disabled {
+    cursor: not-allowed !important;
+
+    &:hover > * {
+        color: #a0a0a0 !important;
+    }
+}
+
 .switch-text {
     writing-mode: vertical-lr;
     font-weight: bolder;
@@ -268,7 +338,7 @@
 }
 
 .data__duties {
-    border: 0.125rem solid #4264ed;
+    border: 0.125rem solid transparent;
     border-radius: 0.3125rem;
     margin-top: 3.125rem;
     margin-bottom: 3.125rem;
@@ -277,10 +347,60 @@
 }
 
 .data__advantages {
-    border: 0.125rem solid #4264ed;
+    border: 0.125rem solid transparent;
     border-radius: 0.3125rem;
     padding: 1.56rem;
     width: 100%;
+}
+
+.role-intern {
+    .data__duties {
+        border-color: #4264ed;
+    }
+
+    .data__advantages {
+        border-color: #4264ed;
+    }
+}
+
+.role-developer {
+    .data__duties {
+        border-color: #e5383a;
+    }
+
+    .data__advantages {
+        border-color: #e5383a;
+    }
+}
+
+.role-premaster {
+    .data__duties {
+        border-color: #3fcb49;
+    }
+
+    .data__advantages {
+        border-color: #3fcb49;
+    }
+}
+
+.role-master {
+    .data__duties {
+        border-color: #9542ed;
+    }
+
+    .data__advantages {
+        border-color: #9542ed;
+    }
+}
+
+.role-techlead {
+    .data__duties {
+        border-color: #edd342;
+    }
+
+    .data__advantages {
+        border-color: #edd342;
+    }
 }
 
 .container__data {
@@ -480,6 +600,7 @@
 
         .bottom-roles-block__techlead {
             --highlight-color: #dec63c;
+            --text-color: black;
             border: #edd342 solid 0.0624rem;
             animation: highlightFade 5s infinite;
             animation-delay: 4s;
@@ -501,25 +622,30 @@
     0% {
         background: none;
         box-shadow: none;
+        color: white;
     }
     5% {
         background: var(--highlight-color);
         border-color: var(--highlight-color);
+        color: var(--text-color, white);
         box-shadow: 0px 0px 15px 0px var(--highlight-color);
     }
     15% {
         background: var(--highlight-color);
         border-color: var(--highlight-color);
+        color: var(--text-color, white);
         box-shadow: 0px 0px 15px 0px var(--highlight-color);
     }
     20% {
         background: none;
         box-shadow: none;
+        color: white;
     }
     20.1%,
     100% {
         background: none;
         box-shadow: none;
+        color: white;
     }
 }
 

@@ -74,15 +74,23 @@
                     swipeDirection === 'left' &&
                     isAnimating
                 "
+                [ngClass]="
+                    'role-' +
+                    (activeContainer === 'primary' && !pendingRole
+                        ? role
+                        : activeContainer !== 'primary' && pendingRole
+                        ? pendingRole
+                        : role
+                    ).toLowerCase()
+                "
             >
-                <!-- Show CURRENT role content in the active container -->
                 <header class="container__header">
                     <span class="header__title">{{
                         activeContainer === "primary" && !pendingRole
                             ? role
                             : activeContainer !== "primary" && pendingRole
-                              ? pendingRole
-                              : role
+                            ? pendingRole
+                            : role
                     }}</span>
                     <span class="header__subtitle">PRE-CAMPUS</span>
                 </header>
@@ -174,15 +182,23 @@
                     swipeDirection === 'left' &&
                     isAnimating
                 "
+                [ngClass]="
+                    'role-' +
+                    (activeContainer === 'secondary' && !pendingRole
+                        ? role
+                        : activeContainer !== 'secondary' && pendingRole
+                        ? pendingRole
+                        : role
+                    ).toLowerCase()
+                "
             >
-                <!-- Show NEW (pending) role content in the inactive container that's sliding in -->
                 <header class="container__header">
                     <span class="header__title">{{
                         activeContainer === "secondary" && !pendingRole
                             ? role
                             : activeContainer !== "secondary" && pendingRole
-                              ? pendingRole
-                              : role
+                            ? pendingRole
+                            : role
                     }}</span>
                     <span class="header__subtitle">PRE-CAMPUS</span>
                 </header>
