@@ -346,13 +346,13 @@ export class RegisterComponent {
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
-            const { confirmPassword, githubAccount, ...personalInfo } =
+            const { confirmPassword, githubAccountUsername, ...personalInfo } =
                 this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
             });
 
-            formData.append('githubAccountUsername', githubAccount);
+            formData.append('githubAccountUsername', githubAccountUsername);
 
             const academicInfo = this.academicInfoForm().value;
             formData.append('departmentId', academicInfo.departmentId);
@@ -424,7 +424,7 @@ export class RegisterComponent {
                     ],
                 ],
                 confirmPassword: ['', Validators.required],
-                githubAccount: ['', [Validators.required]],
+                githubAccountUsername: ['', [Validators.required]],
             },
             { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
@@ -445,7 +445,7 @@ export class RegisterComponent {
             }
         }
 
-        this.personalInfoForm().get('githubAccount')?.setValue(value);
+        this.personalInfoForm().get('githubAccountUsername')?.setValue(value);
     }
 
     private initAcademicInfoForm(): FormGroup {
@@ -476,7 +476,7 @@ export class RegisterComponent {
             'middleName',
             'email',
             'password',
-            'githubAccount',
+            'githubAccountUsername',
         ];
         if (
             Object.keys(newErrors).some((key) => criticalFields.includes(key))

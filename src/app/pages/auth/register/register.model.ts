@@ -35,7 +35,7 @@ export const ERROR_KEY_TO_CONTROL: Record<string, string> = {
     middleNameErrors: 'middleName',
     emailErrors: 'email',
     passwordErrors: 'password',
-    githubAccountUsernameErrors: 'githubAccount',
+    githubAccountUsernameErrors: 'githubAccountUsername',
     departmentIdErrors: 'departmentId',
     specialtyCodenameErrors: 'specialtyCodename',
     yearOfStudyErrors: 'yearOfStudy',
@@ -49,5 +49,5 @@ export const VALIDATION_KEYS = {
     password: ['required', 'minlength', 'maxlength', 'pattern'],
     confirmPassword: ['required', 'passwordMismatch'],
     email: ['required', 'invalidDomain'],
-    githubAccount: ['required'],
+    githubAccountUsername: ['required'],
 } as const;

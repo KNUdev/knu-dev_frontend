@@ -79,16 +79,22 @@
 
                     <div class="github">
                         <app-label-input
-                            controlName="githubAccount"
+                            controlName="githubAccountUsername"
                             [translationPrefix]="'register'"
-                            [label]="'register.githubAccount.label' | translate"
-                            [errors]="VALIDATION_KEYS.githubAccount"
+                            [label]="
+                                'register.githubAccountUsername.label'
+                                    | translate
+                            "
+                            [errors]="VALIDATION_KEYS.githubAccountUsername"
                             (input)="onGithubAccountInput($event)"
                         ></app-label-input>
 
                         <div class="github-info">
                             <p>
-                                {{ "register.githubAccount.info" | translate }}
+                                {{
+                                    "register.githubAccountUsername.info"
+                                        | translate
+                                }}
                             </p>
                         </div>
                     </div>
