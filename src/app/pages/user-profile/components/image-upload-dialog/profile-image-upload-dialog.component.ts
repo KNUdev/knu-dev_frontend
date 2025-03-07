@@ -2,13 +2,15 @@ import { Component, EventEmitter, inject, Input, Output, signal } from '@angular
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslatePipe } from '@ngx-translate/core';
+import {BackdropWindowComponent} from '../../../../common/components/backdrop-window/backdrop-window.component';
 
 @Component({
     selector: 'profile-image-upload-dialog',
     templateUrl: './profile-image-upload-dialog.component.html',
     imports: [
         MatIcon,
-        TranslatePipe
+        TranslatePipe,
+        BackdropWindowComponent
     ],
     standalone: true,
     styleUrls: ['./profile-image-upload-dialog.component.scss']

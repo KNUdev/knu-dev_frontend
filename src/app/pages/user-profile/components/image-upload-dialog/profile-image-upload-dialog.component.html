@@ -1,6 +1,6 @@
 <div (click)="onClose()" aria-hidden="true" class="upload-dialog__backdrop"></div>
 
-<div class="upload-dialog__wrapper">
+<app-backdrop-window>
     <div class="upload-dialog__outer-close" (click)="onClose()">
         <button aria-label="Close dialog" class="upload-dialog__close" type="button">
             <mat-icon svgIcon="closeDialog" class="close__icon"></mat-icon>
@@ -55,4 +55,4 @@
             }
         </div>
     </section>
-</div>
+</app-backdrop-window>

@@ -1,15 +1,16 @@
-<button
+<a
+    [routerLink]="href"
     [attr.type]="type"
     [attr.aria-label]="ariaLabel"
-    [ngClass]="{
-        'profile__meta-button': true,
-        'profile__meta-button--full': fullWidth
-    }"
+    [class.profile__meta-button--full]="fullWidth"
+    [class.disabled]="isDisabled"
     [ngStyle]="{
         '--arrow-button-border-color': borderColorHex,
         '--arrow-button-hover-color': borderHoverColorHex
     }"
 >
     {{ text }}
-    <mat-icon svgIcon="arrowRightUp" aria-hidden="true"></mat-icon>
-</button>
+    @if(iconPresent) {
+        <mat-icon svgIcon="arrowRightUp" aria-hidden="true"></mat-icon>
+    }
+</a>
