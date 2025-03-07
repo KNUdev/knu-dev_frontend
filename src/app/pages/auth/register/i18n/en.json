@@ -58,6 +58,13 @@
                 "invalidDomain": "Email must be in the @knu.ua domain"
             }
         },
+        "githubAccount": {
+            "label": "GitHub Link*",
+            "info": "This GitHub account will be added to the KNUdev organization on GitHub.",
+            "errors": {
+                "required": "GitHub account cannot be blank"
+            }
+        },
         "departments": {
             "label": "Department*"
         },

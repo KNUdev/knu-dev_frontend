@@ -58,6 +58,13 @@
                 "invalidDomain": "Електронна адреса повинна бути в домені @knu.ua"
             }
         },
+        "githubAccount": {
+            "label": "Посилання на GitHub*",
+            "info": "Цей GitHub буде доданий в організацію KNUdev на гітхабі.",
+            "errors": {
+                "required": "Посилання на GitHub не може бути порожнім"
+            }
+        },
         "departments": {
             "label": "Факультет/Інститут*"
         },

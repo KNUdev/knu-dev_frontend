@@ -135,6 +135,25 @@
                 margin: 0 auto;
             }
         }
+
+        .github {
+            padding: 2.19rem 0 0;
+        }
+
+        .github-info {
+            display: flex;
+            margin-top: 1rem;
+            font-family: "Finel Text", sans-serif;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem;
+            letter-spacing: 0.0175rem;
+
+            p {
+                margin: auto 0;
+            }
+        }
     }
     .language-selector-container {
         width: 100%;

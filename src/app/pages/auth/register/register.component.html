@@ -76,6 +76,22 @@
                             [preventClipboard]="true"
                         ></app-label-input>
                     </div>
+
+                    <div class="github">
+                        <app-label-input
+                            controlName="githubAccount"
+                            [translationPrefix]="'register'"
+                            [label]="'register.githubAccount.label' | translate"
+                            [errors]="VALIDATION_KEYS.githubAccount"
+                            (input)="onGithubAccountInput($event)"
+                        ></app-label-input>
+
+                        <div class="github-info">
+                            <p>
+                                {{ "register.githubAccount.info" | translate }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="fill-button fill-red">
                     {{ "register.continue" | translate }}
