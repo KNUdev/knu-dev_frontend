@@ -43,7 +43,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-    public role!: string;
+    public role: string = TechnicalRole.INTERN;
     public nextRole?: string;
     public prevRole?: string;
     public isAnimating = false;
@@ -75,6 +75,7 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadTranslations();
         this.registerIcons();
         this.setupNavigationListener();
+        this.updateAdjacentRoles();
     }
 
     private loadTranslations(): void {
@@ -129,7 +130,6 @@ export class AboutRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private scrollToFragment(fragmentId: string): void {
-        // Use requestAnimationFrame to ensure the DOM is ready
         requestAnimationFrame(() => {
             setTimeout(() => {
                 const element = document.getElementById(fragmentId);
