@@ -473,13 +473,21 @@ export class ManageProgramComponent implements OnInit, OnDestroy {
         const program = this.programSignal();
         if (!program) return;
 
-        this.programService.publishProgram(program.id)
-            .subscribe({
-                next: newProgram => {
-                    this.programSignal.set(newProgram);
-                },
-                error: (err) => this.handleApiError(err)
-            })
+        this.openConfirmDialog({
+            message: this.translate.instant('program.alert.program'),
+            buttonText: this.translate.instant('program.buttons.publish')
+        }).subscribe(result => {
+            if (result) {
+                if (!this.programId) return;
+                this.programService.publishProgram(program.id)
+                    .subscribe({
+                        next: newProgram => {
+                            this.programSignal.set(newProgram);
+                        },
+                        error: (err) => this.handleApiError(err)
+                    })
+            }
+        });
     }
 
     private mapProgramToFormData(program: EducationProgramDto): FormData {
@@ -630,8 +638,14 @@ export class ManageProgramComponent implements OnInit, OnDestroy {
 
     private handleApiError(err: any) {
         this.isErrorPresent.set(true);
+        console.log(err)
 
         const errorObj = err?.error;
+        console.log("!")
+        if(typeof errorObj === 'string') {
+            this.errorText.set(errorObj);
+            return;
+        }
         if (errorObj && typeof errorObj === 'object') {
             let allMessages: string[] = [];
 
@@ -643,9 +657,7 @@ export class ManageProgramComponent implements OnInit, OnDestroy {
                     allMessages.push(value);
                 }
             });
-
             this.errorText.set(allMessages.join(';\n'));
-
         } else {
             this.errorText.set(this.translate.instant("program.error.default"));
         }

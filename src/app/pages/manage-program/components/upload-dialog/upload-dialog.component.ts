@@ -344,6 +344,10 @@ export class UploadDialogComponent implements OnInit {
         this.errorIsPresent.set(true);
 
         const errorObj = err?.error;
+        if(typeof errorObj === 'string') {
+            this.errorText.set(errorObj);
+            return;
+        }
         if (errorObj && typeof errorObj === 'object') {
             let allMessages: string[] = [];
 
