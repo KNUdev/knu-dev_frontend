@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArrowNext } from '../../../../assets/icon/system/arrowNext';
 import { AnimationService } from '../../../services/animation.services';
 
 @Component({
     selector: 'app-role-list',
-    imports: [CommonModule, MatIconModule, TranslateModule],
+    imports: [CommonModule, MatIconModule, TranslateModule, RouterModule],
     templateUrl: './role-list.component.html',
     styleUrl: './role-list.component.scss',
 })
