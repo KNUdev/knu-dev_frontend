@@ -209,7 +209,6 @@ export class UploadDialogComponent implements OnInit {
                         orderIndex: this.defaultOrderIndex || 1
                     };
 
-                    // 3) Emit the correct property so it appears in programSignal
                     if (this.entityType === 'section') {
                         this.close.emit({
                             createdSection: {
@@ -266,6 +265,8 @@ export class UploadDialogComponent implements OnInit {
             } else {
                 (this.entityData as any).finalTaskUrl = undefined;
             }
+            this.entityData.finalTaskFilename = undefined;
+            this.entityData.finalTaskFilename = undefined;
         }
     }
 
@@ -338,14 +339,28 @@ export class UploadDialogComponent implements OnInit {
         return Object.keys(this.form.controls).filter(key => key.startsWith('learningResource')).length;
     }
 
-    private handleApiError(err: any): void {
-        const messageFromServer =
-            err?.error?.message ||
-            err?.message ||
-            this.translate.instant("dialog.error.unknownError");
-
-        this.errorText.set(messageFromServer);
+    private handleApiError(err: any) {
+        console.log(err)
         this.errorIsPresent.set(true);
+
+        const errorObj = err?.error;
+        if (errorObj && typeof errorObj === 'object') {
+            let allMessages: string[] = [];
+
+            Object.keys(errorObj).forEach(key => {
+                const value = errorObj[key];
+                if (Array.isArray(value)) {
+                    allMessages = allMessages.concat(value);
+                } else if (typeof value === 'string') {
+                    allMessages.push(value);
+                }
+            });
+
+            this.errorText.set(allMessages.join(';\n'));
+
+        } else {
+            this.errorText.set(this.translate.instant("dialog.error.unknownEror"));
+        }
     }
 
     private patchForm(entity: EducationProgramDto | ProgramSectionDto | ProgramModuleDto | ProgramTopicDto): void {
@@ -409,10 +424,10 @@ export class UploadDialogComponent implements OnInit {
                 case 'topic':
                     this.close.emit({
                         createdTopic: {
-                            id: fv.existingUnitId, // using the selected unit ID
+                            id: fv.existingUnitId,
                             name: {en: fv.nameEn, uk: fv.nameUk},
                             description: {en: fv.descriptionEn, uk: fv.descriptionUk},
-                            learningResources: [], // or populate if needed
+                            learningResources: [],
                             finalTaskUrl: '',
                             difficulty: fv.difficulty,
                             testId: fv.testId,

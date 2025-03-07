@@ -1,7 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Observable, startWith, switchMap} from 'rxjs';
+import {Observable, startWith, Subject, switchMap, takeUntil} from 'rxjs';
 
 import {
     EducationProgramDto,
@@ -49,7 +49,9 @@ interface DialogConfig {
     ],
     standalone: true
 })
-export class ManageProgramComponent implements OnInit {
+export class ManageProgramComponent implements OnInit, OnDestroy {
+    private destroy$ = new Subject<void>();
+
     public programSignal = signal<EducationProgramDto | null>(null);
     public dialogConfig = signal<DialogConfig | null>(null);
     public areChangesPresent = signal<boolean>(false);
@@ -76,6 +78,7 @@ export class ManageProgramComponent implements OnInit {
         this.locale = this.i18nService.currentLocale;
         this.translate.onLangChange
             .pipe(
+                takeUntil(this.destroy$),
                 startWith({lang: this.translate.currentLang} as LangChangeEvent),
                 switchMap(event => this.i18nService.loadComponentTranslations('pages/manage-program', event.lang))
             )
@@ -116,11 +119,12 @@ export class ManageProgramComponent implements OnInit {
             this.programService.getProgramById(this.programId);
 
         programObs.subscribe(program => {
-            console.log(program);
             this.programSignal.set(program);
         });
 
-        this.i18nService.currentLocale$.subscribe(locale => {
+        this.i18nService.currentLocale$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(locale => {
             this.locale = locale;
         });
 
@@ -140,6 +144,11 @@ export class ManageProgramComponent implements OnInit {
             'clearErrors',
             this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icon/system/close.svg')
         );
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     public onSelectSection(section: ProgramSectionDto): void {
@@ -228,13 +237,6 @@ export class ManageProgramComponent implements OnInit {
         this.areChangesPresent.set(true);
     }
 
-    private openConfirmDialog(data: ConfirmDialogData): Observable<boolean> {
-        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: data
-        });
-        return dialogRef.afterClosed();
-    }
-
     public onDeleteProgram(): void {
         this.openConfirmDialog({
             message: this.translate.instant('program.alert.program'),
@@ -263,6 +265,7 @@ export class ManageProgramComponent implements OnInit {
                         const program = this.programSignal();
                         if (!program) return;
                         program.sections = program.sections.filter(s => s.id !== section.id);
+                        program.sections.forEach((s, index) => s.orderIndex = index + 1);
                         this.programSignal.set({ ...program });
                         if (this.selectedSection === section) {
                             this.selectedSection = null;
@@ -286,8 +289,10 @@ export class ManageProgramComponent implements OnInit {
                     this.selectedSection.id,
                     module.id
                 ).subscribe(() => {
-                    this.selectedSection!.modules =
-                        this.selectedSection!.modules.filter(m => m.id !== module.id);
+                    this.selectedSection!.modules = this.selectedSection!.modules
+                        .filter(m => m.id !== module.id);
+                    this.selectedSection!.modules
+                        .forEach((m, index) => m.orderIndex = index + 1);
                     this.programSignal.update(p => p);
                     if (this.selectedModule === module) {
                         this.selectedModule = null;
@@ -311,8 +316,10 @@ export class ManageProgramComponent implements OnInit {
                     this.selectedModule.id,
                     topic.id
                 ).subscribe(() => {
-                    this.selectedModule!.topics =
-                        this.selectedModule!.topics.filter(t => t.id !== topic.id);
+                    this.selectedModule!.topics = this.selectedModule!.topics
+                        .filter(t => t.id !== topic.id);
+                    this.selectedModule!.topics
+                        .forEach((t, index) => t.orderIndex = index + 1);
                     this.programSignal.update(p => p);
                 });
             }
@@ -365,9 +372,9 @@ export class ManageProgramComponent implements OnInit {
         }
     }
 
-    private arraysEqual<T>(a: T[], b: T[]): boolean {
-        if (a.length !== b.length) return false;
-        return a.every((val, index) => val === b[index]);
+    public onErrorsClear() {
+        this.isErrorPresent.set(false);
+        this.errorText.set("");
     }
 
     public onDialogClose(result: any): void {
@@ -376,14 +383,65 @@ export class ManageProgramComponent implements OnInit {
             return;
         }
 
-        if (result.createdSection) {
-            const program = this.programSignal();
-            if (!program) {
-                this.dialogConfig.set(null);
-                return;
+        if (result.updatedProgram) {
+            const currentProgram = this.programSignal();
+            if (currentProgram) {
+                const mergedProgram: EducationProgramDto = {
+                    ...currentProgram,
+                    ...result.updatedProgram,
+                    sections: currentProgram.sections
+                };
+                this.programSignal.set(mergedProgram);
             }
-            program.sections.push(result.createdSection);
-            this.programSignal.set({ ...program });
+        }
+
+        if (result.updatedSection) {
+            const currentProgram = this.programSignal();
+            if (currentProgram) {
+                const idx = currentProgram.sections
+                    .findIndex(s => s.id === result.updatedSection.id);
+                if (idx >= 0) {
+                    currentProgram.sections[idx] = {
+                        ...currentProgram.sections[idx],
+                        ...result.updatedSection,
+                        modules: currentProgram.sections[idx].modules
+                    };
+                    this.programSignal.set({ ...currentProgram });
+                }
+            }
+        }
+
+        if (result.updatedModule && this.selectedSection) {
+            const idx = this.selectedSection.modules
+                .findIndex(m => m.id === result.updatedModule.id);
+            if (idx >= 0) {
+                this.selectedSection.modules[idx] = {
+                    ...this.selectedSection.modules[idx],
+                    ...result.updatedModule,
+                    topics: this.selectedSection.modules[idx].topics
+                };
+                this.programSignal.update(p => p);
+            }
+        }
+
+        if (result.updatedTopic && this.selectedModule) {
+            const idx = this.selectedModule.topics
+                .findIndex(t => t.id === result.updatedTopic.id);
+            if (idx >= 0) {
+                this.selectedModule.topics[idx] = {
+                    ...this.selectedModule.topics[idx],
+                    ...result.updatedTopic
+                };
+                this.programSignal.update(p => p);
+            }
+        }
+
+        if (result.createdSection) {
+            const currentProgram = this.programSignal();
+            if (currentProgram) {
+                currentProgram.sections.push(result.createdSection);
+                this.programSignal.set({ ...currentProgram });
+            }
         }
         if (result.createdModule && this.selectedSection) {
             this.selectedSection.modules.push(result.createdModule);
@@ -392,35 +450,6 @@ export class ManageProgramComponent implements OnInit {
         if (result.createdTopic && this.selectedModule) {
             this.selectedModule.topics.push(result.createdTopic);
             this.programSignal.update(p => p);
-        }
-        if (result.updatedProgram) {
-            this.programSignal.set(result.updatedProgram);
-        }
-        if (result.updatedSection) {
-            const program = this.programSignal();
-            if (!program) {
-                this.dialogConfig.set(null);
-                return;
-            }
-            const idx = program.sections.findIndex(s => s.id === result.updatedSection.id);
-            if (idx >= 0) {
-                program.sections[idx] = result.updatedSection;
-                this.programSignal.set({ ...program });
-            }
-        }
-        if (result.updatedModule && this.selectedSection) {
-            const idx = this.selectedSection.modules.findIndex(m => m.id === result.updatedModule.id);
-            if (idx >= 0) {
-                this.selectedSection.modules[idx] = result.updatedModule;
-                this.programSignal.update(p => p);
-            }
-        }
-        if (result.updatedTopic && this.selectedModule) {
-            const idx = this.selectedModule.topics.findIndex(t => t.id === result.updatedTopic.id);
-            if (idx >= 0) {
-                this.selectedModule.topics[idx] = result.updatedTopic;
-                this.programSignal.update(p => p);
-            }
         }
 
         this.dialogConfig.set(null);
@@ -436,11 +465,7 @@ export class ManageProgramComponent implements OnInit {
                     this.programSignal.set(newProgram);
                     this.areChangesPresent.set(false);
                 },
-                error: err => {
-                    console.log(err)
-                    this.isErrorPresent.set(true);
-                    this.errorText.set(err?.error);
-                }
+                error: (err) => this.handleApiError(err)
             })
     }
 
@@ -453,10 +478,7 @@ export class ManageProgramComponent implements OnInit {
                 next: newProgram => {
                     this.programSignal.set(newProgram);
                 },
-                error: err => {
-                    this.isErrorPresent.set(true);
-                    this.errorText.set(err?.error?.message || err?.message);
-                }
+                error: (err) => this.handleApiError(err)
             })
     }
 
@@ -495,6 +517,7 @@ export class ManageProgramComponent implements OnInit {
                 if (section.finalTaskFile) {
                     formData.append(`sections[${sIndex}].finalTask`, section.finalTaskFile);
                 }
+                formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
             }
             if(this.isSectionsOrdersChanged()) {
                 formData.append(`sections[${sIndex}].orderIndex`, String(section.orderIndex));
@@ -605,9 +628,39 @@ export class ManageProgramComponent implements OnInit {
         return formData;
     }
 
-    public onErrorsClear() {
-        this.isErrorPresent.set(false);
-        this.errorText.set("");
+    private handleApiError(err: any) {
+        this.isErrorPresent.set(true);
+
+        const errorObj = err?.error;
+        if (errorObj && typeof errorObj === 'object') {
+            let allMessages: string[] = [];
+
+            Object.keys(errorObj).forEach(key => {
+                const value = errorObj[key];
+                if (Array.isArray(value)) {
+                    allMessages = allMessages.concat(value);
+                } else if (typeof value === 'string') {
+                    allMessages.push(value);
+                }
+            });
+
+            this.errorText.set(allMessages.join(';\n'));
+
+        } else {
+            this.errorText.set(this.translate.instant("program.error.default"));
+        }
+    }
+
+    private openConfirmDialog(data: ConfirmDialogData): Observable<boolean> {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: data
+        });
+        return dialogRef.afterClosed();
+    }
+
+    private arraysEqual<T>(a: T[], b: T[]): boolean {
+        if (a.length !== b.length) return false;
+        return a.every((val, index) => val === b[index]);
     }
 
 }

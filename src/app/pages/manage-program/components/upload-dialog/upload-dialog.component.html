@@ -1,4 +1,4 @@
-<app-backdrop-window (close)="onCloseClick()" class="w">
+<app-backdrop-window (close)="onCloseClick()">
     <form (ngSubmit)="onSubmit()" [formGroup]="dialogForm()">
         <div class="upload-dialog">
             @if(entityType !== 'program' && mode === "create") {
@@ -159,14 +159,14 @@
         <input #fileInput (change)="onFileSelected($event)" accept="application/pdf" hidden required type="file"/>
     </form>
 
-    @if (errorIsPresent()) {
-        <div class="upload-dialog__error">
-            <div class="error__top-container">
-                <h1 class="error__title">{{ 'dialog.error.title' | translate }}</h1>
-                <mat-icon [svgIcon]="'closeDialog'" class="error__close-icon" (click)="onErrorClose()"></mat-icon>
-            </div>
-            <hr class="error__divider">
-            <p class="error__text">{{ errorText() }}</p>
-        </div>
-    }
 </app-backdrop-window>
+@if (errorIsPresent()) {
+    <div class="upload-dialog__error">
+        <div class="error__top-container">
+            <h1 class="error__title">{{ 'dialog.error.title' | translate }}</h1>
+            <mat-icon [svgIcon]="'closeDialog'" class="error__close-icon" (click)="onErrorClose()"></mat-icon>
+        </div>
+        <hr class="error__divider">
+        <p class="error__text">{{ errorText() }}</p>
+    </div>
+}

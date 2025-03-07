@@ -287,13 +287,15 @@ html {
 }
 
 .upload-dialog__error {
-    margin-top: 2.813rem;
-    position: relative;
+    z-index: 5000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
     padding: 1.563rem;
     border-radius: 0.3125rem;
     background-color: #642A2A;
-    max-width: 100%;
-    width: 100%;
+    max-width: 37.5rem;
 
     .error__top-container {
         display: flex;

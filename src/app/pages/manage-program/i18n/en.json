@@ -32,6 +32,9 @@
             "section": "Are you sure that you want to delete section?",
             "module": "Are you sure that you want to delete module?",
             "topic": "Are you sure that you want to delete topic?"
+        },
+        "error": {
+            "default": "Unknown error occurred"
         }
     }
 }

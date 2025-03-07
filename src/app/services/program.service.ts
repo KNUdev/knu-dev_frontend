@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {
     EducationProgramDto,
-    ProgramSectionDto,
     ProgramModuleDto,
-    ProgramTopicDto,
-    ProgramSummary
+    ProgramSectionDto,
+    ProgramSummary,
+    ProgramTopicDto
 } from '../common/models/shared.model';
-import { environment } from '../../environments/environment.development';
+import {environment} from 'src/environments/environment.development';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +16,8 @@ import { environment } from '../../environments/environment.development';
 export class ProgramService {
     private readonly apiBaseUrl = environment.apiBaseUrl;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+    }
 
     public getAll(): Observable<ProgramSummary[]> {
         return this.http.get<ProgramSummary[]>(this.apiBaseUrl + `/admin/education/programs`);
