@@ -1,21 +1,10 @@
-import { CommonModule } from '@angular/common';
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    Output,
-    signal,
-} from '@angular/core';
-import {
-    ControlContainer,
-    FormGroupDirective,
-    ReactiveFormsModule,
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
-import { FormErrorService } from './../../../../services/error.service';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Input, Output, signal,} from '@angular/core';
+import {ControlContainer, FormGroupDirective, ReactiveFormsModule,} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {TranslateModule} from '@ngx-translate/core';
+import {FormErrorService} from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-label-input',
@@ -33,6 +22,7 @@ import { FormErrorService } from './../../../../services/error.service';
     ],
     templateUrl: './label-input.html',
     styleUrl: './label-input.scss',
+    standalone: true
 })
 export class LabelInput {
     readonly iconPaths = {
@@ -50,18 +40,19 @@ export class LabelInput {
     @Input() preventClipboard: boolean = false;
     @Input() isEmail: boolean = false;
     @Input() domainSuffix: string = '@knu.ua';
+    @Input() required: boolean = false;
 
     @Output() emailInput = new EventEmitter<Event>();
     @Output() emailBlur = new EventEmitter<void>();
 
     isPasswordVisible = false;
-    private domSanitizer = inject(DomSanitizer);
-    private matIconRegistry = inject(MatIconRegistry);
-    private _showErrors = signal(false);
+    private clipboardEvents = ['copy', 'cut', 'paste'];
 
     constructor(
         private formGroupDirective: FormGroupDirective,
-        private formErrorService: FormErrorService
+        private formErrorService: FormErrorService,
+        private domSanitizer: DomSanitizer,
+        private matIconRegistry: MatIconRegistry
     ) {
         this.matIconRegistry.addSvgIcon(
             'error',
@@ -74,14 +65,22 @@ export class LabelInput {
         });
     }
 
+    private _showErrors = signal(false);
+
+    get showErrors() {
+        return this._showErrors();
+    }
+
     get formGroup() {
         return this.formGroupDirective.form;
     }
 
-    private clipboardEvents = ['copy', 'cut', 'paste'];
-
     get getClipboardEvents() {
         return this.clipboardEvents;
+    }
+
+    get backendErrors() {
+        return this.formErrorService.backendErrors();
     }
 
     togglePasswordVisibility(): void {
@@ -105,13 +104,5 @@ export class LabelInput {
     showDomainSuffix(): boolean {
         const value = this.formGroup.get(this.controlName)?.value;
         return this.isEmail && (!value || !value.includes('@'));
-    }
-
-    get showErrors() {
-        return this._showErrors();
-    }
-
-    get backendErrors() {
-        return this.formErrorService.backendErrors();
     }
 }

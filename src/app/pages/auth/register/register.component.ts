@@ -24,7 +24,7 @@ import {
     startWith,
     switchMap,
 } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.service';
 import { FormErrorService } from '../../../services/error.service';

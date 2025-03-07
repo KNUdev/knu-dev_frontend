@@ -1,0 +1,24 @@
+<div [class.selected]="isSelected" class="item">
+    <div class="item__info">
+        <span class="name">{{ orderIndex + 1 }}. </span>
+        <div class="divider"></div>
+        <span class="name">{{ name | multiLangField }}</span>
+    </div>
+    <div class="item__control">
+        <img
+            (click)="onEditClick()"
+            alt="Edit Program Summary"
+            class="control__icon"
+            loading="lazy"
+            src="../../../../../assets/icon/system/edit.svg"
+        >
+        <div class="divider"></div>
+        <img
+            (click)="onDeleteClick()"
+            alt="Delete Program"
+            class="control__icon"
+            loading="lazy"
+            src="../../../../../assets/icon/system/trash.svg"
+        >
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{
+    "createProgram": {
+        "createButton": "Створити програму",
+        "hint": "Створіть програму, щоб почати роботу з деревом",
+        "items": {
+            "sectionTitle": "Створені програми",
+            "expertise": "Експертиза",
+            "status": {
+                "title": "Статус",
+                "published": "Опубліковано",
+                "unPublished": "Неопубліковано"
+            },
+            "createdDate": "Дата створення",
+            "lastUpdateDate": "Дата останнього оновлення",
+            "sectionsCount": "Кількість секцій",
+            "modulesCount": "Кількість модулів",
+            "topicsCount": "Кількість тем",
+            "activeSessionsCount": "Кількість активних сесій",
+            "controlBtnText": "Керувати"
+        }
+    }
+}

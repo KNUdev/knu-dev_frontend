@@ -1,0 +1,41 @@
+{
+    "dialog" : {
+        "labels": {
+            "name": {
+                "uk": "Name in Ukrainian",
+                "en": "Name in English"
+            },
+            "description": {
+                "uk": "Description in Ukrainian",
+                "en": "Description in English"
+            },
+            "or": "OR",
+            "downloadFilePlaceholder": "Download .pdf file",
+            "removeFile": "Remove File",
+            "task": "Final Task",
+            "program": {
+                "expertise": "Expertise"
+            },
+            "topic": {
+                "difficulty": "Topic Difficulty",
+                "learningResources": "Learning resources",
+                "resourceLabel": "Resource",
+                "existing": "Existing topic"
+            },
+            "existing": "Existing learning unit"
+        },
+        "error": {
+            "title": "ERROR",
+            "unknownError": "Unknown Error",
+            "fieldsRequired": "Please fill all required inputs and upload a task file",
+            "noResources": "No resources"
+        },
+        "buttons": {
+            "createTest": "Create a test",
+            "selectTest": "Select a test",
+            "create": "Create",
+            "update": "Update",
+            "addResource": "Add resource"
+        }
+    }
+}

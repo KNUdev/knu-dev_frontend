@@ -57,4 +57,19 @@ export const routes: Routes = [
                 (m) => m.AboutRoleComponent,
             ),
     },
+    {
+        path: 'program/create',
+        loadComponent: () =>
+            import('../pages/create-program/create-program.component').then(
+                (m) => m.CreateProgramComponent
+            ),
+
+    },
+    {
+        path: 'program/:programId/manage',
+        loadComponent: () =>
+            import('../pages/manage-program/manage-program.component').then(
+                (m) => m.ManageProgramComponent
+            ),
+    }
 ];

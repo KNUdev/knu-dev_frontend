@@ -80,7 +80,6 @@
 
 .select-value {
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
     display: flex;
@@ -122,6 +121,7 @@
     display: flex;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #fff;
 
     span {
         margin: auto 0;

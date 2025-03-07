@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
     Component,
     ElementRef,
@@ -9,16 +9,12 @@ import {
     Input,
     Output,
     ViewChild,
-    ViewEncapsulation,
+    ViewEncapsulation
 } from '@angular/core';
-import {
-    ControlValueAccessor,
-    FormsModule,
-    NG_VALUE_ACCESSOR,
-} from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 export interface LocalizedName {
     uk: string;
@@ -42,135 +38,46 @@ interface FilteredOption extends SelectOption {
 
 @Component({
     selector: 'register-write-dropdowns',
+    standalone: true,
     imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
     encapsulation: ViewEncapsulation.None,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => WriteDropDowns),
-            multi: true,
-        },
+            multi: true
+        }
     ],
     templateUrl: './write-dropdowns.html',
-    styleUrls: ['./write-dropdowns.scss'],
+    styleUrls: ['./write-dropdowns.scss']
 })
 export class WriteDropDowns implements ControlValueAccessor {
-    private translate = inject(TranslateService);
+    private static currentOpenDropdown: WriteDropDowns | null = null;
     @Input() hasError = false;
     @Input() errorMessage = '';
-    @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
+    @Input() defaultSelectedId?: string;
     @Output() selectionChange = new EventEmitter<any>();
-    private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
-
     readonly iconPaths = {
         arrowDown: 'assets/icon/system/arrowDown.svg',
         errorTriangle: 'assets/icon/system/errorTriangle.svg',
-        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
+        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg'
     } as const;
-
-    private focusSearchInput(): void {
-        setTimeout(() => {
-            this.searchInput?.nativeElement?.focus();
-        });
-    }
-
     isOpen = false;
     disabled = false;
-    selectedOption: any = null;
+    selectedOption: SelectOption | null = null;
     searchQuery = '';
     filteredOptions: FilteredOption[] = [];
-
-    private onChange: any = () => {};
-    private onTouched: any = () => {};
+    private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
-    private getMatchScore(text: string, query: string): number {
-        if (!query) return 100;
-        if (text === query) return 90;
-        if (text.startsWith(query)) return 80;
-        if (text.includes(query)) return 70;
-        return 0;
-    }
-
-    get hasNoResults(): boolean {
-        return (
-            !!this.searchQuery &&
-            !this.filteredOptions.some((opt) => opt.visible)
-        );
-    }
-
-    getDisplayValue(option: SelectOption): string {
-        if (option?.name) {
-            const name =
-                this.translate.currentLang === 'uk'
-                    ? option.name.uk
-                    : option.name.en;
-
-            if (option.codeName) {
-                return `${option.codeName} - ${name}`;
-            }
-            return name;
-        }
-        return option?.displayedName || '';
-    }
-
-    selectOption(option: SelectOption): void {
-        this.selectedOption = option;
-        this.isOpen = false;
-        this.searchQuery = '';
-        this.resetFilter();
-
-        const value =
-            this.valueField === 'id' ? option.id : option.codeName || option.id;
-
-        this.onChange(value);
-        this.selectionChange.emit(option);
-    }
-
-    filterOptions(): void {
-        const query = this.searchQuery.toLowerCase().trim();
-
-        this.filteredOptions = this.options
-            .map((option): FilteredOption => {
-                const displayValue = this.getDisplayValue(option).toLowerCase();
-                const visible = !query || displayValue.includes(query);
-                const matchScore = this.getMatchScore(displayValue, query);
-
-                return {
-                    ...option,
-                    visible,
-                    matchScore,
-                };
-            })
-            .sort((a, b) => b.matchScore - a.matchScore);
-    }
-
-    resetFilter(): void {
-        this.filteredOptions = this.options.map(
-            (option): FilteredOption => ({
-                ...option,
-                visible: true,
-                matchScore: 100,
-            })
-        );
-    }
-
-    highlightText(text: string): string {
-        if (!this.searchQuery) return text;
-        const query = this.searchQuery.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-        const regex = new RegExp(`(${query})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
-    }
 
     constructor(private elementRef: ElementRef) {
         this.matIconRegistry.addSvgIcon(
             'arrowDown',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowDown
-            )
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.iconPaths.arrowDown)
         );
         this.matIconRegistry.addSvgIcon(
             'errorTriangle',
@@ -189,7 +96,7 @@ export class WriteDropDowns implements ControlValueAccessor {
             if (this.selectedOption) {
                 const currentId = this.selectedOption[this.valueField];
                 setTimeout(() => {
-                    const updatedOption = this.options.find(
+                    const updatedOption = this._options.find(
                         (opt) => opt[this.valueField] === currentId
                     );
                     if (updatedOption) {
@@ -201,6 +108,36 @@ export class WriteDropDowns implements ControlValueAccessor {
                 }, 100);
             }
         });
+    }
+
+    private _options: SelectOption[] = [];
+
+    get options(): SelectOption[] {
+        return this._options;
+    }
+
+    @Input()
+    set options(value: SelectOption[]) {
+        this._options = value || [];
+        if (this.defaultSelectedId && !this.selectedOption) {
+            const found = this._options.find(
+                (o) => o.id === this.defaultSelectedId
+            );
+            if (found) {
+                this.selectedOption = found;
+                const v = this.valueField === 'id' ? found.id : found.codeName || found.id;
+                this.onChange(v);
+                this.selectionChange.emit(found);
+            }
+        }
+        this.resetFilter();
+    }
+
+    get hasNoResults(): boolean {
+        return (
+            !!this.searchQuery &&
+            !this.filteredOptions.some((opt) => opt.visible)
+        );
     }
 
     @HostListener('document:click', ['$event'])
@@ -243,9 +180,72 @@ export class WriteDropDowns implements ControlValueAccessor {
         }
     }
 
+    getDisplayValue(option: SelectOption): string {
+        if (option?.name) {
+            const name =
+                this.translate.currentLang === 'uk'
+                    ? option.name.uk
+                    : option.name.en;
+
+            if (option.codeName) {
+                return `${option.codeName} - ${name}`;
+            }
+            return name;
+        }
+        return option?.displayedName || '';
+    }
+
+    selectOption(option: SelectOption): void {
+        this.selectedOption = option;
+        this.isOpen = false;
+        this.searchQuery = '';
+        this.resetFilter();
+
+        const value =
+            this.valueField === 'id' ? option.id : option.codeName || option.id;
+
+        this.onChange(value);
+        this.selectionChange.emit(option);
+    }
+
+    filterOptions(): void {
+        const query = this.searchQuery.toLowerCase().trim();
+
+        this.filteredOptions = this._options
+            .map((option): FilteredOption => {
+                const displayValue = this.getDisplayValue(option).toLowerCase();
+                const visible = !query || displayValue.includes(query);
+                const matchScore = this.getMatchScore(displayValue, query);
+
+                return {
+                    ...option,
+                    visible,
+                    matchScore
+                };
+            })
+            .sort((a, b) => b.matchScore - a.matchScore);
+    }
+
+    resetFilter(): void {
+        this.filteredOptions = this._options.map(
+            (option): FilteredOption => ({
+                ...option,
+                visible: true,
+                matchScore: 100
+            })
+        );
+    }
+
+    highlightText(text: string): string {
+        if (!this.searchQuery) return text;
+        const query = this.searchQuery.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
     writeValue(value: any): void {
         if (value) {
-            this.selectedOption = this.options.find((opt) => opt.id === value);
+            this.selectedOption = this._options.find((opt) => opt.id === value) ?? null;
         } else {
             this.selectedOption = null;
         }
@@ -258,4 +258,25 @@ export class WriteDropDowns implements ControlValueAccessor {
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
+
+    private onChange: any = () => {
+    };
+
+    private onTouched: any = () => {
+    };
+
+    private focusSearchInput(): void {
+        setTimeout(() => {
+            this.searchInput?.nativeElement?.focus();
+        });
+    }
+
+    private getMatchScore(text: string, query: string): number {
+        if (!query) return 100;
+        if (text === query) return 90;
+        if (text.startsWith(query)) return 80;
+        if (text.includes(query)) return 70;
+        return 0;
+    }
 }
+

@@ -1,59 +1,65 @@
-<div class="select-container" [class.open]="isOpen">
+<div [class.open]="isOpen" class="select-container">
     <div
-        class="select-header"
         (click)="toggleDropdown()"
-        [class.has-value]="selectedOption"
         [class.focused]="isOpen"
+        [class.has-value]="selectedOption"
+        class="select-header"
     >
         <label class="select-label">{{ placeholder }}</label>
         @if (isOpen) {
-        <input
-            #searchInput
-            type="text"
-            [(ngModel)]="searchQuery"
-            (input)="filterOptions()"
-            (click)="preventClose($event)"
-            class="search-input"
-            [placeholder]="'dropdown.search' | translate"
-            maxlength="16"
-        />
-        } @if (!isOpen) {
-        <span class="select-value" (click)="toggleDropdown($event)">
-            @if (selectedOption){ {{ getDisplayValue(selectedOption) }} }
+            <input
+                #searchInput
+                type="text"
+                [(ngModel)]="searchQuery"
+                (input)="filterOptions()"
+                (click)="preventClose($event)"
+                class="search-input"
+                [placeholder]="'dropdown.search' | translate"
+                maxlength="16"
+            />
+        }
+        @if (!isOpen) {
+            <span class="select-value" (click)="toggleDropdown($event)">
+            @if (selectedOption) {
+                {{ getDisplayValue(selectedOption) }}
+            }
         </span>
         }
         <mat-icon
-            svgIcon="arrowDown"
-            class="arrow-icon"
             [class.open]="isOpen"
+            class="arrow-icon"
+            svgIcon="arrowDown"
         ></mat-icon>
     </div>
 
     @if (isOpen) {
-    <div class="select-dropdown">
-        @if (hasError) {
-        <div class="error-message">
-            <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
-            <span>{{ errorMessage }}</span>
+        <div class="select-dropdown">
+            @if (hasError) {
+                <div class="error-message">
+                    <mat-icon svgIcon="errorQuadrilateral"></mat-icon>
+                    <span>{{ errorMessage }}</span>
+                </div>
+            } @else if (hasNoResults) {
+                <div class="no-results">
+                    <mat-icon svgIcon="errorTriangle"></mat-icon>
+                    <span
+                    >{{
+                            'dropdown.noResults' | translate:{query: searchQuery}
+                        }}</span
+                    >
+                </div>
+            } @else {
+                @for (option of filteredOptions; track option[valueField]) {
+                    <div
+                        class="option-item"
+                        [class.selected]="option[valueField] === selectedOption?.[valueField]"
+                        [class.faded]="!option.visible"
+                        (click)="selectOption(option)"
+                    >
+                        <span [innerHTML]="highlightText(getDisplayValue(option))"></span>
+                    </div>
+                }
+            }
         </div>
-        } @else if (hasNoResults) {
-        <div class="no-results">
-            <mat-icon svgIcon="errorTriangle"></mat-icon>
-            <span
-                >{{ 'dropdown.noResults' | translate:{ query: searchQuery }
-                }}</span
-            >
-        </div>
-        } @else { @for (option of filteredOptions; track option[valueField]) {
-        <div
-            class="option-item"
-            [class.selected]="option[valueField] === selectedOption?.[valueField]"
-            [class.faded]="!option.visible"
-            (click)="selectOption(option)"
-        >
-            <span [innerHTML]="highlightText(getDisplayValue(option))"></span>
-        </div>
-        } }
-    </div>
     }
 </div>
