@@ -18,11 +18,15 @@ import {
 import {
     BehaviorSubject,
     catchError,
+    delay,
+    filter,
     map,
     Observable,
     of,
     startWith,
     switchMap,
+    take,
+    tap,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
@@ -100,6 +104,8 @@ export class RegisterComponent {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    formState: any = {};
+    specialtiesLoaded$ = new BehaviorSubject<boolean>(false);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -170,7 +176,7 @@ export class RegisterComponent {
                     ? this.departmentService.getSpecialties(departmentId).pipe(
                           map((specialties) => {
                               this.specialtyLoadError.set(false);
-                              return specialties.map((specialty) => ({
+                              const result = specialties.map((specialty) => ({
                                   id: specialty.codeName,
                                   codeName: specialty.codeName,
                                   name: {
@@ -178,14 +184,22 @@ export class RegisterComponent {
                                       uk: specialty.name.uk,
                                   },
                               }));
+                              this.specialtiesLoaded$.next(true);
+                              return result;
                           }),
                           catchError(() => {
                               this.specialtyLoadError.set(true);
+                              this.specialtiesLoaded$.next(false);
                               return of([]);
                           })
                       )
                     : of([])
-            )
+            ),
+            tap(() => {
+                if (this.currentRegistrationPhase() === 2) {
+                    this.restoreSpecialtySelection();
+                }
+            })
         );
 
         const langChange$ = this.translate.onLangChange.pipe(
@@ -330,12 +344,63 @@ export class RegisterComponent {
         this.formErrorService.setShowValidationErrors(true);
         if (this.personalInfoForm().valid) {
             this.formErrorService.setShowValidationErrors(false);
-            this.currentRegistrationPhase.set(2);
+            this.saveFormState();
+            this.goToSecondStep();
         }
     }
 
     returnToPreviousStep() {
+        this.saveFormState();
         this.currentRegistrationPhase.set(1);
+    }
+
+    saveFormState() {
+        this.formState = {
+            personalInfo: this.personalInfoForm().value,
+            academicInfo: this.academicInfoForm().value,
+        };
+    }
+
+    goToSecondStep() {
+        this.currentRegistrationPhase.set(2);
+        this.specialtiesLoaded$.next(false);
+
+        const departmentId = this.academicInfoForm().get('departmentId')?.value;
+
+        if (departmentId) {
+            this.selectedDepartmentId$.next(departmentId);
+
+            this.specialtiesLoaded$
+                .pipe(
+                    filter((loaded) => loaded),
+                    take(1),
+                    delay(100)
+                )
+                .subscribe(() => {
+                    this.restoreSpecialtySelection();
+                });
+        }
+    }
+
+    restoreSpecialtySelection() {
+        const specialtyCodename =
+            this.academicInfoForm().get('specialtyCodename')?.value;
+
+        if (specialtyCodename) {
+            this.academicInfoForm()
+                .get('specialtyCodename')
+                ?.setValue('', { emitEvent: false });
+
+            setTimeout(() => {
+                this.academicInfoForm()
+                    .get('specialtyCodename')
+                    ?.setValue(specialtyCodename, { emitEvent: true });
+
+                this.academicInfoForm().updateValueAndValidity({
+                    emitEvent: true,
+                });
+            }, 100);
+        }
     }
 
     onSubmit() {
