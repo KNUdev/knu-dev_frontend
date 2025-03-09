@@ -26,7 +26,6 @@ import {
     startWith,
     switchMap,
     take,
-    tap,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
@@ -194,12 +193,7 @@ export class RegisterComponent {
                           })
                       )
                     : of([])
-            ),
-            tap(() => {
-                if (this.currentRegistrationPhase() === 2) {
-                    this.restoreSpecialtySelection();
-                }
-            })
+            )
         );
 
         const langChange$ = this.translate.onLangChange.pipe(
@@ -357,13 +351,12 @@ export class RegisterComponent {
     saveFormState() {
         this.formState = {
             personalInfo: this.personalInfoForm().value,
-            academicInfo: this.academicInfoForm().value,
+            academicInfo: this.academicInfoForm().getRawValue(),
         };
     }
 
     goToSecondStep() {
         this.currentRegistrationPhase.set(2);
-        this.specialtiesLoaded$.next(false);
 
         const departmentId = this.academicInfoForm().get('departmentId')?.value;
 
@@ -377,29 +370,15 @@ export class RegisterComponent {
                     delay(100)
                 )
                 .subscribe(() => {
-                    this.restoreSpecialtySelection();
+                    const savedSpecialty =
+                        this.formState.academicInfo?.specialtyCodename;
+                    if (savedSpecialty) {
+                        this.academicInfoForm()
+                            .get('specialtyCodename')
+                            ?.setValue(savedSpecialty);
+                        this.academicInfoForm().updateValueAndValidity();
+                    }
                 });
-        }
-    }
-
-    restoreSpecialtySelection() {
-        const specialtyCodename =
-            this.academicInfoForm().get('specialtyCodename')?.value;
-
-        if (specialtyCodename) {
-            this.academicInfoForm()
-                .get('specialtyCodename')
-                ?.setValue('', { emitEvent: false });
-
-            setTimeout(() => {
-                this.academicInfoForm()
-                    .get('specialtyCodename')
-                    ?.setValue(specialtyCodename, { emitEvent: true });
-
-                this.academicInfoForm().updateValueAndValidity({
-                    emitEvent: true,
-                });
-            }, 100);
         }
     }
 
