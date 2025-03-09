@@ -105,6 +105,7 @@ export class RegisterComponent {
     private matIconRegistry = inject(MatIconRegistry);
     formState: any = {};
     specialtiesLoaded$ = new BehaviorSubject<boolean>(false);
+    hasNonEnglishName = signal<boolean>(false);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -319,6 +320,52 @@ export class RegisterComponent {
                 inputElement.setSelectionRange(cursorPosition, cursorPosition);
             }, 0);
         }
+    }
+
+    onNameInput(
+        event: Event,
+        fieldName: 'firstName' | 'lastName' | 'middleName'
+    ): void {
+        const inputElement = event.target as HTMLInputElement;
+        const value = inputElement.value;
+
+        const hasNonEnglish = this.containsNonEnglishCharacters(value);
+
+        if (hasNonEnglish) {
+            this.hasNonEnglishName.set(true);
+        } else {
+            const formControls = this.personalInfoForm().controls;
+            const firstName = formControls['firstName'].value || '';
+            const lastName = formControls['lastName'].value || '';
+            const middleName = formControls['middleName'].value || '';
+
+            const hasAnyNonEnglish =
+                this.containsNonEnglishCharacters(firstName) ||
+                this.containsNonEnglishCharacters(lastName) ||
+                this.containsNonEnglishCharacters(middleName);
+
+            this.hasNonEnglishName.set(hasAnyNonEnglish);
+        }
+    }
+
+    containsNonEnglishCharacters(text: string): boolean {
+        const englishPattern = /^[A-Za-z'-]*$/;
+        return !englishPattern.test(text);
+    }
+
+    onNameKeyDown(event: KeyboardEvent): boolean {
+        if (event.key.length > 1) {
+            return true;
+        }
+
+        const englishPattern = /^[A-Za-z'-]$/;
+        if (!englishPattern.test(event.key)) {
+            event.preventDefault();
+            this.hasNonEnglishName.set(true);
+            return false;
+        }
+
+        return true;
     }
 
     formatEmailOnBlur() {
