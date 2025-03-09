@@ -17,6 +17,8 @@
                             [translationPrefix]="'register'"
                             [label]="'register.firstName.label' | translate"
                             [errors]="VALIDATION_KEYS.firstName"
+                            (input)="onNameInput($event, 'firstName')"
+                            (keydown)="onNameKeyDown($event)"
                         ></app-label-input>
 
                         <app-label-input
@@ -24,6 +26,8 @@
                             [translationPrefix]="'register'"
                             [label]="'register.lastName.label' | translate"
                             [errors]="VALIDATION_KEYS.lastName"
+                            (input)="onNameInput($event, 'lastName')"
+                            (keydown)="onNameKeyDown($event)"
                         ></app-label-input>
 
                         <app-label-input
@@ -31,8 +35,18 @@
                             [translationPrefix]="'register'"
                             [label]="'register.middleName.label' | translate"
                             [errors]="VALIDATION_KEYS.middleName"
+                            (input)="onNameInput($event, 'middleName')"
+                            (keydown)="onNameKeyDown($event)"
                         ></app-label-input>
                     </div>
+
+                    @if (hasNonEnglishName()) {
+                    <div class="warning fullname-warning">
+                        <mat-icon svgIcon="errorTriangle"></mat-icon>
+                        <span>{{ "register.englishOnly" | translate }}</span>
+                    </div>
+                    }
+
                     <div class="email">
                         <app-label-input
                             controlName="email"
@@ -75,6 +89,28 @@
                             type="password"
                             [preventClipboard]="true"
                         ></app-label-input>
+                    </div>
+
+                    <div class="github">
+                        <app-label-input
+                            controlName="githubAccountUsername"
+                            [translationPrefix]="'register'"
+                            [label]="
+                                'register.githubAccountUsername.label'
+                                    | translate
+                            "
+                            [errors]="VALIDATION_KEYS.githubAccountUsername"
+                            (input)="onGithubAccountInput($event)"
+                        ></app-label-input>
+
+                        <div class="github-info">
+                            <p>
+                                {{
+                                    "register.githubAccountUsername.info"
+                                        | translate
+                                }}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="fill-button fill-red">

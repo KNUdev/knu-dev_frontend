@@ -18,11 +18,14 @@ import {
 import {
     BehaviorSubject,
     catchError,
+    delay,
+    filter,
     map,
     Observable,
     of,
     startWith,
     switchMap,
+    take,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
@@ -100,6 +103,9 @@ export class RegisterComponent {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    formState: any = {};
+    specialtiesLoaded$ = new BehaviorSubject<boolean>(false);
+    hasNonEnglishName = signal<boolean>(false);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -170,7 +176,7 @@ export class RegisterComponent {
                     ? this.departmentService.getSpecialties(departmentId).pipe(
                           map((specialties) => {
                               this.specialtyLoadError.set(false);
-                              return specialties.map((specialty) => ({
+                              const result = specialties.map((specialty) => ({
                                   id: specialty.codeName,
                                   codeName: specialty.codeName,
                                   name: {
@@ -178,9 +184,12 @@ export class RegisterComponent {
                                       uk: specialty.name.uk,
                                   },
                               }));
+                              this.specialtiesLoaded$.next(true);
+                              return result;
                           }),
                           catchError(() => {
                               this.specialtyLoadError.set(true);
+                              this.specialtiesLoaded$.next(false);
                               return of([]);
                           })
                       )
@@ -313,6 +322,52 @@ export class RegisterComponent {
         }
     }
 
+    onNameInput(
+        event: Event,
+        fieldName: 'firstName' | 'lastName' | 'middleName'
+    ): void {
+        const inputElement = event.target as HTMLInputElement;
+        const value = inputElement.value;
+
+        const hasNonEnglish = this.containsNonEnglishCharacters(value);
+
+        if (hasNonEnglish) {
+            this.hasNonEnglishName.set(true);
+        } else {
+            const formControls = this.personalInfoForm().controls;
+            const firstName = formControls['firstName'].value || '';
+            const lastName = formControls['lastName'].value || '';
+            const middleName = formControls['middleName'].value || '';
+
+            const hasAnyNonEnglish =
+                this.containsNonEnglishCharacters(firstName) ||
+                this.containsNonEnglishCharacters(lastName) ||
+                this.containsNonEnglishCharacters(middleName);
+
+            this.hasNonEnglishName.set(hasAnyNonEnglish);
+        }
+    }
+
+    containsNonEnglishCharacters(text: string): boolean {
+        const englishPattern = /^[A-Za-z'-]*$/;
+        return !englishPattern.test(text);
+    }
+
+    onNameKeyDown(event: KeyboardEvent): boolean {
+        if (event.key.length > 1) {
+            return true;
+        }
+
+        const englishPattern = /^[A-Za-z'-]$/;
+        if (!englishPattern.test(event.key)) {
+            event.preventDefault();
+            this.hasNonEnglishName.set(true);
+            return false;
+        }
+
+        return true;
+    }
+
     formatEmailOnBlur() {
         let value = this.personalInfoForm().get('email')?.value.trim();
 
@@ -330,12 +385,48 @@ export class RegisterComponent {
         this.formErrorService.setShowValidationErrors(true);
         if (this.personalInfoForm().valid) {
             this.formErrorService.setShowValidationErrors(false);
-            this.currentRegistrationPhase.set(2);
+            this.saveFormState();
+            this.goToSecondStep();
         }
     }
 
     returnToPreviousStep() {
+        this.saveFormState();
         this.currentRegistrationPhase.set(1);
+    }
+
+    saveFormState() {
+        this.formState = {
+            personalInfo: this.personalInfoForm().value,
+            academicInfo: this.academicInfoForm().getRawValue(),
+        };
+    }
+
+    goToSecondStep() {
+        this.currentRegistrationPhase.set(2);
+
+        const departmentId = this.academicInfoForm().get('departmentId')?.value;
+
+        if (departmentId) {
+            this.selectedDepartmentId$.next(departmentId);
+
+            this.specialtiesLoaded$
+                .pipe(
+                    filter((loaded) => loaded),
+                    take(1),
+                    delay(100)
+                )
+                .subscribe(() => {
+                    const savedSpecialty =
+                        this.formState.academicInfo?.specialtyCodename;
+                    if (savedSpecialty) {
+                        this.academicInfoForm()
+                            .get('specialtyCodename')
+                            ?.setValue(savedSpecialty);
+                        this.academicInfoForm().updateValueAndValidity();
+                    }
+                });
+        }
     }
 
     onSubmit() {
@@ -346,11 +437,13 @@ export class RegisterComponent {
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
-            const { confirmPassword, ...personalInfo } =
+            const { confirmPassword, githubAccountUsername, ...personalInfo } =
                 this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
             });
+
+            formData.append('githubAccountUsername', githubAccountUsername);
 
             const academicInfo = this.academicInfoForm().value;
             formData.append('departmentId', academicInfo.departmentId);
@@ -422,9 +515,28 @@ export class RegisterComponent {
                     ],
                 ],
                 confirmPassword: ['', Validators.required],
+                githubAccountUsername: ['', [Validators.required]],
             },
             { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
+    }
+
+    onGithubAccountInput(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+        let value = inputElement.value.trim();
+
+        if (value.includes('github.com/')) {
+            if (value.endsWith('/')) {
+                value = value.slice(0, -1);
+            }
+
+            const parts = value.split('github.com/');
+            if (parts.length > 1) {
+                value = parts[1].split('/')[0];
+            }
+        }
+
+        this.personalInfoForm().get('githubAccountUsername')?.setValue(value);
     }
 
     private initAcademicInfoForm(): FormGroup {
@@ -455,6 +567,7 @@ export class RegisterComponent {
             'middleName',
             'email',
             'password',
+            'githubAccountUsername',
         ];
         if (
             Object.keys(newErrors).some((key) => criticalFields.includes(key))
