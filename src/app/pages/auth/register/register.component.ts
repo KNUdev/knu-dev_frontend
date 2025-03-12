@@ -80,6 +80,9 @@ export class RegisterComponent {
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
+    private localizedErrorMessages = signal<{
+        [field: string]: Array<{ en: string; uk: string } | string>;
+    }>({});
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
@@ -232,6 +235,10 @@ export class RegisterComponent {
                 id: expertise.id,
                 displayedName: expertise.displayedName,
             }));
+        });
+
+        this.translate.onLangChange.subscribe(() => {
+            this.updateErrorMessagesForCurrentLanguage();
         });
     }
 
@@ -433,6 +440,7 @@ export class RegisterComponent {
         this.showValidationErrors.set(true);
         this.formErrorService.setShowValidationErrors(true);
         this.formErrorService.setBackendErrors({});
+        this.localizedErrorMessages.set({});
 
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
@@ -466,9 +474,10 @@ export class RegisterComponent {
                         }
                         if (error.status === 200 && error.error) {
                             this.currentRegistrationPhase.set(1);
-                            this.backendErrors.set({
-                                email: ['This email is already registered'],
-                            });
+                            this.handleLocalizedFieldError('email', [
+                                error.error.message ||
+                                    'This email is already registered',
+                            ]);
                         } else {
                             console.error(error);
                         }
@@ -550,11 +559,41 @@ export class RegisterComponent {
 
     private handleValidationErrors(errors: any) {
         const newErrors: ValidationErrors = {};
+        this.localizedErrorMessages.set({});
 
         Object.entries(ERROR_KEY_TO_CONTROL).forEach(
             ([errorKey, formControlName]) => {
                 if (errors[errorKey]?.length > 0) {
-                    newErrors[formControlName] = errors[errorKey];
+                    const errorArray = errors[errorKey];
+                    const localizedErrorsForField: Array<
+                        { en: string; uk: string } | string
+                    > = [];
+
+                    const processedErrors: string[] = errorArray.map(
+                        (error: any) => {
+                            if (
+                                typeof error === 'object' &&
+                                (error.en || error.uk)
+                            ) {
+                                localizedErrorsForField.push(error);
+                                const currentLang = this.translate.currentLang;
+                                return (
+                                    error[currentLang] || error.en || error.uk
+                                );
+                            } else {
+                                localizedErrorsForField.push(error);
+                                return error;
+                            }
+                        }
+                    );
+                    newErrors[formControlName] = processedErrors;
+
+                    if (localizedErrorsForField.length > 0) {
+                        this.localizedErrorMessages.update((current) => ({
+                            ...current,
+                            [formControlName]: localizedErrorsForField,
+                        }));
+                    }
                 }
             }
         );
@@ -573,6 +612,78 @@ export class RegisterComponent {
             Object.keys(newErrors).some((key) => criticalFields.includes(key))
         ) {
             this.currentRegistrationPhase.set(1);
+        }
+    }
+
+    private handleLocalizedFieldError(field: string, errors: Array<any>) {
+        const fieldMapping = Object.entries(ERROR_KEY_TO_CONTROL).find(
+            ([_, controlName]) => controlName === field
+        );
+
+        if (!fieldMapping) {
+            return;
+        }
+
+        const localizedErrorsForField: Array<
+            { en: string; uk: string } | string
+        > = [];
+
+        const processedErrors: string[] = errors.map((error: any) => {
+            if (typeof error === 'object' && (error.en || error.uk)) {
+                localizedErrorsForField.push(error);
+
+                const currentLang = this.translate.currentLang;
+                return error[currentLang] || error.en || error.uk;
+            } else {
+                localizedErrorsForField.push(error);
+                return error;
+            }
+        });
+
+        this.formErrorService.setBackendErrors({
+            [field]: processedErrors,
+        });
+
+        if (localizedErrorsForField.length > 0) {
+            this.localizedErrorMessages.update((current) => ({
+                ...current,
+                [field]: localizedErrorsForField,
+            }));
+        }
+    }
+
+    private updateErrorMessagesForCurrentLanguage() {
+        const storedErrors = this.localizedErrorMessages();
+        if (!storedErrors || Object.keys(storedErrors).length === 0) {
+            return;
+        }
+
+        const currentLang = this.translate.currentLang;
+        const newErrors: ValidationErrors = {};
+
+        Object.entries(storedErrors).forEach(([field, errorInfoArray]) => {
+            if (!errorInfoArray || errorInfoArray.length === 0) {
+                return;
+            }
+
+            newErrors[field] = errorInfoArray.map((errorInfo) => {
+                if (
+                    typeof errorInfo === 'object' &&
+                    (errorInfo.en || errorInfo.uk)
+                ) {
+                    return (
+                        errorInfo[currentLang as keyof typeof errorInfo] ||
+                        errorInfo.en ||
+                        errorInfo.uk
+                    );
+                } else {
+                    return errorInfo as string;
+                }
+            });
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            this.formErrorService.setBackendErrors(newErrors);
         }
     }
 }
