@@ -30,7 +30,8 @@ import {
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.service';
-import { FormErrorService } from '../../../services/error.service';
+import { FormErrorService } from '../../../services/error/error.service';
+import { LocalizedErrorMessagesArray } from '../../../services/error/errors.model';
 import { I18nService } from '../../../services/languages/i18n.service';
 import {
     SelectOption,
@@ -80,9 +81,7 @@ export class RegisterComponent {
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
-    private localizedErrorMessages = signal<{
-        [field: string]: Array<{ en: string; uk: string } | string>;
-    }>({});
+    private localizedErrorMessages = signal<LocalizedErrorMessagesArray>({});
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
@@ -565,9 +564,8 @@ export class RegisterComponent {
             ([errorKey, formControlName]) => {
                 if (errors[errorKey]?.length > 0) {
                     const errorArray = errors[errorKey];
-                    const localizedErrorsForField: Array<
-                        { en: string; uk: string } | string
-                    > = [];
+                    const localizedErrorsForField: LocalizedErrorMessagesArray[string] =
+                        [];
 
                     const processedErrors: string[] = errorArray.map(
                         (error: any) => {
@@ -575,7 +573,18 @@ export class RegisterComponent {
                                 typeof error === 'object' &&
                                 (error.en || error.uk)
                             ) {
-                                localizedErrorsForField.push(error);
+                                localizedErrorsForField.push({
+                                    en:
+                                        error.en ||
+                                        this.translate.instant(
+                                            'errors.generic'
+                                        ),
+                                    uk:
+                                        error.uk ||
+                                        this.translate.instant(
+                                            'errors.generic'
+                                        ),
+                                });
                                 const currentLang = this.translate.currentLang;
                                 return (
                                     error[currentLang] || error.en || error.uk
@@ -624,13 +633,14 @@ export class RegisterComponent {
             return;
         }
 
-        const localizedErrorsForField: Array<
-            { en: string; uk: string } | string
-        > = [];
+        const localizedErrorsForField: LocalizedErrorMessagesArray[string] = [];
 
         const processedErrors: string[] = errors.map((error: any) => {
             if (typeof error === 'object' && (error.en || error.uk)) {
-                localizedErrorsForField.push(error);
+                localizedErrorsForField.push({
+                    en: error.en || this.translate.instant('errors.generic'),
+                    uk: error.uk || this.translate.instant('errors.generic'),
+                });
 
                 const currentLang = this.translate.currentLang;
                 return error[currentLang] || error.en || error.uk;

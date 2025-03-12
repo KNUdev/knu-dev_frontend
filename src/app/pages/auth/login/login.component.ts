@@ -18,7 +18,8 @@ import {
 import { startWith, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
-import { FormErrorService } from '../../../services/error.service';
+import { FormErrorService } from '../../../services/error/error.service';
+import { LocalizedErrorMessages } from '../../../services/error/errors.model';
 import { I18nService } from '../../../services/languages/i18n.service';
 import { AuthService } from '../../../services/user/auth.service';
 
@@ -66,9 +67,7 @@ export class LoginComponent {
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     isPasswordVisible = signal(false);
     showValidationErrors = signal(false);
-    private localizedErrorMessages = signal<{
-        [field: string]: { en: string; uk: string } | string;
-    }>({});
+    private localizedErrorMessages = signal<LocalizedErrorMessages>({});
 
     readonly iconPaths = {
         arrowLeft: 'assets/icon/system/arrowLeft.svg',
@@ -247,8 +246,8 @@ export class LoginComponent {
             (error.error.en || error.error.uk)
         ) {
             const localizedError = {
-                en: error.error.en || 'An error occurred',
-                uk: error.error.uk || 'Виникла помилка',
+                en: error.error.en || this.translate.instant('errors.generic'),
+                uk: error.error.uk || this.translate.instant('errors.generic'),
             };
 
             this.localizedErrorMessages.update((current) => ({
@@ -270,7 +269,7 @@ export class LoginComponent {
                     ? error.error
                     : error.error?.message
                     ? error.error.message
-                    : 'An unexpected error occurred';
+                    : this.translate.instant('errors.unexpected');
 
             this.localizedErrorMessages.update((current) => ({
                 ...current,
@@ -290,7 +289,7 @@ export class LoginComponent {
         }
 
         const currentLang = this.translate.currentLang;
-        const newErrors: { [field: string]: string[] } = {};
+        const newErrors: ValidationErrors = {};
 
         Object.entries(storedErrors).forEach(([field, errorInfo]) => {
             if (

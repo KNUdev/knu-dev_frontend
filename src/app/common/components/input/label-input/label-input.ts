@@ -1,10 +1,14 @@
-import {CommonModule} from '@angular/common';
-import {Component, EventEmitter, Input, Output, signal,} from '@angular/core';
-import {ControlContainer, FormGroupDirective, ReactiveFormsModule,} from '@angular/forms';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-import {TranslateModule} from '@ngx-translate/core';
-import {FormErrorService} from 'src/app/services/error.service';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import {
+    ControlContainer,
+    FormGroupDirective,
+    ReactiveFormsModule,
+} from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
+import { FormErrorService } from 'src/app/services/error/error.service';
 
 @Component({
     selector: 'app-label-input',
@@ -22,7 +26,7 @@ import {FormErrorService} from 'src/app/services/error.service';
     ],
     templateUrl: './label-input.html',
     styleUrl: './label-input.scss',
-    standalone: true
+    standalone: true,
 })
 export class LabelInput {
     readonly iconPaths = {
