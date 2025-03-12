@@ -137,7 +137,9 @@
     },
     "errors": {
         "departmentLoadError": "Failed to load departments. Please try again later.",
-        "specialtyLoadError": "Failed to load specialties. Please try again later."
+        "specialtyLoadError": "Failed to load specialties. Please try again later.",
+        "generic": "An error occurred",
+        "unexpected": "An unexpected error occurred"
     },
     "dropdown": {
         "search": "Search...",

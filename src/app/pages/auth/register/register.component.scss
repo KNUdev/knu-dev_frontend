@@ -2,7 +2,7 @@
 
 .register {
     background-color: #101010;
-    color: #ffffff;
+    color: $text-gray;
     padding: 0 2.2rem;
 
     p {
@@ -60,6 +60,12 @@
             display: flex;
             justify-content: space-between;
             gap: 1.88rem;
+
+            .form-group {
+                position: relative;
+                width: 100%;
+            }
+
             input {
                 padding: 0 1rem;
             }
@@ -133,6 +139,25 @@
 
             a {
                 margin: 0 auto;
+            }
+        }
+
+        .github {
+            padding: 2.19rem 0 0;
+        }
+
+        .github-info {
+            display: flex;
+            margin-top: 1rem;
+            font-family: "Finel Text", sans-serif;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.25rem;
+            letter-spacing: 0.0175rem;
+
+            p {
+                margin: auto 0;
             }
         }
     }
@@ -214,6 +239,39 @@
                 }
             }
         }
+    }
+}
+
+.name-warning {
+    position: absolute;
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    color: #f09227;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    mat-icon {
+        font-size: 0.875rem;
+        height: 0.875rem;
+        width: 0.875rem;
+    }
+}
+
+.fullname-warning {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #f09227;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+
+    mat-icon {
+        font-size: 1rem;
+        height: 1rem;
+        width: 1rem;
     }
 }
 
