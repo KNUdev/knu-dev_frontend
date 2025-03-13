@@ -1,6 +1,7 @@
 {
     "filters": {
         "title": "Фільтри",
+        "resetFilters": "Скинути фільтри",
         "initials-or-email-filter": "ПІБ/email користувача",
         "registration-date": "Дата реєстрації",
         "registration-end-date": "Дата до якої зараєстрова(ний)/на",
@@ -10,7 +11,13 @@
         "specialty": "Спеціальність",
         "study-year": "Курс",
         "set-come": "Набір з якого прийш(ов)/ла",
-        "user-tech-role": "Технічна роль користувача"
+        "user-tech-role": "Технічна роль користувача",
+        "errorLoadingDepartments": "Помилка завантаження факультетів",
+        "errorLoadingSpecialties": "Помилка завантаження спеціальностей"
+    },
+    "dropdown": {
+        "search": "Пошук...",
+        "noResults": "Не знайдено результатів для \"{{query}}\""
     },
     "users": {
         "title": "Список користувачів",
@@ -26,6 +33,14 @@
         "specialty": "Спеціальність",
         "study-year": "Курс",
         "change-button": "Змінити",
-        "look-on-details-button": "Переглянути деталі"
+        "look-on-details-button": "Переглянути деталі",
+        "noUsersFound": "Користувачів не знайдено"
+    },
+    "pagination": {
+        "previous": "Попередня",
+        "next": "Наступна"
+    },
+    "common": {
+        "loading": "Завантаження..."
     }
 }

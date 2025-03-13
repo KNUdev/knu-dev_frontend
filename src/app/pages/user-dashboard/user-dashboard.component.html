@@ -1,243 +1,282 @@
 <div class="container">
     <section class="filters">
-        <h2 class="filters__title"> {{ "filters.title" | translate }} </h2>
+        <h2 class="filters__title">
+            {{ "filters.title" | translate }}
+        </h2>
         <div class="filters__data">
             <div class="data__first-line-filters">
-                <input class="first-line-filters__initials-or-email" type="text"
-                       [placeholder]="'filters.initials-or-email-filter' | translate">
+                <input
+                    class="first-line-filters__initials-or-email"
+                    type="text"
+                    [placeholder]="
+                        'filters.initials-or-email-filter' | translate
+                    "
+                    (input)="onSearchChange($event)"
+                />
                 <div class="data__date">
-                    <input class="first-line-filters__reg-date" type="text"
-                           [placeholder]="'filters.registration-date' | translate">
+                    <input
+                        class="first-line-filters__reg-date"
+                        type="datetime-local"
+                        [placeholder]="'filters.registration-date' | translate"
+                        [(ngModel)]="filters.registeredAt"
+                        (change)="onDateFilterChange()"
+                    />
                     <span class="date__separation-line"></span>
-                    <input class="first-line-filters__reg-end-date" type="text"
-                           [placeholder]="'filters.registration-end-date' | translate">
+                    <input
+                        class="first-line-filters__reg-end-date"
+                        type="datetime-local"
+                        [placeholder]="
+                            'filters.registration-end-date' | translate
+                        "
+                        [(ngModel)]="filters.registeredBefore"
+                        (change)="onDateFilterChange()"
+                    />
+                </div>
+            </div>
+
+            <div class="filters__additional">
+                <div class="filters__row">
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="filterOptions.units"
+                            [placeholder]="'filters.knudev-unit' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('unit', $event.id)
+                            "
+                            [class.drop-down__loading]="isLoading"
+                        ></register-write-dropdowns>
+                    </div>
+
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="filterOptions.expertise"
+                            [placeholder]="'filters.expertise' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('expertise', $event.id)
+                            "
+                            [class.drop-down__loading]="isLoading"
+                        ></register-write-dropdowns>
+                    </div>
+
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="departments"
+                            [placeholder]="'filters.faculty' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('departmentId', $event.id)
+                            "
+                            [class.drop-down__loading]="isLoadingDepartments"
+                            [hasError]="
+                                isLoadingDepartments && departments.length === 0
+                            "
+                            [errorMessage]="
+                                'filters.errorLoadingDepartments' | translate
+                            "
+                        ></register-write-dropdowns>
+                    </div>
+                </div>
+
+                <div class="filters__row">
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="specialties"
+                            [placeholder]="'filters.specialty' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('specialtyCodeName', $event.id)
+                            "
+                            [disabled]="
+                                !filters.departmentId || isLoadingSpecialties
+                            "
+                            [class.drop-down__loading]="isLoadingSpecialties"
+                            [hasError]="
+                                isLoadingSpecialties && specialties.length === 0
+                            "
+                            [errorMessage]="
+                                'filters.errorLoadingSpecialties' | translate
+                            "
+                        ></register-write-dropdowns>
+                    </div>
+
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="filterOptions.studyYears"
+                            [placeholder]="'filters.study-year' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange(
+                                    'universityStudyYear',
+                                    $event.id
+                                )
+                            "
+                        ></register-write-dropdowns>
+                    </div>
+
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="filterOptions.technicalRoles"
+                            [placeholder]="'filters.user-tech-role' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('technicalRole', $event.id)
+                            "
+                        ></register-write-dropdowns>
+                    </div>
+                </div>
+
+                <div class="filters__actions">
+                    <button class="filter-reset-btn" (click)="resetFilters()">
+                        {{ "filters.resetFilters" | translate }}
+                    </button>
                 </div>
             </div>
         </div>
-        <!--        todo add more filter options-->
     </section>
+
     <section class="users-list">
-        <h2 class="users-list__title"> {{ "users.title" | translate }} </h2>
-        <div class="users-list__user">
-            <div class="user__info">
-                <h3 class="info__title"> {{ "users.general-info" | translate }} </h3>
-                <div class="info__general">
-                    <div class="general__data">
-                        <span class="data__parameter"> {{ "users.full-name" | translate }}: <span
-                            class="data__value">Leonenko Denys Serhiyovich</span></span>
-                        <span class="data__parameter"> {{ "users.email" | translate }}: <span
-                            class="data__value">denys.leonenko</span></span>
-                        <span class="data__parameter"> {{ "users.tech-role" | translate }}: <span
-                            class="data__value">HEAD-MANAGER</span></span>
-                        <span class="data__parameter"> {{ "users.expertise" | translate }}: <span
-                            class="data__value">FULLSTACK</span></span>
-                        <span class="data__parameter"> {{ "users.registration-date" | translate }}: <span
-                            class="data__value">12.12.2012</span></span>
-                        <span class="data__parameter"> {{ "users.last-role-update" | translate }}: <span
-                            class="data__value">05.03.2025</span></span>
-                    </div>
-                    <span><mat-icon class="avatar" svgIcon="testAvatar"></mat-icon></span>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__learns">
-                    <h3 class="learns__title"> {{ "users.learns" | translate }} </h3>
-                    <div class="learns__data">
-                        <span class="data__parameter"> {{ "users.faculty" | translate }}: <span
-                            class="data__value">FRECS</span></span>
-                        <span class="data__parameter"> {{ "users.specialty" | translate }}: <span
-                            class="data__value">F7</span></span>
-                        <span class="data__parameter"> {{ "users.study-year" | translate }}: <span
-                            class="data__value">2</span></span>
-                    </div>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__buttons">
-                    <div class="buttons__manage">
-                        <span class="manage__text"> {{ "users.change-button" | translate}} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                    <div class="buttons__look">
-                        <span class="look__text"> {{ "users.look-on-details-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                </div>
-            </div>
+        <h2 class="users-list__title">
+            {{ "users.title" | translate }}
+            @if (totalAccounts > 0) {
+            <span class="users-list__count">({{ totalAccounts }})</span>
+            }
+        </h2>
 
-            <div class="user__info">
-                <h3 class="info__title"> {{ "users.general-info" | translate }} </h3>
-                <div class="info__general">
-                    <div class="general__data">
-                        <span class="data__parameter"> {{ "users.full-name" | translate }}: <span
-                            class="data__value">Leonenko Denys Serhiyovich</span></span>
-                        <span class="data__parameter"> {{ "users.email" | translate }}: <span
-                            class="data__value">denys.leonenko</span></span>
-                        <span class="data__parameter"> {{ "users.tech-role" | translate }}: <span
-                            class="data__value">HEAD-MANAGER</span></span>
-                        <span class="data__parameter"> {{ "users.expertise" | translate }}: <span
-                            class="data__value">FULLSTACK</span></span>
-                        <span class="data__parameter"> {{ "users.registration-date" | translate }}: <span
-                            class="data__value">12.12.2012</span></span>
-                        <span class="data__parameter"> {{ "users.last-role-update" | translate }}: <span
-                            class="data__value">05.03.2025</span></span>
-                    </div>
-                    <span><mat-icon class="avatar" svgIcon="testAvatar"></mat-icon></span>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__learns">
-                    <h3 class="learns__title"> {{ "users.learns" | translate }} </h3>
-                    <div class="learns__data">
-                            <span class="data__parameter"> {{ "users.faculty" | translate }}: <span
-                                class="data__value">FRECS</span></span>
-                        <span class="data__parameter"> {{ "users.specialty" | translate }}: <span
-                            class="data__value">F7</span></span>
-                        <span class="data__parameter"> {{ "users.study-year" | translate }}: <span
-                            class="data__value">2</span></span>
-                    </div>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__buttons">
-                    <div class="buttons__manage">
-                        <span class="manage__text"> {{ "users.change-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                    <div class="buttons__look">
-                        <span class="look__text"> {{ "users.look-on-details-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="user__info">
-                <h3 class="info__title"> {{ "users.general-info" | translate }} </h3>
-                <div class="info__general">
-                    <div class="general__data">
-                        <span class="data__parameter"> {{ "users.full-name" | translate }}: <span
-                            class="data__value">Leonenko Denys Serhiyovich</span></span>
-                        <span class="data__parameter"> {{ "users.email" | translate }}: <span
-                            class="data__value">denys.leonenko</span></span>
-                        <span class="data__parameter"> {{ "users.tech-role" | translate }}: <span
-                            class="data__value">HEAD-MANAGER</span></span>
-                        <span class="data__parameter"> {{ "users.expertise" | translate }}: <span
-                            class="data__value">FULLSTACK</span></span>
-                        <span class="data__parameter"> {{ "users.registration-date" | translate }}: <span
-                            class="data__value">12.12.2012</span></span>
-                        <span class="data__parameter"> {{ "users.last-role-update" | translate }}: <span
-                            class="data__value">05.03.2025</span></span>
-                    </div>
-                    <span><mat-icon class="avatar" svgIcon="testAvatar"></mat-icon></span>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__learns">
-                    <h3 class="learns__title"> {{ "users.learns" | translate }} </h3>
-                    <div class="learns__data">
-                            <span class="data__parameter"> {{ "users.faculty" | translate }}: <span
-                                class="data__value">FRECS</span></span>
-                        <span class="data__parameter"> {{ "users.specialty" | translate }}: <span
-                            class="data__value">F7</span></span>
-                        <span class="data__parameter"> {{ "users.study-year" | translate }}: <span
-                            class="data__value">2</span></span>
-                    </div>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__buttons">
-                    <div class="buttons__manage">
-                        <span class="manage__text"> {{ "users.change-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                    <div class="buttons__look">
-                        <span class="look__text"> {{ "users.look-on-details-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="user__info">
-                <h3 class="info__title"> {{ "users.general-info" | translate }} </h3>
-                <div class="info__general">
-                    <div class="general__data">
-                        <span class="data__parameter"> {{ "users.full-name" | translate }}: <span
-                            class="data__value">Leonenko Denys Serhiyovich</span></span>
-                        <span class="data__parameter"> {{ "users.email" | translate }}: <span
-                            class="data__value">denys.leonenko</span></span>
-                        <span class="data__parameter"> {{ "users.tech-role" | translate }}: <span
-                            class="data__value">HEAD-MANAGER</span></span>
-                        <span class="data__parameter"> {{ "users.expertise" | translate }}: <span
-                            class="data__value">FULLSTACK</span></span>
-                        <span class="data__parameter"> {{ "users.registration-date" | translate }}: <span
-                            class="data__value">12.12.2012</span></span>
-                        <span class="data__parameter"> {{ "users.last-role-update" | translate }}: <span
-                            class="data__value">05.03.2025</span></span>
-                    </div>
-                    <span><mat-icon class="avatar" svgIcon="testAvatar"></mat-icon></span>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__learns">
-                    <h3 class="learns__title"> {{ "users.learns" | translate }} </h3>
-                    <div class="learns__data">
-                            <span class="data__parameter"> {{ "users.faculty" | translate }}: <span
-                                class="data__value">FRECS</span></span>
-                        <span class="data__parameter"> {{ "users.specialty" | translate }}: <span
-                            class="data__value">F7</span></span>
-                        <span class="data__parameter"> {{ "users.study-year" | translate }}: <span
-                            class="data__value">2</span></span>
-                    </div>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__buttons">
-                    <div class="buttons__manage">
-                        <span class="manage__text"> {{ "users.change-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                    <div class="buttons__look">
-                        <span class="look__text"> {{ "users.look-on-details-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="user__info">
-                <h3 class="info__title"> {{ "users.general-info" | translate }} </h3>
-                <div class="info__general">
-                    <div class="general__data">
-                        <span class="data__parameter"> {{ "users.full-name" | translate }}: <span
-                            class="data__value">Leonenko Denys Serhiyovich</span></span>
-                        <span class="data__parameter"> {{ "users.email" | translate }}: <span
-                            class="data__value">denys.leonenko</span></span>
-                        <span class="data__parameter"> {{ "users.tech-role" | translate }}: <span
-                            class="data__value">HEAD-MANAGER</span></span>
-                        <span class="data__parameter"> {{ "users.expertise" | translate }}: <span
-                            class="data__value">FULLSTACK</span></span>
-                        <span class="data__parameter"> {{ "users.registration-date" | translate }}: <span
-                            class="data__value">12.12.2012</span></span>
-                        <span class="data__parameter"> {{ "users.last-role-update" | translate }}: <span
-                            class="data__value">05.03.2025</span></span>
-                    </div>
-                    <span><mat-icon class="avatar" svgIcon="testAvatar"></mat-icon></span>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__learns">
-                    <h3 class="learns__title"> {{ "users.learns" | translate }} </h3>
-                    <div class="learns__data">
-                            <span class="data__parameter"> {{ "users.faculty" | translate }}: <span
-                                class="data__value">FRECS</span></span>
-                        <span class="data__parameter"> {{ "users.specialty" | translate }}: <span
-                            class="data__value">F7</span></span>
-                        <span class="data__parameter"> {{ "users.study-year" | translate }}: <span
-                            class="data__value">2</span></span>
-                    </div>
-                </div>
-                <span class="separation-line"></span>
-                <div class="info__buttons">
-                    <div class="buttons__manage">
-                        <span class="manage__text"> {{ "users.change-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                    <div class="buttons__look">
-                        <span class="look__text"> {{ "users.look-on-details-button" | translate }} </span>
-                        <span><mat-icon class="arrowRightUp" svgIcon="arrowRightUp"></mat-icon></span>
-                    </div>
-                </div>
-            </div>
+        @if (isLoading) {
+        <div class="loading-indicator">
+            {{ "common.loading" | translate }}
         </div>
+        } @if (!isLoading) {
+        <div class="users-list__user">
+            @for (account of accounts; track account) {
+            <div class="user__info">
+                <h3 class="info__title">
+                    {{ "users.general-info" | translate }}
+                </h3>
+                <div class="info__general">
+                    <div class="general__data">
+                        <span class="data__parameter">
+                            {{ "users.full-name" | translate }}:
+                            <span class="data__value">{{
+                                getFullName(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.email" | translate }}:
+                            <span class="data__value">{{ account.email }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.tech-role" | translate }}:
+                            <span class="data__value">{{
+                                account.technicalRole
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.expertise" | translate }}:
+                            <span class="data__value">{{ "Not found" }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.registration-date" | translate }}:
+                            <span class="data__value">{{ "Not found" }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.last-role-update" | translate }}:
+                            <span class="data__value">{{ "Not found" }}</span>
+                        </span>
+                    </div>
+                    <span>
+                        <mat-icon
+                            class="avatar"
+                            svgIcon="testAvatar"
+                        ></mat-icon>
+                    </span>
+                </div>
+                <span class="separation-line"></span>
+                <div class="info__learns">
+                    <h3 class="learns__title">
+                        {{ "users.learns" | translate }}
+                    </h3>
+                    <div class="learns__data">
+                        <span class="data__parameter">
+                            {{ "users.faculty" | translate }}:
+                            <span class="data__value">{{
+                                getDepartmentId(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.specialty" | translate }}:
+                            <span class="data__value">{{
+                                getSpecialtyCodeName(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.study-year" | translate }}:
+                            <span class="data__value">{{ "Not found" }}</span>
+                        </span>
+                    </div>
+                </div>
+                <span class="separation-line"></span>
+                <div class="info__buttons">
+                    <div class="buttons__manage">
+                        <span class="manage__text">
+                            {{ "users.change-button" | translate }}
+                        </span>
+                        <span>
+                            <mat-icon
+                                class="arrowRightUp"
+                                svgIcon="arrowRightUp"
+                            ></mat-icon>
+                        </span>
+                    </div>
+                    <div class="buttons__look">
+                        <span class="look__text">
+                            {{ "users.look-on-details-button" | translate }}
+                        </span>
+                        <span>
+                            <mat-icon
+                                class="arrowRightUp"
+                                svgIcon="arrowRightUp"
+                            ></mat-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        } @if (totalPages > 1 && !isLoading) {
+        <div class="pagination">
+            <button
+                class="pagination__button"
+                [disabled]="currentPage === 0"
+                (click)="previousPage()"
+            >
+                &laquo; {{ "pagination.previous" | translate }}
+            </button>
+
+            @for (page of paginationArray; track page) {
+            <button
+                class="pagination__button"
+                [class.pagination__button--active]="page === currentPage"
+                (click)="goToPage(page)"
+            >
+                {{ page + 1 }}
+            </button>
+            }
+
+            <button
+                class="pagination__button"
+                [disabled]="currentPage === totalPages - 1"
+                (click)="nextPage()"
+            >
+                {{ "pagination.next" | translate }} &raquo;
+            </button>
+        </div>
+        } @if (accounts.length === 0 && !isLoading) {
+        <div class="empty-state">
+            {{ "users.noUsersFound" | translate }}
+        </div>
+        }
     </section>
 </div>

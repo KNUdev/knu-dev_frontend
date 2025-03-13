@@ -53,6 +53,7 @@ interface FilteredOption extends SelectOption {
     ],
     templateUrl: './write-dropdowns.html',
     styleUrls: ['./write-dropdowns.scss'],
+    standalone: true,
 })
 export class WriteDropDowns implements ControlValueAccessor {
     private translate = inject(TranslateService);
@@ -61,6 +62,8 @@ export class WriteDropDowns implements ControlValueAccessor {
     @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
+    @Input() disabled = false;
+
     @Output() selectionChange = new EventEmitter<any>();
     private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
@@ -78,7 +81,6 @@ export class WriteDropDowns implements ControlValueAccessor {
     }
 
     isOpen = false;
-    disabled = false;
     selectedOption: any = null;
     searchQuery = '';
     filteredOptions: FilteredOption[] = [];
@@ -257,5 +259,9 @@ export class WriteDropDowns implements ControlValueAccessor {
 
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
+    }
+
+    setDisabledState(isDisabled: boolean): void {
+        this.disabled = isDisabled;
     }
 }

@@ -46,13 +46,15 @@ export const routes: Routes = [
     {
         path: 'origins-and-founders',
         loadComponent: () =>
-            import('../pages/origins-and-founders/origins-and-founders.component').then(
-                (m) => m.OriginsAndFoundersComponent),
+            import(
+                '../pages/origins-and-founders/origins-and-founders.component'
+            ).then((m) => m.OriginsAndFoundersComponent),
     },
     {
         path: 'user-dashboard',
         loadComponent: () =>
             import('../pages/user-dashboard/user-dashboard.component').then(
-                (m) => m.UserDashboardComponent),
-    }
+                (m) => m.UserDashboardComponent
+            ),
+    },
 ];
