@@ -1,0 +1,89 @@
+@use "../../common/styles/variables" as *;
+@use "../../common/styles/button/main-button/fill-button" as fill-button;
+
+a {
+    text-decoration: none;
+}
+
+.main {
+    padding: 5rem 5.5rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #343434;
+
+    .create-program {
+        padding: 1.56rem;
+        width: 100%;
+        border-radius: 0.3125rem;
+        border: 1px solid #343434;
+        background: #141414;
+
+        .create-program__header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.94rem;
+            background: linear-gradient(90deg, rgba(20, 20, 20, 0.00) 0%, #141414 100%);
+
+            .header__icon_center {
+                width: 9.38rem;
+                height: 9.38rem;
+                color: $accent-yellow;
+            }
+
+            .header__icon_second {
+                width: 4.375rem;
+                height: 4.375rem;
+                color: #888888
+            }
+
+            .header__icon_third {
+                width: 2.6875rem;
+                height: 3.5rem;
+                color: #888888;
+            }
+        }
+
+    }
+
+    .divider {
+        height: 0.0625rem;
+        border: none;
+        background-color: #343434;
+        margin: 1.56rem 0;
+    }
+
+    .hint {
+        margin-top: 0.94rem;
+        color: #D1D1D1;
+        text-align: center;
+        font-family: "Fixel Text", sans-serif;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.25rem;
+        letter-spacing: 0.0175rem;
+    }
+}
+
+.programs {
+    .programs__title {
+        margin-top: 4.38rem;
+        margin-bottom: 2.81rem;
+        color: #FFF;
+        font-family: Unbounded, sans-serif;
+        font-size: 1.375rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.06875rem;
+        text-transform: uppercase;
+    }
+
+    .programs__items {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 3.12rem;
+    }
+}

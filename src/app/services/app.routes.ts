@@ -51,6 +51,27 @@ export const routes: Routes = [
             ).then((m) => m.OriginsAndFoundersComponent),
     },
     {
+        path: 'about-role',
+        loadComponent: () =>
+            import('../pages/about-role/about-role.component').then(
+                (m) => m.AboutRoleComponent
+            ),
+    },
+    {
+        path: 'program/create',
+        loadComponent: () =>
+            import('../pages/create-program/create-program.component').then(
+                (m) => m.CreateProgramComponent
+            ),
+    },
+    {
+        path: 'program/:programId/manage',
+        loadComponent: () =>
+            import('../pages/manage-program/manage-program.component').then(
+                (m) => m.ManageProgramComponent
+            ),
+    },
+    {
         path: 'user-dashboard',
         loadComponent: () =>
             import('../pages/user-dashboard/user-dashboard.component').then(

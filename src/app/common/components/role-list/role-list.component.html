@@ -1,6 +1,12 @@
 <div #animatedElement class="role-list">
     <div class="reveal-container card-container">
-        <article #animatedElement class="role-card intern-card">
+        <article
+            #animatedElement
+            class="role-card intern-card"
+            [routerLink]="['/about-role']"
+            [queryParams]="{ role: 'INTERN' }"
+            [fragment]="'info-card'"
+        >
             <div class="role-content">
                 <h3 class="role-title">
                     {{ "career-path.role-card-1.title" | translate }}
@@ -23,7 +29,13 @@
         </span>
     </div>
     <div class="reveal-container card-container">
-        <article #animatedElement class="role-card developer-card">
+        <article
+            #animatedElement
+            class="role-card developer-card"
+            [routerLink]="['/about-role']"
+            [queryParams]="{ role: 'DEVELOPER' }"
+            [fragment]="'info-card'"
+        >
             <div class="role-content">
                 <h3 class="role-title">
                     {{ "career-path.role-card-2.title" | translate }}
@@ -46,7 +58,13 @@
         </span>
     </div>
     <div class="reveal-container card-container">
-        <article #animatedElement class="role-card premaster-card">
+        <article
+            #animatedElement
+            class="role-card premaster-card"
+            [routerLink]="['/about-role']"
+            [queryParams]="{ role: 'PREMASTER' }"
+            [fragment]="'info-card'"
+        >
             <div class="role-content">
                 <h3 class="role-title">
                     {{ "career-path.role-card-3.title" | translate }}
@@ -69,7 +87,13 @@
         </span>
     </div>
     <div class="reveal-container card-container">
-        <article #animatedElement class="role-card master-card">
+        <article
+            #animatedElement
+            class="role-card master-card"
+            [routerLink]="['/about-role']"
+            [queryParams]="{ role: 'MASTER' }"
+            [fragment]="'info-card'"
+        >
             <div class="role-content">
                 <h3 class="role-title">
                     {{ "career-path.role-card-4.title" | translate }}
@@ -92,7 +116,13 @@
         </span>
     </div>
     <div class="reveal-container card-container">
-        <article #animatedElement class="role-card techlead-card">
+        <article
+            #animatedElement
+            class="role-card techlead-card"
+            [routerLink]="['/about-role']"
+            [queryParams]="{ role: 'TECHLEAD' }"
+            [fragment]="'info-card'"
+        >
             <div class="role-content">
                 <h3 class="role-title">
                     {{ "career-path.role-card-5.title" | translate }}

@@ -1,9 +1,9 @@
 <div class="select-container" [class.open]="isOpen" [class.disabled]="disabled">
     <div
-        class="select-header"
         (click)="toggleDropdown()"
-        [class.has-value]="selectedOption"
         [class.focused]="isOpen"
+        [class.has-value]="selectedOption"
+        class="select-header"
     >
         <label class="select-label">{{ placeholder }}</label>
         @if (isOpen) {
@@ -19,13 +19,13 @@
         />
         } @if (!isOpen) {
         <span class="select-value" (click)="toggleDropdown($event)">
-            @if (selectedOption){ {{ getDisplayValue(selectedOption) }} }
+            @if (selectedOption) { {{ getDisplayValue(selectedOption) }} }
         </span>
         }
         <mat-icon
-            svgIcon="arrowDown"
-            class="arrow-icon"
             [class.open]="isOpen"
+            class="arrow-icon"
+            svgIcon="arrowDown"
         ></mat-icon>
     </div>
 
@@ -40,7 +40,7 @@
         <div class="no-results">
             <mat-icon svgIcon="errorTriangle"></mat-icon>
             <span
-                >{{ 'dropdown.noResults' | translate:{ query: searchQuery }
+                >{{ 'dropdown.noResults' | translate:{query: searchQuery}
                 }}</span
             >
         </div>
