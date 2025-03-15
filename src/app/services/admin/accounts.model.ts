@@ -13,7 +13,7 @@ export interface AdminAccountsResponse {
 }
 
 export interface AdminAccount {
-    id: string; // Add the ID property
+    id: string;
     email: string;
     technicalRole: string;
     fullName: {
