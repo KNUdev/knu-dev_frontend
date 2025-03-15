@@ -51,6 +51,7 @@
     width: 100%;
     max-width: none;
     box-sizing: border-box;
+    color: #fff;
 
     @include tablet {
         padding: 1.5rem;
@@ -483,6 +484,7 @@ input[type="datetime-local"] {
 }
 
 .pagination {
+    padding: 2rem 0 0 0;
     flex-wrap: wrap;
     display: flex;
     justify-content: center;

@@ -12,8 +12,10 @@
         "study-year": "Курс",
         "set-come": "Набір з якого прийш(ов)/ла",
         "user-tech-role": "Технічна роль користувача",
+        "recruitment": "Набір",
         "errorLoadingDepartments": "Помилка завантаження факультетів",
-        "errorLoadingSpecialties": "Помилка завантаження спеціальностей"
+        "errorLoadingSpecialties": "Помилка завантаження спеціальностей",
+        "errorLoadingRecruitments": "Помилка завантаження наборів"
     },
     "dropdown": {
         "search": "Пошук...",

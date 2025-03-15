@@ -114,7 +114,27 @@
                             "
                         ></register-write-dropdowns>
                     </div>
+                </div>
 
+                <div class="filters__row">
+                    <div class="filters__col">
+                        <register-write-dropdowns
+                            [options]="recruitments"
+                            [placeholder]="'filters.recruitment' | translate"
+                            valueField="id"
+                            (selectionChange)="
+                                onDropdownChange('recruitmentId', $event.id)
+                            "
+                            [class.drop-down__loading]="isLoadingRecruitments"
+                            [hasError]="
+                                isLoadingRecruitments &&
+                                recruitments.length === 0
+                            "
+                            [errorMessage]="
+                                'filters.errorLoadingRecruitments' | translate
+                            "
+                        ></register-write-dropdowns>
+                    </div>
                     <div class="filters__col">
                         <register-write-dropdowns
                             [options]="filterOptions.technicalRoles"

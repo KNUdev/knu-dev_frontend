@@ -20,6 +20,17 @@ export interface FilterParams {
         | 'PREMASTER'
         | 'MASTER'
         | 'TECHLEAD';
+    recruitmentId?: string;
+}
+
+export interface Recruitment {
+    id: string;
+    name: string;
+    startedAt: string;
+    closedAt: string;
+    expertise: string;
+    maxCandidates: number;
+    joinedPeopleAmount: number;
 }
 
 @Injectable({
@@ -34,7 +45,7 @@ export class AdminAccountsService {
 
     getAccounts(
         pageNumber: number = 0,
-        pageSize: number = 9,
+        pageSize: number = 10,
         filters?: FilterParams
     ): Observable<AdminAccountsResponse> {
         let params = new HttpParams()
@@ -75,6 +86,9 @@ export class AdminAccountsService {
                     filters.universityStudyYear.toString()
                 );
             }
+            if (filters.recruitmentId) {
+                params = params.set('recruitmentId', filters.recruitmentId);
+            }
             if (filters.technicalRole) {
                 params = params.set('technicalRole', filters.technicalRole);
             }
@@ -90,6 +104,12 @@ export class AdminAccountsService {
     getSpecialties(departmentId: string): Observable<any[]> {
         return this.http.get<any[]>(
             `http://localhost:5001/departments/${departmentId}/specialties`
+        );
+    }
+
+    getRecruitments(): Observable<Recruitment[]> {
+        return this.http.get<Recruitment[]>(
+            'http://localhost:5001/recruitment/closed'
         );
     }
 }

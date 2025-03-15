@@ -12,8 +12,10 @@
         "study-year": "Study year",
         "set-come": "What set they come",
         "user-tech-role": "User technical role",
+        "recruitment": "Recruitment",
         "errorLoadingDepartments": "Error loading departments",
-        "errorLoadingSpecialties": "Error loading specialties"
+        "errorLoadingSpecialties": "Error loading specialties",
+        "errorLoadingRecruitments": "Error loading recruitments"
     },
     "dropdown": {
         "search": "Search...",

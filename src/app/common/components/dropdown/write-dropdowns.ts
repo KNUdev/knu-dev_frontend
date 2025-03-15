@@ -245,6 +245,11 @@ export class WriteDropDowns implements ControlValueAccessor {
         }
     }
 
+    resetSelection(): void {
+        this.selectedOption = null;
+        this.onChange(null);
+    }
+
     writeValue(value: any): void {
         if (value) {
             this.selectedOption = this.options.find((opt) => opt.id === value);
