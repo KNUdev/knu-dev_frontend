@@ -56,16 +56,13 @@ interface FilteredOption extends SelectOption {
     standalone: true,
 })
 export class WriteDropDowns implements ControlValueAccessor {
-    private translate = inject(TranslateService);
     @Input() hasError = false;
     @Input() errorMessage = '';
-    @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
+    @Input() defaultSelectedId?: string;
     @Input() disabled = false;
-
     @Output() selectionChange = new EventEmitter<any>();
-    private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
 
     readonly iconPaths = {
@@ -74,27 +71,55 @@ export class WriteDropDowns implements ControlValueAccessor {
         errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
     } as const;
 
-    private focusSearchInput(): void {
-        setTimeout(() => {
-            this.searchInput?.nativeElement?.focus();
-        });
-    }
-
     isOpen = false;
     selectedOption: any = null;
     searchQuery = '';
     filteredOptions: FilteredOption[] = [];
 
+    private translate = inject(TranslateService);
     private onChange: any = () => {};
     private onTouched: any = () => {};
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    private static currentOpenDropdown: WriteDropDowns | null = null;
     private getMatchScore(text: string, query: string): number {
         if (!query) return 100;
         if (text === query) return 90;
         if (text.startsWith(query)) return 80;
         if (text.includes(query)) return 70;
         return 0;
+    }
+
+    private _options: SelectOption[] = [];
+
+    get options(): SelectOption[] {
+        return this._options;
+    }
+
+    @Input()
+    set options(value: SelectOption[]) {
+        this._options = value || [];
+        if (this.defaultSelectedId && !this.selectedOption) {
+            const found = this._options.find(
+                (o) => o.id === this.defaultSelectedId
+            );
+            if (found) {
+                this.selectedOption = found;
+                const v =
+                    this.valueField === 'id'
+                        ? found.id
+                        : found.codeName || found.id;
+                this.onChange(v);
+                this.selectionChange.emit(found);
+            }
+        }
+        this.resetFilter();
+    }
+
+    private focusSearchInput(): void {
+        setTimeout(() => {
+            this.searchInput?.nativeElement?.focus();
+        });
     }
 
     get hasNoResults(): boolean {
