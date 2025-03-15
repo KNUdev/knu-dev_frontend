@@ -243,27 +243,22 @@
                 <span class="separation-line"></span>
                 <div class="info__buttons">
                     <div class="buttons__manage">
-                        <span class="manage__text">
-                            {{ "users.change-button" | translate }}
-                        </span>
-                        <span>
-                            <mat-icon
-                                class="arrowRightUp"
-                                svgIcon="arrowRightUp"
-                            ></mat-icon>
-                        </span>
+                        <app-border-button
+                            [text]="'users.look-on-details-button' | translate"
+                            borderColor="yellow"
+                        >
+                        </app-border-button>
                     </div>
-                    <div class="buttons__look">
-                        <span class="look__text">
-                            {{ "users.look-on-details-button" | translate }}
-                        </span>
-                        <span>
-                            <mat-icon
-                                class="arrowRightUp"
-                                svgIcon="arrowRightUp"
-                            ></mat-icon>
-                        </span>
-                    </div>
+                    <a
+                        [routerLink]="['/profile', account.id]"
+                        class="buttons__look"
+                    >
+                        <app-border-button
+                            [text]="'users.look-on-details-button' | translate"
+                            borderColor="red"
+                        >
+                        </app-border-button>
+                    </a>
                 </div>
             </div>
             }

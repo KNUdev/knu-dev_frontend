@@ -10,7 +10,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
     LangChangeEvent,
     TranslateModule,
@@ -30,10 +30,7 @@ import {
     SelectOption,
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
-import {
-    FilterOptionGroup,
-    getFilterOptions,
-} from '../../services/admin/filter-options.model';
+import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 import {
     AdminAccount,
     AdminAccountsResponse,
@@ -42,6 +39,7 @@ import {
     AdminAccountsService,
     FilterParams,
 } from '../../services/admin/admin-accounts.service';
+import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 
 @Component({
     selector: 'user-dashboard',
@@ -51,6 +49,8 @@ import {
         CommonModule,
         FormsModule,
         WriteDropDowns,
+        RouterModule,
+        BorderButtonComponent,
     ],
     templateUrl: './user-dashboard.component.html',
     styleUrls: ['./user-dashboard.component.scss'],

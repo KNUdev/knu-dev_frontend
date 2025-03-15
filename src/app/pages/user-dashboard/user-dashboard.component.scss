@@ -397,12 +397,9 @@ input[type="date"] {
 .buttons__manage {
     display: flex;
     height: 3.4375rem;
-    padding: 1.125rem 1.25rem;
     justify-content: space-between;
     align-items: center;
     width: 16rem;
-    border-radius: 0.3125rem;
-    border: 0.0625rem solid #edd342;
     cursor: pointer;
 
     @include tablet {
@@ -412,22 +409,17 @@ input[type="date"] {
     @include mobile {
         width: 100%;
     }
-}
-
-.buttons__manage:hover {
-    border: 0.0625rem solid #d5bc35;
 }
 
 .buttons__look {
     display: flex;
     height: 3.4375rem;
-    padding: 1.125rem 1.25rem;
     justify-content: space-between;
     align-items: center;
     width: 16rem;
-    border-radius: 0.3125rem;
-    border: 0.0625rem solid #e5383a;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
 
     @include tablet {
         width: 48%;
@@ -438,8 +430,8 @@ input[type="date"] {
     }
 }
 
-.buttons__look:hover {
-    border: 0.0625rem solid #a81f20;
+app-border-button {
+    width: 100%;
 }
 
 .manage__text {

@@ -13,7 +13,6 @@ export interface AdminAccountsResponse {
 }
 
 export interface AdminAccount {
-    id: string; // Add the ID property
     email: string;
     technicalRole: string;
     fullName: {
@@ -24,7 +23,7 @@ export interface AdminAccount {
     academicUnitsIds: {
         departmentId: string;
         specialtyCodename: number;
-    } | null;
+    } | null; // Mark as potentially null
     avatarFilename: string | null;
     bannerFilename: string | null;
     githubAccountUsername: string;
