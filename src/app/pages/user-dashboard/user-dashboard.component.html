@@ -292,25 +292,28 @@
                 [disabled]="currentPage === 0"
                 (click)="previousPage()"
             >
-                &laquo; {{ "pagination.previous" | translate }}
+                &laquo;
             </button>
 
-            @for (page of paginationArray; track page) {
+            @for (page of paginationArray; track $index) { @if (page === '...')
+            {
+            <span class="pagination__ellipsis">...</span>
+            } @else {
             <button
                 class="pagination__button"
                 [class.pagination__button--active]="page === currentPage"
-                (click)="goToPage(page)"
+                (click)="goToPage(+page)"
             >
-                {{ page + 1 }}
+                {{ +page + 1 }}
             </button>
-            }
+            } }
 
             <button
                 class="pagination__button"
                 [disabled]="currentPage === totalPages - 1"
                 (click)="nextPage()"
             >
-                {{ "pagination.next" | translate }} &raquo;
+                &raquo;
             </button>
         </div>
         } @if (accounts.length === 0 && !isLoading) {

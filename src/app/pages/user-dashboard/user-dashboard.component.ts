@@ -86,7 +86,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     currentPage = 0;
     pageSize = 10;
     isLoading = false;
-    paginationArray: number[] = [];
+    paginationArray: (number | string)[] = [];
 
     readonly iconPaths = {
         arrowRightUp: 'assets/icon/system/arrowRightUp.svg',
@@ -99,6 +99,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     recruitments: SelectOption[] = [];
     isLoadingRecruitments = false;
+
+    private isNavigatingFromCode = false;
 
     constructor() {
         this.translate.onLangChange
@@ -136,7 +138,10 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const queryParamsSubscription = this.route.queryParams.subscribe(
             (params) => {
-                this.parseQueryParams(params);
+                if (!this.isNavigatingFromCode) {
+                    this.parseQueryParams(params);
+                }
+                this.isNavigatingFromCode = false;
             }
         );
 
@@ -248,28 +253,47 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     generatePaginationArray(): void {
         this.paginationArray = [];
 
-        const maxVisiblePages = 5;
-        let startPage = Math.max(
-            0,
-            this.currentPage - Math.floor(maxVisiblePages / 2)
-        );
-        let endPage = Math.min(
-            this.totalPages - 1,
-            startPage + maxVisiblePages - 1
-        );
+        if (this.totalPages <= 1) return;
 
-        if (endPage - startPage + 1 < maxVisiblePages) {
-            startPage = Math.max(0, endPage - maxVisiblePages + 1);
+        this.paginationArray.push(0);
+
+        if (this.totalPages <= 5) {
+            for (let i = 1; i < this.totalPages; i++) {
+                this.paginationArray.push(i);
+            }
+            return;
         }
 
-        for (let i = startPage; i <= endPage; i++) {
-            this.paginationArray.push(i);
+        const current = this.currentPage;
+        const last = this.totalPages - 1;
+
+        if (current <= 2) {
+            this.paginationArray.push(1, 2, 3, '...', last);
+        } else if (current >= last - 2) {
+            this.paginationArray.push(
+                '...',
+                last - 3,
+                last - 2,
+                last - 1,
+                last
+            );
+        } else {
+            this.paginationArray.push(
+                '...',
+                current - 1,
+                current,
+                current + 1,
+                '...',
+                last
+            );
         }
     }
 
     goToPage(page: number): void {
         if (page !== this.currentPage && page >= 0 && page < this.totalPages) {
+            this.currentPage = page;
             this.loadAccounts(page);
+            this.isNavigatingFromCode = true;
             this.updateUrlParams();
         }
     }
@@ -384,10 +408,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     private parseQueryParams(params: any): void {
         this.filters = {};
-        if (params.page !== undefined) {
-            const page = Number(params.page);
-            this.currentPage = isNaN(page) ? 0 : page;
-        }
 
         if (params.search) {
             this.filters.searchQuery = params.search;
@@ -469,6 +489,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     private updateUrlParams(reset: boolean = false): void {
         if (reset) {
+            this.isNavigatingFromCode = true;
             this.router.navigate([], {
                 relativeTo: this.route,
                 queryParams: {},
@@ -479,10 +500,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         }
 
         const queryParams: any = {};
-
-        if (this.currentPage > 0) {
-            queryParams.page = this.currentPage;
-        }
 
         if (this.filters.searchQuery)
             queryParams.search = this.filters.searchQuery;
@@ -505,6 +522,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         if (this.filters.recruitmentId)
             queryParams.recruitmentId = this.filters.recruitmentId;
 
+        this.isNavigatingFromCode = true;
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams,

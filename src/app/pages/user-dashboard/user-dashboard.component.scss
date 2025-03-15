@@ -82,7 +82,7 @@
 
 .filter-toggle-btn:hover {
     background: #1f1f1f;
-    border-color: #e5383a;
+    border-color: #edd342;
 }
 
 .filters__parameters {
@@ -118,8 +118,8 @@
 
 .filter-reset-btn {
     background: transparent;
-    color: #e5383a;
-    border: 1px solid #e5383a;
+    color: #edd342;
+    border: 1px solid #edd342;
     padding: 0.75rem 1.5rem;
     border-radius: 0.3125rem;
     cursor: pointer;
@@ -131,7 +131,7 @@
 }
 
 .filter-reset-btn:hover {
-    background: rgba(229, 56, 58, 0.1);
+    background: #3c371a;
 }
 
 .filters__actions {
@@ -477,6 +477,14 @@ app-border-button {
     flex-wrap: wrap;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination__ellipsis {
+    color: #d1d1d1;
+    padding: 0.625rem 0.5rem;
+    font-weight: bold;
 }
 
 .pagination__button {
@@ -490,14 +498,14 @@ app-border-button {
 }
 
 .pagination__button:hover:not(:disabled):not(.pagination__button--active) {
-    border-color: #e5383a;
+    border-color: #edd342;
     color: #ffffff;
 }
 
 .pagination__button--active {
-    background: #e5383a;
-    color: #ffffff;
-    border-color: #e5383a;
+    background: #edd342;
+    color: #000000;
+    border-color: #edd342;
 }
 
 .pagination__button:disabled {
