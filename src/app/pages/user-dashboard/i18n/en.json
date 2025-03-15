@@ -2,7 +2,7 @@
     "filters": {
         "title": "Filters",
         "resetFilters": "Reset filters",
-        "initials-or-email-filter": "User` FML name/email",
+        "initials-or-email-filter": "User FML name/email",
         "registration-date": "Registration date",
         "registration-end-date": "Registration end date",
         "knudev-unit": "Campus/Precampus",

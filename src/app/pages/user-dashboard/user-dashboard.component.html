@@ -16,7 +16,7 @@
                 <div class="data__date">
                     <input
                         class="first-line-filters__reg-date"
-                        type="datetime-local"
+                        type="date"
                         [placeholder]="'filters.registration-date' | translate"
                         [(ngModel)]="filters.registeredAt"
                         (change)="onDateFilterChange()"
@@ -24,7 +24,7 @@
                     <span class="date__separation-line"></span>
                     <input
                         class="first-line-filters__reg-end-date"
-                        type="datetime-local"
+                        type="date"
                         [placeholder]="
                             'filters.registration-end-date' | translate
                         "
