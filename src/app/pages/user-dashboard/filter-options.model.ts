@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { SelectOption } from '../../common/components/dropdown/write-dropdowns';
 
 export interface FilterOptionGroup {
@@ -7,7 +8,9 @@ export interface FilterOptionGroup {
     technicalRoles: SelectOption[];
 }
 
-export function getFilterOptions(): FilterOptionGroup {
+export function getFilterOptions(
+    translateService: TranslateService
+): FilterOptionGroup {
     return {
         units: [
             { id: 'CAMPUS', displayedName: 'Campus' },
@@ -19,10 +22,19 @@ export function getFilterOptions(): FilterOptionGroup {
             { id: 'FRONTEND', displayedName: 'Frontend' },
             { id: 'UI_UX_DESIGNER', displayedName: 'UI/UX Designer' },
         ],
-        studyYears: Array.from({ length: 6 }, (_, i) => ({
-            id: (i + 1).toString(),
-            displayedName: (i + 1).toString(),
-        })),
+        studyYears: Array.from({ length: 10 }, (_, i) => {
+            const year = i + 1;
+            const translation = translateService.instant(
+                `yearOfStudy.${i}.displayedName`
+            );
+            return {
+                id: year.toString(),
+                displayedName:
+                    translation !== `yearOfStudy.${i}.displayedName`
+                        ? translation
+                        : year.toString(),
+            };
+        }),
         technicalRoles: [
             { id: 'INTERN', displayedName: 'Intern' },
             { id: 'DEVELOPER', displayedName: 'Developer' },

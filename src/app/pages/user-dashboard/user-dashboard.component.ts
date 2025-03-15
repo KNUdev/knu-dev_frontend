@@ -26,11 +26,11 @@ import {
     switchMap,
 } from 'rxjs';
 import { I18nService } from 'src/app/services/languages/i18n.service';
+import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 import {
     SelectOption,
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
-import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 import {
     AdminAccount,
     AdminAccountsResponse,
@@ -39,7 +39,7 @@ import {
     AdminAccountsService,
     FilterParams,
 } from '../../services/admin/admin-accounts.service';
-import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
+import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 
 @Component({
     selector: 'user-dashboard',
@@ -69,7 +69,12 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     @ViewChildren(WriteDropDowns) filterDropdowns!: QueryList<WriteDropDowns>;
 
     filters: FilterParams = {};
-    filterOptions: FilterOptionGroup = getFilterOptions();
+    filterOptions: FilterOptionGroup = {
+        units: [],
+        expertise: [],
+        studyYears: [],
+        technicalRoles: [],
+    };
     departments: SelectOption[] = [];
     specialties: SelectOption[] = [];
     isLoadingDepartments = false;
@@ -87,6 +92,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         arrowRightUp: 'assets/icon/system/arrowRightUp.svg',
         arrowDown: 'assets/icon/system/arrowDown.svg',
         testAvatar: 'assets/icon/profile/test-avatar.svg',
+        defaultAvatar: 'assets/icon/profile/defaultAvatar.svg',
     } as const;
 
     private searchQuerySubject = new BehaviorSubject<string>('');
@@ -107,7 +113,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                     )
                 )
             )
-            .subscribe();
+            .subscribe(() => {
+                this.filterOptions = getFilterOptions(this.translate);
+            });
 
         this.registerIcons();
 
@@ -365,6 +373,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                 this.iconPaths.testAvatar
             )
         );
+
+        this.matIconRegistry.addSvgIcon(
+            'defaultAvatar',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.defaultAvatar
+            )
+        );
     }
 
     private parseQueryParams(params: any): void {
@@ -496,5 +511,34 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             queryParamsHandling: 'merge',
             replaceUrl: true,
         });
+    }
+
+    formatDate(dateString: string): string {
+        if (!dateString) return 'Not available';
+
+        const date = new Date(dateString);
+        return date.toLocaleDateString(this.translate.currentLang, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    }
+
+    getStudyYearTranslation(yearNumber: number): string {
+        if (!yearNumber || yearNumber < 1 || yearNumber > 10) {
+            return 'Not found';
+        }
+
+        const translation = this.translate.instant(
+            `yearOfStudy.${yearNumber - 1}.displayedName`
+        );
+
+        if (translation === `yearOfStudy.${yearNumber - 1}.displayedName`) {
+            return yearNumber.toString();
+        }
+
+        return translation;
     }
 }

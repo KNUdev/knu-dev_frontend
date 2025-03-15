@@ -198,21 +198,37 @@
                         </span>
                         <span class="data__parameter">
                             {{ "users.expertise" | translate }}:
-                            <span class="data__value">{{ "Not found" }}</span>
+                            <span class="data__value">{{
+                                account.expertise
+                            }}</span>
                         </span>
                         <span class="data__parameter">
                             {{ "users.registration-date" | translate }}:
-                            <span class="data__value">{{ "Not found" }}</span>
+                            <span class="data__value">{{
+                                formatDate(account.registeredAt)
+                            }}</span>
                         </span>
                         <span class="data__parameter">
                             {{ "users.last-role-update" | translate }}:
-                            <span class="data__value">{{ "Not found" }}</span>
+                            <span class="data__value">{{
+                                account.lastRoleUpdateDate
+                                    ? formatDate(account.lastRoleUpdateDate)
+                                    : "Not updated"
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.unit" | translate }}:
+                            <span class="data__value">{{ account.unit }}</span>
                         </span>
                     </div>
                     <span>
                         <mat-icon
                             class="avatar"
-                            svgIcon="testAvatar"
+                            [svgIcon]="
+                                account.avatarFilename
+                                    ? 'userAvatar'
+                                    : 'defaultAvatar'
+                            "
                         ></mat-icon>
                     </span>
                 </div>
@@ -236,7 +252,13 @@
                         </span>
                         <span class="data__parameter">
                             {{ "users.study-year" | translate }}:
-                            <span class="data__value">{{ "Not found" }}</span>
+                            <span class="data__value">{{
+                                account.yearOfStudyOnRegistration
+                                    ? getStudyYearTranslation(
+                                          account.yearOfStudyOnRegistration
+                                      )
+                                    : "Not found"
+                            }}</span>
                         </span>
                     </div>
                 </div>

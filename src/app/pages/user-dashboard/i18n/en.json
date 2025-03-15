@@ -34,6 +34,7 @@
         "faculty": "Faculty",
         "specialty": "Specialty",
         "study-year": "Study year",
+        "unit": "Campus/Precampus",
         "change-button": "Change",
         "look-on-details-button": "See details",
         "noUsersFound": "No users found"

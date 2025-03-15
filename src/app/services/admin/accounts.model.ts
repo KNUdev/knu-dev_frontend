@@ -28,6 +28,11 @@ export interface AdminAccount {
     avatarFilename: string | null;
     bannerFilename: string | null;
     githubAccountUsername: string;
+    expertise: string;
+    registeredAt: string;
+    yearOfStudyOnRegistration: number;
+    lastRoleUpdateDate: string | null;
+    unit: string;
 }
 
 export interface Pageable {

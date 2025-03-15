@@ -34,6 +34,7 @@
         "faculty": "Факултет",
         "specialty": "Спеціальність",
         "study-year": "Курс",
+        "unit": "Кампус/Прекампус",
         "change-button": "Змінити",
         "look-on-details-button": "Переглянути деталі",
         "noUsersFound": "Користувачів не знайдено"
