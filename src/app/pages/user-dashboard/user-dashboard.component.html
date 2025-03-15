@@ -4,37 +4,42 @@
             {{ "filters.title" | translate }}
         </h2>
         <div class="filters__data">
-            <div class="data__first-line-filters">
-                <input
-                    class="first-line-filters__initials-or-email"
-                    type="text"
-                    [placeholder]="
-                        'filters.initials-or-email-filter' | translate
-                    "
-                    (input)="onSearchChange($event)"
-                />
-                <div class="data__date">
-                    <input
-                        class="first-line-filters__reg-date"
-                        type="date"
-                        [placeholder]="'filters.registration-date' | translate"
-                        [(ngModel)]="filters.registeredAt"
-                        (change)="onDateFilterChange()"
-                    />
-                    <span class="date__separation-line"></span>
-                    <input
-                        class="first-line-filters__reg-end-date"
-                        type="date"
-                        [placeholder]="
-                            'filters.registration-end-date' | translate
-                        "
-                        [(ngModel)]="filters.registeredBefore"
-                        (change)="onDateFilterChange()"
-                    />
+            <div class="filters__parameters">
+                <div class="filters__row">
+                    <div class="filters__col">
+                        <input
+                            class="first-line-filters__initials-or-email"
+                            type="text"
+                            [placeholder]="
+                                'filters.initials-or-email-filter' | translate
+                            "
+                            (input)="onSearchChange($event)"
+                        />
+                    </div>
+                    <div class="filters__col">
+                        <div class="data__date">
+                            <input
+                                class="first-line-filters__reg-date"
+                                type="date"
+                                [placeholder]="
+                                    'filters.registration-date' | translate
+                                "
+                                [(ngModel)]="filters.registeredAt"
+                                (change)="onDateFilterChange()"
+                            />
+                            <span class="date__separation-line"></span>
+                            <input
+                                class="first-line-filters__reg-end-date"
+                                type="date"
+                                [placeholder]="
+                                    'filters.registration-end-date' | translate
+                                "
+                                [(ngModel)]="filters.registeredBefore"
+                                (change)="onDateFilterChange()"
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="filters__additional">
                 <div class="filters__row">
                     <div class="filters__col">
                         <register-write-dropdowns
@@ -77,9 +82,7 @@
                             "
                         ></register-write-dropdowns>
                     </div>
-                </div>
 
-                <div class="filters__row">
                     <div class="filters__col">
                         <register-write-dropdowns
                             [options]="specialties"
@@ -117,7 +120,7 @@
                 </div>
 
                 <div class="filters__row">
-                    <div class="filters__col">
+                    <div class="filters__col" style="flex: 2">
                         <register-write-dropdowns
                             [options]="recruitments"
                             [placeholder]="'filters.recruitment' | translate"
