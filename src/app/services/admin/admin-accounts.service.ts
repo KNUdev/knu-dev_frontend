@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AdminAccountsResponse } from '../../models/admin/accounts.model';
 import { Department } from '../../pages/auth/register/register.model';
+import { AdminAccountsResponse } from './accounts.model';
 
 export interface FilterParams {
     searchQuery?: string;

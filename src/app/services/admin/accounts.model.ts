@@ -23,7 +23,7 @@ export interface AdminAccount {
     academicUnitsIds: {
         departmentId: string;
         specialtyCodename: number;
-    } | null; // Mark as potentially null
+    } | null;
     avatarFilename: string | null;
     bannerFilename: string | null;
     githubAccountUsername: string;

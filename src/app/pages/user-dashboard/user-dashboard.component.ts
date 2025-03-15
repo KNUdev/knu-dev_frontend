@@ -31,13 +31,13 @@ import {
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
 import {
-    AdminAccount,
-    AdminAccountsResponse,
-} from '../../models/admin/accounts.model';
-import {
     FilterOptionGroup,
     getFilterOptions,
-} from '../../models/admin/filter-options.model';
+} from '../../services/admin/filter-options.model';
+import {
+    AdminAccount,
+    AdminAccountsResponse,
+} from '../../services/admin/accounts.model';
 import {
     AdminAccountsService,
     FilterParams,
