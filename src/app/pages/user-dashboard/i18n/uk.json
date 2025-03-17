@@ -28,6 +28,7 @@
         "email": "Email",
         "tech-role": "Технічна роль",
         "expertise": "Напрямок",
+        "github": "GitHub нікнейм",
         "registration-date": "Дата реєстрації",
         "last-role-update": "Дата останнього оновлення ролі",
         "learns": "Навчається",

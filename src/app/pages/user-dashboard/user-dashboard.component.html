@@ -203,6 +203,12 @@
                             }}</span>
                         </span>
                         <span class="data__parameter">
+                            {{ "users.github" | translate }}:
+                            <span class="data__value">{{
+                                account.githubAccountUsername || "Not provided"
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
                             {{ "users.registration-date" | translate }}:
                             <span class="data__value">{{
                                 formatDate(account.registeredAt)

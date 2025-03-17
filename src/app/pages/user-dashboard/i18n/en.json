@@ -28,6 +28,7 @@
         "email": "Email",
         "tech-role": "Technical role",
         "expertise": "Expertise",
+        "github": "GitHub username",
         "registration-date": "Registration date",
         "last-role-update": "Last role update",
         "learns": "Learns",
