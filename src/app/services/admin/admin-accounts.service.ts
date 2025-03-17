@@ -12,7 +12,7 @@ export interface FilterParams {
     unit?: 'CAMPUS' | 'PRECAMPUS';
     expertise?: 'FULLSTACK' | 'BACKEND' | 'FRONTEND' | 'UI_UX_DESIGNER';
     departmentId?: string;
-    specialtyCodeName?: string;
+    specialtyCodename?: string;
     universityStudyYear?: number;
     technicalRole?:
         | 'INTERN'
@@ -74,10 +74,10 @@ export class AdminAccountsService {
             if (filters.departmentId) {
                 params = params.set('departmentId', filters.departmentId);
             }
-            if (filters.specialtyCodeName) {
+            if (filters.specialtyCodename) {
                 params = params.set(
-                    'specialtyCodeName',
-                    filters.specialtyCodeName
+                    'specialtyCodename',
+                    filters.specialtyCodename
                 );
             }
             if (filters.universityStudyYear !== undefined) {
@@ -110,6 +110,13 @@ export class AdminAccountsService {
     getRecruitments(): Observable<Recruitment[]> {
         return this.http.get<Recruitment[]>(
             'http://localhost:5001/recruitment/closed'
+        );
+    }
+
+    updateAccount(accountId: string, accountData: any): Observable<any> {
+        return this.http.post(
+            `${this.apiUrl}/${accountId}/update`,
+            accountData
         );
     }
 }

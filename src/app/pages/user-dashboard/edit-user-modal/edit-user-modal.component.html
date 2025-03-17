@@ -1,0 +1,307 @@
+<app-backdrop-window (close)="onClose()">
+    <div class="edit-user-modal">
+        @if(isLoading) {
+        <div class="loading-indicator">
+            <div class="spinner"></div>
+            <p>{{ "common.loading" | translate }}</p>
+        </div>
+        } @else if (saveSuccess) {
+        <div class="success-message">
+            <mat-icon>check_circle</mat-icon>
+            <p>{{ "users.edit.saveSuccess" | translate }}</p>
+        </div>
+        } @else if (saveError) {
+        <div class="error-message">
+            <mat-icon>error</mat-icon>
+            <p>{{ errorMessage }}</p>
+        </div>
+        } @else {
+        <form
+            [formGroup]="editForm"
+            (ngSubmit)="saveChanges()"
+            class="edit-form"
+        >
+            <!-- Add profile images section before general info -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    {{ "users.profile-images" | translate }}
+                </h3>
+
+                <!-- Banner section -->
+                <div class="image-section">
+                    <div class="image-container">
+                        @if(bannerUrl && !deleteBanner) {
+                        <div class="current-image">
+                            <img
+                                [src]="bannerUrl"
+                                alt="User Banner"
+                                class="banner-preview"
+                            />
+                            <button
+                                type="button"
+                                class="btn-delete-image"
+                                (click)="requestDeleteBanner()"
+                            >
+                                <mat-icon>delete</mat-icon>
+                                {{ "users.edit.delete-image" | translate }}
+                            </button>
+                        </div>
+                        } @else {
+                        <div class="no-image">
+                            <mat-icon>image</mat-icon>
+                            <span>{{
+                                "users.edit.no-banner" | translate
+                            }}</span>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Avatar section -->
+                <div class="image-section">
+                    <div class="image-container">
+                        @if(avatarUrl && !deleteAvatar) {
+                        <div class="current-image">
+                            <img
+                                [src]="avatarUrl"
+                                alt="User Avatar"
+                                class="avatar-preview"
+                            />
+                            <button
+                                type="button"
+                                class="btn-delete-image"
+                                (click)="requestDeleteAvatar()"
+                            >
+                                <mat-icon>delete</mat-icon>
+                                {{ "users.edit.delete-image" | translate }}
+                            </button>
+                        </div>
+                        } @else {
+                        <div class="no-image">
+                            <mat-icon>account_circle</mat-icon>
+                            <span>{{
+                                "users.edit.no-avatar" | translate
+                            }}</span>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">
+                    {{ "users.general-info" | translate }}
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.edit.firstName" | translate }}</label>
+                        <input
+                            type="text"
+                            formControlName="firstName"
+                            class="form-control"
+                        />
+                        @if(editForm.get('firstName')?.invalid &&
+                        editForm.get('firstName')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("firstName") }}
+                        </div>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ "users.edit.lastName" | translate }}</label>
+                        <input
+                            type="text"
+                            formControlName="lastName"
+                            class="form-control"
+                        />
+                        @if(editForm.get('lastName')?.invalid &&
+                        editForm.get('lastName')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("lastName") }}
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.edit.middleName" | translate }}</label>
+                        <input
+                            type="text"
+                            formControlName="middleName"
+                            class="form-control"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ "users.email" | translate }}</label>
+                        <input
+                            type="email"
+                            formControlName="email"
+                            class="form-control"
+                        />
+                        @if(editForm.get('email')?.invalid &&
+                        editForm.get('email')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("email") }}
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.github" | translate }}</label>
+                        <input
+                            type="text"
+                            formControlName="githubAccountUsername"
+                            class="form-control"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ "users.tech-role" | translate }}</label>
+                        <register-write-dropdowns
+                            [options]="filterOptions.technicalRoles"
+                            [placeholder]="'filters.user-tech-role' | translate"
+                            [defaultSelectedId]="user.technicalRole"
+                            formControlName="technicalRole"
+                        >
+                        </register-write-dropdowns>
+                        @if(editForm.get('technicalRole')?.invalid &&
+                        editForm.get('technicalRole')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("technicalRole") }}
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.expertise" | translate }}</label>
+                        <register-write-dropdowns
+                            [options]="filterOptions.expertise"
+                            [placeholder]="'filters.expertise' | translate"
+                            [defaultSelectedId]="user.expertise"
+                            formControlName="expertise"
+                        >
+                        </register-write-dropdowns>
+                        @if(editForm.get('expertise')?.invalid &&
+                        editForm.get('expertise')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("expertise") }}
+                        </div>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ "users.unit" | translate }}</label>
+                        <register-write-dropdowns
+                            [options]="filterOptions.units"
+                            [placeholder]="'filters.knudev-unit' | translate"
+                            [defaultSelectedId]="user.unit"
+                            formControlName="unit"
+                        >
+                        </register-write-dropdowns>
+                        @if(editForm.get('unit')?.invalid &&
+                        editForm.get('unit')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("unit") }}
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">{{ "users.learns" | translate }}</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.faculty" | translate }}</label>
+                        @if(departmentLocalizedName) {
+                        <div class="current-value-label">
+                            {{ departmentLocalizedName }}
+                        </div>
+                        }
+                        <register-write-dropdowns
+                            [options]="departments"
+                            [placeholder]="'filters.faculty' | translate"
+                            [defaultSelectedId]="
+                                user.academicUnitsIds?.departmentId
+                            "
+                            [class.drop-down__loading]="isLoadingDepartments"
+                            formControlName="departmentId"
+                        >
+                        </register-write-dropdowns>
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ "users.specialty" | translate }}</label>
+                        @if(specialtyLocalizedName) {
+                        <div class="current-value-label">
+                            {{ specialtyLocalizedName }}
+                        </div>
+                        }
+                        <register-write-dropdowns
+                            [options]="specialties"
+                            [placeholder]="'filters.specialty' | translate"
+                            [defaultSelectedId]="
+                                user.academicUnitsIds?.specialtyCodename?.toString()
+                            "
+                            [disabled]="
+                                !editForm.get('departmentId')?.value ||
+                                isLoadingSpecialties
+                            "
+                            [class.drop-down__loading]="isLoadingSpecialties"
+                            formControlName="specialtyCodename"
+                        >
+                        </register-write-dropdowns>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ "users.study-year" | translate }}</label>
+                        <register-write-dropdowns
+                            [options]="filterOptions.studyYears"
+                            [placeholder]="'filters.study-year' | translate"
+                            [defaultSelectedId]="
+                                user.universityStudyYear.toString()
+                            "
+                            formControlName="yearOfStudyOnRegistration"
+                        >
+                        </register-write-dropdowns>
+                        @if(editForm.get('yearOfStudyOnRegistration')?.invalid
+                        && editForm.get('yearOfStudyOnRegistration')?.touched) {
+                        <div class="error-text">
+                            {{ getFieldError("yearOfStudyOnRegistration") }}
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    (click)="onClose()"
+                >
+                    {{ "users.edit.cancel" | translate }}
+                </button>
+                <button
+                    type="submit"
+                    class="btn btn-save"
+                    [disabled]="editForm.invalid || isLoading"
+                >
+                    {{ "users.edit.save" | translate }}
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</app-backdrop-window>

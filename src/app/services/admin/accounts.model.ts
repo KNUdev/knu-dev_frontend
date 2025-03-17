@@ -25,12 +25,21 @@ export interface AdminAccount {
         departmentId: string;
         specialtyCodename: number;
     } | null;
+    // Add new fields for department and specialty names
+    departmentName?: {
+        en: string;
+        uk: string;
+    };
+    specialtyName?: {
+        en: string;
+        uk: string;
+    };
     avatarFilename: string | null;
     bannerFilename: string | null;
     githubAccountUsername: string;
     expertise: string;
     registeredAt: string;
-    yearOfStudyOnRegistration: number;
+    universityStudyYear: number;
     lastRoleUpdateDate: string | null;
     unit: string;
 }

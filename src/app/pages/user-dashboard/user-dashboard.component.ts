@@ -39,6 +39,7 @@ import {
     AdminAccountsService,
     FilterParams,
 } from '../../services/admin/admin-accounts.service';
+import { EditUserModalComponent } from './edit-user-modal/edit-user-modal.component';
 import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 
 @Component({
@@ -51,6 +52,7 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         WriteDropDowns,
         RouterModule,
         BorderButtonComponent,
+        EditUserModalComponent,
     ],
     templateUrl: './user-dashboard.component.html',
     styleUrls: ['./user-dashboard.component.scss'],
@@ -101,6 +103,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     isLoadingRecruitments = false;
 
     private isNavigatingFromCode = false;
+
+    isEditModalOpen = false;
+    selectedUser: AdminAccount | null = null;
 
     constructor() {
         this.translate.onLangChange
@@ -176,7 +181,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     loadSpecialties(departmentId: string): void {
         if (!departmentId) {
             this.specialties = [];
-            this.filters.specialtyCodeName = undefined;
+            this.filters.specialtyCodename = undefined;
             return;
         }
 
@@ -319,8 +324,39 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         return account.academicUnitsIds?.departmentId || 'Not found';
     }
 
-    getSpecialtyCodeName(account: AdminAccount): string | number {
+    getSpecialtyCodename(account: AdminAccount): string | number {
         return account.academicUnitsIds?.specialtyCodename || 'Not found';
+    }
+
+    getDepartmentName(account: AdminAccount): string {
+        // Return localized department name if available, otherwise return ID or fallback text
+        if (account.departmentName) {
+            return (
+                account.departmentName[
+                    this.translate.currentLang as 'en' | 'uk'
+                ] ||
+                account.departmentName['en'] ||
+                'Not found'
+            );
+        }
+        return account.academicUnitsIds?.departmentId || 'Not found';
+    }
+
+    getSpecialtyName(account: AdminAccount): string {
+        // Return localized specialty name if available, otherwise return code or fallback text
+        if (account.specialtyName) {
+            return (
+                account.specialtyName[
+                    this.translate.currentLang as 'en' | 'uk'
+                ] ||
+                account.specialtyName['en'] ||
+                'Not found'
+            );
+        }
+        return (
+            account.academicUnitsIds?.specialtyCodename?.toString() ||
+            'Not found'
+        );
     }
 
     onSearchChange(event: Event): void {
@@ -335,7 +371,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     onDropdownChange(field: keyof FilterParams, value: any): void {
         if (field === 'departmentId' && this.filters.departmentId !== value) {
-            this.filters.specialtyCodeName = undefined;
+            this.filters.specialtyCodename = undefined;
             if (value) {
                 this.loadSpecialties(value);
             } else {
@@ -435,8 +471,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             this.loadSpecialties(params.departmentId);
         }
 
-        if (params.specialtyCodeName) {
-            this.filters.specialtyCodeName = params.specialtyCodeName;
+        if (params.specialtyCodename) {
+            this.filters.specialtyCodename = params.specialtyCodename;
         }
 
         if (params.universityStudyYear) {
@@ -479,7 +515,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         if (placeholder.includes('unit')) return 'unit';
         if (placeholder.includes('expertise')) return 'expertise';
         if (placeholder.includes('faculty')) return 'departmentId';
-        if (placeholder.includes('specialty')) return 'specialtyCodeName';
+        if (placeholder.includes('specialty')) return 'specialtyCodename';
         if (placeholder.includes('study-year')) return 'universityStudyYear';
         if (placeholder.includes('tech-role')) return 'technicalRole';
         if (placeholder.includes('recruitment')) return 'recruitmentId';
@@ -512,8 +548,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             queryParams.expertise = this.filters.expertise;
         if (this.filters.departmentId)
             queryParams.departmentId = this.filters.departmentId;
-        if (this.filters.specialtyCodeName)
-            queryParams.specialtyCodeName = this.filters.specialtyCodeName;
+        if (this.filters.specialtyCodename)
+            queryParams.specialtyCodename = this.filters.specialtyCodename;
         if (this.filters.universityStudyYear !== undefined) {
             queryParams.universityStudyYear = this.filters.universityStudyYear;
         }
@@ -558,5 +594,21 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         }
 
         return translation;
+    }
+
+    // Add method to open edit modal
+    openEditModal(account: AdminAccount): void {
+        this.selectedUser = account;
+        this.isEditModalOpen = true;
+    }
+
+    // Add method to handle edit modal close
+    onEditModalClose(updated: boolean): void {
+        if (updated) {
+            // Reload data if user was updated
+            this.loadAccounts(this.currentPage);
+        }
+        this.isEditModalOpen = false;
+        this.selectedUser = null;
     }
 }

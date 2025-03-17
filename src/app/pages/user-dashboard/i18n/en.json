@@ -38,7 +38,23 @@
         "unit": "Campus/Precampus",
         "change-button": "Change",
         "look-on-details-button": "See details",
-        "noUsersFound": "No users found"
+        "noUsersFound": "No users found",
+        "profile-images": "Profile Images",
+        "avatar": "Avatar Image",
+        "banner": "Banner Image",
+        "edit": {
+            "title": "Edit User",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "middleName": "Middle Name",
+            "save": "Save Changes",
+            "cancel": "Cancel",
+            "saveSuccess": "User information updated successfully",
+            "saveError": "Failed to update user information",
+            "delete-image": "Delete image",
+            "no-avatar": "No avatar image",
+            "no-banner": "No banner image"
+        }
     },
     "pagination": {
         "previous": "Previous",

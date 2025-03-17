@@ -89,7 +89,7 @@
                             [placeholder]="'filters.specialty' | translate"
                             valueField="id"
                             (selectionChange)="
-                                onDropdownChange('specialtyCodeName', $event.id)
+                                onDropdownChange('specialtyCodename', $event.id)
                             "
                             [disabled]="
                                 !filters.departmentId || isLoadingSpecialties
@@ -228,14 +228,19 @@
                         </span>
                     </div>
                     <span>
+                        @if (account.avatarFilename) {
+                        <img
+                            [src]="account.avatarFilename"
+                            alt="User avatar"
+                            class="avatar"
+                            onerror="this.onerror=null; this.src='assets/icon/profile/defaultAvatar.svg';"
+                        />
+                        } @else {
                         <mat-icon
                             class="avatar"
-                            [svgIcon]="
-                                account.avatarFilename
-                                    ? 'userAvatar'
-                                    : 'defaultAvatar'
-                            "
+                            [svgIcon]="'defaultAvatar'"
                         ></mat-icon>
+                        }
                     </span>
                 </div>
                 <span class="separation-line"></span>
@@ -247,21 +252,23 @@
                         <span class="data__parameter">
                             {{ "users.faculty" | translate }}:
                             <span class="data__value">{{
-                                getDepartmentId(account)
+                                getDepartmentName(account)
                             }}</span>
                         </span>
                         <span class="data__parameter">
                             {{ "users.specialty" | translate }}:
                             <span class="data__value">{{
-                                getSpecialtyCodeName(account)
+                                getSpecialtyCodename(account) +
+                                    " - " +
+                                    getSpecialtyName(account)
                             }}</span>
                         </span>
                         <span class="data__parameter">
                             {{ "users.study-year" | translate }}:
                             <span class="data__value">{{
-                                account.yearOfStudyOnRegistration
+                                account.universityStudyYear
                                     ? getStudyYearTranslation(
-                                          account.yearOfStudyOnRegistration
+                                          account.universityStudyYear
                                       )
                                     : "Not found"
                             }}</span>
@@ -272,8 +279,9 @@
                 <div class="info__buttons">
                     <div class="buttons__manage">
                         <app-border-button
-                            [text]="'users.look-on-details-button' | translate"
+                            [text]="'users.change-button' | translate"
                             borderColor="yellow"
+                            (click)="openEditModal(account)"
                         >
                         </app-border-button>
                     </div>
@@ -326,6 +334,11 @@
         <div class="empty-state">
             {{ "users.noUsersFound" | translate }}
         </div>
+        } @if (isEditModalOpen && selectedUser) {
+        <app-edit-user-modal
+            [user]="selectedUser"
+            (close)="onEditModalClose($event)"
+        ></app-edit-user-modal>
         }
     </section>
 </div>
