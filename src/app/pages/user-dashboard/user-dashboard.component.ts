@@ -86,7 +86,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     totalPages = 0;
     totalAccounts = 0;
     currentPage = 0;
-    pageSize = 10;
+    pageSize = 12;
     isLoading = false;
     paginationArray: (number | string)[] = [];
 

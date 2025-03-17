@@ -45,7 +45,7 @@ export class AdminAccountsService {
 
     getAccounts(
         pageNumber: number = 0,
-        pageSize: number = 10,
+        pageSize: number = 12,
         filters?: FilterParams
     ): Observable<AdminAccountsResponse> {
         let params = new HttpParams()
