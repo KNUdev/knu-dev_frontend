@@ -25,7 +25,6 @@ export interface AdminAccount {
         departmentId: string;
         specialtyCodename: number;
     } | null;
-    // Add new fields for department and specialty names
     departmentName?: {
         en: string;
         uk: string;

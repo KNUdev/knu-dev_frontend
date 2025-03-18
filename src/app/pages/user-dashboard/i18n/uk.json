@@ -2,7 +2,7 @@
     "filters": {
         "title": "Фільтри",
         "resetFilters": "Скинути фільтри",
-        "initials-or-email-filter": "ПІБ/email користувача",
+        "initials-or-email-filter": "ПІБ/email/GitHub користувача",
         "registration-date": "Дата реєстрації",
         "registration-end-date": "Дата до якої зараєстрова(ний)/на",
         "knudev-unit": "Кампус/Прекампус",
@@ -53,7 +53,16 @@
             "saveError": "Не вдалося оновити інформацію користувача",
             "delete-image": "Видалити зображення",
             "no-avatar": "Немає аватару",
-            "no-banner": "Немає банеру"
+            "no-banner": "Немає банеру",
+            "changed": "Змінено з",
+            "changedField": "Змінено {{field}} з",
+            "closeConfirmTitle": "Відхилити зміни?",
+            "closeConfirmMessage": "У вас є незбережені зміни. Якщо ви закриєте зараз, ваші зміни буде втрачено.",
+            "stayOnPage": "Залишитись на сторінці",
+            "discardChanges": "Відхилити зміни",
+            "saveConfirmTitle": "Зберегти зміни?",
+            "saveConfirmMessage": "Ви впевнені, що хочете зберегти ці зміни?",
+            "confirmSave": "Так, зберегти зміни"
         }
     },
     "pagination": {

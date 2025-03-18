@@ -41,7 +41,7 @@ interface FilteredOption extends SelectOption {
 }
 
 @Component({
-    selector: 'register-write-dropdowns',
+    selector: 'app-write-dropdowns',
     imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
     encapsulation: ViewEncapsulation.None,
     providers: [
@@ -99,7 +99,13 @@ export class WriteDropDowns implements ControlValueAccessor {
     @Input()
     set options(value: SelectOption[]) {
         this._options = value || [];
-        if (this.defaultSelectedId && !this.selectedOption) {
+
+        // Apply pending value if it exists and we have options now
+        if (this._pendingValue !== undefined && this._options.length > 0) {
+            setTimeout(() => this.writeValue(this._pendingValue), 0);
+        }
+        // Apply default selected ID if set
+        else if (this.defaultSelectedId && !this.selectedOption) {
             const found = this._options.find(
                 (o) => o.id === this.defaultSelectedId
             );
@@ -130,18 +136,29 @@ export class WriteDropDowns implements ControlValueAccessor {
     }
 
     getDisplayValue(option: SelectOption): string {
+        if (!option) return '';
+
+        // First check if there's a pre-formatted displayedName
+        if (option.displayedName) {
+            return option.displayedName;
+        }
+
+        // For backwards compatibility, handle localized name objects
         if (option?.name) {
             const name =
                 this.translate.currentLang === 'uk'
                     ? option.name.uk
                     : option.name.en;
 
+            // If we have a codeName, use the "code - name" format
             if (option.codeName) {
                 return `${option.codeName} - ${name}`;
             }
             return name;
         }
-        return option?.displayedName || '';
+
+        // Fallback to empty string if no displayable value found
+        return option?.id || '';
     }
 
     selectOption(option: SelectOption): void {
@@ -276,11 +293,55 @@ export class WriteDropDowns implements ControlValueAccessor {
     }
 
     writeValue(value: any): void {
-        if (value) {
-            this.selectedOption = this.options.find((opt) => opt.id === value);
+        if (value === null || value === undefined) {
+            this.selectedOption = null;
+            return;
+        }
+
+        // If options aren't loaded yet, store value for later application
+        if (!this.options || this.options.length === 0) {
+            this._pendingValue = value;
+            return;
+        }
+
+        // Convert value to string for robust comparison (handles both string and number IDs)
+        const valueStr = String(value);
+
+        // Try to find an exact match by ID
+        let found = this.options.find((opt) => String(opt.id) === valueStr);
+
+        // If not found by ID, try by codeName
+        if (!found && this.valueField === 'codeName') {
+            found = this.options.find(
+                (opt) => opt.codeName && String(opt.codeName) === valueStr
+            );
+        }
+
+        // If still not found, try case-insensitive comparison
+        if (!found) {
+            found = this.options.find(
+                (opt) =>
+                    String(opt.id).toLowerCase() === valueStr.toLowerCase() ||
+                    (opt.codeName &&
+                        String(opt.codeName).toLowerCase() ===
+                            valueStr.toLowerCase())
+            );
+        }
+
+        // Set selected option and emit change if needed
+        if (found) {
+            this.selectedOption = found;
+            const value =
+                this.valueField === 'id'
+                    ? found.id
+                    : found.codeName || found.id;
+            this.onChange(value);
         } else {
             this.selectedOption = null;
         }
+
+        // Clear the pending value since we've processed it
+        this._pendingValue = undefined;
     }
 
     registerOnChange(fn: any): void {
@@ -294,4 +355,7 @@ export class WriteDropDowns implements ControlValueAccessor {
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
     }
+
+    // Add property to track pending values
+    private _pendingValue: any;
 }

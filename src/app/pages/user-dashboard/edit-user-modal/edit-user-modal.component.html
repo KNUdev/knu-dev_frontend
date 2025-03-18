@@ -15,6 +15,56 @@
             <mat-icon>error</mat-icon>
             <p>{{ errorMessage }}</p>
         </div>
+        } @else if (showCloseConfirmation) {
+        <div class="confirmation-dialog">
+            <h3 class="confirmation-title">
+                {{ "users.edit.closeConfirmTitle" | translate }}
+            </h3>
+            <p class="confirmation-message">
+                {{ "users.edit.closeConfirmMessage" | translate }}
+            </p>
+            <div class="confirmation-actions">
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    (click)="cancelClose()"
+                >
+                    {{ "users.edit.stayOnPage" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="confirmClose()"
+                >
+                    {{ "users.edit.discardChanges" | translate }}
+                </button>
+            </div>
+        </div>
+        } @else if (showSaveConfirmation) {
+        <div class="confirmation-dialog">
+            <h3 class="confirmation-title">
+                {{ "users.edit.saveConfirmTitle" | translate }}
+            </h3>
+            <p class="confirmation-message">
+                {{ "users.edit.saveConfirmMessage" | translate }}
+            </p>
+            <div class="confirmation-actions">
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    (click)="cancelSave()"
+                >
+                    {{ "users.edit.cancel" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-save"
+                    (click)="confirmSave()"
+                >
+                    {{ "users.edit.confirmSave" | translate }}
+                </button>
+            </div>
+        </div>
         } @else {
         <form
             [formGroup]="editForm"
@@ -23,10 +73,6 @@
         >
             <!-- Add profile images section before general info -->
             <div class="form-section">
-                <h3 class="section-title">
-                    {{ "users.profile-images" | translate }}
-                </h3>
-
                 <!-- Banner section -->
                 <div class="image-section">
                     <div class="image-container">
@@ -48,7 +94,6 @@
                         </div>
                         } @else {
                         <div class="no-image">
-                            <mat-icon>image</mat-icon>
                             <span>{{
                                 "users.edit.no-banner" | translate
                             }}</span>
@@ -93,195 +138,365 @@
                     {{ "users.general-info" | translate }}
                 </h3>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.edit.firstName" | translate }}</label>
-                        <input
-                            type="text"
-                            formControlName="firstName"
-                            class="form-control"
-                        />
-                        @if(editForm.get('firstName')?.invalid &&
-                        editForm.get('firstName')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("firstName") }}
-                        </div>
-                        }
+                <div class="form-group">
+                    <label>{{ "users.edit.firstName" | translate }}</label>
+                    <input
+                        type="text"
+                        formControlName="firstName"
+                        class="form-control"
+                    />
+                    @if(isFieldChanged('firstName')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "firstName"
+                                          )
+                                      }
+                        }}: {{ initialFormValues.firstName }} →
+                        {{ editForm.get("firstName")?.value }}
                     </div>
-
-                    <div class="form-group">
-                        <label>{{ "users.edit.lastName" | translate }}</label>
-                        <input
-                            type="text"
-                            formControlName="lastName"
-                            class="form-control"
-                        />
-                        @if(editForm.get('lastName')?.invalid &&
-                        editForm.get('lastName')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("lastName") }}
-                        </div>
-                        }
+                    } @if(editForm.get('firstName')?.invalid &&
+                    editForm.get('firstName')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("firstName") }}
                     </div>
+                    }
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.edit.middleName" | translate }}</label>
-                        <input
-                            type="text"
-                            formControlName="middleName"
-                            class="form-control"
-                        />
+                <div class="form-group">
+                    <label>{{ "users.edit.lastName" | translate }}</label>
+                    <input
+                        type="text"
+                        formControlName="lastName"
+                        class="form-control"
+                    />
+                    @if(isFieldChanged('lastName')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName("lastName")
+                                      }
+                        }}: {{ initialFormValues.lastName }} →
+                        {{ editForm.get("lastName")?.value }}
                     </div>
-
-                    <div class="form-group">
-                        <label>{{ "users.email" | translate }}</label>
-                        <input
-                            type="email"
-                            formControlName="email"
-                            class="form-control"
-                        />
-                        @if(editForm.get('email')?.invalid &&
-                        editForm.get('email')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("email") }}
-                        </div>
-                        }
+                    } @if(editForm.get('lastName')?.invalid &&
+                    editForm.get('lastName')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("lastName") }}
                     </div>
+                    }
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.github" | translate }}</label>
-                        <input
-                            type="text"
-                            formControlName="githubAccountUsername"
-                            class="form-control"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label>{{ "users.tech-role" | translate }}</label>
-                        <register-write-dropdowns
-                            [options]="filterOptions.technicalRoles"
-                            [placeholder]="'filters.user-tech-role' | translate"
-                            [defaultSelectedId]="user.technicalRole"
-                            formControlName="technicalRole"
-                        >
-                        </register-write-dropdowns>
-                        @if(editForm.get('technicalRole')?.invalid &&
-                        editForm.get('technicalRole')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("technicalRole") }}
-                        </div>
-                        }
-                    </div>
+                <div class="form-group">
+                    <label>{{ "users.edit.middleName" | translate }}</label>
+                    <input
+                        type="text"
+                        formControlName="middleName"
+                        class="form-control"
+                    />
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.expertise" | translate }}</label>
-                        <register-write-dropdowns
-                            [options]="filterOptions.expertise"
-                            [placeholder]="'filters.expertise' | translate"
-                            [defaultSelectedId]="user.expertise"
-                            formControlName="expertise"
-                        >
-                        </register-write-dropdowns>
-                        @if(editForm.get('expertise')?.invalid &&
-                        editForm.get('expertise')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("expertise") }}
-                        </div>
-                        }
+                <div class="form-group">
+                    <label>{{ "users.email" | translate }}</label>
+                    <input
+                        type="email"
+                        formControlName="email"
+                        class="form-control"
+                    />
+                    @if(isFieldChanged('email')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : { field: getFieldDisplayName("email") }
+                        }}: {{ initialFormValues.email }} →
+                        {{ editForm.get("email")?.value }}
                     </div>
+                    } @if(editForm.get('email')?.invalid &&
+                    editForm.get('email')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("email") }}
+                    </div>
+                    }
+                </div>
 
-                    <div class="form-group">
-                        <label>{{ "users.unit" | translate }}</label>
-                        <register-write-dropdowns
-                            [options]="filterOptions.units"
-                            [placeholder]="'filters.knudev-unit' | translate"
-                            [defaultSelectedId]="user.unit"
-                            formControlName="unit"
-                        >
-                        </register-write-dropdowns>
-                        @if(editForm.get('unit')?.invalid &&
-                        editForm.get('unit')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("unit") }}
-                        </div>
-                        }
+                <div class="form-group">
+                    <label>{{ "users.github" | translate }}</label>
+                    <input
+                        type="text"
+                        formControlName="githubAccountUsername"
+                        class="form-control"
+                    />
+                    @if(isFieldChanged('githubAccountUsername')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "githubAccountUsername"
+                                          )
+                                      }
+                        }}: {{ initialFormValues.githubAccountUsername }} →
+                        {{ editForm.get("githubAccountUsername")?.value }}
                     </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>{{ "users.tech-role" | translate }}</label>
+                    <app-write-dropdowns
+                        [options]="filterOptions.technicalRoles"
+                        [placeholder]="'filters.user-tech-role' | translate"
+                        [defaultSelectedId]="user.technicalRole"
+                        formControlName="technicalRole"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('technicalRole')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "technicalRole"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "technicalRole",
+                                initialFormValues.technicalRole
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "technicalRole",
+                                editForm.get("technicalRole")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('technicalRole')?.invalid &&
+                    editForm.get('technicalRole')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("technicalRole") }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>{{ "users.expertise" | translate }}</label>
+                    <app-write-dropdowns
+                        [options]="filterOptions.expertise"
+                        [placeholder]="'filters.expertise' | translate"
+                        [defaultSelectedId]="user.expertise"
+                        formControlName="expertise"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('expertise')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "expertise"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "expertise",
+                                initialFormValues.expertise
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "expertise",
+                                editForm.get("expertise")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('expertise')?.invalid &&
+                    editForm.get('expertise')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("expertise") }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>{{ "users.unit" | translate }}</label>
+                    <app-write-dropdowns
+                        [options]="filterOptions.units"
+                        [placeholder]="'filters.knudev-unit' | translate"
+                        [defaultSelectedId]="user.unit"
+                        formControlName="unit"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('unit')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : { field: getFieldDisplayName("unit") }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "unit",
+                                initialFormValues.unit
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "unit",
+                                editForm.get("unit")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('unit')?.invalid &&
+                    editForm.get('unit')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("unit") }}
+                    </div>
+                    }
                 </div>
             </div>
 
             <div class="form-section">
                 <h3 class="section-title">{{ "users.learns" | translate }}</h3>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.faculty" | translate }}</label>
-                        @if(departmentLocalizedName) {
-                        <div class="current-value-label">
-                            {{ departmentLocalizedName }}
-                        </div>
-                        }
-                        <register-write-dropdowns
-                            [options]="departments"
-                            [placeholder]="'filters.faculty' | translate"
-                            [defaultSelectedId]="
-                                user.academicUnitsIds?.departmentId
-                            "
-                            [class.drop-down__loading]="isLoadingDepartments"
-                            formControlName="departmentId"
-                        >
-                        </register-write-dropdowns>
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="departments"
+                        [placeholder]="'filters.faculty' | translate"
+                        [defaultSelectedId]="
+                            user.academicUnitsIds?.departmentId
+                        "
+                        [class.drop-down__loading]="isLoadingDepartments"
+                        formControlName="departmentId"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('departmentId')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "departmentId"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "departmentId",
+                                initialFormValues.departmentId
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "departmentId",
+                                editForm.get("departmentId")?.value
+                            )
+                        }}
                     </div>
-
-                    <div class="form-group">
-                        <label>{{ "users.specialty" | translate }}</label>
-                        @if(specialtyLocalizedName) {
-                        <div class="current-value-label">
-                            {{ specialtyLocalizedName }}
-                        </div>
-                        }
-                        <register-write-dropdowns
-                            [options]="specialties"
-                            [placeholder]="'filters.specialty' | translate"
-                            [defaultSelectedId]="
-                                user.academicUnitsIds?.specialtyCodename?.toString()
-                            "
-                            [disabled]="
-                                !editForm.get('departmentId')?.value ||
-                                isLoadingSpecialties
-                            "
-                            [class.drop-down__loading]="isLoadingSpecialties"
-                            formControlName="specialtyCodename"
-                        >
-                        </register-write-dropdowns>
-                    </div>
+                    }
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>{{ "users.study-year" | translate }}</label>
-                        <register-write-dropdowns
-                            [options]="filterOptions.studyYears"
-                            [placeholder]="'filters.study-year' | translate"
-                            [defaultSelectedId]="
-                                user.universityStudyYear.toString()
-                            "
-                            formControlName="yearOfStudyOnRegistration"
-                        >
-                        </register-write-dropdowns>
-                        @if(editForm.get('yearOfStudyOnRegistration')?.invalid
-                        && editForm.get('yearOfStudyOnRegistration')?.touched) {
-                        <div class="error-text">
-                            {{ getFieldError("yearOfStudyOnRegistration") }}
-                        </div>
-                        }
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="specialties"
+                        [placeholder]="'filters.specialty' | translate"
+                        [defaultSelectedId]="
+                            user.academicUnitsIds?.specialtyCodename?.toString()
+                        "
+                        [disabled]="
+                            !editForm.get('departmentId')?.value ||
+                            isLoadingSpecialties
+                        "
+                        [class.drop-down__loading]="isLoadingSpecialties"
+                        formControlName="specialtyCodename"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('specialtyCodename')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "specialtyCodename"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "specialtyCodename",
+                                initialFormValues.specialtyCodename
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "specialtyCodename",
+                                editForm.get("specialtyCodename")?.value
+                            )
+                        }}
                     </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="filterOptions.studyYears"
+                        [placeholder]="'filters.study-year' | translate"
+                        [defaultSelectedId]="
+                            user.universityStudyYear.toString()
+                        "
+                        formControlName="yearOfStudyOnRegistration"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('yearOfStudyOnRegistration')) {
+                    <div class="change-indicator">
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "yearOfStudyOnRegistration"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "yearOfStudyOnRegistration",
+                                initialFormValues.yearOfStudyOnRegistration
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "yearOfStudyOnRegistration",
+                                editForm.get("yearOfStudyOnRegistration")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('yearOfStudyOnRegistration')?.invalid &&
+                    editForm.get('yearOfStudyOnRegistration')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("yearOfStudyOnRegistration") }}
+                    </div>
+                    }
                 </div>
             </div>
 

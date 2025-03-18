@@ -56,6 +56,7 @@
 }
 
 .form-group {
+    display: flex;
     flex: 1;
 
     label {
@@ -88,6 +89,16 @@
             outline: none;
             border-color: #edd342;
         }
+    }
+
+    .change-indicator {
+        color: #45a5f5;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        font-style: italic;
+        background-color: rgba(69, 165, 245, 0.1);
+        border-radius: 4px;
+        padding: 4px 8px;
     }
 
     .error-text {
@@ -281,5 +292,48 @@
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+.confirmation-dialog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    min-height: 200px;
+}
+
+.confirmation-title {
+    color: #edd342;
+    font-family: Unbounded, sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.confirmation-message {
+    color: #d1d1d1;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.confirmation-actions {
+    display: flex;
+    gap: 1rem;
+
+    @include mobile {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+.btn-danger {
+    background: #e5383a;
+    color: #fff;
+
+    &:hover {
+        background: #d13133;
     }
 }

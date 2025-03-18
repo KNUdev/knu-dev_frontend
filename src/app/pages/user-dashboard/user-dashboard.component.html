@@ -13,7 +13,10 @@
                             [placeholder]="
                                 'filters.initials-or-email-filter' | translate
                             "
+                            [value]="searchInputValue"
                             (input)="onSearchChange($event)"
+                            (blur)="onSearchBlur()"
+                            (keyup)="onSearchKeyUp($event)"
                         />
                     </div>
                     <div class="filters__col">
@@ -42,19 +45,20 @@
                 </div>
                 <div class="filters__row">
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="filterOptions.units"
                             [placeholder]="'filters.knudev-unit' | translate"
                             valueField="id"
+                            [defaultSelectedId]="filters.unit"
                             (selectionChange)="
                                 onDropdownChange('unit', $event.id)
                             "
                             [class.drop-down__loading]="isLoading"
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
 
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="filterOptions.expertise"
                             [placeholder]="'filters.expertise' | translate"
                             valueField="id"
@@ -62,11 +66,11 @@
                                 onDropdownChange('expertise', $event.id)
                             "
                             [class.drop-down__loading]="isLoading"
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
 
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="departments"
                             [placeholder]="'filters.faculty' | translate"
                             valueField="id"
@@ -80,11 +84,11 @@
                             [errorMessage]="
                                 'filters.errorLoadingDepartments' | translate
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
 
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="specialties"
                             [placeholder]="'filters.specialty' | translate"
                             valueField="id"
@@ -101,30 +105,34 @@
                             [errorMessage]="
                                 'filters.errorLoadingSpecialties' | translate
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
 
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="filterOptions.studyYears"
                             [placeholder]="'filters.study-year' | translate"
                             valueField="id"
+                            [defaultSelectedId]="
+                                filters.universityStudyYear?.toString()
+                            "
                             (selectionChange)="
                                 onDropdownChange(
                                     'universityStudyYear',
                                     $event.id
                                 )
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
                 </div>
 
                 <div class="filters__row">
                     <div class="filters__col" style="flex: 2">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="recruitments"
                             [placeholder]="'filters.recruitment' | translate"
                             valueField="id"
+                            [defaultSelectedId]="filters.recruitmentId"
                             (selectionChange)="
                                 onDropdownChange('recruitmentId', $event.id)
                             "
@@ -136,17 +144,18 @@
                             [errorMessage]="
                                 'filters.errorLoadingRecruitments' | translate
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
                     <div class="filters__col">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="filterOptions.technicalRoles"
                             [placeholder]="'filters.user-tech-role' | translate"
                             valueField="id"
+                            [defaultSelectedId]="filters.technicalRole"
                             (selectionChange)="
                                 onDropdownChange('technicalRole', $event.id)
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                     </div>
                 </div>
 

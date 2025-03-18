@@ -107,6 +107,12 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     isEditModalOpen = false;
     selectedUser: AdminAccount | null = null;
 
+    searchInputValue = '';
+
+    private initialSearchPerformed = false;
+
+    private initialSearchFromUrl = false;
+
     constructor() {
         this.translate.onLangChange
             .pipe(
@@ -129,9 +135,10 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         const searchSubscription = this.searchQuerySubject
             .pipe(debounceTime(500), distinctUntilChanged())
             .subscribe((query) => {
-                this.filters.searchQuery = query;
-                this.loadAccounts(0);
-                this.updateUrlParams();
+                if (!this.initialSearchFromUrl) {
+                    this.searchInputValue = query;
+                }
+                this.initialSearchFromUrl = false;
             });
 
         this.subscriptions.add(searchSubscription);
@@ -192,10 +199,33 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             .pipe(finalize(() => (this.isLoadingSpecialties = false)))
             .subscribe({
                 next: (specialties) => {
-                    this.specialties = specialties.map((spec) => ({
-                        id: spec.codeName.toString(),
-                        name: spec.name,
-                    }));
+                    this.specialties = specialties.map((spec) => {
+                        const id = spec.codeName.toString();
+
+                        let displayName;
+                        if (spec.name) {
+                            if (typeof spec.name === 'object') {
+                                const localizedName =
+                                    spec.name[
+                                        this.translate.currentLang as
+                                            | 'en'
+                                            | 'uk'
+                                    ] || spec.name['en'];
+                                displayName = `${spec.codeName} - ${localizedName}`;
+                            } else {
+                                displayName = `${spec.codeName} - ${spec.name}`;
+                            }
+                        } else {
+                            displayName = spec.codeName.toString();
+                        }
+
+                        return {
+                            id,
+                            displayedName: displayName,
+                            name: spec.name,
+                            codeName: spec.codeName,
+                        };
+                    });
                 },
                 error: (error) => {
                     console.error('Error loading specialties:', error);
@@ -206,26 +236,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     loadRecruitments(): void {
-        this.isLoadingRecruitments = true;
-
-        const subscription = this.adminAccountsService
-            .getRecruitments()
-            .pipe(finalize(() => (this.isLoadingRecruitments = false)))
-            .subscribe({
-                next: (recruitments) => {
-                    this.recruitments = recruitments.map((recruitment) => ({
-                        id: recruitment.id,
-                        displayedName: recruitment.name,
-                        description: `${recruitment.expertise} (${new Date(
-                            recruitment.closedAt
-                        ).toLocaleDateString()})`,
-                    }));
-                },
-                error: (error) => {
-                    console.error('Error loading recruitments:', error);
-                },
-            });
-
+        const subscription = this.loadRecruitmentsWithCallback();
         this.subscriptions.add(subscription);
     }
 
@@ -329,7 +340,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     getDepartmentName(account: AdminAccount): string {
-        // Return localized department name if available, otherwise return ID or fallback text
         if (account.departmentName) {
             return (
                 account.departmentName[
@@ -343,7 +353,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     getSpecialtyName(account: AdminAccount): string {
-        // Return localized specialty name if available, otherwise return code or fallback text
         if (account.specialtyName) {
             return (
                 account.specialtyName[
@@ -361,7 +370,27 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     onSearchChange(event: Event): void {
         const target = event.target as HTMLInputElement;
-        this.searchQuerySubject.next(target.value);
+        this.searchInputValue = target.value;
+    }
+
+    onSearchBlur(): void {
+        if (this.searchInputValue !== (this.filters.searchQuery || '')) {
+            this.filters.searchQuery = this.searchInputValue || undefined;
+            this.currentPage = 0;
+            this.loadAccounts(0);
+            this.updateUrlParams();
+        }
+    }
+
+    onSearchKeyUp(event: KeyboardEvent): void {
+        if (event.key === 'Enter') {
+            this.filters.searchQuery = this.searchInputValue || undefined;
+            this.currentPage = 0;
+            this.loadAccounts(0);
+            this.updateUrlParams();
+
+            (event.target as HTMLElement).blur();
+        }
     }
 
     onDateFilterChange(): void {
@@ -393,6 +422,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.filters = {};
         this.specialties = [];
         this.currentPage = 0;
+        this.searchInputValue = '';
+        this.searchQuerySubject.next('');
 
         const searchInputs = document.querySelectorAll(
             '.first-line-filters__initials-or-email, .first-line-filters__reg-date, .first-line-filters__reg-end-date'
@@ -447,11 +478,17 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         if (params.search) {
             this.filters.searchQuery = params.search;
+            this.searchInputValue = params.search;
+            this.initialSearchFromUrl = true;
+            this.searchQuerySubject.next(params.search);
+        } else {
+            this.searchInputValue = '';
         }
 
         if (params.registeredAt) {
             this.filters.registeredAt = params.registeredAt;
         }
+
         if (params.registeredBefore) {
             this.filters.registeredBefore = params.registeredBefore;
         }
@@ -459,9 +496,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         if (params.unit) {
             this.filters.unit = params.unit;
         }
+
         if (params.expertise) {
             this.filters.expertise = params.expertise;
         }
+
         if (params.technicalRole) {
             this.filters.technicalRole = params.technicalRole;
         }
@@ -486,25 +525,104 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             this.filters.recruitmentId = params.recruitmentId;
         }
 
-        this.loadAccounts(this.currentPage);
+        if (!this.isNavigatingFromCode) {
+            this.loadAccounts(this.currentPage);
+        }
 
-        setTimeout(() => this.updateDropdownsFromFilters(), 0);
+        this.updateDateInputs();
+
+        setTimeout(() => {
+            this.updateDropdownsFromFilters();
+        }, 0);
+    }
+
+    private updateDateInputs(): void {
+        if (this.filters.registeredAt) {
+            const startDateInput = document.querySelector(
+                '.first-line-filters__reg-date'
+            ) as HTMLInputElement;
+            if (startDateInput) {
+                startDateInput.value = this.filters.registeredAt;
+            }
+        }
+
+        if (this.filters.registeredBefore) {
+            const endDateInput = document.querySelector(
+                '.first-line-filters__reg-end-date'
+            ) as HTMLInputElement;
+            if (endDateInput) {
+                endDateInput.value = this.filters.registeredBefore;
+            }
+        }
     }
 
     private updateDropdownsFromFilters(): void {
-        if (!this.filterDropdowns) return;
+        if (!this.filterDropdowns || this.filterDropdowns.length === 0) return;
 
-        this.filterDropdowns.forEach((dropdown) => {
-            const filterKey = this.getFilterKeyForDropdown(dropdown);
-            if (filterKey && this.filters[filterKey]) {
-                const option = dropdown.options.find(
-                    (opt) => opt.id === this.filters[filterKey]
-                );
-                if (option) {
-                    dropdown.writeValue(option.id);
-                }
-            }
-        });
+        setTimeout(() => {
+            Promise.all([
+                this.departments.length > 0 || !this.filters.departmentId
+                    ? Promise.resolve()
+                    : new Promise((resolve) => {
+                          const interval = setInterval(() => {
+                              if (this.departments.length > 0) {
+                                  clearInterval(interval);
+                                  resolve(true);
+                              }
+                          }, 100);
+                      }),
+
+                this.specialties.length > 0 ||
+                !this.filters.departmentId ||
+                !this.filters.specialtyCodename
+                    ? Promise.resolve()
+                    : new Promise((resolve) => {
+                          const interval = setInterval(() => {
+                              if (this.specialties.length > 0) {
+                                  clearInterval(interval);
+                                  resolve(true);
+                              }
+                          }, 100);
+                      }),
+
+                this.recruitments.length > 0 || !this.filters.recruitmentId
+                    ? Promise.resolve()
+                    : new Promise((resolve) => {
+                          const interval = setInterval(() => {
+                              if (this.recruitments.length > 0) {
+                                  clearInterval(interval);
+                                  resolve(true);
+                              }
+                          }, 100);
+                      }),
+            ]).then(() => {
+                this.filterDropdowns.forEach((dropdown) => {
+                    const filterKey = this.getFilterKeyForDropdown(dropdown);
+                    if (!filterKey || !this.filters[filterKey]) return;
+
+                    let targetValue = this.filters[filterKey];
+
+                    if (
+                        filterKey === 'universityStudyYear' &&
+                        typeof targetValue === 'number'
+                    ) {
+                        targetValue = targetValue.toString();
+                    }
+
+                    const valueStr = String(targetValue);
+
+                    const options = dropdown.options || [];
+                    const option = options.find(
+                        (opt) => String(opt.id) === valueStr
+                    );
+
+                    if (option) {
+                        dropdown.writeValue(option.id);
+                        dropdown.selectOption(option);
+                    }
+                });
+            });
+        }, 500);
     }
 
     private getFilterKeyForDropdown(
@@ -512,13 +630,70 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     ): keyof FilterParams | null {
         const placeholder = dropdown.placeholder.toLowerCase();
 
-        if (placeholder.includes('unit')) return 'unit';
-        if (placeholder.includes('expertise')) return 'expertise';
-        if (placeholder.includes('faculty')) return 'departmentId';
-        if (placeholder.includes('specialty')) return 'specialtyCodename';
-        if (placeholder.includes('study-year')) return 'universityStudyYear';
-        if (placeholder.includes('tech-role')) return 'technicalRole';
-        if (placeholder.includes('recruitment')) return 'recruitmentId';
+        if (placeholder.includes('unit') || placeholder.includes('campus'))
+            return 'unit';
+        if (
+            placeholder.includes('expertise') ||
+            placeholder.includes('напрямок')
+        )
+            return 'expertise';
+        if (
+            placeholder.includes('faculty') ||
+            placeholder.includes('факультет')
+        )
+            return 'departmentId';
+        if (
+            placeholder.includes('specialty') ||
+            placeholder.includes('спеціальність')
+        )
+            return 'specialtyCodename';
+        if (placeholder.includes('study-year') || placeholder.includes('курс'))
+            return 'universityStudyYear';
+        if (
+            placeholder.includes('tech-role') ||
+            placeholder.includes('технічна роль')
+        )
+            return 'technicalRole';
+        if (
+            placeholder.includes('recruitment') ||
+            placeholder.includes('набір')
+        )
+            return 'recruitmentId';
+
+        const options = dropdown.options || [];
+        if (options.length) {
+            const firstOptionId = options[0]?.id;
+
+            if (
+                options.some((o) =>
+                    ['CAMPUS', 'PRECAMPUS'].includes(String(o.id))
+                )
+            )
+                return 'unit';
+            if (
+                options.some((o) =>
+                    [
+                        'INTERN',
+                        'DEVELOPER',
+                        'PREMASTER',
+                        'MASTER',
+                        'TECHLEAD',
+                    ].includes(String(o.id))
+                )
+            )
+                return 'technicalRole';
+            if (
+                options.some((o) =>
+                    [
+                        'FULLSTACK',
+                        'BACKEND',
+                        'FRONTEND',
+                        'UI_UX_DESIGNER',
+                    ].includes(String(o.id))
+                )
+            )
+                return 'expertise';
+        }
 
         return null;
     }
@@ -526,6 +701,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private updateUrlParams(reset: boolean = false): void {
         if (reset) {
             this.isNavigatingFromCode = true;
+            this.searchInputValue = '';
             this.router.navigate([], {
                 relativeTo: this.route,
                 queryParams: {},
@@ -537,8 +713,10 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const queryParams: any = {};
 
-        if (this.filters.searchQuery)
+        if (this.filters.searchQuery) {
             queryParams.search = this.filters.searchQuery;
+        }
+
         if (this.filters.registeredAt)
             queryParams.registeredAt = this.filters.registeredAt;
         if (this.filters.registeredBefore)
@@ -559,6 +737,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             queryParams.recruitmentId = this.filters.recruitmentId;
 
         this.isNavigatingFromCode = true;
+
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams,
@@ -596,19 +775,74 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         return translation;
     }
 
-    // Add method to open edit modal
     openEditModal(account: AdminAccount): void {
         this.selectedUser = account;
         this.isEditModalOpen = true;
     }
 
-    // Add method to handle edit modal close
     onEditModalClose(updated: boolean): void {
         if (updated) {
-            // Reload data if user was updated
             this.loadAccounts(this.currentPage);
         }
         this.isEditModalOpen = false;
         this.selectedUser = null;
+    }
+
+    private loadAccountsAndUpdateFilters(): void {
+        const promises = [
+            // Load accounts
+            new Promise<void>((resolve) => {
+                if (!this.isNavigatingFromCode) {
+                    this.loadAccounts(this.currentPage);
+                }
+                resolve();
+            }),
+        ];
+
+        if (this.filters.recruitmentId && this.recruitments.length === 0) {
+            promises.push(
+                new Promise<void>((resolve) => {
+                    const subscription = this.loadRecruitmentsWithCallback(() =>
+                        resolve()
+                    );
+                    this.subscriptions.add(subscription);
+                })
+            );
+        }
+
+        Promise.all(promises).then(() => {
+            this.updateDateInputs();
+
+            setTimeout(() => {
+                this.updateDropdownsFromFilters();
+            }, 200);
+        });
+    }
+
+    private loadRecruitmentsWithCallback(callback?: () => void): Subscription {
+        this.isLoadingRecruitments = true;
+
+        return this.adminAccountsService
+            .getRecruitments()
+            .pipe(
+                finalize(() => {
+                    this.isLoadingRecruitments = false;
+                    if (callback) callback();
+                })
+            )
+            .subscribe({
+                next: (recruitments) => {
+                    this.recruitments = recruitments.map((recruitment) => ({
+                        id: recruitment.id,
+                        displayedName: recruitment.name,
+                        description: `${recruitment.expertise} (${new Date(
+                            recruitment.closedAt
+                        ).toLocaleDateString()})`,
+                    }));
+                },
+                error: (error) => {
+                    console.error('Error loading recruitments:', error);
+                },
+            });
     }
 }

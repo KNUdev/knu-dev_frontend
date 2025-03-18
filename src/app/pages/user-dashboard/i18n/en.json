@@ -2,7 +2,7 @@
     "filters": {
         "title": "Filters",
         "resetFilters": "Reset filters",
-        "initials-or-email-filter": "User FML name/email",
+        "initials-or-email-filter": "User FML/email/GitHub",
         "registration-date": "Registration date",
         "registration-end-date": "Registration end date",
         "knudev-unit": "Campus/Precampus",
@@ -53,7 +53,16 @@
             "saveError": "Failed to update user information",
             "delete-image": "Delete image",
             "no-avatar": "No avatar image",
-            "no-banner": "No banner image"
+            "no-banner": "No banner image",
+            "changed": "Changed from",
+            "changedField": "Changed {{field}} from",
+            "closeConfirmTitle": "Discard Changes?",
+            "closeConfirmMessage": "You have unsaved changes. If you close now, your changes will be lost.",
+            "stayOnPage": "Stay on This Page",
+            "discardChanges": "Discard Changes",
+            "saveConfirmTitle": "Save Changes?",
+            "saveConfirmMessage": "Are you sure you want to save these changes?",
+            "confirmSave": "Yes, Save Changes"
         }
     },
     "pagination": {
