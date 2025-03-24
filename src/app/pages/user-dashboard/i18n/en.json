@@ -2,7 +2,7 @@
     "filters": {
         "title": "Filters",
         "resetFilters": "Reset filters",
-        "initials-or-email-filter": "User FML/email/GitHub",
+        "initials-or-email-filter": "User Name/Email/GitHub",
         "registration-date": "Registration date",
         "registration-end-date": "Registration end date",
         "knudev-unit": "Campus/Precampus",
@@ -24,7 +24,7 @@
     "users": {
         "title": "List of users",
         "general-info": "General information",
-        "full-name": "FML name",
+        "full-name": "Full Name",
         "email": "Email",
         "tech-role": "Technical role",
         "expertise": "Expertise",

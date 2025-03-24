@@ -86,7 +86,9 @@
                                     class="delete-icon-button"
                                     (click)="requestDeleteBanner()"
                                 >
-                                    <mat-icon>close</mat-icon>
+                                    <mat-icon [svgIcon]="'trash'"
+                                        >close</mat-icon
+                                    >
                                 </button>
                             </div>
                         </div>
@@ -112,7 +114,9 @@
                                         class="delete-icon-button"
                                         (click)="requestDeleteAvatar()"
                                     >
-                                        <mat-icon>close</mat-icon>
+                                        <mat-icon [svgIcon]="'trash'"
+                                            >close</mat-icon
+                                        >
                                     </button>
                                 </div>
                                 } @else {

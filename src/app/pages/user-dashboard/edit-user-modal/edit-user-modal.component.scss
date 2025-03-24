@@ -480,6 +480,7 @@ app-write-dropdowns {
     font-size: 30px;
     width: 30px;
     height: 30px;
+    color: #fff;
 }
 
 .profile-wrapper {
@@ -509,8 +510,9 @@ app-write-dropdowns {
 }
 
 .profile-image {
-    width: 50%;
+    width: 100%;
     object-fit: cover;
+    background-color: #000;
 }
 
 .avatar-image-overlay {

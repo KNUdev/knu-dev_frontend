@@ -45,8 +45,9 @@ export class EditUserModalComponent implements OnInit {
     @Output() close = new EventEmitter<boolean>();
 
     readonly iconPaths = {
-        defaultAvatar: 'assets/icon/profile/default-profile-avatar.svg',
+        defaultAvatar: 'assets/icon/defaultAvatar.svg',
         errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
+        trash: 'assets/icon/system/trash.svg',
     } as const;
 
     editForm!: FormGroup;
@@ -91,6 +92,13 @@ export class EditUserModalComponent implements OnInit {
             'arrowRightUp',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.errorQuadrilateral
+            )
+        );
+
+        this.matIconRegistry.addSvgIcon(
+            'trash',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.trash
             )
         );
     }
