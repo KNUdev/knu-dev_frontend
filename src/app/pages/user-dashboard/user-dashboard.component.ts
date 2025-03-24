@@ -46,7 +46,7 @@ import {
     AdminAccountsService,
     FilterParams,
 } from '../../services/admin/admin-accounts.service';
-import { EditUserModalComponent } from './edit-user-modal/edit-user-modal.component';
+import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
 import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 
 @Component({
