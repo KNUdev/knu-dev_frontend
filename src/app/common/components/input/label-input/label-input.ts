@@ -48,6 +48,7 @@ export class LabelInput {
 
     @Output() emailInput = new EventEmitter<Event>();
     @Output() emailBlur = new EventEmitter<void>();
+    @Output() blur = new EventEmitter<void>();
 
     isPasswordVisible = false;
     private clipboardEvents = ['copy', 'cut', 'paste'];
@@ -103,6 +104,11 @@ export class LabelInput {
 
     onEmailBlur() {
         this.emailBlur.emit();
+    }
+
+    onInputBlur() {
+        this.emailBlur.emit(); // Keep for backward compatibility
+        this.blur.emit(); // Add standard blur event
     }
 
     showDomainSuffix(): boolean {

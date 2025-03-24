@@ -13,12 +13,14 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { BackdropWindowComponent } from '../../../common/components/backdrop-window/backdrop-window.component';
 import { WriteDropDowns } from '../../../common/components/dropdown/write-dropdowns';
+import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { AdminAccount } from '../../../services/admin/accounts.model';
 import { AdminAccountsService } from '../../../services/admin/admin-accounts.service';
 import { FilterOptionGroup, getFilterOptions } from '../filter-options.model';
@@ -33,6 +35,7 @@ import { FilterOptionGroup, getFilterOptions } from '../filter-options.model';
         MatIconModule,
         BackdropWindowComponent,
         WriteDropDowns,
+        LabelInput,
     ],
     templateUrl: './edit-user-modal.component.html',
     styleUrls: ['./edit-user-modal.component.scss'],
@@ -40,6 +43,11 @@ import { FilterOptionGroup, getFilterOptions } from '../filter-options.model';
 export class EditUserModalComponent implements OnInit {
     @Input() user!: AdminAccount;
     @Output() close = new EventEmitter<boolean>();
+
+    readonly iconPaths = {
+        defaultAvatar: 'assets/icon/profile/default-profile-avatar.svg',
+        errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
+    } as const;
 
     editForm!: FormGroup;
     isLoading = false;
@@ -66,6 +74,8 @@ export class EditUserModalComponent implements OnInit {
 
     private adminAccountsService = inject(AdminAccountsService);
     private fb = inject(FormBuilder);
+    private domSanitizer = inject(DomSanitizer);
+    private matIconRegistry = inject(MatIconRegistry);
     private translate = inject(TranslateService);
 
     initialFormValues: any = {};
@@ -76,6 +86,13 @@ export class EditUserModalComponent implements OnInit {
 
     constructor() {
         this.filterOptions = getFilterOptions(this.translate);
+
+        this.matIconRegistry.addSvgIcon(
+            'arrowRightUp',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.errorQuadrilateral
+            )
+        );
     }
 
     ngOnInit(): void {
@@ -383,7 +400,17 @@ export class EditUserModalComponent implements OnInit {
             });
     }
 
+    resetErrorState(): void {
+        this.saveError = false;
+        this.errorMessage = '';
+    }
+
     onClose(): void {
+        if (this.saveError) {
+            this.resetErrorState();
+            return;
+        }
+
         this.checkForChanges();
 
         if (this.hasUnsavedChanges) {

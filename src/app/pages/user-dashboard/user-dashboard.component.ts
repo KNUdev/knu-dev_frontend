@@ -7,7 +7,13 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+} from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -31,6 +37,7 @@ import {
     SelectOption,
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
+import { LabelInput } from '../../common/components/input/label-input/label-input';
 import {
     AdminAccount,
     AdminAccountsResponse,
@@ -49,10 +56,12 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         MatIconModule,
         CommonModule,
         FormsModule,
+        ReactiveFormsModule, // Add this
         WriteDropDowns,
         RouterModule,
         BorderButtonComponent,
         EditUserModalComponent,
+        LabelInput,
     ],
     templateUrl: './user-dashboard.component.html',
     styleUrls: ['./user-dashboard.component.scss'],
@@ -95,6 +104,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         arrowDown: 'assets/icon/system/arrowDown.svg',
         testAvatar: 'assets/icon/profile/test-avatar.svg',
         defaultAvatar: 'assets/icon/profile/defaultAvatar.svg',
+        flag: 'assets/icon/system/flag.svg',
     } as const;
 
     private searchQuerySubject = new BehaviorSubject<string>('');
@@ -113,7 +123,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     private initialSearchFromUrl = false;
 
-    constructor() {
+    searchFormControl = new FormControl('');
+
+    searchForm: FormGroup;
+
+    constructor(private fb: FormBuilder) {
         this.translate.onLangChange
             .pipe(
                 startWith({
@@ -132,11 +146,17 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         this.registerIcons();
 
-        const searchSubscription = this.searchQuerySubject
-            .pipe(debounceTime(500), distinctUntilChanged())
+        this.searchForm = this.fb.group({
+            searchInput: [''],
+        });
+
+        const searchSubscription = this.searchForm
+            .get('searchInput')!
+            .valueChanges.pipe(debounceTime(500), distinctUntilChanged())
             .subscribe((query) => {
                 if (!this.initialSearchFromUrl) {
-                    this.searchInputValue = query;
+                    this.searchInputValue = query || '';
+                    this.triggerSearch();
                 }
                 this.initialSearchFromUrl = false;
             });
@@ -371,23 +391,36 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     onSearchChange(event: Event): void {
         const target = event.target as HTMLInputElement;
         this.searchInputValue = target.value;
+        this.searchForm
+            .get('searchInput')
+            ?.setValue(this.searchInputValue, { emitEvent: false });
     }
 
     onSearchBlur(): void {
+        const currentSearchValue =
+            this.searchForm.get('searchInput')?.value || '';
+        this.searchInputValue = currentSearchValue;
+
         if (this.searchInputValue !== (this.filters.searchQuery || '')) {
-            this.filters.searchQuery = this.searchInputValue || undefined;
-            this.currentPage = 0;
-            this.loadAccounts(0);
-            this.updateUrlParams();
+            if (this.searchInputValue === '') {
+                this.handleEmptySearch();
+            } else {
+                this.triggerSearch();
+            }
         }
     }
 
     onSearchKeyUp(event: KeyboardEvent): void {
         if (event.key === 'Enter') {
-            this.filters.searchQuery = this.searchInputValue || undefined;
-            this.currentPage = 0;
-            this.loadAccounts(0);
-            this.updateUrlParams();
+            const currentSearchValue =
+                this.searchForm.get('searchInput')?.value || '';
+            this.searchInputValue = currentSearchValue;
+
+            if (this.searchInputValue === '') {
+                this.handleEmptySearch();
+            } else {
+                this.triggerSearch();
+            }
 
             (event.target as HTMLElement).blur();
         }
@@ -439,6 +472,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             });
         });
 
+        this.searchForm.get('searchInput')!.setValue('', { emitEvent: false });
+
         this.loadAccounts(0);
         this.updateUrlParams(true);
     }
@@ -471,6 +506,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                 this.iconPaths.defaultAvatar
             )
         );
+
+        this.matIconRegistry.addSvgIcon(
+            'flag',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+                this.iconPaths.flag
+            )
+        );
     }
 
     private parseQueryParams(params: any): void {
@@ -479,10 +521,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         if (params.search) {
             this.filters.searchQuery = params.search;
             this.searchInputValue = params.search;
+            this.searchForm
+                .get('searchInput')!
+                .setValue(params.search, { emitEvent: false });
             this.initialSearchFromUrl = true;
             this.searchQuerySubject.next(params.search);
         } else {
             this.searchInputValue = '';
+            this.searchForm
+                .get('searchInput')!
+                .setValue('', { emitEvent: false });
         }
 
         if (params.registeredAt) {
@@ -713,7 +761,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const queryParams: any = {};
 
-        if (this.filters.searchQuery) {
+        // Only add search parameter if it's not empty
+        if (
+            this.filters.searchQuery &&
+            this.filters.searchQuery.trim() !== ''
+        ) {
             queryParams.search = this.filters.searchQuery;
         }
 
@@ -742,6 +794,40 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             relativeTo: this.route,
             queryParams,
             queryParamsHandling: 'merge',
+            replaceUrl: true,
+        });
+    }
+
+    private updateUrlParamsWithEmptySearch(): void {
+        const queryParams: any = {};
+
+        // Copy all other filters except searchQuery
+        if (this.filters.registeredAt)
+            queryParams.registeredAt = this.filters.registeredAt;
+        if (this.filters.registeredBefore)
+            queryParams.registeredBefore = this.filters.registeredBefore;
+        if (this.filters.unit) queryParams.unit = this.filters.unit;
+        if (this.filters.expertise)
+            queryParams.expertise = this.filters.expertise;
+        if (this.filters.departmentId)
+            queryParams.departmentId = this.filters.departmentId;
+        if (this.filters.specialtyCodename)
+            queryParams.specialtyCodename = this.filters.specialtyCodename;
+        if (this.filters.universityStudyYear !== undefined) {
+            queryParams.universityStudyYear = this.filters.universityStudyYear;
+        }
+        if (this.filters.technicalRole)
+            queryParams.technicalRole = this.filters.technicalRole;
+        if (this.filters.recruitmentId)
+            queryParams.recruitmentId = this.filters.recruitmentId;
+
+        this.isNavigatingFromCode = true;
+
+        // Use replaceUrl: true to ensure we're replacing the current URL
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams,
+            queryParamsHandling: '', // This clears all existing params
             replaceUrl: true,
         });
     }
@@ -790,7 +876,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     private loadAccountsAndUpdateFilters(): void {
         const promises = [
-            // Load accounts
             new Promise<void>((resolve) => {
                 if (!this.isNavigatingFromCode) {
                     this.loadAccounts(this.currentPage);
@@ -844,5 +929,21 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                     console.error('Error loading recruitments:', error);
                 },
             });
+    }
+
+    private triggerSearch(): void {
+        this.filters.searchQuery = this.searchInputValue || undefined;
+        this.currentPage = 0;
+        this.loadAccounts(0);
+        this.updateUrlParams();
+    }
+
+    private handleEmptySearch(): void {
+        // Explicitly set search query to undefined
+        this.filters.searchQuery = undefined;
+        this.currentPage = 0;
+        this.loadAccounts(0);
+        // Force URL parameter update with clean empty query handling
+        this.updateUrlParamsWithEmptySearch();
     }
 }

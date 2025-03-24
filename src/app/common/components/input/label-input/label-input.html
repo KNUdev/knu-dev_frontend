@@ -12,7 +12,7 @@
             (cut)="preventClipboardAction($event)"
             (paste)="preventClipboardAction($event)"
             (input)="isEmail && onEmailInput($event)"
-            (blur)="isEmail && onEmailBlur()"
+            (blur)="onInputBlur()"
         />
         <label class="input-label">{{label}}</label>
 

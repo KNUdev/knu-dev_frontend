@@ -7,17 +7,18 @@
             <div class="filters__parameters">
                 <div class="filters__row">
                     <div class="filters__col">
-                        <input
-                            class="first-line-filters__initials-or-email"
-                            type="text"
-                            [placeholder]="
-                                'filters.initials-or-email-filter' | translate
-                            "
-                            [value]="searchInputValue"
-                            (input)="onSearchChange($event)"
-                            (blur)="onSearchBlur()"
-                            (keyup)="onSearchKeyUp($event)"
-                        />
+                        <form [formGroup]="searchForm">
+                            <app-label-input
+                                [label]="
+                                    'filters.initials-or-email-filter'
+                                        | translate
+                                "
+                                controlName="searchInput"
+                                (blur)="onSearchBlur()"
+                                (input)="onSearchChange($event)"
+                                (keyup)="onSearchKeyUp($event)"
+                            ></app-label-input>
+                        </form>
                     </div>
                     <div class="filters__col">
                         <div class="data__date">

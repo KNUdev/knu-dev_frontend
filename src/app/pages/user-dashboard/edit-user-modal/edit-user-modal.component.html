@@ -7,12 +7,11 @@
         </div>
         } @else if (saveSuccess) {
         <div class="success-message">
-            <mat-icon>check_circle</mat-icon>
             <p>{{ "users.edit.saveSuccess" | translate }}</p>
         </div>
         } @else if (saveError) {
         <div class="error-message">
-            <mat-icon>error</mat-icon>
+            <mat-icon [svgIcon]="'errorQuadrilateral'">error</mat-icon>
             <p>{{ errorMessage }}</p>
         </div>
         } @else if (showCloseConfirmation) {
@@ -51,17 +50,17 @@
             <div class="confirmation-actions">
                 <button
                     type="button"
-                    class="btn btn-cancel"
-                    (click)="cancelSave()"
-                >
-                    {{ "users.edit.cancel" | translate }}
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-save"
+                    class="fill-button fill-yellow"
                     (click)="confirmSave()"
                 >
                     {{ "users.edit.confirmSave" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="fill-button fill-red"
+                    (click)="cancelSave()"
+                >
+                    {{ "users.edit.cancel" | translate }}
                 </button>
             </div>
         </div>
@@ -71,66 +70,62 @@
             (ngSubmit)="saveChanges()"
             class="edit-form"
         >
-            <!-- Add profile images section before general info -->
             <div class="form-section">
-                <!-- Banner section -->
-                <div class="image-section">
-                    <div class="image-container">
+                <section class="profile-container">
+                    <div class="cover-container">
                         @if(bannerUrl && !deleteBanner) {
-                        <div class="current-image">
+                        <div class="banner-wrapper">
                             <img
                                 [src]="bannerUrl"
-                                alt="User Banner"
-                                class="banner-preview"
+                                alt="Banner"
+                                class="cover-image"
                             />
-                            <button
-                                type="button"
-                                class="btn-delete-image"
-                                (click)="requestDeleteBanner()"
-                            >
-                                <mat-icon>delete</mat-icon>
-                                {{ "users.edit.delete-image" | translate }}
-                            </button>
+                            <div class="cover-image-overlay">
+                                <button
+                                    type="button"
+                                    class="delete-icon-button"
+                                    (click)="requestDeleteBanner()"
+                                >
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
                         </div>
                         } @else {
-                        <div class="no-image">
+                        <div class="cover-image no-banner">
                             <span>{{
                                 "users.edit.no-banner" | translate
                             }}</span>
                         </div>
                         }
-                    </div>
-                </div>
 
-                <!-- Avatar section -->
-                <div class="image-section">
-                    <div class="image-container">
-                        @if(avatarUrl && !deleteAvatar) {
-                        <div class="current-image">
-                            <img
-                                [src]="avatarUrl"
-                                alt="User Avatar"
-                                class="avatar-preview"
-                            />
-                            <button
-                                type="button"
-                                class="btn-delete-image"
-                                (click)="requestDeleteAvatar()"
-                            >
-                                <mat-icon>delete</mat-icon>
-                                {{ "users.edit.delete-image" | translate }}
-                            </button>
+                        <div class="profile-wrapper">
+                            <div class="profile-image-container">
+                                @if(avatarUrl && !deleteAvatar) {
+                                <img
+                                    [src]="avatarUrl"
+                                    alt="Profile"
+                                    class="profile-image"
+                                />
+                                <div class="avatar-image-overlay">
+                                    <button
+                                        type="button"
+                                        class="delete-icon-button"
+                                        (click)="requestDeleteAvatar()"
+                                    >
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                                } @else {
+                                <img
+                                    [src]="iconPaths.defaultAvatar"
+                                    alt="Profile"
+                                    class="profile-image"
+                                />
+                                }
+                            </div>
                         </div>
-                        } @else {
-                        <div class="no-image">
-                            <mat-icon>account_circle</mat-icon>
-                            <span>{{
-                                "users.edit.no-avatar" | translate
-                            }}</span>
-                        </div>
-                        }
                     </div>
-                </div>
+                </section>
             </div>
 
             <div class="form-section">
@@ -139,14 +134,17 @@
                 </h3>
 
                 <div class="form-group">
-                    <label>{{ "users.edit.firstName" | translate }}</label>
-                    <input
-                        type="text"
-                        formControlName="firstName"
-                        class="form-control"
-                    />
+                    <app-label-input
+                        [label]="'users.edit.firstName' | translate"
+                        controlName="firstName"
+                        [required]="true"
+                    ></app-label-input>
                     @if(isFieldChanged('firstName')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -158,23 +156,21 @@
                         }}: {{ initialFormValues.firstName }} →
                         {{ editForm.get("firstName")?.value }}
                     </div>
-                    } @if(editForm.get('firstName')?.invalid &&
-                    editForm.get('firstName')?.touched) {
-                    <div class="error-text">
-                        {{ getFieldError("firstName") }}
-                    </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.edit.lastName" | translate }}</label>
-                    <input
-                        type="text"
-                        formControlName="lastName"
-                        class="form-control"
-                    />
+                    <app-label-input
+                        [label]="'users.edit.lastName' | translate"
+                        controlName="lastName"
+                        [required]="true"
+                    ></app-label-input>
                     @if(isFieldChanged('lastName')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -184,32 +180,47 @@
                         }}: {{ initialFormValues.lastName }} →
                         {{ editForm.get("lastName")?.value }}
                     </div>
-                    } @if(editForm.get('lastName')?.invalid &&
-                    editForm.get('lastName')?.touched) {
-                    <div class="error-text">
-                        {{ getFieldError("lastName") }}
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.edit.middleName' | translate"
+                        controlName="middleName"
+                    ></app-label-input>
+                    @if(isFieldChanged('middleName')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "middleName"
+                                          )
+                                      }
+                        }}: {{ initialFormValues.middleName }} →
+                        {{ editForm.get("middleName")?.value }}
                     </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.edit.middleName" | translate }}</label>
-                    <input
-                        type="text"
-                        formControlName="middleName"
-                        class="form-control"
-                    />
-                </div>
-
-                <div class="form-group">
-                    <label>{{ "users.email" | translate }}</label>
-                    <input
+                    <app-label-input
+                        [label]="'users.email' | translate"
+                        controlName="email"
                         type="email"
-                        formControlName="email"
-                        class="form-control"
-                    />
+                        [required]="true"
+                    ></app-label-input>
                     @if(isFieldChanged('email')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -217,23 +228,20 @@
                         }}: {{ initialFormValues.email }} →
                         {{ editForm.get("email")?.value }}
                     </div>
-                    } @if(editForm.get('email')?.invalid &&
-                    editForm.get('email')?.touched) {
-                    <div class="error-text">
-                        {{ getFieldError("email") }}
-                    </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.github" | translate }}</label>
-                    <input
-                        type="text"
-                        formControlName="githubAccountUsername"
-                        class="form-control"
-                    />
+                    <app-label-input
+                        [label]="'users.github' | translate"
+                        controlName="githubAccountUsername"
+                    ></app-label-input>
                     @if(isFieldChanged('githubAccountUsername')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -242,14 +250,18 @@
                                               "githubAccountUsername"
                                           )
                                       }
-                        }}: {{ initialFormValues.githubAccountUsername }} →
-                        {{ editForm.get("githubAccountUsername")?.value }}
+                        }}:
+                        {{ initialFormValues.githubAccountUsername || "None" }}
+                        →
+                        {{
+                            editForm.get("githubAccountUsername")?.value ||
+                                "None"
+                        }}
                     </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.tech-role" | translate }}</label>
                     <app-write-dropdowns
                         [options]="filterOptions.technicalRoles"
                         [placeholder]="'filters.user-tech-role' | translate"
@@ -258,7 +270,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('technicalRole')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -291,7 +307,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.expertise" | translate }}</label>
                     <app-write-dropdowns
                         [options]="filterOptions.expertise"
                         [placeholder]="'filters.expertise' | translate"
@@ -300,7 +315,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('expertise')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -333,7 +352,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label>{{ "users.unit" | translate }}</label>
                     <app-write-dropdowns
                         [options]="filterOptions.units"
                         [placeholder]="'filters.knudev-unit' | translate"
@@ -342,7 +360,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('unit')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -386,7 +408,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('departmentId')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -429,7 +455,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('specialtyCodename')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -467,7 +497,11 @@
                     >
                     </app-write-dropdowns>
                     @if(isFieldChanged('yearOfStudyOnRegistration')) {
-                    <div class="change-indicator">
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
                         {{
                             "users.edit.changedField"
                                 | translate
@@ -502,18 +536,18 @@
 
             <div class="form-actions">
                 <button
-                    type="button"
-                    class="btn btn-cancel"
-                    (click)="onClose()"
-                >
-                    {{ "users.edit.cancel" | translate }}
-                </button>
-                <button
                     type="submit"
-                    class="btn btn-save"
+                    class="fill-button fill-yellow"
                     [disabled]="editForm.invalid || isLoading"
                 >
                     {{ "users.edit.save" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="fill-button fill-red"
+                    (click)="onClose()"
+                >
+                    {{ "users.edit.cancel" | translate }}
                 </button>
             </div>
         </form>
