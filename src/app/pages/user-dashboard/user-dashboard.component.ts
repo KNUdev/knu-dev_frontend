@@ -119,8 +119,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     searchInputValue = '';
 
-    private initialSearchPerformed = false;
-
     private initialSearchFromUrl = false;
 
     searchFormControl = new FormControl('');
@@ -710,8 +708,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const options = dropdown.options || [];
         if (options.length) {
-            const firstOptionId = options[0]?.id;
-
             if (
                 options.some((o) =>
                     ['CAMPUS', 'PRECAMPUS'].includes(String(o.id))
@@ -869,36 +865,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         }
         this.isEditModalOpen = false;
         this.selectedUser = null;
-    }
-
-    private loadAccountsAndUpdateFilters(): void {
-        const promises = [
-            new Promise<void>((resolve) => {
-                if (!this.isNavigatingFromCode) {
-                    this.loadAccounts(this.currentPage);
-                }
-                resolve();
-            }),
-        ];
-
-        if (this.filters.recruitmentId && this.recruitments.length === 0) {
-            promises.push(
-                new Promise<void>((resolve) => {
-                    const subscription = this.loadRecruitmentsWithCallback(() =>
-                        resolve()
-                    );
-                    this.subscriptions.add(subscription);
-                })
-            );
-        }
-
-        Promise.all(promises).then(() => {
-            this.updateDateInputs();
-
-            setTimeout(() => {
-                this.updateDropdownsFromFilters();
-            }, 200);
-        });
     }
 
     private loadRecruitmentsWithCallback(callback?: () => void): Subscription {
