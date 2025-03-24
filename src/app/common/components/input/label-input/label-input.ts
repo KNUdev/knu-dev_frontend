@@ -107,8 +107,8 @@ export class LabelInput {
     }
 
     onInputBlur() {
-        this.emailBlur.emit(); // Keep for backward compatibility
-        this.blur.emit(); // Add standard blur event
+        this.emailBlur.emit();
+        this.blur.emit();
     }
 
     showDomainSuffix(): boolean {

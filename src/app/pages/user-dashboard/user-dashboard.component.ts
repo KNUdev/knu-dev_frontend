@@ -56,7 +56,7 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         MatIconModule,
         CommonModule,
         FormsModule,
-        ReactiveFormsModule, // Add this
+        ReactiveFormsModule,
         WriteDropDowns,
         RouterModule,
         BorderButtonComponent,
@@ -761,7 +761,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const queryParams: any = {};
 
-        // Only add search parameter if it's not empty
         if (
             this.filters.searchQuery &&
             this.filters.searchQuery.trim() !== ''
@@ -801,7 +800,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private updateUrlParamsWithEmptySearch(): void {
         const queryParams: any = {};
 
-        // Copy all other filters except searchQuery
         if (this.filters.registeredAt)
             queryParams.registeredAt = this.filters.registeredAt;
         if (this.filters.registeredBefore)
@@ -823,11 +821,10 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         this.isNavigatingFromCode = true;
 
-        // Use replaceUrl: true to ensure we're replacing the current URL
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams,
-            queryParamsHandling: '', // This clears all existing params
+            queryParamsHandling: '',
             replaceUrl: true,
         });
     }
@@ -939,11 +936,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     private handleEmptySearch(): void {
-        // Explicitly set search query to undefined
         this.filters.searchQuery = undefined;
         this.currentPage = 0;
         this.loadAccounts(0);
-        // Force URL parameter update with clean empty query handling
         this.updateUrlParamsWithEmptySearch();
     }
 }
