@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './pagination.component.html',
     styleUrls: ['./pagination.component.scss'],
 })
-export class PaginationComponent<T> implements OnChanges {
+export class PaginationComponent implements OnChanges {
     @Input() totalItems: number = 0;
     @Input() currentPage: number = 0;
     @Input() pageSize: number = 10;

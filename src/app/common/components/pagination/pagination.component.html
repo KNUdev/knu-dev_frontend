@@ -8,9 +8,10 @@
     </button>
 
     <ng-container *ngFor="let page of paginationArray; let i = index">
-        <span *ngIf="page === '...'" class="pagination__ellipsis">...</span>
+        @if (page === '...'){
+        <span class="pagination__ellipsis">...</span>
+        } @else {
         <button
-            *ngIf="page !== '...'"
             class="pagination__button"
             [class.pagination__button--active]="page === currentPage"
             [disabled]="isLoading"
@@ -18,6 +19,7 @@
         >
             {{ +page + 1 }}
         </button>
+        }
     </ng-container>
 
     <button
