@@ -93,7 +93,7 @@
     --highlight-color4: #592a8b70;
     --highlight-color5: #dec63c70;
 
-    animation: headerColorCycle 5s infinite;
+    animation: headerColorCycle 7.5s infinite;
 }
 
 @keyframes headerColorCycle {
@@ -576,37 +576,37 @@
     &__intern {
         --highlight-color: #3147a2;
         border: #4264ed solid 0.0624rem;
-        animation: highlightFade 5s infinite;
+        animation: highlightFade 7.5s infinite;
     }
 
     &__developer {
         --highlight-color: #b82f31;
         border: #e5383a solid 0.0624rem;
-        animation: highlightFade 5s infinite;
-        animation-delay: 1s;
+        animation: highlightFade 7.5s infinite;
+        animation-delay: 1.5s;
     }
 
     &__premaster {
         --highlight-color: #36692f;
         border: #3fcb49 solid 0.0624rem;
-        animation: highlightFade 5s infinite;
-        animation-delay: 2s;
+        animation: highlightFade 7.5s infinite;
+        animation-delay: 3s;
     }
 
     &__bottom-roles-block {
         .bottom-roles-block__master {
             --highlight-color: #592a8b;
             border: #9542ed solid 0.0624rem;
-            animation: highlightFade 5s infinite;
-            animation-delay: 3s;
+            animation: highlightFade 7.5s infinite;
+            animation-delay: 4.5s;
         }
 
         .bottom-roles-block__techlead {
             --highlight-color: #dec63c;
             --text-color: black;
             border: #edd342 solid 0.0624rem;
-            animation: highlightFade 5s infinite;
-            animation-delay: 4s;
+            animation: highlightFade 7.5s infinite;
+            animation-delay: 6s;
         }
     }
 

@@ -36,7 +36,7 @@ import { I18nService } from '../../../services/languages/i18n.service';
 import {
     SelectOption,
     WriteDropDowns,
-} from './components/dropdown/write-dropdowns';
+} from '../../../common/components/dropdown/write-dropdowns';
 import {
     Department,
     ERROR_KEY_TO_CONTROL,

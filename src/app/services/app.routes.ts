@@ -11,28 +11,28 @@ export const routes: Routes = [
         path: 'auth/login',
         loadComponent: () =>
             import('../pages/auth/login/login.component').then(
-                (m) => m.LoginComponent,
+                (m) => m.LoginComponent
             ),
     },
     {
         path: 'auth/register',
         loadComponent: () =>
             import('../pages/auth/register/register.component').then(
-                (m) => m.RegisterComponent,
+                (m) => m.RegisterComponent
             ),
     },
     {
         path: 'profile/:userId',
         loadComponent: () =>
             import('../pages/user-profile/user-profile.component').then(
-                (m) => m.UserProfileComponent,
+                (m) => m.UserProfileComponent
             ),
     },
     {
         path: 'error/404',
         loadComponent: () =>
             import('../pages/error/404/404.component').then(
-                (m) => m.NotFoundPage,
+                (m) => m.NotFoundPage
             ),
         canActivate: [ErrorStateGuard],
     },
@@ -40,7 +40,7 @@ export const routes: Routes = [
         path: 'error/500',
         loadComponent: () =>
             import('../pages/error/500/500.component').then(
-                (m) => m.InternalErrorPage,
+                (m) => m.InternalErrorPage
             ),
     },
     {
@@ -54,7 +54,7 @@ export const routes: Routes = [
         path: 'about-role',
         loadComponent: () =>
             import('../pages/about-role/about-role.component').then(
-                (m) => m.AboutRoleComponent,
+                (m) => m.AboutRoleComponent
             ),
     },
     {
@@ -63,7 +63,6 @@ export const routes: Routes = [
             import('../pages/create-program/create-program.component').then(
                 (m) => m.CreateProgramComponent
             ),
-
     },
     {
         path: 'program/:programId/manage',
@@ -71,5 +70,12 @@ export const routes: Routes = [
             import('../pages/manage-program/manage-program.component').then(
                 (m) => m.ManageProgramComponent
             ),
-    }
+    },
+    {
+        path: 'user-dashboard',
+        loadComponent: () =>
+            import('../pages/user-dashboard/user-dashboard.component').then(
+                (m) => m.UserDashboardComponent
+            ),
+    },
 ];

@@ -135,7 +135,7 @@
             <div class="inputs">
                 <div class="firstRow">
                     <div class="form-group">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [class.drop-down__error]="departmentLoadError()"
                             [options]="departments"
                             [placeholder]="
@@ -148,7 +148,7 @@
                             [errorMessage]="
                                 'errors.departmentLoadError' | translate
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                         @if (showValidationErrors() &&
                         academicInfoForm().get("departmentId")?.errors?.[
                         "required"]) {
@@ -169,7 +169,7 @@
 
                     <div class="form-group">
                         @if (!academicInfoForm().get("departmentId")?.value) {
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
                                 'register.specialties.label' | translate
@@ -177,7 +177,7 @@
                             valueField="codeName"
                             formControlName="specialtyCodename"
                             class="disabled"
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                         <p class="warning">
                             <mat-icon svgIcon="errorTriangle"></mat-icon>
                             <span>{{
@@ -185,7 +185,7 @@
                             }}</span>
                         </p>
                         } @else {
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [class.drop-down__error]="specialtyLoadError()"
                             [options]="(specialties$ | async) || []"
                             [placeholder]="
@@ -197,7 +197,7 @@
                             [errorMessage]="
                                 'errors.specialtyLoadError' | translate
                             "
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                         @if (showValidationErrors() &&
                         academicInfoForm().get("specialtyCodename")?.errors?.["required"])
                         {
@@ -219,7 +219,7 @@
                 </div>
                 <div class="secondRow">
                     <div class="form-group">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
                         academicInfoForm().get("yearOfStudy")?.errors?.["required" ]
                         || formErrorService.backendErrors()["yearOfStudy"])'
@@ -230,7 +230,7 @@
                             valueField="id"
                             displayField="displayedName"
                             formControlName="yearOfStudy"
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                         @if (showValidationErrors() &&
                         academicInfoForm().get("yearOfStudy")?.errors?.["required"])
                         {
@@ -250,7 +250,7 @@
                     </div>
 
                     <div class="form-group">
-                        <register-write-dropdowns
+                        <app-write-dropdowns
                             [class.drop-down__error]='(showValidationErrors() &&
                                 academicInfoForm().get("expertise")?.errors?.[ "required" ]
                                 || formErrorService.backendErrors()["expertise"])'
@@ -261,7 +261,7 @@
                             valueField="id"
                             displayField="displayedName"
                             formControlName="expertise"
-                        ></register-write-dropdowns>
+                        ></app-write-dropdowns>
                         @if (showValidationErrors() &&
                         academicInfoForm().get("expertise")?.errors?.["required"])
                         {

@@ -1,0 +1,32 @@
+<div class="pagination" *ngIf="totalPages > 1">
+    <button
+        class="pagination__button"
+        [disabled]="currentPage === 0 || isLoading"
+        (click)="previousPage()"
+    >
+        &laquo;
+    </button>
+
+    <ng-container *ngFor="let page of paginationArray; let i = index">
+        @if (page === '...'){
+        <span class="pagination__ellipsis">...</span>
+        } @else {
+        <button
+            class="pagination__button"
+            [class.pagination__button--active]="page === currentPage"
+            [disabled]="isLoading"
+            (click)="goToPage(+page)"
+        >
+            {{ +page + 1 }}
+        </button>
+        }
+    </ng-container>
+
+    <button
+        class="pagination__button"
+        [disabled]="currentPage === totalPages - 1 || isLoading"
+        (click)="nextPage()"
+    >
+        &raquo;
+    </button>
+</div>

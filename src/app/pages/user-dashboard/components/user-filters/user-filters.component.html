@@ -1,0 +1,160 @@
+<section class="filters">
+    <h2 class="filters__title">
+        {{ "filters.title" | translate }}
+    </h2>
+    <div class="filters__data">
+        <div class="filters__parameters">
+            <div class="filters__row">
+                <div class="filters__col">
+                    <form [formGroup]="searchForm">
+                        <app-label-input
+                            [label]="
+                                'filters.initials-or-email-filter' | translate
+                            "
+                            controlName="searchInput"
+                            (blur)="onSearchBlur()"
+                            (input)="onSearchChange($event)"
+                            (keyup)="onSearchKeyUp($event)"
+                        ></app-label-input>
+                    </form>
+                </div>
+                <div class="filters__col">
+                    <div class="data__date">
+                        <input
+                            class="first-line-filters__reg-date"
+                            type="date"
+                            [placeholder]="
+                                'filters.registration-date' | translate
+                            "
+                            [(ngModel)]="filters.registeredAt"
+                            (change)="onDateFilterChange()"
+                        />
+                        <span class="date__separation-line"></span>
+                        <input
+                            class="first-line-filters__reg-end-date"
+                            type="date"
+                            [placeholder]="
+                                'filters.registration-end-date' | translate
+                            "
+                            [(ngModel)]="filters.registeredBefore"
+                            (change)="onDateFilterChange()"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="filters__row">
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="filterOptions.units"
+                        [placeholder]="'filters.knudev-unit' | translate"
+                        valueField="id"
+                        [defaultSelectedId]="filters.unit"
+                        (selectionChange)="onDropdownChange('unit', $event.id)"
+                    ></app-write-dropdowns>
+                </div>
+
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="filterOptions.expertise"
+                        [placeholder]="'filters.expertise' | translate"
+                        valueField="id"
+                        (selectionChange)="
+                            onDropdownChange('expertise', $event.id)
+                        "
+                    ></app-write-dropdowns>
+                </div>
+
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="departments"
+                        [placeholder]="'filters.faculty' | translate"
+                        valueField="id"
+                        (selectionChange)="
+                            onDropdownChange('departmentId', $event.id)
+                        "
+                        [class.drop-down__loading]="isLoadingDepartments"
+                        [hasError]="
+                            isLoadingDepartments && departments.length === 0
+                        "
+                        [errorMessage]="
+                            'filters.errorLoadingDepartments' | translate
+                        "
+                    ></app-write-dropdowns>
+                </div>
+
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="specialties"
+                        [placeholder]="'filters.specialty' | translate"
+                        valueField="id"
+                        (selectionChange)="
+                            onDropdownChange('specialtyCodename', $event.id)
+                        "
+                        [disabled]="
+                            !filters.departmentId || isLoadingSpecialties
+                        "
+                        [class.drop-down__loading]="isLoadingSpecialties"
+                        [hasError]="
+                            isLoadingSpecialties && specialties.length === 0
+                        "
+                        [errorMessage]="
+                            'filters.errorLoadingSpecialties' | translate
+                        "
+                    ></app-write-dropdowns>
+                </div>
+
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="filterOptions.studyYears"
+                        [placeholder]="'filters.study-year' | translate"
+                        valueField="id"
+                        [defaultSelectedId]="
+                            filters.universityStudyYear?.toString()
+                        "
+                        (selectionChange)="
+                            onDropdownChange('universityStudyYear', $event.id)
+                        "
+                    ></app-write-dropdowns>
+                </div>
+            </div>
+
+            <div class="filters__row">
+                <div class="filters__col" style="flex: 2">
+                    <app-write-dropdowns
+                        [options]="recruitments"
+                        [placeholder]="'filters.recruitment' | translate"
+                        valueField="id"
+                        [defaultSelectedId]="filters.recruitmentId"
+                        (selectionChange)="
+                            onDropdownChange('recruitmentId', $event.id)
+                        "
+                        [class.drop-down__loading]="isLoadingRecruitments"
+                        [hasError]="
+                            isLoadingRecruitments && recruitments.length === 0
+                        "
+                        [errorMessage]="
+                            'filters.errorLoadingRecruitments' | translate
+                        "
+                    ></app-write-dropdowns>
+                </div>
+                <div class="filters__col">
+                    <app-write-dropdowns
+                        [options]="filterOptions.technicalRoles"
+                        [placeholder]="'filters.user-tech-role' | translate"
+                        valueField="id"
+                        [defaultSelectedId]="filters.technicalRole"
+                        (selectionChange)="
+                            onDropdownChange('technicalRole', $event.id)
+                        "
+                    ></app-write-dropdowns>
+                </div>
+            </div>
+
+            <div class="filters__actions">
+                <button class="filter-reset-btn" (click)="resetFilters()">
+                    {{ "filters.resetFilters" | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

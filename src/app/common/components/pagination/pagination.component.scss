@@ -1,0 +1,42 @@
+@use "../../../common/styles/variables" as *;
+
+.pagination {
+    padding: 2rem 0 0 0;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination__ellipsis {
+    color: #d1d1d1;
+    padding: 0.625rem 0.5rem;
+    font-weight: bold;
+}
+
+.pagination__button {
+    background: #141414;
+    color: #d1d1d1;
+    border: 1px solid #343434;
+    padding: 0.625rem 1rem;
+    border-radius: 0.3125rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination__button:hover:not(:disabled):not(.pagination__button--active) {
+    border-color: #edd342;
+    color: #ffffff;
+}
+
+.pagination__button--active {
+    background: #edd342;
+    color: #000000;
+    border-color: #edd342;
+}
+
+.pagination__button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
