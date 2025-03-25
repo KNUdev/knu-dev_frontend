@@ -92,7 +92,7 @@ export class EditUserModalComponent implements OnInit {
         this.filterOptions = getFilterOptions(this.translate);
 
         this.matIconRegistry.addSvgIcon(
-            'arrowRightUp',
+            'errorQuadrilateral',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
                 this.iconPaths.errorQuadrilateral
             )

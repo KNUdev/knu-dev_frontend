@@ -1,173 +1,21 @@
 <div class="container">
-    <section class="filters">
-        <h2 class="filters__title">
-            {{ "filters.title" | translate }}
-        </h2>
-        <div class="filters__data">
-            <div class="filters__parameters">
-                <div class="filters__row">
-                    <div class="filters__col">
-                        <form [formGroup]="searchForm">
-                            <app-label-input
-                                [label]="
-                                    'filters.initials-or-email-filter'
-                                        | translate
-                                "
-                                controlName="searchInput"
-                                (blur)="onSearchBlur()"
-                                (input)="onSearchChange($event)"
-                                (keyup)="onSearchKeyUp($event)"
-                            ></app-label-input>
-                        </form>
-                    </div>
-                    <div class="filters__col">
-                        <div class="data__date">
-                            <input
-                                class="first-line-filters__reg-date"
-                                type="date"
-                                [placeholder]="
-                                    'filters.registration-date' | translate
-                                "
-                                [(ngModel)]="filters.registeredAt"
-                                (change)="onDateFilterChange()"
-                            />
-                            <span class="date__separation-line"></span>
-                            <input
-                                class="first-line-filters__reg-end-date"
-                                type="date"
-                                [placeholder]="
-                                    'filters.registration-end-date' | translate
-                                "
-                                [(ngModel)]="filters.registeredBefore"
-                                (change)="onDateFilterChange()"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="filters__row">
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="filterOptions.units"
-                            [placeholder]="'filters.knudev-unit' | translate"
-                            valueField="id"
-                            [defaultSelectedId]="filters.unit"
-                            (selectionChange)="
-                                onDropdownChange('unit', $event.id)
-                            "
-                            [class.drop-down__loading]="isLoading"
-                        ></app-write-dropdowns>
-                    </div>
-
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="filterOptions.expertise"
-                            [placeholder]="'filters.expertise' | translate"
-                            valueField="id"
-                            (selectionChange)="
-                                onDropdownChange('expertise', $event.id)
-                            "
-                            [class.drop-down__loading]="isLoading"
-                        ></app-write-dropdowns>
-                    </div>
-
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="departments"
-                            [placeholder]="'filters.faculty' | translate"
-                            valueField="id"
-                            (selectionChange)="
-                                onDropdownChange('departmentId', $event.id)
-                            "
-                            [class.drop-down__loading]="isLoadingDepartments"
-                            [hasError]="
-                                isLoadingDepartments && departments.length === 0
-                            "
-                            [errorMessage]="
-                                'filters.errorLoadingDepartments' | translate
-                            "
-                        ></app-write-dropdowns>
-                    </div>
-
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="specialties"
-                            [placeholder]="'filters.specialty' | translate"
-                            valueField="id"
-                            (selectionChange)="
-                                onDropdownChange('specialtyCodename', $event.id)
-                            "
-                            [disabled]="
-                                !filters.departmentId || isLoadingSpecialties
-                            "
-                            [class.drop-down__loading]="isLoadingSpecialties"
-                            [hasError]="
-                                isLoadingSpecialties && specialties.length === 0
-                            "
-                            [errorMessage]="
-                                'filters.errorLoadingSpecialties' | translate
-                            "
-                        ></app-write-dropdowns>
-                    </div>
-
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="filterOptions.studyYears"
-                            [placeholder]="'filters.study-year' | translate"
-                            valueField="id"
-                            [defaultSelectedId]="
-                                filters.universityStudyYear?.toString()
-                            "
-                            (selectionChange)="
-                                onDropdownChange(
-                                    'universityStudyYear',
-                                    $event.id
-                                )
-                            "
-                        ></app-write-dropdowns>
-                    </div>
-                </div>
-
-                <div class="filters__row">
-                    <div class="filters__col" style="flex: 2">
-                        <app-write-dropdowns
-                            [options]="recruitments"
-                            [placeholder]="'filters.recruitment' | translate"
-                            valueField="id"
-                            [defaultSelectedId]="filters.recruitmentId"
-                            (selectionChange)="
-                                onDropdownChange('recruitmentId', $event.id)
-                            "
-                            [class.drop-down__loading]="isLoadingRecruitments"
-                            [hasError]="
-                                isLoadingRecruitments &&
-                                recruitments.length === 0
-                            "
-                            [errorMessage]="
-                                'filters.errorLoadingRecruitments' | translate
-                            "
-                        ></app-write-dropdowns>
-                    </div>
-                    <div class="filters__col">
-                        <app-write-dropdowns
-                            [options]="filterOptions.technicalRoles"
-                            [placeholder]="'filters.user-tech-role' | translate"
-                            valueField="id"
-                            [defaultSelectedId]="filters.technicalRole"
-                            (selectionChange)="
-                                onDropdownChange('technicalRole', $event.id)
-                            "
-                        ></app-write-dropdowns>
-                    </div>
-                </div>
-
-                <div class="filters__actions">
-                    <button class="filter-reset-btn" (click)="resetFilters()">
-                        {{ "filters.resetFilters" | translate }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <app-user-filters
+        [filters]="filters"
+        [filterOptions]="filterOptions"
+        [departments]="departments"
+        [specialties]="specialties"
+        [recruitments]="recruitments"
+        [isLoadingDepartments]="isLoadingDepartments"
+        [isLoadingSpecialties]="isLoadingSpecialties"
+        [isLoadingRecruitments]="isLoadingRecruitments"
+        [searchInputValue]="searchInputValue"
+        (searchChange)="onFilterSearchChange($event)"
+        (searchBlurEvent)="onFilterSearchBlur()"
+        (searchKeyUpEvent)="onFilterSearchKeyUp($event)"
+        (dateFilterChange)="onDateFilterChange()"
+        (dropdownChange)="onFilterDropdownChange($event)"
+        (resetFiltersEvent)="resetFilters()"
+    ></app-user-filters>
 
     <section class="users-list">
         <h2 class="users-list__title">
@@ -309,41 +157,18 @@
             </div>
             }
         </div>
-        } @if (totalPages > 1 && !isLoading) {
-        <div class="pagination">
-            <button
-                class="pagination__button"
-                [disabled]="currentPage === 0"
-                (click)="previousPage()"
-            >
-                &laquo;
-            </button>
-
-            @for (page of paginationArray; track $index) { @if (page === '...')
-            {
-            <span class="pagination__ellipsis">...</span>
-            } @else {
-            <button
-                class="pagination__button"
-                [class.pagination__button--active]="page === currentPage"
-                (click)="goToPage(+page)"
-            >
-                {{ +page + 1 }}
-            </button>
-            } }
-
-            <button
-                class="pagination__button"
-                [disabled]="currentPage === totalPages - 1"
-                (click)="nextPage()"
-            >
-                &raquo;
-            </button>
-        </div>
         } @if (accounts.length === 0 && !isLoading) {
         <div class="empty-state">
             {{ "users.noUsersFound" | translate }}
         </div>
+        } @if(totalPages > 1 && !isLoading){
+        <app-pagination
+            [totalItems]="totalAccounts"
+            [currentPage]="currentPage"
+            [pageSize]="pageSize"
+            [isLoading]="isLoading"
+            (pageChange)="onPageChange($event)"
+        ></app-pagination>
         } @if (isEditModalOpen && selectedUser) {
         <app-edit-user-modal
             [user]="selectedUser"

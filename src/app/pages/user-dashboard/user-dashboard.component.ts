@@ -5,6 +5,7 @@ import {
     OnDestroy,
     OnInit,
     QueryList,
+    ViewChild,
     ViewChildren,
 } from '@angular/core';
 import {
@@ -38,6 +39,13 @@ import {
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
 import { LabelInput } from '../../common/components/input/label-input/label-input';
+import { PaginationComponent } from '../../common/components/pagination/pagination.component';
+import {
+    Expertise,
+    getEnumValues,
+    KNUdevUnit,
+    TechnicalRole,
+} from '../../common/models/enums';
 import {
     AdminAccount,
     AdminAccountsResponse,
@@ -47,6 +55,7 @@ import {
     FilterParams,
 } from '../../services/admin/admin-accounts.service';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
+import { UserFiltersComponent } from './components/user-filters/user-filters.component';
 import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
 
 @Component({
@@ -62,6 +71,8 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         BorderButtonComponent,
         EditUserModalComponent,
         LabelInput,
+        PaginationComponent,
+        UserFiltersComponent,
     ],
     templateUrl: './user-dashboard.component.html',
     styleUrls: ['./user-dashboard.component.scss'],
@@ -78,6 +89,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
 
     @ViewChildren(WriteDropDowns) filterDropdowns!: QueryList<WriteDropDowns>;
+    @ViewChild(UserFiltersComponent)
+    userFiltersComponent!: UserFiltersComponent;
 
     filters: FilterParams = {};
     filterOptions: FilterOptionGroup = {
@@ -100,9 +113,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     paginationArray: (number | string)[] = [];
 
     readonly iconPaths = {
-        arrowRightUp: 'assets/icon/system/arrowRightUp.svg',
-        arrowDown: 'assets/icon/system/arrowDown.svg',
-        testAvatar: 'assets/icon/profile/test-avatar.svg',
         defaultAvatar: 'assets/icon/profile/defaultAvatar.svg',
         flag: 'assets/icon/system/flag.svg',
     } as const;
@@ -274,7 +284,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                     this.totalPages = response.totalPages;
                     this.totalAccounts = response.totalElements;
                     this.currentPage = response.number;
-                    this.generatePaginationArray();
                 },
                 error: (error) => {
                     console.error('Error fetching accounts:', error);
@@ -284,64 +293,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(subscription);
     }
 
-    generatePaginationArray(): void {
-        this.paginationArray = [];
-
-        if (this.totalPages <= 1) return;
-
-        this.paginationArray.push(0);
-
-        if (this.totalPages <= 5) {
-            for (let i = 1; i < this.totalPages; i++) {
-                this.paginationArray.push(i);
-            }
-            return;
-        }
-
-        const current = this.currentPage;
-        const last = this.totalPages - 1;
-
-        if (current <= 2) {
-            this.paginationArray.push(1, 2, 3, '...', last);
-        } else if (current >= last - 2) {
-            this.paginationArray.push(
-                '...',
-                last - 3,
-                last - 2,
-                last - 1,
-                last
-            );
-        } else {
-            this.paginationArray.push(
-                '...',
-                current - 1,
-                current,
-                current + 1,
-                '...',
-                last
-            );
-        }
-    }
-
-    goToPage(page: number): void {
-        if (page !== this.currentPage && page >= 0 && page < this.totalPages) {
-            this.currentPage = page;
-            this.loadAccounts(page);
-            this.isNavigatingFromCode = true;
-            this.updateUrlParams();
-        }
-    }
-
-    previousPage(): void {
-        if (this.currentPage > 0) {
-            this.goToPage(this.currentPage - 1);
-        }
-    }
-
-    nextPage(): void {
-        if (this.currentPage < this.totalPages - 1) {
-            this.goToPage(this.currentPage + 1);
-        }
+    onPageChange(page: number): void {
+        this.currentPage = page;
+        this.loadAccounts(page);
+        this.isNavigatingFromCode = true;
+        this.updateUrlParams();
     }
 
     getFullName(account: AdminAccount): string {
@@ -464,11 +420,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
             input.value = '';
         });
 
-        setTimeout(() => {
-            this.filterDropdowns.forEach((dropdown) => {
-                dropdown.resetSelection();
-            });
-        });
+        if (this.userFiltersComponent) {
+            this.userFiltersComponent.resetDropdownSelections();
+        }
 
         this.searchForm.get('searchInput')!.setValue('', { emitEvent: false });
 
@@ -477,27 +431,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     private registerIcons(): void {
-        this.matIconRegistry.addSvgIcon(
-            'arrowRightUp',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowRightUp
-            )
-        );
-
-        this.matIconRegistry.addSvgIcon(
-            'arrowDown',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.arrowDown
-            )
-        );
-
-        this.matIconRegistry.addSvgIcon(
-            'testAvatar',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                this.iconPaths.testAvatar
-            )
-        );
-
         this.matIconRegistry.addSvgIcon(
             'defaultAvatar',
             this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -708,56 +641,28 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
         const options = dropdown.options || [];
         if (options.length) {
-            if (
-                options.some((o) =>
-                    ['CAMPUS', 'PRECAMPUS'].includes(String(o.id))
-                )
-            )
+            const unitValues = getEnumValues(KNUdevUnit);
+            const technicalRoleValues = getEnumValues(TechnicalRole);
+            const expertiseValues = getEnumValues(Expertise);
+
+            if (options.some((o) => unitValues.includes(String(o.id))))
                 return 'unit';
-            if (
-                options.some((o) =>
-                    [
-                        'INTERN',
-                        'DEVELOPER',
-                        'PREMASTER',
-                        'MASTER',
-                        'TECHLEAD',
-                    ].includes(String(o.id))
-                )
-            )
+            if (options.some((o) => technicalRoleValues.includes(String(o.id))))
                 return 'technicalRole';
-            if (
-                options.some((o) =>
-                    [
-                        'FULLSTACK',
-                        'BACKEND',
-                        'FRONTEND',
-                        'UI_UX_DESIGNER',
-                    ].includes(String(o.id))
-                )
-            )
+            if (options.some((o) => expertiseValues.includes(String(o.id))))
                 return 'expertise';
         }
 
         return null;
     }
 
-    private updateUrlParams(reset: boolean = false): void {
-        if (reset) {
-            this.isNavigatingFromCode = true;
-            this.searchInputValue = '';
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: {},
-                queryParamsHandling: '',
-                replaceUrl: true,
-            });
-            return;
-        }
-
+    private createQueryParamsFromFilters(
+        includeSearchQuery: boolean = true
+    ): any {
         const queryParams: any = {};
 
         if (
+            includeSearchQuery &&
             this.filters.searchQuery &&
             this.filters.searchQuery.trim() !== ''
         ) {
@@ -783,6 +688,23 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         if (this.filters.recruitmentId)
             queryParams.recruitmentId = this.filters.recruitmentId;
 
+        return queryParams;
+    }
+
+    private updateUrlParams(reset: boolean = false): void {
+        if (reset) {
+            this.isNavigatingFromCode = true;
+            this.searchInputValue = '';
+            this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: {},
+                queryParamsHandling: '',
+                replaceUrl: true,
+            });
+            return;
+        }
+
+        const queryParams = this.createQueryParamsFromFilters(true);
         this.isNavigatingFromCode = true;
 
         this.router.navigate([], {
@@ -794,27 +716,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     private updateUrlParamsWithEmptySearch(): void {
-        const queryParams: any = {};
-
-        if (this.filters.registeredAt)
-            queryParams.registeredAt = this.filters.registeredAt;
-        if (this.filters.registeredBefore)
-            queryParams.registeredBefore = this.filters.registeredBefore;
-        if (this.filters.unit) queryParams.unit = this.filters.unit;
-        if (this.filters.expertise)
-            queryParams.expertise = this.filters.expertise;
-        if (this.filters.departmentId)
-            queryParams.departmentId = this.filters.departmentId;
-        if (this.filters.specialtyCodename)
-            queryParams.specialtyCodename = this.filters.specialtyCodename;
-        if (this.filters.universityStudyYear !== undefined) {
-            queryParams.universityStudyYear = this.filters.universityStudyYear;
-        }
-        if (this.filters.technicalRole)
-            queryParams.technicalRole = this.filters.technicalRole;
-        if (this.filters.recruitmentId)
-            queryParams.recruitmentId = this.filters.recruitmentId;
-
+        const queryParams = this.createQueryParamsFromFilters(false);
         this.isNavigatingFromCode = true;
 
         this.router.navigate([], {
@@ -906,5 +808,74 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.currentPage = 0;
         this.loadAccounts(0);
         this.updateUrlParamsWithEmptySearch();
+    }
+
+    // Handle filter events from the filter component
+    onFiltersChanged(event: FilterParams): void {
+        this.filters = event;
+        this.loadAccounts(0);
+        this.updateUrlParams();
+    }
+
+    onFilterSearchChange(value: string): void {
+        this.searchInputValue = value;
+        this.searchForm
+            .get('searchInput')
+            ?.setValue(this.searchInputValue, { emitEvent: false });
+    }
+
+    onFilterSearchBlur(): void {
+        const currentSearchValue =
+            this.searchForm.get('searchInput')?.value || '';
+        this.searchInputValue = currentSearchValue;
+
+        if (this.searchInputValue !== (this.filters.searchQuery || '')) {
+            if (this.searchInputValue === '') {
+                this.handleEmptySearch();
+            } else {
+                this.triggerSearch();
+            }
+        }
+    }
+
+    onFilterSearchKeyUp(event: KeyboardEvent): void {
+        if (event.key === 'Enter') {
+            const currentSearchValue =
+                this.searchForm.get('searchInput')?.value || '';
+            this.searchInputValue = currentSearchValue;
+
+            if (this.searchInputValue === '') {
+                this.handleEmptySearch();
+            } else {
+                this.triggerSearch();
+            }
+
+            (event.target as HTMLElement).blur();
+        }
+    }
+
+    onFilterDropdownChange(event: {
+        field: keyof FilterParams;
+        value: any;
+    }): void {
+        const { field, value } = event;
+
+        if (field === 'departmentId' && this.filters.departmentId !== value) {
+            this.filters.specialtyCodename = undefined;
+            if (value) {
+                this.loadSpecialties(value);
+            } else {
+                this.specialties = [];
+            }
+        }
+
+        if (field === 'universityStudyYear' && typeof value === 'string') {
+            this.filters[field] = parseInt(value, 10);
+        } else {
+            this.filters[field] = value;
+        }
+
+        this.loadAccounts(0);
+        this.updateUrlParams();
     }
 }

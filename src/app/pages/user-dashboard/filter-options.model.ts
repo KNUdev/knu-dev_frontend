@@ -1,5 +1,11 @@
 import { TranslateService } from '@ngx-translate/core';
 import { SelectOption } from '../../common/components/dropdown/write-dropdowns';
+import {
+    Expertise,
+    KNUdevUnit,
+    TechnicalRole,
+    getEnumValues,
+} from '../../common/models/enums';
 
 export interface FilterOptionGroup {
     units: SelectOption[];
@@ -12,16 +18,17 @@ export function getFilterOptions(
     translateService: TranslateService
 ): FilterOptionGroup {
     return {
-        units: [
-            { id: 'CAMPUS', displayedName: 'Campus' },
-            { id: 'PRECAMPUS', displayedName: 'Pre-campus' },
-        ],
-        expertise: [
-            { id: 'FULLSTACK', displayedName: 'Fullstack' },
-            { id: 'BACKEND', displayedName: 'Backend' },
-            { id: 'FRONTEND', displayedName: 'Frontend' },
-            { id: 'UI_UX_DESIGNER', displayedName: 'UI/UX Designer' },
-        ],
+        units: getEnumValues(KNUdevUnit).map((id) => ({
+            id,
+            displayedName: id === KNUdevUnit.CAMPUS ? 'Campus' : 'Pre-campus',
+        })),
+        expertise: getEnumValues(Expertise).map((id) => ({
+            id,
+            displayedName:
+                id === Expertise.UI_UX_DESIGNER
+                    ? 'UI/UX Designer'
+                    : id.charAt(0) + id.slice(1).toLowerCase(),
+        })),
         studyYears: Array.from({ length: 10 }, (_, i) => {
             const year = i + 1;
             const translation = translateService.instant(
@@ -35,12 +42,9 @@ export function getFilterOptions(
                         : year.toString(),
             };
         }),
-        technicalRoles: [
-            { id: 'INTERN', displayedName: 'Intern' },
-            { id: 'DEVELOPER', displayedName: 'Developer' },
-            { id: 'PREMASTER', displayedName: 'Premaster' },
-            { id: 'MASTER', displayedName: 'Master' },
-            { id: 'TECHLEAD', displayedName: 'Techlead' },
-        ],
+        technicalRoles: getEnumValues(TechnicalRole).map((id) => ({
+            id,
+            displayedName: id.charAt(0) + id.slice(1).toLowerCase(),
+        })),
     };
 }
