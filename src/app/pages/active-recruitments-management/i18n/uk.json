@@ -5,7 +5,12 @@
         "recruitment-type": "Тип набору",
         "recruitment-max-number": "Максимальна кількість людей у наборі",
         "final-date": "Фінальна дата",
-        "open-recruitment": "Відкрити набір"
+        "open-recruitment": "Відкрити набір",
+        "name": "Назва набору",
+        "expertise": "Напрямок",
+        "max-candidates": "Максимальна кількість учасників",
+        "deadline-date": "Дата та час закінчення",
+        "success": "Набір успішно створено"
     },
 
     "recruitment-card": {
@@ -19,6 +24,20 @@
         "people-max-amount": "Максимальна кількість людей",
         "statistic-title": "Статистика",
         "joined-people-amount": "Кількість людей, які приєднались",
-        "close-recruitment-button": "Закрити набір"
+        "close-recruitment-button": "Закрити набір",
+        "no-active-recruitments": "На даний момент немає активних наборів"
+    },
+
+    "common": {
+        "loading": "Завантаження...",
+        "processing": "Обробка...",
+        "submitting": "Відправлення..."
+    },
+
+    "errors": {
+        "fieldRequired": "Це поле обов'язкове",
+        "minValue": "Мінімальне значення: {{min}}",
+        "numberOnly": "Введіть тільки цифри",
+        "invalidField": "Невірне значення поля"
     }
 }
