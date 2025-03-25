@@ -38,7 +38,6 @@ import {
     SelectOption,
     WriteDropDowns,
 } from '../../common/components/dropdown/write-dropdowns';
-import { LabelInput } from '../../common/components/input/label-input/label-input';
 import { PaginationComponent } from '../../common/components/pagination/pagination.component';
 import {
     Expertise,
@@ -66,11 +65,9 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        WriteDropDowns,
         RouterModule,
         BorderButtonComponent,
         EditUserModalComponent,
-        LabelInput,
         PaginationComponent,
         UserFiltersComponent,
     ],
