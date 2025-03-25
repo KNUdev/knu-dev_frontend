@@ -1,0 +1,560 @@
+<app-backdrop-window (close)="onClose()">
+    <div class="edit-user-modal">
+        @if(isLoading) {
+        <div class="loading-indicator">
+            <div class="spinner"></div>
+            <p>{{ "common.loading" | translate }}</p>
+        </div>
+        } @else if (saveSuccess) {
+        <div class="success-message">
+            <p>{{ "users.edit.saveSuccess" | translate }}</p>
+        </div>
+        } @else if (saveError) {
+        <div class="error-message">
+            <mat-icon [svgIcon]="'errorQuadrilateral'">error</mat-icon>
+            <p>{{ errorMessage }}</p>
+        </div>
+        } @else if (showCloseConfirmation) {
+        <div class="confirmation-dialog">
+            <h3 class="confirmation-title">
+                {{ "users.edit.closeConfirmTitle" | translate }}
+            </h3>
+            <p class="confirmation-message">
+                {{ "users.edit.closeConfirmMessage" | translate }}
+            </p>
+            <div class="confirmation-actions">
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    (click)="cancelClose()"
+                >
+                    {{ "users.edit.stayOnPage" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="confirmClose()"
+                >
+                    {{ "users.edit.discardChanges" | translate }}
+                </button>
+            </div>
+        </div>
+        } @else if (showSaveConfirmation) {
+        <div class="confirmation-dialog">
+            <h3 class="confirmation-title">
+                {{ "users.edit.saveConfirmTitle" | translate }}
+            </h3>
+            <p class="confirmation-message">
+                {{ "users.edit.saveConfirmMessage" | translate }}
+            </p>
+            <div class="confirmation-actions">
+                <button
+                    type="button"
+                    class="fill-button fill-yellow"
+                    (click)="confirmSave()"
+                >
+                    {{ "users.edit.confirmSave" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="fill-button fill-red"
+                    (click)="cancelSave()"
+                >
+                    {{ "users.edit.cancel" | translate }}
+                </button>
+            </div>
+        </div>
+        } @else {
+        <form
+            [formGroup]="editForm"
+            (ngSubmit)="saveChanges()"
+            class="edit-form"
+        >
+            <div class="form-section">
+                <section class="profile-container">
+                    <div class="cover-container">
+                        @if(bannerUrl && !deleteBanner) {
+                        <div class="banner-wrapper">
+                            <img
+                                [src]="bannerUrl"
+                                alt="Banner"
+                                class="cover-image"
+                            />
+                            <div class="cover-image-overlay">
+                                <button
+                                    type="button"
+                                    class="delete-icon-button"
+                                    (click)="requestDeleteBanner()"
+                                >
+                                    <mat-icon [svgIcon]="'trash'"
+                                        >close</mat-icon
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        } @else {
+                        <div class="cover-image no-banner">
+                            <span>{{
+                                "users.edit.no-banner" | translate
+                            }}</span>
+                        </div>
+                        }
+
+                        <div class="profile-wrapper">
+                            <div class="profile-image-container">
+                                @if(avatarUrl && !deleteAvatar) {
+                                <img
+                                    [src]="avatarUrl"
+                                    alt="Profile"
+                                    class="profile-image"
+                                />
+                                <div class="avatar-image-overlay">
+                                    <button
+                                        type="button"
+                                        class="delete-icon-button"
+                                        (click)="requestDeleteAvatar()"
+                                    >
+                                        <mat-icon [svgIcon]="'trash'"
+                                            >close</mat-icon
+                                        >
+                                    </button>
+                                </div>
+                                } @else {
+                                <img
+                                    [src]="iconPaths.defaultAvatar"
+                                    alt="Profile"
+                                    class="profile-image"
+                                />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">
+                    {{ "users.general-info" | translate }}
+                </h3>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.edit.firstName' | translate"
+                        controlName="firstName"
+                        [required]="true"
+                    ></app-label-input>
+                    @if(isFieldChanged('firstName')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "firstName"
+                                          )
+                                      }
+                        }}: {{ initialFormValues.firstName }} →
+                        {{ editForm.get("firstName")?.value }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.edit.lastName' | translate"
+                        controlName="lastName"
+                        [required]="true"
+                    ></app-label-input>
+                    @if(isFieldChanged('lastName')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName("lastName")
+                                      }
+                        }}: {{ initialFormValues.lastName }} →
+                        {{ editForm.get("lastName")?.value }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.edit.middleName' | translate"
+                        controlName="middleName"
+                    ></app-label-input>
+                    @if(isFieldChanged('middleName')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "middleName"
+                                          )
+                                      }
+                        }}: {{ initialFormValues.middleName }} →
+                        {{ editForm.get("middleName")?.value }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.email' | translate"
+                        controlName="email"
+                        type="email"
+                        [required]="true"
+                    ></app-label-input>
+                    @if(isFieldChanged('email')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : { field: getFieldDisplayName("email") }
+                        }}: {{ initialFormValues.email }} →
+                        {{ editForm.get("email")?.value }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-label-input
+                        [label]="'users.github' | translate"
+                        controlName="githubAccountUsername"
+                    ></app-label-input>
+                    @if(isFieldChanged('githubAccountUsername')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "githubAccountUsername"
+                                          )
+                                      }
+                        }}:
+                        {{ initialFormValues.githubAccountUsername || "None" }}
+                        →
+                        {{
+                            editForm.get("githubAccountUsername")?.value ||
+                                "None"
+                        }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="filterOptions.technicalRoles"
+                        [placeholder]="'filters.user-tech-role' | translate"
+                        [defaultSelectedId]="user.technicalRole"
+                        formControlName="technicalRole"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('technicalRole')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "technicalRole"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "technicalRole",
+                                initialFormValues.technicalRole
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "technicalRole",
+                                editForm.get("technicalRole")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('technicalRole')?.invalid &&
+                    editForm.get('technicalRole')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("technicalRole") }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="filterOptions.expertise"
+                        [placeholder]="'filters.expertise' | translate"
+                        [defaultSelectedId]="user.expertise"
+                        formControlName="expertise"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('expertise')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "expertise"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "expertise",
+                                initialFormValues.expertise
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "expertise",
+                                editForm.get("expertise")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('expertise')?.invalid &&
+                    editForm.get('expertise')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("expertise") }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="filterOptions.units"
+                        [placeholder]="'filters.knudev-unit' | translate"
+                        [defaultSelectedId]="user.unit"
+                        formControlName="unit"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('unit')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : { field: getFieldDisplayName("unit") }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "unit",
+                                initialFormValues.unit
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "unit",
+                                editForm.get("unit")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('unit')?.invalid &&
+                    editForm.get('unit')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("unit") }}
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">{{ "users.learns" | translate }}</h3>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="departments"
+                        [placeholder]="'filters.faculty' | translate"
+                        [defaultSelectedId]="
+                            user.academicUnitsIds?.departmentId
+                        "
+                        [class.drop-down__loading]="isLoadingDepartments"
+                        formControlName="departmentId"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('departmentId')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "departmentId"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "departmentId",
+                                initialFormValues.departmentId
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "departmentId",
+                                editForm.get("departmentId")?.value
+                            )
+                        }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="specialties"
+                        [placeholder]="'filters.specialty' | translate"
+                        [defaultSelectedId]="
+                            user.academicUnitsIds?.specialtyCodename?.toString()
+                        "
+                        [disabled]="
+                            !editForm.get('departmentId')?.value ||
+                            isLoadingSpecialties
+                        "
+                        [class.drop-down__loading]="isLoadingSpecialties"
+                        formControlName="specialtyCodename"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('specialtyCodename')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "specialtyCodename"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "specialtyCodename",
+                                initialFormValues.specialtyCodename
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "specialtyCodename",
+                                editForm.get("specialtyCodename")?.value
+                            )
+                        }}
+                    </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-write-dropdowns
+                        [options]="filterOptions.studyYears"
+                        [placeholder]="'filters.study-year' | translate"
+                        [defaultSelectedId]="
+                            user.universityStudyYear.toString()
+                        "
+                        formControlName="yearOfStudyOnRegistration"
+                    >
+                    </app-write-dropdowns>
+                    @if(isFieldChanged('yearOfStudyOnRegistration')) {
+                    <div class="content-changed">
+                        <mat-icon
+                            [svgIcon]="'flag'"
+                            class="content-changed__icon"
+                        />
+                        {{
+                            "users.edit.changedField"
+                                | translate
+                                    : {
+                                          field: getFieldDisplayName(
+                                              "yearOfStudyOnRegistration"
+                                          )
+                                      }
+                        }}:
+                        {{
+                            getDisplayValueForField(
+                                "yearOfStudyOnRegistration",
+                                initialFormValues.yearOfStudyOnRegistration
+                            )
+                        }}
+                        →
+                        {{
+                            getDisplayValueForField(
+                                "yearOfStudyOnRegistration",
+                                editForm.get("yearOfStudyOnRegistration")?.value
+                            )
+                        }}
+                    </div>
+                    } @if(editForm.get('yearOfStudyOnRegistration')?.invalid &&
+                    editForm.get('yearOfStudyOnRegistration')?.touched) {
+                    <div class="error-text">
+                        {{ getFieldError("yearOfStudyOnRegistration") }}
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button
+                    type="submit"
+                    class="fill-button fill-yellow"
+                    [disabled]="editForm.invalid || isLoading"
+                >
+                    {{ "users.edit.save" | translate }}
+                </button>
+                <button
+                    type="button"
+                    class="fill-button fill-red"
+                    (click)="onClose()"
+                >
+                    {{ "users.edit.cancel" | translate }}
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</app-backdrop-window>

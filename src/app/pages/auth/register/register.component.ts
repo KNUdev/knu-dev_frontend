@@ -18,21 +18,25 @@ import {
 import {
     BehaviorSubject,
     catchError,
+    delay,
+    filter,
     map,
     Observable,
     of,
     startWith,
     switchMap,
+    take,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabelInput } from '../../../common/components/input/label-input/label-input';
 import { DepartmentService } from '../../../services/department.service';
-import { FormErrorService } from '../../../services/error.service';
+import { FormErrorService } from '../../../services/error/error.service';
+import { LocalizedErrorMessagesArray } from '../../../services/error/errors.model';
 import { I18nService } from '../../../services/languages/i18n.service';
 import {
     SelectOption,
     WriteDropDowns,
-} from './components/dropdown/write-dropdowns';
+} from '../../../common/components/dropdown/write-dropdowns';
 import {
     Department,
     ERROR_KEY_TO_CONTROL,
@@ -77,6 +81,7 @@ export class RegisterComponent {
     personalInfoForm = signal<FormGroup>(new FormGroup({}));
     academicInfoForm = signal<FormGroup>(new FormGroup({}));
     backendErrors = signal<ValidationErrors>({});
+    private localizedErrorMessages = signal<LocalizedErrorMessagesArray>({});
     departments$: Observable<Department[]>;
     departments: Department[] = [];
     specialties$: Observable<SelectOption[]>;
@@ -100,6 +105,9 @@ export class RegisterComponent {
     private translate = inject(TranslateService);
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    formState: any = {};
+    specialtiesLoaded$ = new BehaviorSubject<boolean>(false);
+    hasNonEnglishName = signal<boolean>(false);
 
     constructor(
         private readonly fb: FormBuilder,
@@ -170,7 +178,7 @@ export class RegisterComponent {
                     ? this.departmentService.getSpecialties(departmentId).pipe(
                           map((specialties) => {
                               this.specialtyLoadError.set(false);
-                              return specialties.map((specialty) => ({
+                              const result = specialties.map((specialty) => ({
                                   id: specialty.codeName,
                                   codeName: specialty.codeName,
                                   name: {
@@ -178,9 +186,12 @@ export class RegisterComponent {
                                       uk: specialty.name.uk,
                                   },
                               }));
+                              this.specialtiesLoaded$.next(true);
+                              return result;
                           }),
                           catchError(() => {
                               this.specialtyLoadError.set(true);
+                              this.specialtiesLoaded$.next(false);
                               return of([]);
                           })
                       )
@@ -223,6 +234,10 @@ export class RegisterComponent {
                 id: expertise.id,
                 displayedName: expertise.displayedName,
             }));
+        });
+
+        this.translate.onLangChange.subscribe(() => {
+            this.updateErrorMessagesForCurrentLanguage();
         });
     }
 
@@ -313,6 +328,52 @@ export class RegisterComponent {
         }
     }
 
+    onNameInput(
+        event: Event,
+        fieldName: 'firstName' | 'lastName' | 'middleName'
+    ): void {
+        const inputElement = event.target as HTMLInputElement;
+        const value = inputElement.value;
+
+        const hasNonEnglish = this.containsNonEnglishCharacters(value);
+
+        if (hasNonEnglish) {
+            this.hasNonEnglishName.set(true);
+        } else {
+            const formControls = this.personalInfoForm().controls;
+            const firstName = formControls['firstName'].value || '';
+            const lastName = formControls['lastName'].value || '';
+            const middleName = formControls['middleName'].value || '';
+
+            const hasAnyNonEnglish =
+                this.containsNonEnglishCharacters(firstName) ||
+                this.containsNonEnglishCharacters(lastName) ||
+                this.containsNonEnglishCharacters(middleName);
+
+            this.hasNonEnglishName.set(hasAnyNonEnglish);
+        }
+    }
+
+    containsNonEnglishCharacters(text: string): boolean {
+        const englishPattern = /^[A-Za-z'-]*$/;
+        return !englishPattern.test(text);
+    }
+
+    onNameKeyDown(event: KeyboardEvent): boolean {
+        if (event.key.length > 1) {
+            return true;
+        }
+
+        const englishPattern = /^[A-Za-z'-]$/;
+        if (!englishPattern.test(event.key)) {
+            event.preventDefault();
+            this.hasNonEnglishName.set(true);
+            return false;
+        }
+
+        return true;
+    }
+
     formatEmailOnBlur() {
         let value = this.personalInfoForm().get('email')?.value.trim();
 
@@ -330,27 +391,66 @@ export class RegisterComponent {
         this.formErrorService.setShowValidationErrors(true);
         if (this.personalInfoForm().valid) {
             this.formErrorService.setShowValidationErrors(false);
-            this.currentRegistrationPhase.set(2);
+            this.saveFormState();
+            this.goToSecondStep();
         }
     }
 
     returnToPreviousStep() {
+        this.saveFormState();
         this.currentRegistrationPhase.set(1);
+    }
+
+    saveFormState() {
+        this.formState = {
+            personalInfo: this.personalInfoForm().value,
+            academicInfo: this.academicInfoForm().getRawValue(),
+        };
+    }
+
+    goToSecondStep() {
+        this.currentRegistrationPhase.set(2);
+
+        const departmentId = this.academicInfoForm().get('departmentId')?.value;
+
+        if (departmentId) {
+            this.selectedDepartmentId$.next(departmentId);
+
+            this.specialtiesLoaded$
+                .pipe(
+                    filter((loaded) => loaded),
+                    take(1),
+                    delay(100)
+                )
+                .subscribe(() => {
+                    const savedSpecialty =
+                        this.formState.academicInfo?.specialtyCodename;
+                    if (savedSpecialty) {
+                        this.academicInfoForm()
+                            .get('specialtyCodename')
+                            ?.setValue(savedSpecialty);
+                        this.academicInfoForm().updateValueAndValidity();
+                    }
+                });
+        }
     }
 
     onSubmit() {
         this.showValidationErrors.set(true);
         this.formErrorService.setShowValidationErrors(true);
         this.formErrorService.setBackendErrors({});
+        this.localizedErrorMessages.set({});
 
         if (this.personalInfoForm().valid && this.academicInfoForm().valid) {
             const formData = new FormData();
 
-            const { confirmPassword, ...personalInfo } =
+            const { confirmPassword, githubAccountUsername, ...personalInfo } =
                 this.personalInfoForm().value;
             Object.keys(personalInfo).forEach((key) => {
                 formData.append(key, personalInfo[key]);
             });
+
+            formData.append('githubAccountUsername', githubAccountUsername);
 
             const academicInfo = this.academicInfoForm().value;
             formData.append('departmentId', academicInfo.departmentId);
@@ -373,9 +473,10 @@ export class RegisterComponent {
                         }
                         if (error.status === 200 && error.error) {
                             this.currentRegistrationPhase.set(1);
-                            this.backendErrors.set({
-                                email: ['This email is already registered'],
-                            });
+                            this.handleLocalizedFieldError('email', [
+                                error.error.message ||
+                                    'This email is already registered',
+                            ]);
                         } else {
                             console.error(error);
                         }
@@ -422,9 +523,28 @@ export class RegisterComponent {
                     ],
                 ],
                 confirmPassword: ['', Validators.required],
+                githubAccountUsername: ['', [Validators.required]],
             },
             { validators: [this.passwordMatchValidator], updateOn: 'change' }
         );
+    }
+
+    onGithubAccountInput(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+        let value = inputElement.value.trim();
+
+        if (value.includes('github.com/')) {
+            if (value.endsWith('/')) {
+                value = value.slice(0, -1);
+            }
+
+            const parts = value.split('github.com/');
+            if (parts.length > 1) {
+                value = parts[1].split('/')[0];
+            }
+        }
+
+        this.personalInfoForm().get('githubAccountUsername')?.setValue(value);
     }
 
     private initAcademicInfoForm(): FormGroup {
@@ -438,11 +558,51 @@ export class RegisterComponent {
 
     private handleValidationErrors(errors: any) {
         const newErrors: ValidationErrors = {};
+        this.localizedErrorMessages.set({});
 
         Object.entries(ERROR_KEY_TO_CONTROL).forEach(
             ([errorKey, formControlName]) => {
                 if (errors[errorKey]?.length > 0) {
-                    newErrors[formControlName] = errors[errorKey];
+                    const errorArray = errors[errorKey];
+                    const localizedErrorsForField: LocalizedErrorMessagesArray[string] =
+                        [];
+
+                    const processedErrors: string[] = errorArray.map(
+                        (error: any) => {
+                            if (
+                                typeof error === 'object' &&
+                                (error.en || error.uk)
+                            ) {
+                                localizedErrorsForField.push({
+                                    en:
+                                        error.en ||
+                                        this.translate.instant(
+                                            'errors.generic'
+                                        ),
+                                    uk:
+                                        error.uk ||
+                                        this.translate.instant(
+                                            'errors.generic'
+                                        ),
+                                });
+                                const currentLang = this.translate.currentLang;
+                                return (
+                                    error[currentLang] || error.en || error.uk
+                                );
+                            } else {
+                                localizedErrorsForField.push(error);
+                                return error;
+                            }
+                        }
+                    );
+                    newErrors[formControlName] = processedErrors;
+
+                    if (localizedErrorsForField.length > 0) {
+                        this.localizedErrorMessages.update((current) => ({
+                            ...current,
+                            [formControlName]: localizedErrorsForField,
+                        }));
+                    }
                 }
             }
         );
@@ -455,11 +615,85 @@ export class RegisterComponent {
             'middleName',
             'email',
             'password',
+            'githubAccountUsername',
         ];
         if (
             Object.keys(newErrors).some((key) => criticalFields.includes(key))
         ) {
             this.currentRegistrationPhase.set(1);
+        }
+    }
+
+    private handleLocalizedFieldError(field: string, errors: Array<any>) {
+        const fieldMapping = Object.entries(ERROR_KEY_TO_CONTROL).find(
+            ([_, controlName]) => controlName === field
+        );
+
+        if (!fieldMapping) {
+            return;
+        }
+
+        const localizedErrorsForField: LocalizedErrorMessagesArray[string] = [];
+
+        const processedErrors: string[] = errors.map((error: any) => {
+            if (typeof error === 'object' && (error.en || error.uk)) {
+                localizedErrorsForField.push({
+                    en: error.en || this.translate.instant('errors.generic'),
+                    uk: error.uk || this.translate.instant('errors.generic'),
+                });
+
+                const currentLang = this.translate.currentLang;
+                return error[currentLang] || error.en || error.uk;
+            } else {
+                localizedErrorsForField.push(error);
+                return error;
+            }
+        });
+
+        this.formErrorService.setBackendErrors({
+            [field]: processedErrors,
+        });
+
+        if (localizedErrorsForField.length > 0) {
+            this.localizedErrorMessages.update((current) => ({
+                ...current,
+                [field]: localizedErrorsForField,
+            }));
+        }
+    }
+
+    private updateErrorMessagesForCurrentLanguage() {
+        const storedErrors = this.localizedErrorMessages();
+        if (!storedErrors || Object.keys(storedErrors).length === 0) {
+            return;
+        }
+
+        const currentLang = this.translate.currentLang;
+        const newErrors: ValidationErrors = {};
+
+        Object.entries(storedErrors).forEach(([field, errorInfoArray]) => {
+            if (!errorInfoArray || errorInfoArray.length === 0) {
+                return;
+            }
+
+            newErrors[field] = errorInfoArray.map((errorInfo) => {
+                if (
+                    typeof errorInfo === 'object' &&
+                    (errorInfo.en || errorInfo.uk)
+                ) {
+                    return (
+                        errorInfo[currentLang as keyof typeof errorInfo] ||
+                        errorInfo.en ||
+                        errorInfo.uk
+                    );
+                } else {
+                    return errorInfo as string;
+                }
+            });
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            this.formErrorService.setBackendErrors(newErrors);
         }
     }
 }

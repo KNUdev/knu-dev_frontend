@@ -62,11 +62,11 @@
         },
         {
             "id": "3",
-            "displayedName": "1st Master"
+            "displayedName": "3rd Bachelor"
         },
         {
             "id": "4",
-            "displayedName": "2nd Master"
+            "displayedName": "4th Bachelor"
         },
         {
             "id": "5",
@@ -111,9 +111,35 @@
             "displayedName": "Ui/Ux designer"
         }
     ],
+    "career-path": {
+        "title": "Career Growth Opportunities",
+        "instruction-text": "Click on any of the roles to learn more about it",
+        "role-card-1": {
+            "title": "Intern",
+            "description": "Entry-level position focused on learning fundamentals. You'll work on basic tasks under close supervision while building core skills and understanding development workflows."
+        },
+        "role-card-2": {
+            "title": "Developer",
+            "description": "Regular team member working on feature implementation and bug fixes. You'll collaborate with other developers while taking responsibility for specific components or modules."
+        },
+        "role-card-3": {
+            "title": "Pre-master",
+            "description": "Experienced developer with deeper technical knowledge. You'll handle complex features independently and begin mentoring junior team members."
+        },
+        "role-card-4": {
+            "title": "Master Developer",
+            "description": "Senior technical specialist capable of making architectural decisions. You'll lead critical components development and actively mentor others."
+        },
+        "role-card-5": {
+            "title": "Team Lead",
+            "description": "Technical manager overseeing team performance and project delivery. You'll coordinate work processes, remove obstacles, and ensure successful project implementation."
+        }
+    },
     "errors": {
         "departmentLoadError": "Failed to load departments. Please try again later.",
-        "specialtyLoadError": "Failed to load specialties. Please try again later."
+        "specialtyLoadError": "Failed to load specialties. Please try again later.",
+        "generic": "An error occurred",
+        "unexpected": "An unexpected error occurred"
     },
     "dropdown": {
         "search": "Search...",

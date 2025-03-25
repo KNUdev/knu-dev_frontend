@@ -1,0 +1,75 @@
+{
+    "filters": {
+        "title": "Filters",
+        "resetFilters": "Reset filters",
+        "initials-or-email-filter": "User Name/Email/GitHub",
+        "registration-date": "Registration date",
+        "registration-end-date": "Registration end date",
+        "knudev-unit": "Campus/Precampus",
+        "expertise": "Expertise",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "study-year": "Study year",
+        "set-come": "What set they come",
+        "user-tech-role": "User technical role",
+        "recruitment": "Recruitment",
+        "errorLoadingDepartments": "Error loading departments",
+        "errorLoadingSpecialties": "Error loading specialties",
+        "errorLoadingRecruitments": "Error loading recruitments"
+    },
+    "dropdown": {
+        "search": "Search...",
+        "noResults": "No results found for \"{{query}}\""
+    },
+    "users": {
+        "title": "List of users",
+        "general-info": "General information",
+        "full-name": "Full Name",
+        "email": "Email",
+        "tech-role": "Technical role",
+        "expertise": "Expertise",
+        "github": "GitHub username",
+        "registration-date": "Registration date",
+        "last-role-update": "Last role update",
+        "learns": "Learns",
+        "faculty": "Faculty",
+        "specialty": "Specialty",
+        "study-year": "Study year",
+        "unit": "Campus/Precampus",
+        "change-button": "Change",
+        "look-on-details-button": "See details",
+        "noUsersFound": "No users found",
+        "profile-images": "Profile Images",
+        "avatar": "Avatar Image",
+        "banner": "Banner Image",
+        "edit": {
+            "title": "Edit User",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "middleName": "Middle Name",
+            "save": "Save Changes",
+            "cancel": "Cancel",
+            "saveSuccess": "User information updated successfully",
+            "saveError": "Failed to update user information",
+            "delete-image": "Delete image",
+            "no-avatar": "No avatar image",
+            "no-banner": "No banner image",
+            "changed": "Changed from",
+            "changedField": "Changed {{field}} from",
+            "closeConfirmTitle": "Discard Changes?",
+            "closeConfirmMessage": "You have unsaved changes. If you close now, your changes will be lost.",
+            "stayOnPage": "Stay on This Page",
+            "discardChanges": "Discard Changes",
+            "saveConfirmTitle": "Save Changes?",
+            "saveConfirmMessage": "Are you sure you want to save these changes?",
+            "confirmSave": "Yes, Save Changes"
+        }
+    },
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "common": {
+        "loading": "Loading..."
+    }
+}

@@ -1,0 +1,75 @@
+{
+    "filters": {
+        "title": "Фільтри",
+        "resetFilters": "Скинути фільтри",
+        "initials-or-email-filter": "ПІБ/email/GitHub користувача",
+        "registration-date": "Дата реєстрації",
+        "registration-end-date": "Дата до якої зараєстрова(ний)/на",
+        "knudev-unit": "Кампус/Прекампус",
+        "expertise": "Напрямок",
+        "faculty": "Факультет",
+        "specialty": "Спеціальність",
+        "study-year": "Курс",
+        "set-come": "Набір з якого прийш(ов)/ла",
+        "user-tech-role": "Технічна роль користувача",
+        "recruitment": "Набір",
+        "errorLoadingDepartments": "Помилка завантаження факультетів",
+        "errorLoadingSpecialties": "Помилка завантаження спеціальностей",
+        "errorLoadingRecruitments": "Помилка завантаження наборів"
+    },
+    "dropdown": {
+        "search": "Пошук...",
+        "noResults": "Не знайдено результатів для \"{{query}}\""
+    },
+    "users": {
+        "title": "Список користувачів",
+        "general-info": "Загальна інформація",
+        "full-name": "ПІБ",
+        "email": "Email",
+        "tech-role": "Технічна роль",
+        "expertise": "Напрямок",
+        "github": "GitHub нікнейм",
+        "registration-date": "Дата реєстрації",
+        "last-role-update": "Дата останнього оновлення ролі",
+        "learns": "Навчається",
+        "faculty": "Факултет",
+        "specialty": "Спеціальність",
+        "study-year": "Курс",
+        "unit": "Кампус/Прекампус",
+        "change-button": "Змінити",
+        "look-on-details-button": "Переглянути деталі",
+        "noUsersFound": "Користувачів не знайдено",
+        "profile-images": "Зображення профілю",
+        "avatar": "Аватар",
+        "banner": "Банер",
+        "edit": {
+            "title": "Редагувати користувача",
+            "firstName": "Ім'я",
+            "lastName": "Прізвище",
+            "middleName": "По батькові",
+            "save": "Зберегти зміни",
+            "cancel": "Скасувати",
+            "saveSuccess": "Інформація користувача успішно оновлена",
+            "saveError": "Не вдалося оновити інформацію користувача",
+            "delete-image": "Видалити зображення",
+            "no-avatar": "Немає аватару",
+            "no-banner": "Немає банеру",
+            "changed": "Змінено з",
+            "changedField": "Змінено {{field}} з",
+            "closeConfirmTitle": "Відхилити зміни?",
+            "closeConfirmMessage": "У вас є незбережені зміни. Якщо ви закриєте зараз, ваші зміни буде втрачено.",
+            "stayOnPage": "Залишитись на сторінці",
+            "discardChanges": "Відхилити зміни",
+            "saveConfirmTitle": "Зберегти зміни?",
+            "saveConfirmMessage": "Ви впевнені, що хочете зберегти ці зміни?",
+            "confirmSave": "Так, зберегти зміни"
+        }
+    },
+    "pagination": {
+        "previous": "Попередня",
+        "next": "Наступна"
+    },
+    "common": {
+        "loading": "Завантаження..."
+    }
+}

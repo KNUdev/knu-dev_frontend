@@ -41,7 +41,7 @@ interface FilteredOption extends SelectOption {
 }
 
 @Component({
-    selector: 'register-write-dropdowns',
+    selector: 'app-write-dropdowns',
     imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
     encapsulation: ViewEncapsulation.None,
     providers: [
@@ -53,16 +53,16 @@ interface FilteredOption extends SelectOption {
     ],
     templateUrl: './write-dropdowns.html',
     styleUrls: ['./write-dropdowns.scss'],
+    standalone: true,
 })
 export class WriteDropDowns implements ControlValueAccessor {
-    private translate = inject(TranslateService);
     @Input() hasError = false;
     @Input() errorMessage = '';
-    @Input() options: SelectOption[] = [];
     @Input() placeholder = 'Select an option';
     @Input() valueField: 'id' | 'codeName' = 'id';
+    @Input() defaultSelectedId?: string;
+    @Input() disabled = false;
     @Output() selectionChange = new EventEmitter<any>();
-    private static currentOpenDropdown: WriteDropDowns | null = null;
     @ViewChild('searchInput') searchInput!: ElementRef;
 
     readonly iconPaths = {
@@ -71,28 +71,61 @@ export class WriteDropDowns implements ControlValueAccessor {
         errorQuadrilateral: 'assets/icon/system/errorQuadrilateral.svg',
     } as const;
 
-    private focusSearchInput(): void {
-        setTimeout(() => {
-            this.searchInput?.nativeElement?.focus();
-        });
-    }
-
     isOpen = false;
-    disabled = false;
     selectedOption: any = null;
     searchQuery = '';
     filteredOptions: FilteredOption[] = [];
 
+    private translate = inject(TranslateService);
     private onChange: any = () => {};
     private onTouched: any = () => {};
     private domSanitizer = inject(DomSanitizer);
     private matIconRegistry = inject(MatIconRegistry);
+    private static currentOpenDropdown: WriteDropDowns | null = null;
     private getMatchScore(text: string, query: string): number {
         if (!query) return 100;
         if (text === query) return 90;
         if (text.startsWith(query)) return 80;
         if (text.includes(query)) return 70;
         return 0;
+    }
+
+    private _options: SelectOption[] = [];
+
+    get options(): SelectOption[] {
+        return this._options;
+    }
+
+    @Input()
+    set options(value: SelectOption[]) {
+        this._options = value || [];
+
+        // Apply pending value if it exists and we have options now
+        if (this._pendingValue !== undefined && this._options.length > 0) {
+            setTimeout(() => this.writeValue(this._pendingValue), 0);
+        }
+        // Apply default selected ID if set
+        else if (this.defaultSelectedId && !this.selectedOption) {
+            const found = this._options.find(
+                (o) => o.id === this.defaultSelectedId
+            );
+            if (found) {
+                this.selectedOption = found;
+                const v =
+                    this.valueField === 'id'
+                        ? found.id
+                        : found.codeName || found.id;
+                this.onChange(v);
+                this.selectionChange.emit(found);
+            }
+        }
+        this.resetFilter();
+    }
+
+    private focusSearchInput(): void {
+        setTimeout(() => {
+            this.searchInput?.nativeElement?.focus();
+        });
     }
 
     get hasNoResults(): boolean {
@@ -103,18 +136,29 @@ export class WriteDropDowns implements ControlValueAccessor {
     }
 
     getDisplayValue(option: SelectOption): string {
+        if (!option) return '';
+
+        // First check if there's a pre-formatted displayedName
+        if (option.displayedName) {
+            return option.displayedName;
+        }
+
+        // For backwards compatibility, handle localized name objects
         if (option?.name) {
             const name =
                 this.translate.currentLang === 'uk'
                     ? option.name.uk
                     : option.name.en;
 
+            // If we have a codeName, use the "code - name" format
             if (option.codeName) {
                 return `${option.codeName} - ${name}`;
             }
             return name;
         }
-        return option?.displayedName || '';
+
+        // Fallback to empty string if no displayable value found
+        return option?.id || '';
     }
 
     selectOption(option: SelectOption): void {
@@ -243,12 +287,61 @@ export class WriteDropDowns implements ControlValueAccessor {
         }
     }
 
+    resetSelection(): void {
+        this.selectedOption = null;
+        this.onChange(null);
+    }
+
     writeValue(value: any): void {
-        if (value) {
-            this.selectedOption = this.options.find((opt) => opt.id === value);
+        if (value === null || value === undefined) {
+            this.selectedOption = null;
+            return;
+        }
+
+        // If options aren't loaded yet, store value for later application
+        if (!this.options || this.options.length === 0) {
+            this._pendingValue = value;
+            return;
+        }
+
+        // Convert value to string for robust comparison (handles both string and number IDs)
+        const valueStr = String(value);
+
+        // Try to find an exact match by ID
+        let found = this.options.find((opt) => String(opt.id) === valueStr);
+
+        // If not found by ID, try by codeName
+        if (!found && this.valueField === 'codeName') {
+            found = this.options.find(
+                (opt) => opt.codeName && String(opt.codeName) === valueStr
+            );
+        }
+
+        // If still not found, try case-insensitive comparison
+        if (!found) {
+            found = this.options.find(
+                (opt) =>
+                    String(opt.id).toLowerCase() === valueStr.toLowerCase() ||
+                    (opt.codeName &&
+                        String(opt.codeName).toLowerCase() ===
+                            valueStr.toLowerCase())
+            );
+        }
+
+        // Set selected option and emit change if needed
+        if (found) {
+            this.selectedOption = found;
+            const value =
+                this.valueField === 'id'
+                    ? found.id
+                    : found.codeName || found.id;
+            this.onChange(value);
         } else {
             this.selectedOption = null;
         }
+
+        // Clear the pending value since we've processed it
+        this._pendingValue = undefined;
     }
 
     registerOnChange(fn: any): void {
@@ -258,4 +351,11 @@ export class WriteDropDowns implements ControlValueAccessor {
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
+
+    setDisabledState(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
+
+    // Add property to track pending values
+    private _pendingValue: any;
 }

@@ -1,0 +1,303 @@
+<div class="container">
+    <section class="header-about-role">
+        <div class="header-text">
+            <h1 class="header-text__title-first-part">
+                {{ "about-role.title__first-part" | translate }}
+                <span
+                    #animatedElement
+                    class="header-text__title-second-part"
+                    appLetterByLetter="about-role.title__second-part"
+                ></span>
+            </h1>
+            <p class="header-text__description">
+                {{ "about-role.page-description" | translate }}
+            </p>
+            <div class="header__shadow"></div>
+        </div>
+        <div class="roles-wrapper">
+            <a class="roles-wrapper__role roles-wrapper__intern">INTERN</a>
+            <a class="roles-wrapper__role roles-wrapper__developer"
+                >DEVELOPER</a
+            >
+            <a class="roles-wrapper__role roles-wrapper__premaster"
+                >PRE-MASTER</a
+            >
+            <div class="roles-wrapper__bottom-roles-block">
+                <a class="roles-wrapper__role bottom-roles-block__master"
+                    >MASTER</a
+                >
+                <a class="roles-wrapper__role bottom-roles-block__techlead"
+                    >TECHLEAD</a
+                >
+            </div>
+        </div>
+    </section>
+    <hr class="blocks-separator" />
+    <section class="info-card" id="info-card">
+        <div
+            class="info-card__prew-role-switcher"
+            (click)="onPrevRole()"
+            [class.disabled]="!prevRole"
+        >
+            <span class="switch-text prev-role-text">{{
+                previousRoleLabel
+            }}</span>
+            <mat-icon class="arrow" svgIcon="arrowLeft"></mat-icon>
+        </div>
+
+        <div
+            (touchstart)="onTouchStart($event)"
+            (touchmove)="onTouchMove($event)"
+            (touchend)="onTouchEnd()"
+            class="info-card-container-wrapper"
+        >
+            <div
+                class="side-panel side-panel-prev"
+                [style.display]="prevRole ? 'block' : 'none'"
+                [attr.aria-hidden]="true"
+            ></div>
+
+            <div
+                class="info-card__container"
+                [class.active]="activeContainer === 'primary'"
+                [class.slide-out-left]="
+                    activeContainer === 'primary' &&
+                    swipeDirection === 'left' &&
+                    isAnimating
+                "
+                [class.slide-out-right]="
+                    activeContainer === 'primary' &&
+                    swipeDirection === 'right' &&
+                    isAnimating
+                "
+                [class.slide-in-from-left]="
+                    activeContainer !== 'primary' &&
+                    swipeDirection === 'right' &&
+                    isAnimating
+                "
+                [class.slide-in-from-right]="
+                    activeContainer !== 'primary' &&
+                    swipeDirection === 'left' &&
+                    isAnimating
+                "
+                [ngClass]="
+                    'role-' +
+                    (activeContainer === 'primary' && !pendingRole
+                        ? role
+                        : activeContainer !== 'primary' && pendingRole
+                        ? pendingRole
+                        : role
+                    ).toLowerCase()
+                "
+            >
+                <header class="container__header">
+                    <span class="header__title">{{
+                        activeContainer === "primary" && !pendingRole
+                            ? role
+                            : activeContainer !== "primary" && pendingRole
+                            ? pendingRole
+                            : role
+                    }}</span>
+                    <span class="header__subtitle">PRE-CAMPUS</span>
+                </header>
+                <p class="container__role-description">
+                    {{
+                        "about-role." +
+                            (activeContainer === "primary"
+                                ? role
+                                : pendingRole) +
+                            ".container-role-description" | translate
+                    }}
+                </p>
+                <section class="container__data">
+                    <div class="data__duties">
+                        <h2 class="duties__title">
+                            {{
+                                "about-role." + role + ".about-work" | translate
+                            }}
+                        </h2>
+                        <p class="duties__duty-type">
+                            <span>1.</span>
+                            {{
+                                "about-role." + role + ".first-work" | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>2.</span>
+                            {{
+                                "about-role." + role + ".second-work"
+                                    | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>3.</span>
+                            {{
+                                "about-role." + role + ".third-work" | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>4.</span>
+                            {{
+                                "about-role." + role + ".fourth-work"
+                                    | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>5.</span>
+                            {{
+                                "about-role." + role + ".fifth-work" | translate
+                            }}
+                        </p>
+                    </div>
+                    <div class="data__advantages">
+                        <h2 class="advantages__title">
+                            {{
+                                "about-role." + role + ".about-advantages"
+                                    | translate
+                            }}
+                        </h2>
+                        <p class="advantages__description">
+                            {{
+                                "about-role." + role + ".advantages-text"
+                                    | translate
+                            }}
+                        </p>
+                    </div>
+                </section>
+            </div>
+            <div
+                class="info-card__container"
+                [class.active]="activeContainer === 'secondary'"
+                [class.slide-out-left]="
+                    activeContainer === 'secondary' &&
+                    swipeDirection === 'left' &&
+                    isAnimating
+                "
+                [class.slide-out-right]="
+                    activeContainer === 'secondary' &&
+                    swipeDirection === 'right' &&
+                    isAnimating
+                "
+                [class.slide-in-from-left]="
+                    activeContainer !== 'secondary' &&
+                    swipeDirection === 'right' &&
+                    isAnimating
+                "
+                [class.slide-in-from-right]="
+                    activeContainer !== 'secondary' &&
+                    swipeDirection === 'left' &&
+                    isAnimating
+                "
+                [ngClass]="
+                    'role-' +
+                    (activeContainer === 'secondary' && !pendingRole
+                        ? role
+                        : activeContainer !== 'secondary' && pendingRole
+                        ? pendingRole
+                        : role
+                    ).toLowerCase()
+                "
+            >
+                <header class="container__header">
+                    <span class="header__title">{{
+                        activeContainer === "secondary" && !pendingRole
+                            ? role
+                            : activeContainer !== "secondary" && pendingRole
+                            ? pendingRole
+                            : role
+                    }}</span>
+                    <span class="header__subtitle">PRE-CAMPUS</span>
+                </header>
+                <p class="container__role-description">
+                    {{
+                        "about-role." +
+                            (activeContainer === "secondary"
+                                ? role
+                                : pendingRole) +
+                            ".container-role-description" | translate
+                    }}
+                </p>
+                <section class="container__data">
+                    <div class="data__duties">
+                        <h2 class="duties__title">
+                            {{
+                                "about-role." + role + ".about-work" | translate
+                            }}
+                        </h2>
+                        <p class="duties__duty-type">
+                            <span>1.</span>
+                            {{
+                                "about-role." + role + ".first-work" | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>2.</span>
+                            {{
+                                "about-role." + role + ".second-work"
+                                    | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>3.</span>
+                            {{
+                                "about-role." + role + ".third-work" | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>4.</span>
+                            {{
+                                "about-role." + role + ".fourth-work"
+                                    | translate
+                            }}
+                        </p>
+                        <p class="duties__duty-type">
+                            <span>5.</span>
+                            {{
+                                "about-role." + role + ".fifth-work" | translate
+                            }}
+                        </p>
+                    </div>
+                    <div class="data__advantages">
+                        <h2 class="advantages__title">
+                            {{
+                                "about-role." + role + ".about-advantages"
+                                    | translate
+                            }}
+                        </h2>
+                        <p class="advantages__description">
+                            {{
+                                "about-role." + role + ".advantages-text"
+                                    | translate
+                            }}
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Add side panel for next role - modified to be a thin line -->
+            <div
+                class="side-panel side-panel-next"
+                [style.display]="nextRole ? 'block' : 'none'"
+                [attr.aria-hidden]="true"
+            ></div>
+        </div>
+
+        <div
+            class="info-card__next-role-switcher"
+            (click)="onNextRole()"
+            [class.disabled]="!nextRole"
+        >
+            <mat-icon class="arrow" svgIcon="arrowRight"></mat-icon>
+            <span class="switch-text">{{ nextRoleLabel }}</span>
+        </div>
+    </section>
+
+    <hr class="blocks-separator" />
+
+    <section class="roles-hierarchy">
+        <span class="roles-hierarchy__title">
+            {{ "about-role.all-roles" | translate }}
+        </span>
+        <app-role-list />
+    </section>
+</div>

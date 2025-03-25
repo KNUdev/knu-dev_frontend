@@ -1,0 +1,179 @@
+<div class="container">
+    <app-user-filters
+        [filters]="filters"
+        [filterOptions]="filterOptions"
+        [departments]="departments"
+        [specialties]="specialties"
+        [recruitments]="recruitments"
+        [isLoadingDepartments]="isLoadingDepartments"
+        [isLoadingSpecialties]="isLoadingSpecialties"
+        [isLoadingRecruitments]="isLoadingRecruitments"
+        [searchInputValue]="searchInputValue"
+        (searchChange)="onFilterSearchChange($event)"
+        (searchBlurEvent)="onFilterSearchBlur()"
+        (searchKeyUpEvent)="onFilterSearchKeyUp($event)"
+        (dateFilterChange)="onDateFilterChange()"
+        (dropdownChange)="onFilterDropdownChange($event)"
+        (resetFiltersEvent)="resetFilters()"
+    ></app-user-filters>
+
+    <section class="users-list">
+        <h2 class="users-list__title">
+            {{ "users.title" | translate }}
+            @if (totalAccounts > 0) {
+            <span class="users-list__count">({{ totalAccounts }})</span>
+            }
+        </h2>
+
+        @if (isLoading) {
+        <div class="loading-indicator">
+            {{ "common.loading" | translate }}
+        </div>
+        } @if (!isLoading) {
+        <div class="users-list__user">
+            @for (account of accounts; track account) {
+            <div class="user__info">
+                <h3 class="info__title">
+                    {{ "users.general-info" | translate }}
+                </h3>
+                <div class="info__general">
+                    <div class="general__data">
+                        <span class="data__parameter">
+                            {{ "users.full-name" | translate }}:
+                            <span class="data__value">{{
+                                getFullName(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.email" | translate }}:
+                            <span class="data__value">{{ account.email }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.tech-role" | translate }}:
+                            <span class="data__value">{{
+                                account.technicalRole
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.expertise" | translate }}:
+                            <span class="data__value">{{
+                                account.expertise
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.github" | translate }}:
+                            <span class="data__value">{{
+                                account.githubAccountUsername || "Not provided"
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.registration-date" | translate }}:
+                            <span class="data__value">{{
+                                formatDate(account.registeredAt)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.last-role-update" | translate }}:
+                            <span class="data__value">{{
+                                account.lastRoleUpdateDate
+                                    ? formatDate(account.lastRoleUpdateDate)
+                                    : "Not updated"
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.unit" | translate }}:
+                            <span class="data__value">{{ account.unit }}</span>
+                        </span>
+                    </div>
+                    <span>
+                        @if (account.avatarFilename) {
+                        <img
+                            [src]="account.avatarFilename"
+                            alt="User avatar"
+                            class="avatar"
+                            onerror="this.onerror=null; this.src='assets/icon/profile/defaultAvatar.svg';"
+                        />
+                        } @else {
+                        <mat-icon
+                            class="avatar"
+                            [svgIcon]="'defaultAvatar'"
+                        ></mat-icon>
+                        }
+                    </span>
+                </div>
+                <span class="separation-line"></span>
+                <div class="info__learns">
+                    <h3 class="learns__title">
+                        {{ "users.learns" | translate }}
+                    </h3>
+                    <div class="learns__data">
+                        <span class="data__parameter">
+                            {{ "users.faculty" | translate }}:
+                            <span class="data__value">{{
+                                getDepartmentName(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.specialty" | translate }}:
+                            <span class="data__value">{{
+                                getSpecialtyCodename(account) +
+                                    " - " +
+                                    getSpecialtyName(account)
+                            }}</span>
+                        </span>
+                        <span class="data__parameter">
+                            {{ "users.study-year" | translate }}:
+                            <span class="data__value">{{
+                                account.universityStudyYear
+                                    ? getStudyYearTranslation(
+                                          account.universityStudyYear
+                                      )
+                                    : "Not found"
+                            }}</span>
+                        </span>
+                    </div>
+                </div>
+                <span class="separation-line"></span>
+                <div class="info__buttons">
+                    <div class="buttons__manage">
+                        <app-border-button
+                            [text]="'users.change-button' | translate"
+                            borderColor="yellow"
+                            (click)="openEditModal(account)"
+                        >
+                        </app-border-button>
+                    </div>
+                    <a
+                        [routerLink]="['/profile', account.id]"
+                        class="buttons__look"
+                    >
+                        <app-border-button
+                            [text]="'users.look-on-details-button' | translate"
+                            borderColor="red"
+                        >
+                        </app-border-button>
+                    </a>
+                </div>
+            </div>
+            }
+        </div>
+        } @if (accounts.length === 0 && !isLoading) {
+        <div class="empty-state">
+            {{ "users.noUsersFound" | translate }}
+        </div>
+        } @if(totalPages > 1 && !isLoading){
+        <app-pagination
+            [totalItems]="totalAccounts"
+            [currentPage]="currentPage"
+            [pageSize]="pageSize"
+            [isLoading]="isLoading"
+            (pageChange)="onPageChange($event)"
+        ></app-pagination>
+        } @if (isEditModalOpen && selectedUser) {
+        <app-edit-user-modal
+            [user]="selectedUser"
+            (close)="onEditModalClose($event)"
+        ></app-edit-user-modal>
+        }
+    </section>
+</div>

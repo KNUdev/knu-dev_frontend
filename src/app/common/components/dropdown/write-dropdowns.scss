@@ -26,12 +26,22 @@
     height: 3.4375rem;
     padding: 0rem 1rem;
     border-radius: 0.3125rem;
-    border: 1px solid #6d6d6d;
+    border: 1px solid #343434;
     cursor: pointer;
     min-height: 48px;
-    color: #999;
+    color: #d1d1d1;
     transition: all 0.2s ease;
     position: relative;
+
+    &:hover {
+        border-color: #ffd700;
+
+        svg {
+            g path[fill] {
+                fill: #ffd700 !important;
+            }
+        }
+    }
 }
 
 .select-header.focused {
@@ -41,7 +51,7 @@
 .select-header.has-value .select-label {
     transform: translate(-10px, -32px);
     font-size: 14px;
-    color: #6d6d6d;
+    color: #d1d1d1;
     background-color: #131313;
     padding: 0 8px;
 }
@@ -80,7 +90,6 @@
 
 .select-value {
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
     display: flex;
@@ -122,6 +131,7 @@
     display: flex;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #fff;
 
     span {
         margin: auto 0;

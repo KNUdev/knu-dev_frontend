@@ -1,0 +1,62 @@
+<div class="container">
+    <p class="id">{{ program.id }}</p>
+    <h2 class="title">{{ program.name | multiLangField }}</h2>
+    <ul class="meta">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                {{'createProgram.items.expertise' | translate}}:
+                <span class="item__text-value">{{ program.expertise }}</span>
+            </p>
+            <p class="item__text-prefix">
+                {{'createProgram.items.status.title' | translate}}:
+                <span [class.published]="program.isPublished"
+                      [class.unpublished]="!program.isPublished"
+                      class="item__text-value"
+                >{{ program.isPublished ? ('createProgram.items.status.published' | translate)
+                    : ('createProgram.items.status.unPublished' | translate) }}
+                </span>
+            </p>
+        </li>
+        <hr class="meta__divider">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                {{'createProgram.items.createdDate' | translate}}:
+                <span class="item__text-value">
+                    {{ program.createdAt | date:'short':'UTC':locale }}
+                </span>
+            </p>
+            <p class="item__text-prefix">
+                {{'createProgram.items.lastUpdateDate' | translate}}:
+                <span class="item__text-value">
+                    {{ program.lastUpdatedAt | date:'short':'UTC':locale }}
+                </span>
+            </p>
+        </li>
+        <hr class="meta__divider">
+        <li class="meta__item">
+            <p class="item__text-prefix">
+                {{'createProgram.items.sectionsCount' | translate}}:
+                <span class="item__text-value">{{ program.totalSections }}</span>
+            </p>
+            <p class="item__text-prefix">
+                {{'createProgram.items.modulesCount' | translate}}:
+                <span class="item__text-value">{{ program.totalModules }}</span>
+            </p>
+            <p class="item__text-prefix">
+                {{'createProgram.items.topicsCount' | translate}}:
+                <span class="item__text-value">{{ program.totalTopics }}</span>
+            </p>
+            <p class="item__text-prefix">
+                {{'createProgram.items.activeSessionsCount' | translate}}:
+                <span class="item__text-value">{{ program.totalActiveSessions }}</span>
+            </p>
+        </li>
+    </ul>
+    <app-border-button
+        [borderColor]="'yellow'"
+        [fullWidth]="true"
+        [text]="('createProgram.items.controlBtnText' | translate)"
+        [href]="manageProgramLink"
+    />
+
+</div>
