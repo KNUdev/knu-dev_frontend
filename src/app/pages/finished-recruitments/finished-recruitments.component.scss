@@ -377,11 +377,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     letter-spacing: 0.046875rem;
 }
 
-.analytics-button {
-    display: flex;
-    width: 1.25rem;
-    height: 1.25rem;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
+app-border-button {
+    width: 100%;
 }

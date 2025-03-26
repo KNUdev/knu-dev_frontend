@@ -20,6 +20,7 @@ import {
 import { LabelInput } from '../../common/components/input/label-input/label-input';
 import { PaginationComponent } from '../../common/components/pagination/pagination.component';
 import { Expertise, getEnumValues } from '../../common/models/enums';
+import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
 
 interface ClosedRecruitmentResponse {
     content: ClosedRecruitmentDto[];
@@ -52,6 +53,7 @@ interface ClosedRecruitmentDto {
         LabelInput,
         WriteDropDowns,
         PaginationComponent,
+        BorderButtonComponent,
     ],
     templateUrl: './finished-recruitments.component.html',
     styleUrls: ['./finished-recruitments.component.scss'],

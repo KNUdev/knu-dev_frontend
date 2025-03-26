@@ -136,17 +136,12 @@
                     </span>
                 </div>
                 <span class="separation-line"></span>
-                <a href="#" class="body__see-analytics">
-                    <span class="analytics-text">
-                        {{
-                            "recruitment-card.see-analytics-button" | translate
-                        }}
-                    </span>
-                    <mat-icon
-                        class="analytics-button"
-                        svgIcon="arrowRightUp"
-                    ></mat-icon>
-                </a>
+                <app-border-button
+                    [text]="'recruitment-card.see-analytics-button' | translate"
+                    borderColor="yellow"
+                    class="profile-meta-role-button"
+                >
+                </app-border-button>
             </div>
             }
         </div>
