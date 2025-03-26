@@ -39,5 +39,9 @@
         "minValue": "Minimum value is {{min}}",
         "numberOnly": "Please enter numbers only",
         "invalidField": "Invalid field value"
+    },
+
+    "filters": {
+        "all-expertise": "All Expertise"
     }
 }

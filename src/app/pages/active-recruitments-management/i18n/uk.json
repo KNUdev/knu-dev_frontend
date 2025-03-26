@@ -39,5 +39,9 @@
         "minValue": "Мінімальне значення: {{min}}",
         "numberOnly": "Введіть тільки цифри",
         "invalidField": "Невірне значення поля"
+    },
+
+    "filters": {
+        "all-expertise": "Всі напрямки"
     }
 }

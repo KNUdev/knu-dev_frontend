@@ -1,8 +1,16 @@
 {
-    "filters": "Фільтри",
-    "recruitment-name": "Назва набору",
+    "filters": {
+        "title": "Фільтри",
+        "name": "Назва набору",
+        "expertise": "Напрямок",
+        "all-expertise": "Всі напрямки",
+        "start-date": "Дата початку",
+        "end-date": "Дата закінчення",
+        "reset": "Скинути фільтри"
+    },
     "recruitment-card": {
-        "closed-recruitments-title": "Список закритих наборів",
+        "closed-recruitments-title": "Закриті набори",
+        "no-closed-recruitments": "Немає закритих наборів, що відповідають вашим фільтрам",
         "general-info": "Загальна інформація",
         "title": "Назва",
         "start-date": "Дата початку",
@@ -11,6 +19,9 @@
         "people-max-amount": "Максимальна кількість людей",
         "statistic-title": "Статистика",
         "joined-people-amount": "Кількість людей, які приєднались",
-        "see-analytics-button": "Побачити аналітику"
+        "see-analytics-button": "Переглянути аналітику"
+    },
+    "common": {
+        "loading": "Завантаження..."
     }
 }
