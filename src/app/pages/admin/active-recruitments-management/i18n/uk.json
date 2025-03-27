@@ -1,0 +1,49 @@
+{
+    "create-recruitment": {
+        "title": "Відкрити ще один набір",
+        "recruitment-name": "Назва набору",
+        "recruitment-type": "Тип набору",
+        "recruitment-max-number": "Максимальна кількість людей у наборі",
+        "final-date": "Фінальна дата",
+        "open-recruitment": "Відкрити набір",
+        "name": "Назва набору",
+        "expertise": "Напрямок",
+        "max-candidates": "Максимальна кількість учасників",
+        "deadline-date": "Дата та час закінчення",
+        "success": "Набір успішно створено"
+    },
+
+    "recruitment-card": {
+        "example": "Приклад набору, який буде створено",
+        "open-recruitments-title": "Відкриті набори",
+        "general-info": "Загальна інформація",
+        "title": "Назва",
+        "start-date": "Дата початку",
+        "end-date": "Дата закінчення",
+        "type": "Тип",
+        "people-max-amount": "Максимальна кількість людей",
+        "statistic-title": "Статистика",
+        "joined-people-amount": "Кількість людей, які приєднались",
+        "close-recruitment-button": "Закрити набір",
+        "no-active-recruitments": "На даний момент немає активних наборів"
+    },
+
+    "common": {
+        "loading": "Завантаження...",
+        "processing": "Обробка...",
+        "submitting": "Відправлення..."
+    },
+
+    "errors": {
+        "fieldRequired": "Це поле обов'язкове",
+        "minValue": "Мінімальне значення: {{min}}",
+        "numberOnly": "Введіть тільки цифри",
+        "invalidField": "Невірне значення поля",
+        "failedToLoadRecruitments": "Не вдалося завантажити активні набори. Будь ласка, спробуйте пізніше.",
+        "closeRecruitmentFailed": "Не вдалося закрити набір"
+    },
+
+    "filters": {
+        "all-expertise": "Всі напрямки"
+    }
+}

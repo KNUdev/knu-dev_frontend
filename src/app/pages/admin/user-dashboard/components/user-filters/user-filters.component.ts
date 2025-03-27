@@ -20,9 +20,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
     SelectOption,
     WriteDropDowns,
-} from '../../../../common/components/dropdown/write-dropdowns';
-import { LabelInput } from '../../../../common/components/input/label-input/label-input';
-import { FilterParams } from '../../../../services/admin/admin-accounts.service';
+} from '../../../../../common/components/dropdown/write-dropdowns';
+import { LabelInput } from '../../../../../common/components/input/label-input/label-input';
+import { FilterParams } from '../../../../../services/admin/admin-accounts.service';
 import { FilterOptionGroup } from '../../filter-options.model';
 
 @Component({

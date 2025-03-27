@@ -46,7 +46,7 @@ import { Expertise } from 'src/app/services/user/user.model';
 import {
     SelectOption,
     WriteDropDowns,
-} from '../../../../common/components/dropdown/write-dropdowns';
+} from '../../../../../common/components/dropdown/write-dropdowns';
 
 @Component({
     selector: 'program-upload-dialog',

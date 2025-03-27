@@ -13,7 +13,7 @@ import {
     ProgramModuleDto,
     ProgramSectionDto,
     ProgramTopicDto,
-} from '../../common/models/shared.model';
+} from '../../../common/models/shared.model';
 
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,10 +24,10 @@ import {
     TranslatePipe,
     TranslateService,
 } from '@ngx-translate/core';
-import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
-import { MultiLangFieldPipe } from '../../common/pipes/multi-lang-field.pipe';
-import { I18nService } from '../../services/languages/i18n.service';
-import { ProgramService } from '../../services/program.service';
+import { BorderButtonComponent } from '../../../common/components/button/arrow-button/border-button.component';
+import { MultiLangFieldPipe } from '../../../common/pipes/multi-lang-field.pipe';
+import { I18nService } from '../../../services/languages/i18n.service';
+import { ProgramService } from '../../../services/program.service';
 import {
     ConfirmDialogComponent,
     ConfirmDialogData,
@@ -100,7 +100,7 @@ export class ManageProgramComponent implements OnInit, OnDestroy {
                 } as LangChangeEvent),
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
-                        'pages/manage-program',
+                        'pages/admin/manage-program',
                         event.lang
                     )
                 )

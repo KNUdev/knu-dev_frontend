@@ -17,12 +17,12 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
-import { environment } from '../../../../../environments/environment';
-import { BackdropWindowComponent } from '../../../../common/components/backdrop-window/backdrop-window.component';
-import { WriteDropDowns } from '../../../../common/components/dropdown/write-dropdowns';
-import { LabelInput } from '../../../../common/components/input/label-input/label-input';
-import { AdminAccount } from '../../../../services/admin/accounts.model';
-import { AdminAccountsService } from '../../../../services/admin/admin-accounts.service';
+import { environment } from '../../../../../../environments/environment';
+import { BackdropWindowComponent } from '../../../../../common/components/backdrop-window/backdrop-window.component';
+import { WriteDropDowns } from '../../../../../common/components/dropdown/write-dropdowns';
+import { LabelInput } from '../../../../../common/components/input/label-input/label-input';
+import { AdminAccount } from '../../../../../services/admin/accounts.model';
+import { AdminAccountsService } from '../../../../../services/admin/admin-accounts.service';
 import {
     FilterOptionGroup,
     getFilterOptions,

@@ -33,27 +33,26 @@ import {
     switchMap,
 } from 'rxjs';
 import { I18nService } from 'src/app/services/languages/i18n.service';
-import { BorderButtonComponent } from '../../common/components/button/arrow-button/border-button.component';
+import { BorderButtonComponent } from '../../../common/components/button/arrow-button/border-button.component';
 import {
     SelectOption,
     WriteDropDowns,
-} from '../../common/components/dropdown/write-dropdowns';
-import { LabelInput } from '../../common/components/input/label-input/label-input';
-import { PaginationComponent } from '../../common/components/pagination/pagination.component';
+} from '../../../common/components/dropdown/write-dropdowns';
+import { PaginationComponent } from '../../../common/components/pagination/pagination.component';
 import {
     Expertise,
     getEnumValues,
     KNUdevUnit,
     TechnicalRole,
-} from '../../common/models/enums';
+} from '../../../common/models/enums';
 import {
     AdminAccount,
     AdminAccountsResponse,
-} from '../../services/admin/accounts.model';
+} from '../../../services/admin/accounts.model';
 import {
     AdminAccountsService,
     FilterParams,
-} from '../../services/admin/admin-accounts.service';
+} from '../../../services/admin/admin-accounts.service';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
 import { UserFiltersComponent } from './components/user-filters/user-filters.component';
 import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
@@ -66,11 +65,9 @@ import { FilterOptionGroup, getFilterOptions } from './filter-options.model';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        WriteDropDowns,
         RouterModule,
         BorderButtonComponent,
         EditUserModalComponent,
-        LabelInput,
         PaginationComponent,
         UserFiltersComponent,
     ],
@@ -143,7 +140,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                 } as LangChangeEvent),
                 switchMap((event) =>
                     this.i18nService.loadComponentTranslations(
-                        'pages/user-dashboard',
+                        'pages/admin/user-dashboard',
                         event.lang
                     )
                 )

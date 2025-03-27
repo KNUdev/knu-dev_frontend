@@ -1,11 +1,11 @@
 import { TranslateService } from '@ngx-translate/core';
-import { SelectOption } from '../../common/components/dropdown/write-dropdowns';
+import { SelectOption } from '../../../common/components/dropdown/write-dropdowns';
 import {
     Expertise,
     KNUdevUnit,
     TechnicalRole,
     getEnumValues,
-} from '../../common/models/enums';
+} from '../../../common/models/enums';
 
 export interface FilterOptionGroup {
     units: SelectOption[];
