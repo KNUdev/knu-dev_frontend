@@ -67,29 +67,29 @@ export const routes: Routes = [
     {
         path: 'program/:programId/manage',
         loadComponent: () =>
-            import('../pages/manage-program/manage-program.component').then(
-                (m) => m.ManageProgramComponent
-            ),
+            import(
+                '../pages/admin/manage-program/manage-program.component'
+            ).then((m) => m.ManageProgramComponent),
     },
     {
         path: 'user-dashboard',
         loadComponent: () =>
-            import('../pages/user-dashboard/user-dashboard.component').then(
-                (m) => m.UserDashboardComponent
-            ),
+            import(
+                '../pages/admin/user-dashboard/user-dashboard.component'
+            ).then((m) => m.UserDashboardComponent),
     },
     {
-        path: 'active-recruitments-management',
+        path: 'admin/recruitment/active',
         loadComponent: () =>
             import(
-                '../pages/active-recruitments-management/active-recruitments-management.component'
+                '../pages/admin/active-recruitments-management/active-recruitments-management.component'
             ).then((m) => m.ActiveRecruitmentsManagementComponent),
     },
     {
-        path: 'finished-recruitments',
+        path: 'admin/recruitment/closed',
         loadComponent: () =>
             import(
-                '../pages/finished-recruitments/finished-recruitments.component'
-            ).then((m) => m.FinishedRecruitmentsComponent),
+                '../pages/admin/closed-recruitments/closed-recruitments.component'
+            ).then((m) => m.ClosedRecruitmentsComponent),
     },
 ];
