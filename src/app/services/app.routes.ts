@@ -92,4 +92,12 @@ export const routes: Routes = [
                 '../pages/admin/closed-recruitments/closed-recruitments.component'
             ).then((m) => m.ClosedRecruitmentsComponent),
     },
+
+    {
+        path: 'recruitment',
+        loadComponent: () =>
+            import('../pages/recruitment/recruitment.components').then(
+                (m) => m.RecruitmentPageComponent
+            ),
+    },
 ];
