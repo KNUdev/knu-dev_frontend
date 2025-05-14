@@ -15,7 +15,6 @@ import { routes } from './app/services/app.routes';
 
 import localeEn from '@angular/common/locales/en';
 import localeUk from '@angular/common/locales/uk';
-import { ngrokHeaderInterceptor } from './app/interceptors/ngrok-header.interceptor';
 import { notFoundInterceptor } from './app/pages/error/404/404.interceptor';
 
 const LANG_TO_LOCALE: { [key: string]: string } = {
@@ -33,9 +32,7 @@ function localeIdFactory(): string {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideHttpClient(
-            withInterceptors([notFoundInterceptor, ngrokHeaderInterceptor])
-        ),
+        provideHttpClient(withInterceptors([notFoundInterceptor])),
         provideTranslateService(),
         provideRouter(
             routes,

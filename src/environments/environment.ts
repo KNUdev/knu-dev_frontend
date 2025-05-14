@@ -1,4 +1,4 @@
-const apiBaseUrl = 'https://patient-raven-poetic.ngrok-free.app';
+const apiBaseUrl = '/api';
 
 export const environment = {
     production: false,
