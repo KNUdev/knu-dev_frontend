@@ -1,4 +1,4 @@
-const apiBaseUrl = 'https://knu-devbackend-production.up.railway.app';
+const apiBaseUrl = 'https://patient-raven-poetic.ngrok-free.app';
 
 export const environment = {
     production: false,
