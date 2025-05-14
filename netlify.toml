@@ -1,6 +1,15 @@
+[build]
+  publish = "dist/knu-dev_frontend"
+  command = "npm run build"
+
 [[redirects]]
   from = "/api/*"
   to = "https://patient-raven-poetic.ngrok-free.app/:splat"
   status = 200
   force = true
   headers = {ngrok-skip-browser-warning = "true"}
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
