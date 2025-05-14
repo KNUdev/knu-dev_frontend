@@ -1,0 +1,4 @@
+/api/* https://patient-raven-poetic.ngrok-free.app/:splat 200!
+  ngrok-skip-browser-warning: true
+
+/* /index.html 200
