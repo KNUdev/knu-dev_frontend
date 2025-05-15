@@ -3,7 +3,9 @@
         "target": "https://patient-raven-poetic.ngrok-free.app",
         "secure": false,
         "changeOrigin": true,
-        "logLevel": "debug",
+        "pathRewrite": {
+            "^/api": ""
+        },
         "headers": {
             "ngrok-skip-browser-warning": "true"
         }
